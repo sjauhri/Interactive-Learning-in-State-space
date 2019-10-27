@@ -2,12 +2,14 @@ from utils import *
 from bco import BCO
 import gym
 
-class BCO_cartpole(BCO):
-  def __init__(self, state_shape, action_shape, lr=0.002, maxits=1000, M=1000):  
+class BCO_hopper(BCO):
+  def __init__(self, state_shape, action_shape, lr=0.002, maxits=1000, M=5000):  
     BCO.__init__(self, state_shape, action_shape, lr=lr, maxits=maxits, M=M)
 
     # set which game to play
-    self.env = gym.make('CartPole-v0')
+    self.env = gym.make('Hopper-v2')
+    #import pdb; pdb.set_trace()
+    #env.observation_space.high
   
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
@@ -15,9 +17,9 @@ class BCO_cartpole(BCO):
       with tf.variable_scope("input") as scope:
         policy_input = self.state
       with tf.variable_scope("model") as scope:
-        policy_h1 = tf.layers.dense(policy_input, 8, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
+        policy_h1 = tf.layers.dense(policy_input, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
         policy_h1 = tf.nn.leaky_relu(policy_h1, 0.2, name="LeakyRelu_1")
-        policy_h2 = tf.layers.dense(policy_h1, 8, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
+        policy_h2 = tf.layers.dense(policy_h1, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
         policy_h2 = tf.nn.leaky_relu(policy_h2, 0.2, name="LeakyRelu_2")
 
       with tf.variable_scope("output") as scope:
@@ -36,9 +38,9 @@ class BCO_cartpole(BCO):
       with tf.variable_scope("input") as scope:
         idm_input = tf.concat([self.state, self.nstate], 1)
       with tf.variable_scope("model") as scope:
-        idm_h1 = tf.layers.dense(idm_input, 8, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
+        idm_h1 = tf.layers.dense(idm_input, 100, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
         idm_h1 = tf.nn.leaky_relu(idm_h1, 0.2, name="LeakyRelu_1")
-        idm_h2 = tf.layers.dense(idm_h1, 8, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
+        idm_h2 = tf.layers.dense(idm_h1, 100, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
         idm_h2 = tf.nn.leaky_relu(idm_h2, 0.2, name="LeakyRelu_2")
 
       with tf.variable_scope("output") as scope:
@@ -109,16 +111,19 @@ class BCO_cartpole(BCO):
     total_reward = 0
     state = self.env.reset()
 
-    while not terminal:
+    #while not terminal:
+    i = 0
+    while i in range(2000):
       state = np.reshape(state, [-1,self.state_dim])
       a = np.reshape(self.eval_policy(state), [-1])
       A = np.argmax(a)
       state, reward, terminal, _ = self.env.step(A)
       total_reward += reward
       self.env.render()
+      i+=1
 
     return total_reward
     
 if __name__ == "__main__":
-  bco = BCO_cartpole(4, 2, lr=args.lr, maxits=args.maxits)
+  bco = BCO_hopper(11, 3, lr=args.lr, maxits=args.maxits)
   bco.run()

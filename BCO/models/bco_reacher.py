@@ -2,12 +2,12 @@ from utils import *
 from bco import BCO
 import gym
 
-class BCO_cartpole(BCO):
+class BCO_reacher(BCO):
   def __init__(self, state_shape, action_shape, lr=0.002, maxits=1000, M=1000):  
     BCO.__init__(self, state_shape, action_shape, lr=lr, maxits=maxits, M=M)
 
     # set which game to play
-    self.env = gym.make('CartPole-v0')
+    self.env = gym.make('Reacher-v2')
   
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
@@ -120,5 +120,5 @@ class BCO_cartpole(BCO):
     return total_reward
     
 if __name__ == "__main__":
-  bco = BCO_cartpole(4, 2, lr=args.lr, maxits=args.maxits)
+  bco = BCO_reacher(11, 2, lr=args.lr, maxits=args.maxits)
   bco.run()

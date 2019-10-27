@@ -1,10 +1,11 @@
 import tensorflow as tf
 import argparse
 import os
+import pickle
 import numpy as np
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--input_filename", default="input/demonstration.txt", help="the demonstration inputs")
+parser.add_argument("--input_filename", default="demonstration/expert_obs/CartPole-v0.pkl", help="the demonstration inputs")
 parser.add_argument("--mode", default="train", choices=["train", "test"], required=True)
 parser.add_argument("--model_dir", help="where to save/restore the model")
 

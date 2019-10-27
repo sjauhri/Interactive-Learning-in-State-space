@@ -18,7 +18,7 @@ class BCO():
     self.sess = tf.Session(config=config)
 
     # set the input placeholder
-    with tf.variable_scope("placeholder") as scpoe:
+    with tf.variable_scope("placeholder") as scope:
       self.state = tf.placeholder(tf.float32, [None, self.state_dim], name="state")
       self.nstate = tf.placeholder(tf.float32, [None, self.state_dim], name="next_state")
       self.action = tf.placeholder(tf.float32, [None, self.action_dim], name="action")
@@ -35,26 +35,16 @@ class BCO():
   def load_demonstration(self):
     """Load demonstration from the file"""
     if args.input_filename is None or not os.path.isfile(args.input_filename):
-      raise Exception("input filename does not exist")
-
-    inputs = []
-    targets = []
-    
-    i = 0
-    for trajectory in open(args.input_filename):
-      s, s_prime = trajectory.replace("\n", "").replace(",,", ",").split(" ")
-      s = eval(s)
-      s_prime = eval(s_prime)
-      inputs.append(s)
-      targets.append(s_prime)
-      i += 1
-      if i % 10000 == 0:
-        print("Loading demonstration ", i)
-
-      if i >= 50000:
-        break
-
+      raise Exception("input filename does not exist")    
+        
+    with open(args.input_filename, 'rb') as f:
+      expert_data = pickle.load(f)
+      inputs = expert_data['observations']
+      targets = expert_data['observations_next']
+        
     num_samples = len(inputs)
+    print("Loaded %d demonstrations" % num_samples)
+    #import pdb; pdb.set_trace()
 
     return num_samples, inputs, targets
 
@@ -192,7 +182,8 @@ class BCO():
     if args.mode == 'train':
       # read demonstration data
       self.demo_examples, self.inputs, self.targets = self.load_demonstration()
-      self.num_sample = self.M
+      #self.num_sample = self.M  # Issue: This should not directly be set to M, too low in some cases and too high in some cases!!!
+      self.num_sample = min(self.demo_examples,self.M)
 
       self.train()
 
