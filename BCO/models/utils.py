@@ -14,7 +14,7 @@ parser.add_argument("--M", type=int, default=1000, help="the number of post demo
 
 parser.add_argument("--batch_size", type=int, default=32, help="number of examples in batch")
 parser.add_argument("--lr", type=float, default=0.002, help="initial learning rate for adam SGD")
-
+parser.add_argument('--render', action='store_true')
 parser.add_argument("--save_freq", type=int, default=100, help="save model every save_freq iterations, 0 to disable")
 parser.add_argument("--print_freq", type=int, default=50, help="print current reward and loss every print_freq iterations, 0 to disable")
 

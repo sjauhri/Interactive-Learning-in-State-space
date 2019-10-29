@@ -39,7 +39,7 @@ class BCO():
         
     with open(args.input_filename, 'rb') as f:
       expert_data = pickle.load(f)
-      inputs = expert_data['observations']
+      inputs = expert_data['observations']      
       targets = expert_data['observations_next']
         
     num_samples = len(inputs)
@@ -181,9 +181,10 @@ class BCO():
 
     if args.mode == 'train':
       # read demonstration data
-      self.demo_examples, self.inputs, self.targets = self.load_demonstration()
+      self.demo_examples, self.inputs, self.targets = self.load_demonstration()      
       #self.num_sample = self.M  # Issue: This should not directly be set to M, too low in some cases and too high in some cases!!!
       self.num_sample = min(self.demo_examples,self.M)
+      #import pdb; pdb.set_trace()
 
       self.train()
 

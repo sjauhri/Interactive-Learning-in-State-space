@@ -8,6 +8,8 @@ class BCO_cartpole(BCO):
 
     # set which game to play
     self.env = gym.make('CartPole-v0')
+    #import pdb; pdb.set_trace()
+    #print(self.env.observation_space.high)
   
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
