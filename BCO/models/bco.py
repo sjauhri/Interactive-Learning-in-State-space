@@ -35,16 +35,15 @@ class BCO():
   def load_demonstration(self):
     """Load demonstration from the file"""
     if args.input_filename is None or not os.path.isfile(args.input_filename):
-      raise Exception("input filename does not exist")    
-        
+      raise Exception("input filename does not exist")
+
     with open(args.input_filename, 'rb') as f:
       expert_data = pickle.load(f)
-      inputs = expert_data['observations']      
+      inputs = expert_data['observations']
       targets = expert_data['observations_next']
-        
+
     num_samples = len(inputs)
-    print("Loaded %d demonstrations" % num_samples)
-    #import pdb; pdb.set_trace()
+    print("Loaded %d demonstrations" % num_samples)    
 
     return num_samples, inputs, targets
 
@@ -71,7 +70,7 @@ class BCO():
     })
 
   def eval_idm(self, state, nstate):
-    """get the action by inverse dynamic model from current state and next state"""
+    """get the action by inverse dynamic model from current state and next state"""    
     return self.sess.run(self.idm_pred_action, feed_dict={
       self.state: state,
       self.nstate: nstate
@@ -108,7 +107,7 @@ class BCO():
     for idx in idxs:
       batch_s  = [  state[i] for i in idx ]
       batch_ns = [ nstate[i] for i in idx ]
-      batch_a  = [ action[i] for i in idx ]
+      batch_a  = [ action[i] for i in idx ]      
       self.sess.run(self.idm_train_step, feed_dict={
         self.state : batch_s,
         self.nstate: batch_ns,
@@ -124,29 +123,48 @@ class BCO():
 
   def get_idm_loss(self, state, nstate, action):
     """get inverse dynamic model loss"""
-    return self.sess.run(self.idm_loss, feed_dict={
+    idm_loss = self.sess.run(self.idm_loss, feed_dict={
       self.state: state,
       self.nstate: nstate,
       self.action: action
     })
+    #import pdb; pdb.set_trace()
+    return idm_loss
 
   def train(self):
-    """training the policy model and inverse dynamic model by behavioral cloning"""
+    """training the policy model and inverse dynamic model by behavioral cloning"""    
+    
+    if args.savedPreModel:
+      # Use saved pre-demo trained model
+      saver_pre = tf.train.Saver()
+      saver_pre.restore(self.sess, args.premodel_dir)
+      print("\n[Training]")
+      print('Loaded pre demo model')
+    else:
+      # Start session
+      self.sess.run(tf.global_variables_initializer())
 
+      print("\n[Training]")
+      # pre demonstration to update inverse dynamic model
+      S, nS, A = self.pre_demonstration()      
+      self.update_idm(S, nS, A)
+      # Save pre-demo trained model
+      print('saving pre demo model')
+      saver_pre = tf.train.Saver(max_to_keep=1)
+      saver_pre.save(self.sess, args.premodel_dir)        
+    
+    # Init model saver
     saver = tf.train.Saver(max_to_keep=1)
+    
+    curr_reward = 0
+    best_reward = 0
 
-    self.sess.run(tf.global_variables_initializer())
-
-    print("\n[Training]")
-    # pre demonstration to update inverse dynamic model
-    S, nS, A = self.pre_demonstration()
-    self.update_idm(S, nS, A)
     for it in range(self.maxits):
       def should(freq):
         return freq > 0 and ((it+1) % freq==0 or it == self.maxits-1 )
 
       # update policy pi
-      S, nS = self.sample_demo()
+      S, nS = self.sample_demo()      
       A = self.eval_idm(S, nS)
       self.update_policy(S, A)
       policy_loss = self.get_policy_loss(S, A)
@@ -154,15 +172,23 @@ class BCO():
       # update inverse dynamic model
       S, nS, A = self.post_demonstration()
       self.update_idm(S, nS, A)
-      idm_loss = self.get_idm_loss(S, nS, A)
+      #idm_loss = self.get_idm_loss(S, nS, A)
 
       if should(args.print_freq):
-        print('iteration: %5d, total reward: %5.1f, policy loss: %8.6f, idm loss: %8.6f' % ((it+1), self.eval_rwd_policy(), policy_loss, idm_loss))
+        curr_reward = self.eval_rwd_policy()
+        # Debug
+        if (curr_reward < -999):
+          import pdb; pdb.set_trace()
+          dummy = self.eval_rwd_policy()
+        print('iteration: %5d, total reward: %5.1f, policy loss: %8.6f, idm loss: %8.6f' % ((it+1), curr_reward, policy_loss, self.get_idm_loss(S, nS, A)))
 
       # saving model
       if should(args.save_freq):
-        print('saving model')
-        saver.save(self.sess, args.model_dir)
+        if(curr_reward > best_reward):
+          best_reward = curr_reward
+          print('saving model')
+          saver.save(self.sess, args.model_dir)
+
 
   def test(self):
     saver = tf.train.Saver()
@@ -175,11 +201,16 @@ class BCO():
 
     if args.mode == 'test':
       if args.model_dir is None:
-        raise Exception("checkpoint required for test mode")
+        raise Exception("checkpoint required for test mode")    
 
       self.test()
 
     if args.mode == 'train':
+      if args.premodel_dir is None:
+        raise Exception("pre-model directory required for saving initial trained model")
+      if not os.path.exists(args.premodel_dir):
+        os.makedirs(args.premodel_dir)
+
       # read demonstration data
       self.demo_examples, self.inputs, self.targets = self.load_demonstration()      
       #self.num_sample = self.M  # Issue: This should not directly be set to M, too low in some cases and too high in some cases!!!
