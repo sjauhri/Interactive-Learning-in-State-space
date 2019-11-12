@@ -177,17 +177,18 @@ class BCO():
       if should(args.print_freq):
         curr_reward = self.eval_rwd_policy()
         # Debug
-        if (curr_reward < -999):
-          import pdb; pdb.set_trace()
-          dummy = self.eval_rwd_policy()
+        # if (curr_reward < -999):
+        #  import pdb; pdb.set_trace()
+        #  dummy = self.eval_rwd_policy()
         print('iteration: %5d, total reward: %5.1f, policy loss: %8.6f, idm loss: %8.6f' % ((it+1), curr_reward, policy_loss, self.get_idm_loss(S, nS, A)))
 
       # saving model
       if should(args.save_freq):
-        if(curr_reward > best_reward):
-          best_reward = curr_reward
-          print('saving model')
-          saver.save(self.sess, args.model_dir)
+        # Debug
+        # if(curr_reward > best_reward):
+        # best_reward = curr_reward
+        print('saving model')
+        saver.save(self.sess, args.model_dir)
 
 
   def test(self):

@@ -18,7 +18,7 @@ parser.add_argument("--lr", type=float, default=0.002, help="initial learning ra
 parser.add_argument('--render', action='store_true')
 parser.add_argument('--savedPreModel', action='store_true')
 parser.add_argument("--save_freq", type=int, default=100, help="save model every save_freq iterations, 0 to disable")
-parser.add_argument("--print_freq", type=int, default=10, help="print current reward and loss every print_freq iterations, 0 to disable")
+parser.add_argument("--print_freq", type=int, default=50, help="print current reward and loss every print_freq iterations, 0 to disable")
 
 args = parser.parse_args()
 

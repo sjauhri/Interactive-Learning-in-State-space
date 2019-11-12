@@ -117,7 +117,7 @@ class BCO_cartpole(BCO):
       A = np.argmax(a)
       state, reward, terminal, _ = self.env.step(A)
       total_reward += reward
-      self.env.render()
+      #self.env.render()
 
     return total_reward
     
