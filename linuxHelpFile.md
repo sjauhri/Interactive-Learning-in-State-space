@@ -71,7 +71,17 @@ pip install 'pyglet==1.3.2' --force-reinstall
 # Docker
 
 ## Docker run
-docker run --gpus all -it tensorflow/tensorflow:devel-gpu [optional command]
+docker run --gpus all -it tensorflow/tensorflow:1.15.0-gpu-py3 [optional command]
+docker run --gpus all -it drl:0.1
+
+## Docker run with bind mount
+docker run -it --mount type=bind,source=/home/sjauhri/Desktop,target=/Desktop/ tensorflow/tensorflow:1.15.0-gpu-py3
+
+## See Images
+docker images -a
+
+## See containers
+docker ps -a
 
 ## Docker stop unused images
 docker container prune
