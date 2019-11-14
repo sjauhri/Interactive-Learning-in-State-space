@@ -14,6 +14,7 @@ parser.add_argument("--maxits", type=int, default=1000, help="the number of trai
 parser.add_argument("--M", type=int, default=1000, help="the number of post demonstration examples")
 
 parser.add_argument("--batch_size", type=int, default=32, help="number of examples in batch")
+parser.add_argument('--printTime', action='store_true')
 parser.add_argument("--lr", type=float, default=0.002, help="initial learning rate for adam SGD")
 parser.add_argument('--render', action='store_true')
 parser.add_argument('--savedPreModel', action='store_true')

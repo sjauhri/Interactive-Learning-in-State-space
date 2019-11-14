@@ -1,0 +1,167 @@
+
+[Training]
+Collecting idm training data  50000
+Collecting idm training data  100000
+Collecting idm training data  150000
+Collecting idm training data  200000
+Collecting idm training data  250000
+Collecting idm training data  300000
+Collecting idm training data  350000
+Collecting idm training data  400000
+Collecting idm training data  450000
+Collecting idm training data  500000
+Collecting idm training data  550000
+Collecting idm training data  600000
+Collecting idm training data  650000
+Collecting idm training data  700000
+Collecting idm training data  750000
+Collecting idm training data  800000
+Collecting idm training data  850000
+Collecting idm training data  900000
+Collecting idm training data  950000
+Collecting idm training data  1000000
+Collecting idm training data  1050000
+Collecting idm training data  1100000
+Collecting idm training data  1150000
+Collecting idm training data  1200000
+Collecting idm training data  1250000
+Collecting idm training data  1300000
+Collecting idm training data  1350000
+Collecting idm training data  1400000
+Collecting idm training data  1450000
+Collecting idm training data  1500000
+saving pre demo model
+WARNING:tensorflow:From /home/sjauhri/Desktop/IfO/BCO/models/bco.py:155: The name tf.train.Saver is deprecated. Please use tf.compat.v1.train.Saver instead.
+
+iteration:     5, total reward: 442.9, policy loss: 0.010072, idm loss: 0.000077
+iteration:    10, total reward: 434.6, policy loss: 0.009142, idm loss: 0.000119
+iteration:    15, total reward: 501.0, policy loss: 0.004908, idm loss: 0.000076
+iteration:    20, total reward: 776.6, policy loss: 0.005462, idm loss: 0.000084
+iteration:    25, total reward: 765.7, policy loss: 0.006291, idm loss: 0.001241
+iteration:    30, total reward: 275.9, policy loss: 0.005312, idm loss: 0.000225
+iteration:    35, total reward: 558.6, policy loss: 0.002566, idm loss: 0.000032
+iteration:    40, total reward: 426.6, policy loss: 0.003498, idm loss: 0.000058
+iteration:    45, total reward: 594.7, policy loss: 0.002400, idm loss: 0.000116
+iteration:    50, total reward: 672.2, policy loss: 0.003460, idm loss: 0.000117
+saving model
+iteration:    55, total reward: 303.0, policy loss: 0.008187, idm loss: 0.000138
+iteration:    60, total reward: 445.6, policy loss: 0.004306, idm loss: 0.006969
+iteration:    65, total reward: 206.7, policy loss: 0.004465, idm loss: 0.000114
+iteration:    70, total reward: 526.9, policy loss: 0.003694, idm loss: 0.013693
+iteration:    75, total reward: 373.5, policy loss: 0.037188, idm loss: 0.000069
+iteration:    80, total reward: 419.4, policy loss: 0.030034, idm loss: 0.000055
+iteration:    85, total reward: 400.9, policy loss: 0.024517, idm loss: 0.000024
+iteration:    90, total reward: 387.9, policy loss: 0.036634, idm loss: 0.000031
+iteration:    95, total reward: 587.1, policy loss: 0.055577, idm loss: 0.000371
+iteration:   100, total reward: 399.0, policy loss: 0.034603, idm loss: 0.000123
+saving model
+iteration:   105, total reward: 508.0, policy loss: 0.003065, idm loss: 0.000157
+iteration:   110, total reward: 596.7, policy loss: 0.002753, idm loss: 0.000109
+iteration:   115, total reward: 401.5, policy loss: 0.002525, idm loss: 0.000080
+iteration:   120, total reward: 376.4, policy loss: 0.002527, idm loss: 0.000128
+iteration:   125, total reward: 455.9, policy loss: 0.003164, idm loss: 0.001447
+iteration:   130, total reward: 390.6, policy loss: 0.003352, idm loss: 0.000076
+iteration:   135, total reward: 475.3, policy loss: 0.001860, idm loss: 0.000035
+iteration:   140, total reward: 400.0, policy loss: 0.001957, idm loss: 0.000040
+iteration:   145, total reward: 404.9, policy loss: 0.001832, idm loss: 0.000039
+iteration:   150, total reward: 448.1, policy loss: 0.001228, idm loss: 0.000048
+saving model
+iteration:   155, total reward: 358.8, policy loss: 0.002410, idm loss: 0.000072
+iteration:   160, total reward: 550.0, policy loss: 0.002757, idm loss: 0.001348
+iteration:   165, total reward: 440.6, policy loss: 0.002016, idm loss: 0.000053
+iteration:   170, total reward: 553.7, policy loss: 0.016302, idm loss: 0.000149
+iteration:   175, total reward: 420.1, policy loss: 0.007456, idm loss: 0.000076
+iteration:   180, total reward: 492.9, policy loss: 0.003461, idm loss: 0.000224
+iteration:   185, total reward: 522.6, policy loss: 0.003996, idm loss: 0.000474
+iteration:   190, total reward: 531.6, policy loss: 0.006011, idm loss: 0.000908
+iteration:   195, total reward: 638.6, policy loss: 0.003279, idm loss: 0.000124
+iteration:   200, total reward: 608.5, policy loss: 0.004526, idm loss: 0.000209
+saving model
+iteration:   205, total reward: 774.3, policy loss: 0.005552, idm loss: 0.004081
+iteration:   210, total reward: 758.7, policy loss: 0.002443, idm loss: 0.000150
+iteration:   215, total reward: 722.9, policy loss: 0.002117, idm loss: 0.000504
+iteration:   220, total reward: 771.1, policy loss: 0.001308, idm loss: 0.000554
+iteration:   225, total reward: 736.8, policy loss: 0.001275, idm loss: 0.000704
+iteration:   230, total reward: 826.8, policy loss: 0.001853, idm loss: 0.003148
+iteration:   235, total reward: 789.3, policy loss: 0.000790, idm loss: 0.003598
+iteration:   240, total reward: 807.8, policy loss: 0.001121, idm loss: 0.000740
+iteration:   245, total reward: 760.6, policy loss: 0.000652, idm loss: 0.001802
+iteration:   250, total reward: 806.0, policy loss: 0.000914, idm loss: 0.003498
+saving model
+iteration:   255, total reward: 796.6, policy loss: 0.001229, idm loss: 0.001419
+iteration:   260, total reward: 771.2, policy loss: 0.000487, idm loss: 0.001146
+iteration:   265, total reward: 645.8, policy loss: 0.001030, idm loss: 0.000403
+iteration:   270, total reward: 776.1, policy loss: 0.000968, idm loss: 0.000324
+iteration:   275, total reward: 724.9, policy loss: 0.001451, idm loss: 0.000234
+iteration:   280, total reward: 605.5, policy loss: 0.001499, idm loss: 0.000083
+iteration:   285, total reward: 602.2, policy loss: 0.002696, idm loss: 0.000055
+iteration:   290, total reward: 539.3, policy loss: 0.001927, idm loss: 0.000315
+iteration:   295, total reward: 546.8, policy loss: 0.001039, idm loss: 0.000111
+iteration:   300, total reward: 796.7, policy loss: 0.001205, idm loss: 0.000573
+saving model
+iteration:   305, total reward: 626.8, policy loss: 0.001285, idm loss: 0.000131
+iteration:   310, total reward: 613.5, policy loss: 0.001858, idm loss: 0.000127
+iteration:   315, total reward: 631.3, policy loss: 0.003475, idm loss: 0.000079
+iteration:   320, total reward: 723.9, policy loss: 0.002884, idm loss: 0.000130
+iteration:   325, total reward: 657.0, policy loss: 0.002079, idm loss: 0.000112
+iteration:   330, total reward: 655.5, policy loss: 0.004131, idm loss: 0.000524
+iteration:   335, total reward: 760.7, policy loss: 0.002339, idm loss: 0.000489
+iteration:   340, total reward: 806.4, policy loss: 0.001639, idm loss: 0.000216
+iteration:   345, total reward: 697.0, policy loss: 0.002140, idm loss: 0.000225
+iteration:   350, total reward: 632.1, policy loss: 0.001625, idm loss: 0.000095
+saving model
+iteration:   355, total reward: 743.6, policy loss: 0.001648, idm loss: 0.000190
+iteration:   360, total reward: 701.3, policy loss: 0.001577, idm loss: 0.000102
+iteration:   365, total reward: 734.5, policy loss: 0.001395, idm loss: 0.000565
+iteration:   370, total reward: 738.8, policy loss: 0.001185, idm loss: 0.000277
+iteration:   375, total reward: 694.5, policy loss: 0.000968, idm loss: 0.000121
+iteration:   380, total reward: 670.9, policy loss: 0.000938, idm loss: 0.000062
+iteration:   385, total reward: 724.7, policy loss: 0.000910, idm loss: 0.000067
+iteration:   390, total reward: 811.1, policy loss: 0.000680, idm loss: 0.000972
+iteration:   395, total reward: 686.5, policy loss: 0.000801, idm loss: 0.000056
+iteration:   400, total reward: 653.0, policy loss: 0.001245, idm loss: 0.000115
+saving model
+iteration:   405, total reward: 662.7, policy loss: 0.001225, idm loss: 0.000072
+iteration:   410, total reward: 758.7, policy loss: 0.000872, idm loss: 0.000221
+iteration:   415, total reward: 754.4, policy loss: 0.000994, idm loss: 0.000506
+iteration:   420, total reward: 808.3, policy loss: 0.002670, idm loss: 0.001099
+iteration:   425, total reward: 769.9, policy loss: 0.000674, idm loss: 0.004414
+iteration:   430, total reward: 797.2, policy loss: 0.000489, idm loss: 0.001819
+iteration:   435, total reward: 783.0, policy loss: 0.000528, idm loss: 0.000797
+iteration:   440, total reward: 774.5, policy loss: 0.000933, idm loss: 0.000672
+iteration:   445, total reward: 788.5, policy loss: 0.000715, idm loss: 0.002065
+iteration:   450, total reward: 799.3, policy loss: 0.000787, idm loss: 0.000919
+saving model
+iteration:   455, total reward: 807.5, policy loss: 0.000376, idm loss: 0.000991
+iteration:   460, total reward: 748.1, policy loss: 0.000712, idm loss: 0.000567
+iteration:   465, total reward: 789.7, policy loss: 0.000947, idm loss: 0.001386
+iteration:   470, total reward: 774.3, policy loss: 0.000632, idm loss: 0.000571
+iteration:   475, total reward: 834.8, policy loss: 0.000449, idm loss: 0.002748
+iteration:   480, total reward: 807.9, policy loss: 0.000572, idm loss: 0.000454
+iteration:   485, total reward: 826.0, policy loss: 0.000601, idm loss: 0.000400
+iteration:   490, total reward: 798.8, policy loss: 0.000562, idm loss: 0.000831
+iteration:   495, total reward: 804.3, policy loss: 0.001179, idm loss: 0.001266
+iteration:   500, total reward: 813.1, policy loss: 0.000690, idm loss: 0.000247
+saving model
+iteration:   505, total reward: 726.6, policy loss: 0.001235, idm loss: 0.000134
+iteration:   510, total reward: 819.8, policy loss: 0.000338, idm loss: 0.000379
+iteration:   515, total reward: 780.0, policy loss: 0.001262, idm loss: 0.000030
+iteration:   520, total reward: 783.2, policy loss: 0.000659, idm loss: 0.001339
+iteration:   525, total reward: 746.2, policy loss: 0.000485, idm loss: 0.001578
+iteration:   530, total reward: 776.8, policy loss: 0.000424, idm loss: 0.001141
+iteration:   535, total reward: 796.2, policy loss: 0.000627, idm loss: 0.002927
+iteration:   540, total reward: 793.9, policy loss: 0.000494, idm loss: 0.000722
+iteration:   545, total reward: 759.5, policy loss: 0.000370, idm loss: 0.001779
+iteration:   550, total reward: 724.2, policy loss: 0.000790, idm loss: 0.001263
+saving model
+iteration:   555, total reward: 801.6, policy loss: 0.000377, idm loss: 0.000343
+iteration:   560, total reward: 784.4, policy loss: 0.000470, idm loss: 0.001517
+iteration:   565, total reward: 805.6, policy loss: 0.000477, idm loss: 0.000534
+iteration:   570, total reward: 760.6, policy loss: 0.001658, idm loss: 0.001085
+iteration:   575, total reward: 808.5, policy loss: 0.000461, idm loss: 0.000575
+iteration:   580, total reward: 774.8, policy loss: 0.000361, idm loss: 0.000858
+iteration:   585, total reward: 797.8, policy loss: 0.000300, idm loss: 0.000778
+iteration:   590, total reward: 778.8, policy loss: 0.000506, idm loss: 0.000936
+iteration:   595, total reward: 798.7, policy loss: 0.000426, idm loss: 0.001465
+iteration:   600, total reward: 765.2, policy loss: 0.000409, idm loss: 0.001330
+saving model

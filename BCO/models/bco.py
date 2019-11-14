@@ -1,5 +1,7 @@
 from utils import *
 import gym
+# Debug
+import time
 
 class BCO():
   def __init__(self, state_shape, action_shape, lr=0.002, maxits=1000, M=1000):
@@ -98,7 +100,7 @@ class BCO():
       self.sess.run(self.policy_train_step, feed_dict={
         self.state : batch_s,
         self.action: batch_a
-      })
+      })      
  
   def update_idm(self, state, nstate, action):
     """update inverse dynamic model"""
@@ -128,7 +130,6 @@ class BCO():
       self.nstate: nstate,
       self.action: action
     })
-    #import pdb; pdb.set_trace()
     return idm_loss
 
   def train(self):
@@ -154,10 +155,7 @@ class BCO():
       saver_pre.save(self.sess, args.premodel_dir)        
     
     # Init model saver
-    saver = tf.train.Saver(max_to_keep=1)
-    
-    curr_reward = 0
-    best_reward = 0
+    saver = tf.train.Saver(max_to_keep=1)    
 
     for it in range(self.maxits):
       def should(freq):
@@ -166,7 +164,13 @@ class BCO():
       # update policy pi
       S, nS = self.sample_demo()
       A = self.eval_idm(S, nS)
+      currTime = time.time()
       self.update_policy(S, A)
+      
+      # Print time taken for debug
+      if (args.printTime and should(args.print_freq)):
+        print("Policy Learning time: ", time.time() - currTime)
+      
       # Check loss on another data set.................
       S, nS = self.sample_demo()
       A = self.eval_idm(S, nS)
@@ -175,34 +179,32 @@ class BCO():
 
       # update inverse dynamic model
       S, nS, A = self.post_demonstration(self.M)
+      currTime = time.time()
       self.update_idm(S, nS, A)
+      
+      # Print time taken for debug
+      if (args.printTime and should(args.print_freq)):
+        print("Model Learning time: ", time.time() - currTime)
       #idm_loss = self.get_idm_loss(S, nS, A)
 
       if should(args.print_freq):
-        curr_reward = self.eval_rwd_policy()
-        # Debug
-        # if (curr_reward < -999):
-        #  import pdb; pdb.set_trace()
-        #  dummy = self.eval_rwd_policy()
+        policy_reward = self.eval_rwd_policy()
 
         # Check loss on another data set.................
         S, nS, A = self.post_demonstration(int(round(self.M * 0.15))) # 15% test data
         idm_loss = self.get_idm_loss(S, nS, A)
         # ...............................................
-        print('iteration: %5d, total reward: %5.1f, policy loss: %8.6f, idm loss: %8.6f' % ((it+1), curr_reward, policy_loss, idm_loss))
+        print('iteration: %5d, total reward: %5.1f, policy loss: %8.6f, idm loss: %8.6f' % ((it+1), policy_reward, policy_loss, idm_loss))
 
       # saving model
       if should(args.save_freq):
-        # Debug
-        # if(curr_reward > best_reward):
-        # best_reward = curr_reward
         print('saving model')
         saver.save(self.sess, args.model_dir)
 
       # Debug
       # After 20 iterations, redo pre demo learning
       #if should(20):
-      #  S, nS, A = self.pre_demonstration()      
+      #  S, nS, A = self.pre_demonstration()
       #  self.update_idm(S, nS, A)
 
 
@@ -230,8 +232,7 @@ class BCO():
       # read demonstration data
       self.demo_examples, self.inputs, self.targets = self.load_demonstration()      
       #self.num_sample = self.M  # Issue: This should not directly be set to M, too low in some cases and too high in some cases!!!
-      self.num_sample = min(self.demo_examples,self.M)
-      #import pdb; pdb.set_trace()
+      self.num_sample = min(self.demo_examples,self.M)      
 
       self.train()
 
