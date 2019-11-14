@@ -1,2 +1,2 @@
 #!/bin/bash
-python3 models/bco_hopper.py --mode=train --input_file=demonstration/expert_obs/Hopper-v2.pkl --model_dir=model/hopper/ --print_freq=10 --save_freq=10 --premodel_dir=premodel/hopper/ --savedPreModel
+python3 models/bco_hopper.py --mode=train --input_file=demonstration/expert_obs/Hopper-v2.pkl --model_dir=model/hopper/ --print_freq=5 --save_freq=50 --premodel_dir=premodel/hopper/ --savedPreModel

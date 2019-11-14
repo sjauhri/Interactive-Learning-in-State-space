@@ -80,7 +80,7 @@ class BCO():
     """uniform sample action to generate (s_t, s_t+1) and action pairs"""
     raise NotImplementedError
 
-  def post_demonstration(self):
+  def post_demonstration(self, M):
     """using policy to generate (s_t, s_t+1) and action pairs"""
     raise NotImplementedError
 
@@ -164,13 +164,17 @@ class BCO():
         return freq > 0 and ((it+1) % freq==0 or it == self.maxits-1 )
 
       # update policy pi
-      S, nS = self.sample_demo()      
+      S, nS = self.sample_demo()
       A = self.eval_idm(S, nS)
       self.update_policy(S, A)
+      # Check loss on another data set.................
+      S, nS = self.sample_demo()
+      A = self.eval_idm(S, nS)
+      # ...............................................
       policy_loss = self.get_policy_loss(S, A)
 
       # update inverse dynamic model
-      S, nS, A = self.post_demonstration()
+      S, nS, A = self.post_demonstration(self.M)
       self.update_idm(S, nS, A)
       #idm_loss = self.get_idm_loss(S, nS, A)
 
@@ -180,7 +184,12 @@ class BCO():
         # if (curr_reward < -999):
         #  import pdb; pdb.set_trace()
         #  dummy = self.eval_rwd_policy()
-        print('iteration: %5d, total reward: %5.1f, policy loss: %8.6f, idm loss: %8.6f' % ((it+1), curr_reward, policy_loss, self.get_idm_loss(S, nS, A)))
+
+        # Check loss on another data set.................
+        S, nS, A = self.post_demonstration(int(round(self.M * 0.15))) # 15% test data
+        idm_loss = self.get_idm_loss(S, nS, A)
+        # ...............................................
+        print('iteration: %5d, total reward: %5.1f, policy loss: %8.6f, idm loss: %8.6f' % ((it+1), curr_reward, policy_loss, idm_loss))
 
       # saving model
       if should(args.save_freq):
@@ -189,6 +198,12 @@ class BCO():
         # best_reward = curr_reward
         print('saving model')
         saver.save(self.sess, args.model_dir)
+
+      # Debug
+      # After 20 iterations, redo pre demo learning
+      if should(20):
+        S, nS, A = self.pre_demonstration()      
+        self.update_idm(S, nS, A)
 
 
   def test(self):

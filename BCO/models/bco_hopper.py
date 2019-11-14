@@ -3,7 +3,7 @@ from bco import BCO
 import gym
 
 class BCO_hopper(BCO):
-  def __init__(self, state_shape, action_shape, lr=0.002, maxits=1000, M=10000):  
+  def __init__(self, state_shape, action_shape, lr=0.002, maxits=1000, M=5000):
     BCO.__init__(self, state_shape, action_shape, lr=lr, maxits=maxits, M=M)
 
     # set which game to play
@@ -61,7 +61,7 @@ class BCO_hopper(BCO):
     Nstates = []
     Actions = []
 
-    for i in range(35000000):#range(int(round(self.M / self.alpha))):    
+    for i in range(int(round(self.M / self.alpha))): #range(35000000):
       if terminal:
         state = self.env.reset()
 
@@ -85,14 +85,14 @@ class BCO_hopper(BCO):
 
     return States, Nstates, Actions
 
-  def post_demonstration(self):
+  def post_demonstration(self, M):
     """using policy to generate (s_t, s_t+1) and action pairs"""
     terminal = True
     States = []
     Nstates = []
     Actions = []
 
-    for i in range(self.M):
+    for i in range(M):
       if terminal:
         state = self.env.reset()
 
