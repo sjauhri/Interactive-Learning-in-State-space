@@ -56,7 +56,7 @@ class BCO_hopper(BCO):
     Nstates = []
     Actions = []
 
-    for i in range(1500000):#range(int(round(self.M / self.alpha))):
+    for i in range(int(round(self.M / self.alpha))):
       if terminal:
         state = self.env.reset()
 

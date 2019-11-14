@@ -100,7 +100,8 @@ class BCO():
       self.sess.run(self.policy_train_step, feed_dict={
         self.state : batch_s,
         self.action: batch_a
-      })      
+      })
+      break
  
   def update_idm(self, state, nstate, action):
     """update inverse dynamic model"""
@@ -115,6 +116,7 @@ class BCO():
         self.nstate: batch_ns,
         self.action: batch_a
       })
+      break
 
   def get_policy_loss(self, state, action):
     """get policy model loss"""
@@ -202,10 +204,10 @@ class BCO():
         saver.save(self.sess, args.model_dir)
 
       # Debug
-      # After 20 iterations, redo pre demo learning
-      #if should(20):
-      #  S, nS, A = self.pre_demonstration()
-      #  self.update_idm(S, nS, A)
+      # After 100 iterations, redo pre demo learning
+      if should(100):
+        S, nS, A = self.pre_demonstration()
+        self.update_idm(S, nS, A)
 
 
   def test(self):
