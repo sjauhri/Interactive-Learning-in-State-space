@@ -75,7 +75,11 @@ docker run --gpus all -it tensorflow/tensorflow:1.15.0-gpu-py3 [optional command
 docker run --gpus all -it drl:0.1
 
 ## Docker run with bind mount
-docker run -it --mount type=bind,source=/home/sjauhri/Desktop,target=/Desktop/ tensorflow/tensorflow:1.15.0-gpu-py3
+docker run --gpus all -it --mount type=bind,source=/home/sjauhri/Desktop,target=/Desktop/ tensorflow/tensorflow:1.15.0-gpu-py3
+docker run --gpus all -it --mount type=bind,source=/home/sjauhri/Desktop,target=/Desktop/ drl:0.1
+
+## Docker Copy files/folders
+docker cp /home/sjauhri/.mujoco/ 0fba4f98f50e:/.mujoco
 
 ## See Images
 docker images -a
