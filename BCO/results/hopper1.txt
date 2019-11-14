@@ -1,0 +1,209 @@
+snehal@snehal-HP-ZBook-Studio-x360-G5:~/Desktop/Thesis/IfO/BCO$ ./scripts/run_bco_hopper.sh 
+/home/snehal/.local/lib/python3.6/site-packages/tensorflow/python/framework/dtypes.py:516: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint8 = np.dtype([("qint8", np.int8, 1)])
+/home/snehal/.local/lib/python3.6/site-packages/tensorflow/python/framework/dtypes.py:517: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint8 = np.dtype([("quint8", np.uint8, 1)])
+/home/snehal/.local/lib/python3.6/site-packages/tensorflow/python/framework/dtypes.py:518: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint16 = np.dtype([("qint16", np.int16, 1)])
+/home/snehal/.local/lib/python3.6/site-packages/tensorflow/python/framework/dtypes.py:519: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint16 = np.dtype([("quint16", np.uint16, 1)])
+/home/snehal/.local/lib/python3.6/site-packages/tensorflow/python/framework/dtypes.py:520: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint32 = np.dtype([("qint32", np.int32, 1)])
+/home/snehal/.local/lib/python3.6/site-packages/tensorflow/python/framework/dtypes.py:525: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  np_resource = np.dtype([("resource", np.ubyte, 1)])
+/home/snehal/.local/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:541: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint8 = np.dtype([("qint8", np.int8, 1)])
+/home/snehal/.local/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:542: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint8 = np.dtype([("quint8", np.uint8, 1)])
+/home/snehal/.local/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:543: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint16 = np.dtype([("qint16", np.int16, 1)])
+/home/snehal/.local/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:544: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint16 = np.dtype([("quint16", np.uint16, 1)])
+/home/snehal/.local/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:545: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint32 = np.dtype([("qint32", np.int32, 1)])
+/home/snehal/.local/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:550: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  np_resource = np.dtype([("resource", np.ubyte, 1)])
+WARNING:tensorflow:From /home/snehal/Desktop/Thesis/IfO/BCO/models/bco.py:16: The name tf.ConfigProto is deprecated. Please use tf.compat.v1.ConfigProto instead.
+
+WARNING:tensorflow:From /home/snehal/Desktop/Thesis/IfO/BCO/models/bco.py:18: The name tf.Session is deprecated. Please use tf.compat.v1.Session instead.
+
+2019-11-13 19:20:42.484360: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2019-11-13 19:20:42.508781: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2208000000 Hz
+2019-11-13 19:20:42.510777: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x2049530 executing computations on platform Host. Devices:
+2019-11-13 19:20:42.510839: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): <undefined>, <undefined>
+WARNING:tensorflow:From /home/snehal/Desktop/Thesis/IfO/BCO/models/bco.py:21: The name tf.variable_scope is deprecated. Please use tf.compat.v1.variable_scope instead.
+
+WARNING:tensorflow:From /home/snehal/Desktop/Thesis/IfO/BCO/models/bco.py:22: The name tf.placeholder is deprecated. Please use tf.compat.v1.placeholder instead.
+
+WARNING:tensorflow:From models/bco_hopper.py:20: dense (from tensorflow.python.layers.core) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.dense instead.
+WARNING:tensorflow:Entity <bound method Dense.call of <tensorflow.python.layers.core.Dense object at 0x7f7f1d80dc50>> could not be transformed and will be executed as-is. Please report this to the AutgoGraph team. When filing the bug, set the verbosity to 10 (on Linux, `export AUTOGRAPH_VERBOSITY=10`) and attach the full output. Cause: converting <bound method Dense.call of <tensorflow.python.layers.core.Dense object at 0x7f7f1d80dc50>>: AssertionError: Bad argument number for Name: 3, expecting 4
+WARNING:tensorflow:Entity <bound method Dense.call of <tensorflow.python.layers.core.Dense object at 0x7f7f1d80dda0>> could not be transformed and will be executed as-is. Please report this to the AutgoGraph team. When filing the bug, set the verbosity to 10 (on Linux, `export AUTOGRAPH_VERBOSITY=10`) and attach the full output. Cause: converting <bound method Dense.call of <tensorflow.python.layers.core.Dense object at 0x7f7f1d80dda0>>: AssertionError: Bad argument number for Name: 3, expecting 4
+WARNING:tensorflow:Entity <bound method Dense.call of <tensorflow.python.layers.core.Dense object at 0x7f7f1d80df28>> could not be transformed and will be executed as-is. Please report this to the AutgoGraph team. When filing the bug, set the verbosity to 10 (on Linux, `export AUTOGRAPH_VERBOSITY=10`) and attach the full output. Cause: converting <bound method Dense.call of <tensorflow.python.layers.core.Dense object at 0x7f7f1d80df28>>: AssertionError: Bad argument number for Name: 3, expecting 4
+WARNING:tensorflow:From models/bco_hopper.py:32: The name tf.squared_difference is deprecated. Please use tf.math.squared_difference instead.
+
+WARNING:tensorflow:From models/bco_hopper.py:34: The name tf.train.AdamOptimizer is deprecated. Please use tf.compat.v1.train.AdamOptimizer instead.
+
+WARNING:tensorflow:Entity <bound method Dense.call of <tensorflow.python.layers.core.Dense object at 0x7f7f1c7ba6a0>> could not be transformed and will be executed as-is. Please report this to the AutgoGraph team. When filing the bug, set the verbosity to 10 (on Linux, `export AUTOGRAPH_VERBOSITY=10`) and attach the full output. Cause: converting <bound method Dense.call of <tensorflow.python.layers.core.Dense object at 0x7f7f1c7ba6a0>>: AssertionError: Bad argument number for Name: 3, expecting 4
+WARNING:tensorflow:Entity <bound method Dense.call of <tensorflow.python.layers.core.Dense object at 0x7f7f784cf668>> could not be transformed and will be executed as-is. Please report this to the AutgoGraph team. When filing the bug, set the verbosity to 10 (on Linux, `export AUTOGRAPH_VERBOSITY=10`) and attach the full output. Cause: converting <bound method Dense.call of <tensorflow.python.layers.core.Dense object at 0x7f7f784cf668>>: AssertionError: Bad argument number for Name: 3, expecting 4
+WARNING:tensorflow:Entity <bound method Dense.call of <tensorflow.python.layers.core.Dense object at 0x7f7f1c724cf8>> could not be transformed and will be executed as-is. Please report this to the AutgoGraph team. When filing the bug, set the verbosity to 10 (on Linux, `export AUTOGRAPH_VERBOSITY=10`) and attach the full output. Cause: converting <bound method Dense.call of <tensorflow.python.layers.core.Dense object at 0x7f7f1c724cf8>>: AssertionError: Bad argument number for Name: 3, expecting 4
+WARNING:tensorflow:From /home/snehal/Desktop/Thesis/IfO/BCO/models/bco.py:31: The name tf.summary.FileWriter is deprecated. Please use tf.compat.v1.summary.FileWriter instead.
+
+/home/snehal/.local/lib/python3.6/site-packages/gym/envs/registration.py:14: PkgResourcesDeprecationWarning: Parameters to load are deprecated.  Call .resolve and .require separately.
+  result = entry_point.load(False)
+WARN: gym.spaces.Box autodetected dtype as <class 'numpy.float32'>. Please provide explicit dtype.
+WARN: gym.spaces.Box autodetected dtype as <class 'numpy.float32'>. Please provide explicit dtype.
+Loaded 498000 demonstrations
+WARNING:tensorflow:From /home/snehal/Desktop/Thesis/IfO/BCO/models/bco.py:139: The name tf.train.Saver is deprecated. Please use tf.compat.v1.train.Saver instead.
+
+WARNING:tensorflow:From /home/snehal/.local/lib/python3.6/site-packages/tensorflow/python/training/saver.py:1276: checkpoint_exists (from tensorflow.python.training.checkpoint_management) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use standard file APIs to check for files with this prefix.
+2019-11-13 19:20:44.996632: W tensorflow/compiler/jit/mark_for_compilation_pass.cc:1412] (One-time warning): Not using XLA:CPU for cluster because envvar TF_XLA_FLAGS=--tf_xla_cpu_global_jit was not set.  If you want XLA:CPU, either set that envvar, or use experimental_jit_scope to enable XLA:CPU.  To confirm that XLA is active, pass --vmodule=xla_compilation_cache=1 (as a proper command-line flag, not via TF_XLA_FLAGS) or set the envvar XLA_FLAGS=--xla_hlo_profile.
+
+[Training]
+Loaded pre demo model
+iteration:     5, total reward: -139.2, policy loss: 31.907316, idm loss: 0.126623
+iteration:    10, total reward: -558.4, policy loss: 7.674912, idm loss: 0.094117
+iteration:    15, total reward: -162.2, policy loss: 1.175798, idm loss: 0.036199
+iteration:    20, total reward: -242.5, policy loss: 0.673936, idm loss: 0.025234
+Collecting idm training data  500000
+iteration:    25, total reward: 327.2, policy loss: 2.015606, idm loss: 0.073529
+iteration:    30, total reward: -214.3, policy loss: 3.303372, idm loss: 0.108551
+iteration:    35, total reward: 116.5, policy loss: 2.866364, idm loss: 0.104710
+iteration:    40, total reward:  96.4, policy loss: 0.712713, idm loss: 0.042663
+Collecting idm training data  500000
+iteration:    45, total reward: -4781.4, policy loss: 3.392319, idm loss: 0.185789
+iteration:    50, total reward: -5120.3, policy loss: 7.124615, idm loss: 0.393532
+saving model
+iteration:    55, total reward: -4935.0, policy loss: 26.854452, idm loss: 1.703176
+iteration:    60, total reward: -4363.9, policy loss: 23.299597, idm loss: 0.647719
+Collecting idm training data  500000
+iteration:    65, total reward: -12595.1, policy loss: 56.564526, idm loss: 4.833726
+iteration:    70, total reward: -27359.4, policy loss: 52.544785, idm loss: 4.813480
+iteration:    75, total reward: -3943.2, policy loss: 35.773468, idm loss: 5.042148
+iteration:    80, total reward: -7924.2, policy loss: 27.503757, idm loss: 0.525494
+Collecting idm training data  500000
+iteration:    85, total reward: -13233.7, policy loss: 53.914543, idm loss: 0.907693
+iteration:    90, total reward: -3302.1, policy loss: 33.071743, idm loss: 1.076212
+iteration:    95, total reward: -2781.4, policy loss: 15.405463, idm loss: 15.156449
+iteration:   100, total reward: -4082.1, policy loss: 30.453140, idm loss: 2.806040
+saving model
+Collecting idm training data  500000
+iteration:   105, total reward: -450.8, policy loss: 31.483446, idm loss: 0.793993
+iteration:   110, total reward: -18369.8, policy loss: 46.723190, idm loss: 0.300486
+iteration:   115, total reward: -193812.4, policy loss: 57.001526, idm loss: 2.799859
+iteration:   120, total reward: -12496.1, policy loss: 37.530308, idm loss: 3.080301
+Collecting idm training data  500000
+iteration:   125, total reward: -10825.5, policy loss: 24.986862, idm loss: 0.097315
+iteration:   130, total reward: -14808.8, policy loss: 24.287670, idm loss: 0.118916
+iteration:   135, total reward: -3816.0, policy loss: 15.255896, idm loss: 0.244584
+iteration:   140, total reward: -1864.8, policy loss: 7.232269, idm loss: 0.820568
+Collecting idm training data  500000
+iteration:   145, total reward: -3261.8, policy loss: 65.350456, idm loss: 3.388706
+iteration:   150, total reward: -793.4, policy loss: 20.193966, idm loss: 0.490442
+saving model
+iteration:   155, total reward: -7302.6, policy loss: 17.599129, idm loss: 1.501432
+iteration:   160, total reward: -33371.6, policy loss: 13.958122, idm loss: 14.317397
+Collecting idm training data  500000
+iteration:   165, total reward: -3949.1, policy loss: 4.740713, idm loss: 1.987195
+iteration:   170, total reward: -762.0, policy loss: 4.397621, idm loss: 0.902579
+iteration:   175, total reward: -2299.1, policy loss: 5.524889, idm loss: 0.598241
+iteration:   180, total reward: -4085.0, policy loss: 2.774535, idm loss: 0.391747
+Collecting idm training data  500000
+iteration:   185, total reward: -992.6, policy loss: 8.704909, idm loss: 0.747305
+iteration:   190, total reward: -108870.4, policy loss: 26.123465, idm loss: 1.206153
+iteration:   195, total reward: -2477900.4, policy loss: 273.574615, idm loss: 7.151508
+iteration:   200, total reward: -3261517.1, policy loss: 557.269836, idm loss: 218.950211
+saving model
+Collecting idm training data  500000
+iteration:   205, total reward: -1571271.1, policy loss: 208.162628, idm loss: 8.933606
+iteration:   210, total reward: -1743199.0, policy loss: 117.983414, idm loss: 2.337342
+iteration:   215, total reward: -2064794.9, policy loss: 69.341858, idm loss: 1.739575
+iteration:   220, total reward: -3376812.6, policy loss: 51.848572, idm loss: 1.266885
+Collecting idm training data  500000
+iteration:   225, total reward: -2663780.3, policy loss: 45.133831, idm loss: 0.686577
+iteration:   230, total reward: -2885232.4, policy loss: 37.334908, idm loss: 0.398310
+iteration:   235, total reward: -4332671.5, policy loss: 37.236298, idm loss: 2.070381
+iteration:   240, total reward: -8205996.8, policy loss: 44.613018, idm loss: 0.434997
+Collecting idm training data  500000
+iteration:   245, total reward: -5856767.2, policy loss: 31.764275, idm loss: 0.865899
+iteration:   250, total reward: -4608239.1, policy loss: 31.373718, idm loss: 1.680057
+saving model
+iteration:   255, total reward: -8062842.2, policy loss: 31.928059, idm loss: 0.635333
+iteration:   260, total reward: -7199497.8, policy loss: 23.509691, idm loss: 0.917288
+Collecting idm training data  500000
+iteration:   265, total reward: -2269530.4, policy loss: 63.845707, idm loss: 1.968732
+iteration:   270, total reward: -896795.1, policy loss: 48.293407, idm loss: 4.723855
+iteration:   275, total reward: -1233707.5, policy loss: 24.174408, idm loss: 1.892342
+iteration:   280, total reward: -1506424.4, policy loss: 28.911581, idm loss: 1.176350
+Collecting idm training data  500000
+iteration:   285, total reward: -1971841.4, policy loss: 28.509184, idm loss: 0.719905
+iteration:   290, total reward: -789088.1, policy loss: 25.766521, idm loss: 18.668146
+iteration:   295, total reward: -807383.8, policy loss: 25.685450, idm loss: 3.256688
+iteration:   300, total reward: -696925.8, policy loss: 13.385896, idm loss: 0.727186
+saving model
+Collecting idm training data  500000
+iteration:   305, total reward: -457214.3, policy loss: 17.061075, idm loss: 0.332273
+iteration:   310, total reward: -672430.6, policy loss: 8.134134, idm loss: 0.106801
+iteration:   315, total reward: -666187.6, policy loss: 10.236308, idm loss: 0.586285
+iteration:   320, total reward: -636858.9, policy loss: 6.369050, idm loss: 0.962109
+Collecting idm training data  500000
+iteration:   325, total reward: -577208.9, policy loss: 12.257971, idm loss: 0.078244
+iteration:   330, total reward: -390131.3, policy loss: 8.835294, idm loss: 0.265095
+iteration:   335, total reward: -446446.7, policy loss: 11.340353, idm loss: 0.299183
+iteration:   340, total reward: -523940.2, policy loss: 7.772923, idm loss: 0.081279
+Collecting idm training data  500000
+iteration:   345, total reward: -740248.3, policy loss: 14.763196, idm loss: 3.344736
+iteration:   350, total reward: -2952731.1, policy loss: 59.522427, idm loss: 14.793531
+saving model
+iteration:   355, total reward: -4703472.3, policy loss: 100.199448, idm loss: 2.099566
+iteration:   360, total reward: -5071285.0, policy loss: 70.149391, idm loss: 1.342236
+Collecting idm training data  500000
+iteration:   365, total reward: -3264594.7, policy loss: 83.020660, idm loss: 18.155691
+iteration:   370, total reward: -16105193.8, policy loss: 478.274628, idm loss: 44.680389
+iteration:   375, total reward: -57431538.7, policy loss: 2322.331055, idm loss: 313.207458
+iteration:   380, total reward: -137630157.6, policy loss: 4115.515137, idm loss: 592.652466
+Collecting idm training data  500000
+iteration:   385, total reward: -98733333.9, policy loss: 2714.590332, idm loss: 108.725204
+iteration:   390, total reward: -156406087.6, policy loss: 5066.675293, idm loss: 187.329910
+iteration:   395, total reward: -231835496.2, policy loss: 3923.176025, idm loss: 170.060150
+iteration:   400, total reward: -292482590.6, policy loss: 3485.204346, idm loss: 176.449142
+saving model
+Collecting idm training data  500000
+iteration:   405, total reward: -279046294.8, policy loss: 2492.582520, idm loss: 161.309692
+iteration:   410, total reward: -437742059.2, policy loss: 2424.258545, idm loss: 61.959396
+iteration:   415, total reward: -487158625.9, policy loss: 2138.921631, idm loss: 43.268253
+iteration:   420, total reward: -528995298.5, policy loss: 1743.607788, idm loss: 35.469799
+Collecting idm training data  500000
+iteration:   425, total reward: -458895895.1, policy loss: 1360.659424, idm loss: 193.016800
+iteration:   430, total reward: -492928317.1, policy loss: 1577.195190, idm loss: 32.603596
+iteration:   435, total reward: -462232807.7, policy loss: 1643.972778, idm loss: 68.215958
+iteration:   440, total reward: -450747731.7, policy loss: 1416.599243, idm loss: 70.320717
+Collecting idm training data  500000
+iteration:   445, total reward: -277143139.4, policy loss: 1266.905762, idm loss: 78.875679
+iteration:   450, total reward: -338007942.5, policy loss: 1036.902344, idm loss: 109.299393
+saving model
+iteration:   455, total reward: -295767463.8, policy loss: 1140.759644, idm loss: 126.475182
+iteration:   460, total reward: -264625218.7, policy loss: 1044.211304, idm loss: 27.794031
+Collecting idm training data  500000
+iteration:   465, total reward: -315794825.0, policy loss: 895.663086, idm loss: 14.642441
+iteration:   470, total reward: -323121195.8, policy loss: 900.578430, idm loss: 11.237733
+iteration:   475, total reward: -296802404.5, policy loss: 615.662903, idm loss: 9.915458
+iteration:   480, total reward: -273441390.0, policy loss: 584.837646, idm loss: 14.143039
+Collecting idm training data  500000
+iteration:   485, total reward: -242257859.9, policy loss: 888.815552, idm loss: 7.981248
+iteration:   490, total reward: -164927979.3, policy loss: 756.285156, idm loss: 7.224839
+iteration:   495, total reward: -232044782.2, policy loss: 761.520142, idm loss: 40.171097
+iteration:   500, total reward: -163609163.4, policy loss: 718.039734, idm loss: 324.966248
+saving model
+Collecting idm training data  500000
+iteration:   505, total reward: -173061239.3, policy loss: 1009.322449, idm loss: 73.126892
+iteration:   510, total reward: -150916099.4, policy loss: 734.068176, idm loss: 131.028854
+iteration:   515, total reward: -184232937.2, policy loss: 651.617065, idm loss: 151.951019
+iteration:   520, total reward: -240839979.3, policy loss: 567.131714, idm loss: 84.125832
+Collecting idm training data  500000
+iteration:   525, total reward: -142146843.6, policy loss: 498.281677, idm loss: 303.257599
+iteration:   530, total reward: -89310098.8, policy loss: 657.016846, idm loss: 70.502815
+iteration:   535, total reward: -93794754.8, policy loss: 525.595581, idm loss: 29.430317
