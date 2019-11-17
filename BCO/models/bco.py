@@ -206,9 +206,9 @@ class BCO():
 
       # Debug
       # After 100 iterations, redo pre demo learning
-      if should(100):
-        S, nS, A = self.pre_demonstration()
-        self.update_idm(S, nS, A)
+      #if should(100):
+      #  S, nS, A = self.pre_demonstration()
+      #  self.update_idm(S, nS, A)
 
 
   def test(self):
