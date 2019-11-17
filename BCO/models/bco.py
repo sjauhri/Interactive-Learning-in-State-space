@@ -45,7 +45,8 @@ class BCO():
       targets = expert_data['observations_next']
 
     num_samples = len(inputs)
-    print("Loaded %d demonstrations" % num_samples)    
+    print("Loaded %d demonstrations" % num_samples)
+    #import pdb; pdb.set_trace()
 
     return num_samples, inputs, targets
 
