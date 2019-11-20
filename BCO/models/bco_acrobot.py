@@ -119,6 +119,7 @@ class BCO_acrobot(BCO):
       total_reward += reward
       if args.render:
         self.env.render()
+        time.sleep(0.05)
 
     return total_reward
     
