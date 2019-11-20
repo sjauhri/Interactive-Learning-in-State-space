@@ -3,8 +3,8 @@ from bco import BCO
 import gym
 
 class BCO_mcar(BCO):
-  def __init__(self, state_shape, action_shape, lr=0.002, maxits=1000, M=2000):
-    BCO.__init__(self, state_shape, action_shape, lr=lr, maxits=maxits, M=M)
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=200, epochTrainIts=20000, M=20, batch_size=16):
+    BCO.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M, batch_size=batch_size)
 
     # set which game to play
     self.env = gym.make('MountainCar-v0')
@@ -59,7 +59,7 @@ class BCO_mcar(BCO):
     Nstates = []
     Actions = []
 
-    for i in range(500000):#range(int(round(self.M / self.alpha))):
+    for i in range(int(round(self.M / self.alpha))):
       if terminal:
         state = self.env.reset()
 
@@ -76,19 +76,19 @@ class BCO_mcar(BCO):
       Nstates.append(state)
       Actions.append(a)
 
-      if i and (i+1) % 10000 == 0:
+      if i and (i+1) % 1000 == 0:
         print("Collecting idm training data ", i+1)
 
     return States, Nstates, Actions
 
-  def post_demonstration(self):
+  def post_demonstration(self, M):
     """using policy to generate (s_t, s_t+1) and action pairs"""
     terminal = True
     States = []
     Nstates = []
     Actions = []
 
-    for i in range(self.M):
+    for i in range(M):
       if terminal:
         state = self.env.reset()
 
@@ -119,10 +119,10 @@ class BCO_mcar(BCO):
       total_reward += reward
       if args.render:        
         self.env.render()
-        import time; time.sleep(0.02)     
+        time.sleep(0.02)     
 
     return total_reward
     
 if __name__ == "__main__":
-  bco = BCO_mcar(2, 3, lr=args.lr, maxits=args.maxits)
+  bco = BCO_mcar(2, 3, lr=args.lr, maxEpochs=args.maxEpochs)
   bco.run()

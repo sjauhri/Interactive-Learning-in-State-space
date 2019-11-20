@@ -3,6 +3,9 @@ import argparse
 import os
 import pickle
 import numpy as np
+import random
+import time
+import pdb
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--input_filename", default="demonstration/expert_obs/CartPole-v0.pkl", help="the demonstration inputs")
@@ -10,15 +13,17 @@ parser.add_argument("--mode", default="train", choices=["train", "test"], requir
 parser.add_argument("--model_dir", help="where to save/restore the model")
 parser.add_argument("--premodel_dir", help="where to save/restore the pre-demonstration trained model")
 
-parser.add_argument("--maxits", type=int, default=1000, help="the number of training iteration")
-parser.add_argument("--M", type=int, default=1000, help="the number of post demonstration examples")
+parser.add_argument("--maxEpochs", type=int, default=200, help="the number of overall loop iterations")
+parser.add_argument("--epochTrainIts", type=int, default=5000, help="the number of training iterations executed every epoch")
+parser.add_argument("--M", type=int, default=50, help="the number of post demonstration examples")
 
 parser.add_argument("--batch_size", type=int, default=32, help="number of examples in batch")
-parser.add_argument("--lr", type=float, default=0.002, help="initial learning rate for adam SGD")
+parser.add_argument('--printTime', action='store_true')
+parser.add_argument("--lr", type=float, default=0.001, help="initial learning rate for adam SGD")
 parser.add_argument('--render', action='store_true')
 parser.add_argument('--savedPreModel', action='store_true')
-parser.add_argument("--save_freq", type=int, default=100, help="save model every save_freq iterations, 0 to disable")
-parser.add_argument("--print_freq", type=int, default=50, help="print current reward and loss every print_freq iterations, 0 to disable")
+parser.add_argument("--save_freq", type=int, default=10, help="save model every save_freq iterations, 0 to disable")
+parser.add_argument("--print_freq", type=int, default=10, help="print current reward and loss every print_freq iterations, 0 to disable")
 
 args = parser.parse_args()
 

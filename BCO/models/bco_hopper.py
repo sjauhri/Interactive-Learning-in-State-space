@@ -3,13 +3,11 @@ from bco import BCO
 import gym
 
 class BCO_hopper(BCO):
-  def __init__(self, state_shape, action_shape, lr=0.002, maxits=1000, M=10000):  
-    BCO.__init__(self, state_shape, action_shape, lr=lr, maxits=maxits, M=M)
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=200, epochTrainIts=10000, M=200):
+    BCO.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M)
 
     # set which game to play
     self.env = gym.make('Hopper-v2')
-    #import pdb; pdb.set_trace()
-    #env.observation_space.high
   
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
@@ -23,12 +21,10 @@ class BCO_hopper(BCO):
         policy_h2 = tf.nn.leaky_relu(policy_h2, 0.2, name="LeakyRelu_2")
 
       with tf.variable_scope("output") as scope:
-        self.policy_pred_action = tf.layers.dense(policy_h2, self.action_dim, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")
-        #self.tmp_policy_pred_action = policy_pred_action
-        #self.policy_pred_action = tf.one_hot(tf.argmax(policy_pred_action, axis=1), self.action_dim, name="one_hot")
+        self.tmp_policy_pred_action = tf.layers.dense(policy_h2, self.action_dim, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")
+        self.policy_pred_action = tf.clip_by_value(self.tmp_policy_pred_action, clip_value_min=-1, clip_value_max=1)
 
-      with tf.variable_scope("loss") as scope:
-        #self.policy_loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.action, logits=policy_pred_action))
+      with tf.variable_scope("loss") as scope:        
         self.policy_loss = tf.reduce_mean(tf.squared_difference(self.policy_pred_action, self.action))
       with tf.variable_scope("train_step") as scope:
         self.policy_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.policy_loss)
@@ -45,11 +41,10 @@ class BCO_hopper(BCO):
         idm_h2 = tf.nn.leaky_relu(idm_h2, 0.2, name="LeakyRelu_2")
 
       with tf.variable_scope("output") as scope:
-        self.idm_pred_action = tf.layers.dense(idm_h2, self.action_dim, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")
-        #self.idm_pred_action = tf.one_hot(tf.argmax(idm_pred_action, axis=1), self.action_dim, name="one_hot")
+        self.tmp_idm_pred_action = tf.layers.dense(idm_h2, self.action_dim, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")
+        self.idm_pred_action = tf.clip_by_value(self.tmp_idm_pred_action, clip_value_min=-1, clip_value_max=1)        
 
-      with tf.variable_scope("loss") as scope:
-        #self.idm_loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.action, logits=idm_pred_action))
+      with tf.variable_scope("loss") as scope:        
         self.idm_loss = tf.reduce_mean(tf.squared_difference(self.idm_pred_action, self.action))
       with tf.variable_scope("train_step") as scope:
         self.idm_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.idm_loss)
@@ -61,18 +56,16 @@ class BCO_hopper(BCO):
     Nstates = []
     Actions = []
 
-    for i in range(35000000):#range(int(round(self.M / self.alpha))):    
+    for i in range(int(round(self.M / self.alpha))):
       if terminal:
         state = self.env.reset()
 
       prev_s = state
       state = np.reshape(state, [-1, self.state_dim])
 
-      #A = np.random.randint(self.action_dim)
-      #a = np.zeros([self.action_dim])
-      #a[A] = 1
-      # Changed to continuos action space
-      A = np.random.rand(self.action_dim)
+      # Continuos action space
+      # Hopper actions between -1 and 1
+      A = np.random.uniform(-1, 1, self.action_dim)
 
       state, _, terminal, _ = self.env.step(A)
 
@@ -80,28 +73,26 @@ class BCO_hopper(BCO):
       Nstates.append(state)
       Actions.append(A)
 
-      if i and (i+1) % 500000 == 0:
+      if i and (i+1) % 1000 == 0:
         print("Collecting idm training data ", i+1)
 
     return States, Nstates, Actions
 
-  def post_demonstration(self):
+  def post_demonstration(self, M):
     """using policy to generate (s_t, s_t+1) and action pairs"""
     terminal = True
     States = []
     Nstates = []
     Actions = []
 
-    for i in range(self.M):
+    for i in range(M):
       if terminal:
         state = self.env.reset()
 
       prev_s = state
       state = np.reshape(state, [-1,self.state_dim])
 
-      #a = np.reshape(self.eval_policy(state), [-1])
-      #A = np.argmax(a)
-      # Changed to continuos action space      
+      # Continuos action space      
       A = np.reshape(self.eval_policy(state), [-1])
       state, _, terminal, _ = self.env.step(A)
 
@@ -117,20 +108,18 @@ class BCO_hopper(BCO):
     total_reward = 0
     state = self.env.reset()    
 
-    #while not terminal:
-    for i in range(250):
+    while not terminal:
+    #for i in range(250):
       state = np.reshape(state, [-1,self.state_dim])
-      #a = np.reshape(self.eval_policy(state), [-1])
-      #A = np.argmax(a)
-      # Changed to continuos action space
+      # Continuos action space
       A = np.reshape(self.eval_policy(state), [-1])
       state, reward, terminal, _ = self.env.step(A)
       total_reward += reward
       if args.render:
-        self.env.render()        
+        self.env.render()
 
     return total_reward
     
 if __name__ == "__main__":
-  bco = BCO_hopper(11, 3, lr=args.lr, maxits=args.maxits)
+  bco = BCO_hopper(11, 3, lr=args.lr, maxEpochs=args.maxEpochs)
   bco.run()

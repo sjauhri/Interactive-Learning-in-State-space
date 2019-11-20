@@ -3,8 +3,8 @@ from bco import BCO
 import gym
 
 class BCO_reacher(BCO):
-  def __init__(self, state_shape, action_shape, lr=0.002, maxits=1000, M=1000):  
-    BCO.__init__(self, state_shape, action_shape, lr=lr, maxits=maxits, M=M)
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=200, epochTrainIts=5000, M=50):  
+    BCO.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M)
 
     # set which game to play
     self.env = gym.make('Reacher-v2')
@@ -74,19 +74,19 @@ class BCO_reacher(BCO):
       Nstates.append(state)
       Actions.append(a)
 
-      if i and (i+1) % 10000 == 0:
+      if i and (i+1) % 1000 == 0:
         print("Collecting idm training data ", i+1)
 
     return States, Nstates, Actions
 
-  def post_demonstration(self):
+  def post_demonstration(self, M):
     """using policy to generate (s_t, s_t+1) and action pairs"""
     terminal = True
     States = []
     Nstates = []
     Actions = []
 
-    for i in range(self.M):
+    for i in range(M):
       if terminal:
         state = self.env.reset()
 
@@ -120,5 +120,5 @@ class BCO_reacher(BCO):
     return total_reward
     
 if __name__ == "__main__":
-  bco = BCO_reacher(11, 2, lr=args.lr, maxits=args.maxits)
+  bco = BCO_reacher(11, 2, lr=args.lr, maxEpochs=args.maxEpochs)
   bco.run()
