@@ -79,14 +79,14 @@ class BCO_reacher(BCO):
 
     return States, Nstates, Actions
 
-  def post_demonstration(self):
+  def post_demonstration(self, M):
     """using policy to generate (s_t, s_t+1) and action pairs"""
     terminal = True
     States = []
     Nstates = []
     Actions = []
 
-    for i in range(self.M):
+    for i in range(M):
       if terminal:
         state = self.env.reset()
 
