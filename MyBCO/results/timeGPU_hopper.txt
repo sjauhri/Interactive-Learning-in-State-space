@@ -1,0 +1,18 @@
+Policy Learning time:  0.003582000732421875
+Model Learning time:  0.0043642520904541016
+iteration:     5, total reward:  33.2, policy loss: 0.296472, idm loss: 0.008368
+Policy Learning time:  0.003146648406982422
+Model Learning time:  0.00400543212890625
+iteration:    10, total reward:  14.5, policy loss: 0.231484, idm loss: 0.001660
+Policy Learning time:  0.0032601356506347656
+Model Learning time:  0.004294395446777344
+iteration:    15, total reward:   7.8, policy loss: 0.196133, idm loss: 0.001308
+Policy Learning time:  0.003315448760986328
+Model Learning time:  0.003987312316894531
+iteration:    20, total reward:   6.3, policy loss: 0.170600, idm loss: 0.001332
+Policy Learning time:  0.0033783912658691406
+Model Learning time:  0.004477500915527344
+iteration:    25, total reward:   5.4, policy loss: 0.139325, idm loss: 0.004375
+Policy Learning time:  0.003588438034057617
+Model Learning time:  0.004807233810424805
+iteration:    30, total reward:   5.0, policy loss: 0.112481, idm loss: 0.001975
