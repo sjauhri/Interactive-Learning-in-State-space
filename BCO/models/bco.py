@@ -4,15 +4,16 @@ import gym
 import time
 
 class BCO():
-  def __init__(self, state_shape, action_shape, lr=0.002, maxits=1000, M=1000):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=1000, epochTrainIts=5000, M=50, batch_size=32):
     # set initial value
     self.state_dim = state_shape            # state dimension
     self.action_dim = action_shape          # action dimension
     self.lr = lr                            # model update learning rate
-    self.maxits = maxits                    # maximum iteration
-    self.batch_size = args.batch_size       # batch size
+    self.maxEpochs = maxEpochs              # maximum epochs
+    self.epochTrainIts = epochTrainIts      # maximum training iterations every epoch
+    self.batch_size = batch_size            # batch size
     self.alpha = 0.01                       # alpha = | post_demo | / | pre_demo |
-    self.M = M                              # sample to update inverse dynamic model
+    self.M = M                              # samples to update inverse dynamic model
 
     # initial session
     config = tf.ConfigProto()  
@@ -50,10 +51,10 @@ class BCO():
 
     return num_samples, inputs, targets
 
-  def sample_demo(self):
+  def sample_demo(self, num_samples):
     """sample demonstration"""
     sample_idx = range(self.demo_examples)
-    sample_idx = np.random.choice(sample_idx, self.num_sample)
+    sample_idx = np.random.choice(sample_idx, num_samples)
     S = [ self.inputs[i] for i in sample_idx ]
     nS = [ self.targets[i] for i in sample_idx ]
     return S, nS
@@ -91,33 +92,46 @@ class BCO():
     """getting the reward by current policy model"""
     raise NotImplementedError
     
-  def update_policy(self, state, action):
+  def update_policy(self):
     """update policy model"""
+    A = self.eval_idm(S, nS)
     num = len(state)
-    idxs = get_shuffle_idx(num, self.batch_size)
-    for idx in idxs:
-      batch_s = [  state[i] for i in idx ]
-      batch_a = [ action[i] for i in idx ]
-      self.sess.run(self.policy_train_step, feed_dict={
-        self.state : batch_s,
-        self.action: batch_a
-      })
-      break
+    if(num >= self.batch_size):      
+      for it in range(1, self.epochTrainIts+1):
+        idxs = random.sample(range(num), self.batch_size)
+        batch_s = [  state[i] for i in idxs ]
+        batch_a = [ action[i] for i in idxs ]
+        self.sess.run(self.policy_train_step, feed_dict={
+          self.state : batch_s,
+          self.action: batch_a
+        })
+        # Debug
+        #if it % 500 == 0:
+        #  policy_loss = self.get_policy_loss(batch_s, batch_a)
+        #  print('Policy train: iteration: %5d, policy loss: %8.6f' % (it, policy_loss))        
+    else:
+      print("Error!! Batch size greater than number of samples provided for training")     
  
   def update_idm(self, state, nstate, action):
     """update inverse dynamic model"""
     num = len(state)
-    idxs = get_shuffle_idx(num, self.batch_size)
-    for idx in idxs:
-      batch_s  = [  state[i] for i in idx ]
-      batch_ns = [ nstate[i] for i in idx ]
-      batch_a  = [ action[i] for i in idx ]      
-      self.sess.run(self.idm_train_step, feed_dict={
-        self.state : batch_s,
-        self.nstate: batch_ns,
-        self.action: batch_a
-      })
-      break
+    if(num >= self.batch_size):
+      for it in range(1, self.epochTrainIts+1):
+        idxs = random.sample(range(num), self.batch_size)
+        batch_s  = [  state[i] for i in idxs ]
+        batch_ns = [ nstate[i] for i in idxs ]
+        batch_a  = [ action[i] for i in idxs ]      
+        self.sess.run(self.idm_train_step, feed_dict={
+          self.state : batch_s,
+          self.nstate: batch_ns,
+          self.action: batch_a
+        })
+        # Debug
+        #if it % 500 == 0:
+        #  idm_loss = self.get_idm_loss(batch_s, batch_ns, batch_a)
+        #  print('IDM train: iteration: %5d, idm loss: %8.6f' % (it, idm_loss))
+    else:
+      print("Error!! Batch size greater than number of samples provided for training")
 
   def get_policy_loss(self, state, action):
     """get policy model loss"""
@@ -155,27 +169,25 @@ class BCO():
       # Save pre-demo trained model
       print('saving pre demo model')
       saver_pre = tf.train.Saver(max_to_keep=1)
-      saver_pre.save(self.sess, args.premodel_dir)        
+      saver_pre.save(self.sess, args.premodel_dir)
     
     # Init model saver
-    saver = tf.train.Saver(max_to_keep=1)    
+    saver = tf.train.Saver(max_to_keep=1)
 
-    for it in range(self.maxits):
+    for it in range(self.maxEpochs):
       def should(freq):
-        return freq > 0 and ((it+1) % freq==0 or it == self.maxits-1 )
+        return freq > 0 and ((it+1) % freq==0 or it == self.maxEpochs-1)
 
       # update policy pi
-      S, nS = self.sample_demo()
-      A = self.eval_idm(S, nS)
       currTime = time.time()
-      self.update_policy(S, A)
+      self.update_policy()
       
       # Print time taken for debug
       if (args.printTime and should(args.print_freq)):
         print("Policy Learning time: ", time.time() - currTime)
       
       # Check loss on another data set.................
-      S, nS = self.sample_demo()
+      S, nS = self.sample_demo(self.demo_examples/20) # 5 % of the demo data
       A = self.eval_idm(S, nS)
       # ...............................................
       policy_loss = self.get_policy_loss(S, A)
@@ -194,7 +206,7 @@ class BCO():
         policy_reward = self.eval_rwd_policy()
 
         # Check loss on another data set.................
-        S, nS, A = self.post_demonstration(int(round(self.M * 0.15))) # 15% test data
+        S, nS, A = self.post_demonstration(self.M)
         idm_loss = self.get_idm_loss(S, nS, A)
         # ...............................................
         print('iteration: %5d, total reward: %5.1f, policy loss: %8.6f, idm loss: %8.6f' % ((it+1), policy_reward, policy_loss, idm_loss))
@@ -234,8 +246,6 @@ class BCO():
 
       # read demonstration data
       self.demo_examples, self.inputs, self.targets = self.load_demonstration()      
-      #self.num_sample = self.M  # Issue: This should not directly be set to M, too low in some cases and too high in some cases!!!
-      self.num_sample = min(self.demo_examples,self.M)      
 
       self.train()
 

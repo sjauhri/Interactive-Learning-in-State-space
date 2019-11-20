@@ -3,8 +3,8 @@ from bco import BCO
 import gym
 
 class BCO_hopper(BCO):
-  def __init__(self, state_shape, action_shape, lr=0.002, maxits=1000, M=5000):
-    BCO.__init__(self, state_shape, action_shape, lr=lr, maxits=maxits, M=M)
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=1000, epochTrainIts=5000, M=200):
+    BCO.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M)
 
     # set which game to play
     self.env = gym.make('HalfCheetah-v2')    
@@ -73,7 +73,7 @@ class BCO_hopper(BCO):
       Nstates.append(state)
       Actions.append(A)
 
-      if i and (i+1) % 50000 == 0:
+      if i and (i+1) % 1000 == 0:
         print("Collecting idm training data ", i+1)
 
     return States, Nstates, Actions
@@ -121,5 +121,5 @@ class BCO_hopper(BCO):
     return total_reward
     
 if __name__ == "__main__":
-  bco = BCO_hopper(17, 6, lr=args.lr, maxits=args.maxits)
+  bco = BCO_hopper(17, 6, lr=args.lr, maxEpochs=args.maxEpochs)
   bco.run()
