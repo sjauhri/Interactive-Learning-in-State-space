@@ -108,7 +108,7 @@ class BCO():
     """update inverse dynamic model"""
     num = len(state)
     if(num >= self.batch_size):
-      for it in range(1, self.epochTrainIts+1):
+      for it in range(1, self.epochTrainIts+1):        
         idxs = random.sample(range(num), self.batch_size)
         batch_s  = [  state[i] for i in idxs ]
         batch_ns = [ nstate[i] for i in idxs ]
