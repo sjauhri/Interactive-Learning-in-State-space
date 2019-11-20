@@ -3,7 +3,7 @@ from bco import BCO
 import gym
 
 class BCO_hopper(BCO):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=1000, epochTrainIts=5000, M=200):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=1000, epochTrainIts=10000, M=100):
     BCO.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M)
 
     # set which game to play

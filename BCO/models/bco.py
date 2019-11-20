@@ -42,8 +42,12 @@ class BCO():
       expert_data = pickle.load(f)
       inputs = expert_data['observations']
       targets = expert_data['observations_next']
-
+    
     num_samples = len(inputs)
+    if(num_samples > 10000):      
+      inputs = inputs[0:10000]
+      targets = targets[0:10000]
+      num_samples = 10000
     print("Loaded %d demonstrations" % num_samples)
     #import pdb; pdb.set_trace()
 

@@ -5,6 +5,7 @@ import pickle
 import numpy as np
 import random
 import time
+import pdb
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--input_filename", default="demonstration/expert_obs/CartPole-v0.pkl", help="the demonstration inputs")
@@ -21,8 +22,8 @@ parser.add_argument('--printTime', action='store_true')
 parser.add_argument("--lr", type=float, default=0.001, help="initial learning rate for adam SGD")
 parser.add_argument('--render', action='store_true')
 parser.add_argument('--savedPreModel', action='store_true')
-parser.add_argument("--save_freq", type=int, default=5, help="save model every save_freq iterations, 0 to disable")
-parser.add_argument("--print_freq", type=int, default=5, help="print current reward and loss every print_freq iterations, 0 to disable")
+parser.add_argument("--save_freq", type=int, default=10, help="save model every save_freq iterations, 0 to disable")
+parser.add_argument("--print_freq", type=int, default=10, help="print current reward and loss every print_freq iterations, 0 to disable")
 
 args = parser.parse_args()
 
