@@ -13,7 +13,7 @@ parser.add_argument("--mode", default="train", choices=["train", "test"], requir
 parser.add_argument("--model_dir", help="where to save/restore the model")
 parser.add_argument("--premodel_dir", help="where to save/restore the pre-demonstration trained model")
 
-parser.add_argument("--maxEpochs", type=int, default=1000, help="the number of overall loop iterations")
+parser.add_argument("--maxEpochs", type=int, default=200, help="the number of overall loop iterations")
 parser.add_argument("--epochTrainIts", type=int, default=5000, help="the number of training iterations executed every epoch")
 parser.add_argument("--M", type=int, default=50, help="the number of post demonstration examples")
 

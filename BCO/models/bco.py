@@ -2,7 +2,7 @@ from utils import *
 import gym
 
 class BCO():
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=1000, epochTrainIts=5000, M=50, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=200, epochTrainIts=5000, M=50, batch_size=32):
     # set initial value
     self.state_dim = state_shape            # state dimension
     self.action_dim = action_shape          # action dimension
