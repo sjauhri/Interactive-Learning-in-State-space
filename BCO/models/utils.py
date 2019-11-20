@@ -4,6 +4,7 @@ import os
 import pickle
 import numpy as np
 import random
+import time
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--input_filename", default="demonstration/expert_obs/CartPole-v0.pkl", help="the demonstration inputs")

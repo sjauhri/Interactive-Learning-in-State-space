@@ -1,7 +1,5 @@
 from utils import *
 import gym
-# Debug
-import time
 
 class BCO():
   def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=1000, epochTrainIts=5000, M=50, batch_size=32):
