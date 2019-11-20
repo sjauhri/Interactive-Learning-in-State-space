@@ -119,7 +119,7 @@ class BCO_mcar(BCO):
       total_reward += reward
       if args.render:        
         self.env.render()
-        import time; time.sleep(0.02)     
+        time.sleep(0.02)     
 
     return total_reward
     
