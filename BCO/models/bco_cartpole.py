@@ -3,7 +3,7 @@ from bco import BCO
 import gym
 
 class BCO_cartpole(BCO):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=1000, epochTrainIts=5000, M=10, batch_size=8):  
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=1000, epochTrainIts=1000, M=10, batch_size=8):  
     BCO.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M, batch_size=batch_size)
 
     # set which game to play

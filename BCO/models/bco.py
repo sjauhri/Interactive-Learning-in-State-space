@@ -94,23 +94,17 @@ class BCO():
     
   def update_policy(self):
     """update policy model"""
-    A = self.eval_idm(S, nS)
-    num = len(state)
-    if(num >= self.batch_size):      
-      for it in range(1, self.epochTrainIts+1):
-        idxs = random.sample(range(num), self.batch_size)
-        batch_s = [  state[i] for i in idxs ]
-        batch_a = [ action[i] for i in idxs ]
-        self.sess.run(self.policy_train_step, feed_dict={
-          self.state : batch_s,
-          self.action: batch_a
-        })
-        # Debug
-        #if it % 500 == 0:
-        #  policy_loss = self.get_policy_loss(batch_s, batch_a)
-        #  print('Policy train: iteration: %5d, policy loss: %8.6f' % (it, policy_loss))        
-    else:
-      print("Error!! Batch size greater than number of samples provided for training")     
+    for it in range(1, self.epochTrainIts+1):
+      batch_s, batch_ns =  self.sample_demo(self.batch_size)
+      batch_a = self.eval_idm(batch_s, batch_ns)
+      self.sess.run(self.policy_train_step, feed_dict={
+      self.state : batch_s,
+      self.action: batch_a
+      })
+      # Debug
+      if it % 500 == 0:
+        policy_loss = self.get_policy_loss(batch_s, batch_a)
+        print('Policy train: iteration: %5d, policy loss: %8.6f' % (it, policy_loss))    
  
   def update_idm(self, state, nstate, action):
     """update inverse dynamic model"""
@@ -127,9 +121,9 @@ class BCO():
           self.action: batch_a
         })
         # Debug
-        #if it % 500 == 0:
-        #  idm_loss = self.get_idm_loss(batch_s, batch_ns, batch_a)
-        #  print('IDM train: iteration: %5d, idm loss: %8.6f' % (it, idm_loss))
+        if it % 500 == 0:
+          idm_loss = self.get_idm_loss(batch_s, batch_ns, batch_a)
+          print('IDM train: iteration: %5d, idm loss: %8.6f' % (it, idm_loss))
     else:
       print("Error!! Batch size greater than number of samples provided for training")
 
@@ -184,13 +178,7 @@ class BCO():
       
       # Print time taken for debug
       if (args.printTime and should(args.print_freq)):
-        print("Policy Learning time: ", time.time() - currTime)
-      
-      # Check loss on another data set.................
-      S, nS = self.sample_demo(self.demo_examples/20) # 5 % of the demo data
-      A = self.eval_idm(S, nS)
-      # ...............................................
-      policy_loss = self.get_policy_loss(S, A)
+        print("Policy Learning time: ", time.time() - currTime)    
 
       # update inverse dynamic model
       S, nS, A = self.post_demonstration(self.M)
@@ -199,13 +187,18 @@ class BCO():
       
       # Print time taken for debug
       if (args.printTime and should(args.print_freq)):
-        print("Model Learning time: ", time.time() - currTime)
-      #idm_loss = self.get_idm_loss(S, nS, A)
+        print("Model Learning time: ", time.time() - currTime)      
 
       if should(args.print_freq):
         policy_reward = self.eval_rwd_policy()
 
-        # Check loss on another data set.................
+        # Check policy loss on another data set.................
+        S, nS = self.sample_demo(int(round(self.demo_examples/20))) # 5% of the demo data
+        A = self.eval_idm(S, nS)
+        policy_loss = self.get_policy_loss(S, A)
+        # ...............................................        
+        
+        # Check idm loss on another data set.................
         S, nS, A = self.post_demonstration(self.M)
         idm_loss = self.get_idm_loss(S, nS, A)
         # ...............................................
