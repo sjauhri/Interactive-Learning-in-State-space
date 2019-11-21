@@ -12,6 +12,7 @@ class BCO():
     self.batch_size = batch_size            # batch size
     self.alpha = 0.01                       # alpha = | post_demo | / | pre_demo |
     self.M = M                              # samples to update inverse dynamic model
+    self.ExpBuff  = []                      # Experience buffer for replay 
 
     # initial session
     config = tf.ConfigProto()  
@@ -49,7 +50,7 @@ class BCO():
       targets = targets[0:10000]
       num_samples = 10000
     print("Loaded %d demonstrations" % num_samples)
-    #import pdb; pdb.set_trace()
+    #pdb.set_trace()
 
     return num_samples, inputs, targets
 
@@ -108,15 +109,15 @@ class BCO():
         policy_loss = self.get_policy_loss(batch_s, batch_a)
         print('Policy train: iteration: %5d, policy loss: %8.6f' % (it, policy_loss))    
  
-  def update_idm(self, state, nstate, action):
+  def update_idm(self):
     """update inverse dynamic model"""
-    num = len(state)
+    num = len(self.ExpBuff)
     if(num >= self.batch_size):
       for it in range(1, self.epochTrainIts+1):        
-        idxs = random.sample(range(num), self.batch_size)
-        batch_s  = [  state[i] for i in idxs ]
-        batch_ns = [ nstate[i] for i in idxs ]
-        batch_a  = [ action[i] for i in idxs ]      
+        minibatch = random.sample(self.ExpBuff, args.batch_size)
+        batch_s = [e[0] for e in minibatch]
+        batch_ns = [e[1] for e in minibatch]
+        batch_a = [e[2] for e in minibatch]        
         self.sess.run(self.idm_train_step, feed_dict={
           self.state : batch_s,
           self.nstate: batch_ns,
@@ -160,8 +161,11 @@ class BCO():
 
       print("\n[Training]")
       # pre demonstration to update inverse dynamic model
-      S, nS, A = self.pre_demonstration()      
-      self.update_idm(S, nS, A)
+      S, nS, A = self.pre_demonstration()
+      # Add to Experience Buffer      
+      for id in range(0, len(S)):        
+        self.ExpBuff.append((S[id], nS[id], A[id]))              
+      self.update_idm()
       # Save pre-demo trained model
       print('saving pre demo model')
       saver_pre = tf.train.Saver(max_to_keep=1)
@@ -184,8 +188,10 @@ class BCO():
 
       # update inverse dynamic model
       S, nS, A = self.post_demonstration(self.M)
+      for id in range(0, len(S)):
+        self.ExpBuff.append((S[id], nS[id], A[id]))        
       currTime = time.time()
-      self.update_idm(S, nS, A)
+      self.update_idm()
       
       # Print time taken for debug
       if (args.printTime and should(args.print_freq)):
@@ -212,10 +218,12 @@ class BCO():
         saver.save(self.sess, args.model_dir)
 
       # Debug
-      # After 100 iterations, redo pre demo learning
-      #if should(100):
+      # After 5 iterations, redo pre demo learning
+      #if should(5):
       #  S, nS, A = self.pre_demonstration()
-      #  self.update_idm(S, nS, A)
+      #for id in range(0, len(S)):
+      #  self.ExpBuff.append((S[id], nS[id], A[id]))
+      #  self.update_idm()
 
 
   def test(self):

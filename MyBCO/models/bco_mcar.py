@@ -3,7 +3,7 @@ from bco import BCO
 import gym
 
 class BCO_mcar(BCO):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=200, epochTrainIts=20000, M=20, batch_size=16):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=200, epochTrainIts=2000, M=20, batch_size=16):
     BCO.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M, batch_size=batch_size)
 
     # set which game to play
