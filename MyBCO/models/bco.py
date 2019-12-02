@@ -114,7 +114,7 @@ class BCO():
     num = len(self.ExpBuff)
     if(num >= self.batch_size):
       for it in range(1, self.epochTrainIts+1):        
-        minibatch = random.sample(self.ExpBuff, args.batch_size)
+        minibatch = random.sample(self.ExpBuff, self.batch_size)
         batch_s = [e[0] for e in minibatch]
         batch_ns = [e[1] for e in minibatch]
         batch_a = [e[2] for e in minibatch]        
