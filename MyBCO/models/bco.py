@@ -149,27 +149,16 @@ class BCO():
   def train(self):
     """training the policy model and inverse dynamic model by behavioral cloning"""    
     
-    if args.savedPreModel:
-      # Use saved pre-demo trained model
-      saver_pre = tf.train.Saver()
-      saver_pre.restore(self.sess, args.premodel_dir)
-      print("\n[Training]")
-      print('Loaded pre demo model')
-    else:
-      # Start session
-      self.sess.run(tf.global_variables_initializer())
+    # Start session
+    self.sess.run(tf.global_variables_initializer())
 
-      print("\n[Training]")
-      # pre demonstration to update inverse dynamic model
-      S, nS, A = self.pre_demonstration()
-      # Add to Experience Buffer      
-      for id in range(0, len(S)):        
-        self.ExpBuff.append((S[id], nS[id], A[id]))              
-      self.update_idm()
-      # Save pre-demo trained model
-      print('saving pre demo model')
-      saver_pre = tf.train.Saver(max_to_keep=1)
-      saver_pre.save(self.sess, args.premodel_dir)
+    print("\n[Training]")
+    # pre demonstration to update inverse dynamic model
+    S, nS, A = self.pre_demonstration()
+    # Add to Experience Buffer
+    for id in range(0, len(S)):
+      self.ExpBuff.append((S[id], nS[id], A[id]))
+    self.update_idm()
     
     # Init model saver
     saver = tf.train.Saver(max_to_keep=1)
@@ -242,11 +231,6 @@ class BCO():
       self.test()
 
     if args.mode == 'train':
-      if args.premodel_dir is None:
-        raise Exception("pre-model directory required for saving initial trained model")
-      if not os.path.exists(args.premodel_dir):
-        os.makedirs(args.premodel_dir)
-
       # read demonstration data
       self.demo_examples, self.inputs, self.targets = self.load_demonstration()      
 
