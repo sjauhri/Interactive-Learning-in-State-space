@@ -3,7 +3,7 @@ from bco import BCO
 import gym
 
 class BCO_acrobot(BCO):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=200, epochTrainIts=5000, M=80):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=5000, M=80):
     BCO.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M)
 
     # set which game to play
@@ -78,6 +78,7 @@ class BCO_acrobot(BCO):
 
       if i and (i+1) % 1000 == 0:
         print("Collecting idm training data ", i+1)
+        self.log_writer.write("Collecting idm training data " + str(i+1) + "\n")
 
     return States, Nstates, Actions
 

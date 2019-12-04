@@ -2,7 +2,7 @@ from utils import *
 import gym
 
 class BCO():
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=200, epochTrainIts=5000, M=50, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=5000, M=50, batch_size=32):
     # set initial value
     self.state_dim = state_shape            # state dimension
     self.action_dim = action_shape          # action dimension
@@ -12,7 +12,7 @@ class BCO():
     self.batch_size = batch_size            # batch size
     self.alpha = 0.01                       # alpha = | post_demo | / | pre_demo |
     self.M = M                              # samples to update inverse dynamic model
-    self.ExpBuff  = []                      # Experience buffer for replay 
+    self.ExpBuff  = []                      # Experience buffer for replay
 
     # initial session
     config = tf.ConfigProto()  
@@ -29,8 +29,8 @@ class BCO():
     self.build_policy_model()
     self.build_idm_model()
 
-    # tensorboard output
-    writer = tf.summary.FileWriter("logdir/", graph=self.sess.graph)    
+    # tensorboard output (TODO: Check if you really need tensorboard)
+    #writer = tf.summary.FileWriter("logdir/", graph=self.sess.graph)
 
   def load_demonstration(self):
     """Load demonstration from the file"""
@@ -47,17 +47,15 @@ class BCO():
       inputs = inputs[0:10000]
       targets = targets[0:10000]
       num_samples = 10000
-    print("Loaded %d demonstrations" % num_samples)
-    #pdb.set_trace()
+    print("Loaded %d demonstrations" % num_samples)    
 
     return num_samples, inputs, targets
 
   def sample_demo(self, num_samples):
     """sample demonstration"""
-    sample_idx = range(self.demo_examples)
-    sample_idx = np.random.choice(sample_idx, num_samples)
-    S = [ self.inputs[i] for i in sample_idx ]
-    nS = [ self.targets[i] for i in sample_idx ]
+    sample_ids = np.random.choice(self.demo_examples, num_samples)
+    S = [ self.inputs[i] for i in sample_ids ]
+    nS = [ self.targets[i] for i in sample_ids ]
     return S, nS
 
   def build_policy_model(self):
@@ -105,17 +103,18 @@ class BCO():
       # Debug
       if it % 500 == 0:
         policy_loss = self.get_policy_loss(batch_s, batch_a)
-        print('Policy train: iteration: %5d, policy loss: %8.6f' % (it, policy_loss))    
+        print('Policy train: iteration: %5d, policy_loss: %8.6f' % (it, policy_loss))
+        self.log_writer.write("Policy train: iteration: " + str(it) + ", policy_loss: " + str(policy_loss) + "\n")
  
   def update_idm(self):
     """update inverse dynamic model"""
     num = len(self.ExpBuff)
     if(num >= self.batch_size):
       for it in range(1, self.epochTrainIts+1):        
-        minibatch = random.sample(self.ExpBuff, self.batch_size)
-        batch_s = [e[0] for e in minibatch]
-        batch_ns = [e[1] for e in minibatch]
-        batch_a = [e[2] for e in minibatch]        
+        minibatch_ids = np.random.choice(len(self.ExpBuff), self.batch_size)
+        batch_s = [self.ExpBuff[id][0] for id in minibatch_ids]
+        batch_ns = [self.ExpBuff[id][1] for id in minibatch_ids]
+        batch_a = [self.ExpBuff[id][2] for id in minibatch_ids]        
         self.sess.run(self.idm_train_step, feed_dict={
           self.state : batch_s,
           self.nstate: batch_ns,
@@ -124,7 +123,8 @@ class BCO():
         # Debug
         if it % 500 == 0:
           idm_loss = self.get_idm_loss(batch_s, batch_ns, batch_a)
-          print('IDM train: iteration: %5d, idm loss: %8.6f' % (it, idm_loss))
+          print('IDM train: iteration: %5d, idm_loss: %8.6f' % (it, idm_loss))
+          self.log_writer.write("IDM train: iteration: " + str(it) + ", idm_loss: " + str(idm_loss) + "\n")
     else:
       print("Error!! Batch size greater than number of samples provided for training")
 
@@ -197,7 +197,9 @@ class BCO():
         S, nS, A = self.post_demonstration(self.M)
         idm_loss = self.get_idm_loss(S, nS, A)
         # ...............................................
-        print('iteration: %5d, total reward: %5.1f, policy loss: %8.6f, idm loss: %8.6f' % ((it+1), policy_reward, policy_loss, idm_loss))
+        print('iteration: %5d, total_reward: %5.1f, policy_loss: %8.6f, idm_loss: %8.6f' % ((it+1), policy_reward, policy_loss, idm_loss))
+        self.result_writer.write( str(it+1) + " , " + str(policy_reward) + " , " + str(policy_loss) + " , " + str(idm_loss) + "\n" )
+        self.log_writer.write("\n" + "iteration: " + str(it+1) + ", total_reward: " + str(policy_reward) + ", policy_loss: " + str(policy_loss) + ", idm_loss: " + str(idm_loss) + "\n" + "\n")
 
       # saving model
       if should(args.save_freq):
@@ -224,13 +226,28 @@ class BCO():
 
     if args.mode == 'test':
       if args.model_dir is None:
-        raise Exception("checkpoint required for test mode")    
+        raise Exception("checkpoint required for test mode")
 
       self.test()
 
     if args.mode == 'train':
+      if not os.path.exists(args.result_dir):
+        os.makedirs(args.result_dir)
+
       # read demonstration data
-      self.demo_examples, self.inputs, self.targets = self.load_demonstration()      
+      self.demo_examples, self.inputs, self.targets = self.load_demonstration()
 
-      self.train()
+      # store datetime for saving logs
+      self.logTime = dt.datetime.now().strftime('%d%m%H%M')
+      
+      for exp in range(0, args.numExperiments):
+        
+        self.result_writer = open(args.result_dir + self.logTime + "_" + str(exp) + ".csv", "w") # csv episode result log
+        self.result_writer.write("iteration,total_reward,policy_loss,idm_loss\n")
 
+        self.log_writer = open(args.result_dir + self.logTime + "_" + str(exp) + ".txt", "w") # txt debug log with everything
+        
+        self.train() # Train epochs
+        
+        self.result_writer.close()
+        self.log_writer.close()
