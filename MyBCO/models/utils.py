@@ -30,15 +30,3 @@ def weight_initializer():
 
 def bias_initializer():
   return tf.constant_initializer(0.01)
-
-def get_shuffle_idx(num, batch_size):
-  tmp = np.arange(num)
-  np.random.shuffle(tmp)
-  split_array = []
-  cur = 0
-  while num > batch_size:
-    num -= batch_size
-    if(num != 0):
-      split_array.append(cur+batch_size)
-      cur+=batch_size
-  return np.split(tmp, split_array)

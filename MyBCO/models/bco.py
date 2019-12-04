@@ -30,9 +30,7 @@ class BCO():
     self.build_idm_model()
 
     # tensorboard output
-    writer = tf.summary.FileWriter("logdir/", graph=self.sess.graph)
-
-    self.test_time = 100
+    writer = tf.summary.FileWriter("logdir/", graph=self.sess.graph)    
 
   def load_demonstration(self):
     """Load demonstration from the file"""
