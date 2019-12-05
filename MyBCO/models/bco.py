@@ -242,6 +242,9 @@ class BCO():
       
       for exp in range(0, args.numExperiments):
         
+        # Set random seed for experiment
+        np.random.seed(exp)
+        
         self.result_writer = open(args.result_dir + self.logTime + "_" + str(exp) + ".csv", "w") # csv episode result log
         self.result_writer.write("iteration,total_reward,policy_loss,idm_loss\n")
 
