@@ -17,7 +17,7 @@ class BCOACH_cartpole(BCOACH):
     # Initialise Human feedback (call render before this)
     self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
-    self.errorConst = 0.1
+    self.errorConst = 0.05
     # Choose which feedback to act on with fb dictionary
     self.feedback_dict = {
       H_NULL: 0,      
@@ -101,9 +101,9 @@ class BCOACH_cartpole(BCOACH):
     """get new state transition label for this environment using feedback"""
     fb_value = self.feedback_dict.get(h_fb)
         
-    # Acting on only Cart position in x plane
+    # Acting on only pole angle
     new_s_transition = np.copy(nstate)
-    new_s_transition[0][0] += self.errorConst*fb_value
+    new_s_transition[0][2] += self.errorConst*fb_value
 
     return new_s_transition
 

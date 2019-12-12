@@ -10,7 +10,7 @@ class BCOACH():
     self.maxEpochs = maxEpochs              # maximum epochs
     self.epochTrainIts = epochTrainIts      # maximum training iterations every epoch
     self.batch_size = batch_size            # batch size
-    self.alpha = 1#0.01                       # alpha = | post_demo | / | pre_demo |
+    self.alpha = 0.01                       # alpha = | post_demo | / | pre_demo |
     self.M = M                              # samples to update inverse dynamic model
     self.ExpBuff  = []                      # Experience buffer for replay
     self.DemoBuff  = []                     # Demonstration buffer
@@ -183,7 +183,7 @@ class BCOACH():
       })
 
   def update_policy_feedback_immediate(self, state, nstate):
-    """update policy using given label"""
+    """update policy using given label"""    
     # Get action from idm
     A = self.eval_idm(state, nstate)
 
@@ -252,16 +252,18 @@ class BCOACH():
       def should(freq):
         return freq > 0 and ((it+1) % freq==0 or it == self.maxEpochs-1)
 
-      # update policy pi based on feedback
+      # update policy pi #######################
       #self.update_policy()
+      ##########################################
+      # COACH      
       self.coach()
 
-      # update inverse dynamic model
-      S, nS, A = self.post_demonstration(self.M)
-      for id in range(0, len(S)):
-        self.ExpBuff.append((S[id], nS[id], A[id]))
-      self.update_idm()
-
+      # update inverse dynamic model ##############
+      # S, nS, A = self.post_demonstration(self.M)
+      # for id in range(0, len(S)):
+      #   self.ExpBuff.append((S[id], nS[id], A[id]))
+      # self.update_idm()
+      #############################################
       if should(args.print_freq):
         policy_reward = self.eval_rwd_policy()
 
