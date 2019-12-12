@@ -5,7 +5,6 @@ import pickle
 import numpy as np
 import datetime as dt
 import time
-import pdb
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--input_filename", default="demonstration/expert_obs/CartPole-v0.pkl", help="the demonstration inputs")
@@ -17,9 +16,9 @@ parser.add_argument("--numExperiments", type=int, default=5, help="the number ti
 parser.add_argument("--maxEpochs", type=int, default=50, help="the number of overall loop iterations")
 parser.add_argument("--epochTrainIts", type=int, default=5000, help="the number of training iterations executed every epoch")
 parser.add_argument("--M", type=int, default=50, help="the number of post demonstration examples")
+parser.add_argument('--printTime', action='store_true')
 
 parser.add_argument("--batch_size", type=int, default=32, help="number of examples in batch")
-parser.add_argument('--printTime', action='store_true')
 parser.add_argument("--lr", type=float, default=0.001, help="initial learning rate for adam SGD")
 parser.add_argument('--render', action='store_true')
 parser.add_argument("--save_freq", type=int, default=1, help="save model every save_freq iterations, 0 to disable")
@@ -31,4 +30,4 @@ def weight_initializer():
   return tf.truncated_normal_initializer(stddev=0.1)
 
 def bias_initializer():
-  return tf.constant_initializer(0.01)
+  return tf.constant_initializer(0.01)    

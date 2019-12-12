@@ -1,0 +1,7 @@
+IDM train: iteration: 500, idm_loss: 0.019887906
+IDM train: iteration: 1000, idm_loss: 0.00258182
+IDM train: iteration: 500, idm_loss: 0.0012040756
+IDM train: iteration: 1000, idm_loss: 0.0007450447
+
+iteration: 1, total_reward: 9.0, policy_loss: 0.6933504, idm_loss: 0.0001293691
+

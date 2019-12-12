@@ -1,0 +1,3 @@
+iteration,total_reward,policy_loss,idm_loss
+1 , 21.0 , 0.69287467 , 0.0005276177
+2 , 24.0 , 0.69289345 , 0.00014616209

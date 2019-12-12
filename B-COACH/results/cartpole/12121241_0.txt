@@ -1,0 +1,2 @@
+IDM train: iteration: 500, idm_loss: 0.022297937
+IDM train: iteration: 1000, idm_loss: 0.00095201784
