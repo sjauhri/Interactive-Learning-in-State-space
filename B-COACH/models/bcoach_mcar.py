@@ -3,15 +3,15 @@ from bcoach import BCOACH
 from feedback import *
 import gym
 
-class BCOACH_cartpole(BCOACH):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=1000, M=10, batch_size=8):  
+class BCOACH_mcar(BCO):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=4000, M=120, batch_size=16):
     BCOACH.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M, batch_size=batch_size)
 
     # set which game to play
-    self.env = gym.make('CartPole-v0')
+    self.env = gym.make('MountainCar-v0')
     self.env.reset()
     self.env.render()  # Make the environment visible
-    #pdb.set_trace()
+    #import pdb; pdb.set_trace()
     #print(self.env.observation_space.high)
 
     # Initialise Human feedback (call render before this)
@@ -21,13 +21,13 @@ class BCOACH_cartpole(BCOACH):
     self.errorConst = 0.05
     # Choose which feedback to act on with fb dictionary
     self.feedback_dict = {
-      H_NULL: 0,      
+      H_NULL: 0,
       H_UP: 0,
       H_DOWN: 0,
       H_LEFT: -1,
       H_RIGHT: 1
     }
-  
+
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
     with tf.variable_scope("policy_model") as scope:
@@ -101,13 +101,11 @@ class BCOACH_cartpole(BCOACH):
   def get_feedback_label(self, h_fb, nstate):
     """get new state transition label for this environment using feedback"""
     fb_value = self.feedback_dict.get(h_fb)
-        
+
     # Acting on only pole angle
     new_s_transition = np.copy(nstate)
     new_s_transition[0][0] += self.errorConst*fb_value
-    new_s_transition[0][1] += self.errorConst*fb_value*5
-    #new_s_transition[0][2] -= self.errorConst*fb_value
-    #new_s_transition[0][3] -= self.errorConst*fb_value*5
+    print("State: ", nstate)
     return new_s_transition
 
   def post_demonstration(self, M):
@@ -146,12 +144,12 @@ class BCOACH_cartpole(BCOACH):
       A = np.argmax(a)
       state, reward, terminal, _ = self.env.step(A)
       total_reward += reward
-      if args.render:
+      if args.render:        
         self.env.render()
-        time.sleep(0.05)
+        time.sleep(0.02)     
 
     return total_reward
     
 if __name__ == "__main__":
-  bcoach = BCOACH_cartpole(4, 2, lr=args.lr, maxEpochs=args.maxEpochs)
+  bcoach = BCOACH_mcar(2, 3, lr=args.lr, maxEpochs=args.maxEpochs)
   bcoach.run()

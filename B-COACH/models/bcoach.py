@@ -46,11 +46,11 @@ class BCOACH():
       targets = expert_data['observations_next']
     
     num_samples = len(inputs)
-    if(num_samples > 10000):      
+    if(num_samples > 10000):
       inputs = inputs[0:10000]
       targets = targets[0:10000]
       num_samples = 10000
-    print("Loaded %d demonstrations" % num_samples)    
+    print("Loaded %d demonstrations" % num_samples)
 
     return num_samples, inputs, targets
 
@@ -76,7 +76,7 @@ class BCOACH():
     })
 
   def eval_idm(self, state, nstate):
-    """get the action by inverse dynamic model from current state and next state"""    
+    """get the action by inverse dynamic model from current state and next state"""
     return self.sess.run(self.idm_pred_action, feed_dict={
       self.state: state,
       self.nstate: nstate
@@ -117,17 +117,19 @@ class BCOACH():
 
       # Update policy
       if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero
-        print("feedback", self.feedback_dict.get(h_fb))
+        print("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFeedback", self.feedback_dict.get(h_fb))
         h_counter += 1 # Feedback counter
 
         # Get new state transition label using feedback
         new_s_transition = self.get_feedback_label(h_fb, state)
 
         # Update policy (immediate)
-        self.update_policy_feedback_immediate(prev_s, new_s_transition)
+        #self.update_policy_feedback_immediate(prev_s, new_s_transition)
+        # Currently training with s_t+1 and modified s_t+1 only
+        self.update_policy_feedback_immediate(state, new_s_transition)
 
         # Add state transition pair to demo buffer
-        self.DemoBuff.append((prev_s[0], new_s_transition[0]))
+        self.DemoBuff.append((state[0], new_s_transition[0]))
         # If Demo buffer full, remove oldest entry
         if (len(self.DemoBuff) > self.maxDemoBuffSize):
             self.DemoBuff.pop(0)
@@ -166,12 +168,12 @@ class BCOACH():
       if it % 500 == 0:
         policy_loss = self.get_policy_loss(batch_s, batch_a)
         print('Policy train: iteration: %5d, policy_loss: %8.6f' % (it, policy_loss))
-        self.log_writer.write("Policy train: iteration: " + str(it) + ", policy_loss: " + str(policy_loss) + "\n")
+        self.log_writer.write("Policy train: iteration: " + str(it) + ", policy_loss: " + format(policy_loss, '8.6f') + "\n")
  
   def update_policy_feedback(self):
     """update policy using labels from Demo Buffer"""
-    num = len(self.DemoBuff)    
-    if(num >= self.batch_size):      
+    num = len(self.DemoBuff)
+    if(num >= self.batch_size):
       minibatch_ids = np.random.choice(len(self.DemoBuff), self.batch_size)
       batch_s = [self.DemoBuff[id][0] for id in minibatch_ids]
       batch_ns = [self.DemoBuff[id][1] for id in minibatch_ids]
@@ -183,7 +185,7 @@ class BCOACH():
       })
 
   def update_policy_feedback_immediate(self, state, nstate):
-    """update policy using given label"""    
+    """update policy using given label"""
     # Get action from idm
     A = self.eval_idm(state, nstate)
 
@@ -197,8 +199,8 @@ class BCOACH():
     """update inverse dynamic model"""
     num = len(self.ExpBuff)
     if(num >= self.batch_size):
-      for it in range(1, self.epochTrainIts+1):        
-        minibatch_ids = np.random.choice(len(self.ExpBuff), self.batch_size)        
+      for it in range(1, self.epochTrainIts+1):
+        minibatch_ids = np.random.choice(len(self.ExpBuff), self.batch_size)
         batch_s = [self.ExpBuff[id][0] for id in minibatch_ids]
         batch_ns = [self.ExpBuff[id][1] for id in minibatch_ids]
         batch_a = [self.ExpBuff[id][2] for id in minibatch_ids]
@@ -211,7 +213,7 @@ class BCOACH():
         if it % 500 == 0:
           idm_loss = self.get_idm_loss(batch_s, batch_ns, batch_a)
           print('IDM train: iteration: %5d, idm_loss: %8.6f' % (it, idm_loss))
-          self.log_writer.write("IDM train: iteration: " + str(it) + ", idm_loss: " + str(idm_loss) + "\n")
+          self.log_writer.write("IDM train: iteration: " + str(it) + ", idm_loss: " + format(idm_loss, '8.6f') + "\n")
     else:
       print("Error!! Batch size greater than number of samples provided for training")
 
@@ -278,8 +280,8 @@ class BCOACH():
         idm_loss = self.get_idm_loss(S, nS, A)
         # ......................................................
         print('iteration: %5d, total_reward: %5.1f, policy_loss: %8.6f, idm_loss: %8.6f' % ((it+1), policy_reward, policy_loss, idm_loss))
-        self.result_writer.write( str(it+1) + " , " + str(policy_reward) + " , " + str(policy_loss) + " , " + str(idm_loss) + "\n" )
-        self.log_writer.write("\n" + "iteration: " + str(it+1) + ", total_reward: " + str(policy_reward) + ", policy_loss: " + str(policy_loss) + ", idm_loss: " + str(idm_loss) + "\n" + "\n")
+        self.result_writer.write( str(it+1) + " , " + format(policy_reward, '8.6f') + " , " + format(policy_loss, '8.6f') + " , " + format(idm_loss, '8.6f') + "\n" )
+        self.log_writer.write("\n" + "iteration: " + str(it+1) + ", total_reward: " + str(policy_reward) + ", policy_loss: " + format(policy_loss, '8.6f') + ", idm_loss: " + format(idm_loss, '8.6f') + "\n" + "\n")
 
       # saving model
       if should(args.save_freq):
@@ -288,11 +290,11 @@ class BCOACH():
 
       # Debug
       # After 5 iterations, redo pre demo learning
-      #if should(5):
-      #  S, nS, A = self.pre_demonstration()
-      #for id in range(0, len(S)):
-      #  self.ExpBuff.append((S[id], nS[id], A[id]))
-      #  self.update_idm()
+      if should(5):
+        S, nS, A = self.pre_demonstration()
+        for id in range(0, len(S)):
+          self.ExpBuff.append((S[id], nS[id], A[id]))
+        self.update_idm()
 
 
   def test(self):
