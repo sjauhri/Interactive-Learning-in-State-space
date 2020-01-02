@@ -97,7 +97,7 @@ class BCOACH():
     # Iterate over the episode
     while((not terminal) and (not self.human_feedback.ask_for_done()) ):        
       self.env.render()  # Make the environment visible
-      time.sleep(0.1)    # Add delay to rendering if necessary
+      time.sleep(self.render_delay)    # Add delay to rendering if necessary
       
       # Store previous_state
       prev_s = state
@@ -255,7 +255,8 @@ class BCOACH():
         return freq > 0 and ((it+1) % freq==0 or it == self.maxEpochs-1)
 
       # update policy pi #######################
-      #self.update_policy()
+      if should(5):
+        self.update_policy()
       ##########################################
       # COACH      
       self.coach()

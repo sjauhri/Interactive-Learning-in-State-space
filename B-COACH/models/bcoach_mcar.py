@@ -3,7 +3,7 @@ from bcoach import BCOACH
 from feedback import *
 import gym
 
-class BCOACH_mcar(BCO):
+class BCOACH_mcar(BCOACH):
   def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=4000, M=120, batch_size=16):
     BCOACH.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M, batch_size=batch_size)
 
@@ -18,7 +18,9 @@ class BCOACH_mcar(BCO):
     self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5
-    self.errorConst = 0.05
+    self.errorConst = 0.1
+    # Render time delay for this environment (in s)
+    self.render_delay = 0.05
     # Choose which feedback to act on with fb dictionary
     self.feedback_dict = {
       H_NULL: 0,
@@ -104,8 +106,8 @@ class BCOACH_mcar(BCO):
 
     # Acting on only pole angle
     new_s_transition = np.copy(nstate)
-    new_s_transition[0][0] += self.errorConst*fb_value
-    print("State: ", nstate)
+    new_s_transition[0][0] += self.errorConst * fb_value
+    new_s_transition[0][1] += self.errorConst * fb_value
     return new_s_transition
 
   def post_demonstration(self, M):
@@ -146,7 +148,7 @@ class BCOACH_mcar(BCO):
       total_reward += reward
       if args.render:        
         self.env.render()
-        time.sleep(0.02)     
+        time.sleep(self.render_delay)
 
     return total_reward
     

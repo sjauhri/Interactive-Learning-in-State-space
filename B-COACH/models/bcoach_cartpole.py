@@ -19,6 +19,8 @@ class BCOACH_cartpole(BCOACH):
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5
     self.errorConst = 0.05
+    # Render time delay for this environment (in s)
+    self.render_delay = 0.1
     # Choose which feedback to act on with fb dictionary
     self.feedback_dict = {
       H_NULL: 0,      
@@ -148,7 +150,7 @@ class BCOACH_cartpole(BCOACH):
       total_reward += reward
       if args.render:
         self.env.render()
-        time.sleep(0.05)
+        time.sleep(self.render_delay)
 
     return total_reward
     
