@@ -20,7 +20,7 @@ class BCOACH_mcar(BCOACH):
     # 0.01, 0.05, 0.1, 0.5
     self.errorConst = 0.1
     # Render time delay for this environment (in s)
-    self.render_delay = 0.1
+    self.render_delay = 0.05
     # Choose which feedback to act on with fb dictionary
     self.feedback_dict = {
       H_NULL: 0,

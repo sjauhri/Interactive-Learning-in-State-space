@@ -109,7 +109,7 @@ class BCOACH_acrobot(BCOACH):
     new_s_transition = np.copy(nstate)
     new_s_transition[0][2] += self.errorConst*fb_value*2
     new_s_transition[0][3] += self.errorConst*fb_value*2
-    new_s_transition[0][5] += self.errorConst*fb_value*5
+    new_s_transition[0][5] += self.errorConst*fb_value*10
     return new_s_transition
 
   def post_demonstration(self, M):

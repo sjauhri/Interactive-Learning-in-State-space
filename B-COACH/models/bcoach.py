@@ -102,14 +102,6 @@ class BCOACH():
       # Store previous_state
       prev_s = state
 
-      # Map action from state      
-      a = np.reshape(self.eval_policy(state), [-1])
-      A = np.argmax(a)
-
-      # Act      
-      state, _, terminal, _ = self.env.step(A)
-      state = np.reshape(state, [-1, self.state_dim])    
-
       # Get feedback signal
       h_fb = self.human_feedback.get_h()
       # Debug
@@ -123,10 +115,12 @@ class BCOACH():
         # Get new state transition label using feedback
         new_s_transition = self.get_feedback_label(h_fb, state)
 
+        # Get action from idm
+        a = self.eval_idm(state, new_s_transition)
+        print("Eval_IDM action: ", a)
+
         # Update policy (immediate)
-        #self.update_policy_feedback_immediate(prev_s, new_s_transition)
-        # Currently training with s_t+1 and modified s_t+1 only
-        self.update_policy_feedback_immediate(state, new_s_transition)
+        self.update_policy_feedback_immediate(state, a)
 
         # Add state transition pair to demo buffer
         self.DemoBuff.append((state[0], new_s_transition[0]))
@@ -137,7 +131,22 @@ class BCOACH():
         # Train with batch from Demo buffer (if enough entries exist)
         self.update_policy_feedback()
 
-      # Train every k time steps
+        # Act using action based on h_feedback
+        a = np.reshape(a, [-1])
+        A = np.argmax(a)
+        state, _, terminal, _ = self.env.step(A)
+        state = np.reshape(state, [-1, self.state_dim])
+      else:
+        # Use current policy
+        # Map action from state
+        a = np.reshape(self.eval_policy(state), [-1])
+        A = np.argmax(a)
+
+        # Act
+        state, _, terminal, _ = self.env.step(A)
+        state = np.reshape(state, [-1, self.state_dim])
+
+        # Train every k time steps
       if t_counter % self.coach_training_rate == 0:
         self.update_policy_feedback()
 
@@ -184,16 +193,13 @@ class BCOACH():
       self.action: batch_a
       })
 
-  def update_policy_feedback_immediate(self, state, nstate):
+  def update_policy_feedback_immediate(self, state, action):
     """update policy using given label"""
-    # Get action from idm
-    A = self.eval_idm(state, nstate)
-    print("Eval_IDM action: ", A)
 
     # Train single step
     self.sess.run(self.policy_train_step, feed_dict={
       self.state : state,
-      self.action: A
+      self.action: action
       })
 
   def update_idm(self):
