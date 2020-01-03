@@ -1,2 +1,2 @@
 #!/bin/bash
-python3 models/bco_hopper.py --mode=train --input_file=demonstration/expert_obs/Hopper-v2.pkl --result_dir=results/hopper/ --model_dir=model/hopper/ --print_freq=1 --save_freq=1 --maxEpochs=40
+python3 models/bco_hopper.py --mode=train --input_file=demonstration/expert_obs/Hopper-v2.pkl --result_dir=results/bco/hopper/ --model_dir=model/bco/hopper/ --print_freq=1 --save_freq=1 --maxEpochs=40

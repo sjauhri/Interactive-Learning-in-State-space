@@ -1,2 +1,2 @@
 #!/bin/bash
-python3 models/bco_mcar.py --mode=train --input_file=demonstration/expert_obs/MountainCar-v0.pkl --result_dir=results/mcar/ --model_dir=model/mcar/ --print_freq=1 --save_freq=1 --maxEpochs=10
+python3 models/bco_mcar.py --mode=train --input_file=demonstration/expert_obs/MountainCar-v0.pkl --result_dir=results/bco/mcar/ --model_dir=model/bco/mcar/ --print_freq=1 --save_freq=1 --maxEpochs=10

@@ -1,5 +1,6 @@
 from utils import *
 from bcoach import BCOACH
+from feedback import *
 import gym
 
 class BCOACH_acrobot(BCOACH):
@@ -8,12 +9,27 @@ class BCOACH_acrobot(BCOACH):
 
     # set which game to play
     self.env = gym.make('Acrobot-v1')    
-    #print(self.env.observation_space)    
-    self.env.render()
+    self.env.reset()
+    self.env.render()  # Make the environment visible
     #import pdb; pdb.set_trace()
-    self.env.viewer.window.on_key_press = key_press
-    self.env.viewer.window.on_key_release = key_release
-  
+    #print(self.env.observation_space.high)
+
+    # Initialise Human feedback (call render before this)
+    self.human_feedback = Feedback(self.env)
+    # Set error constant multiplier for this environment
+    # 0.01, 0.05, 0.1, 0.5
+    self.errorConst = 0.1
+    # Render time delay for this environment (in s)
+    self.render_delay = 0.05
+    # Choose which feedback to act on with fb dictionary
+    self.feedback_dict = {
+      H_NULL: 0,
+      H_UP: 0,
+      H_DOWN: 0,
+      H_LEFT: -1,
+      H_RIGHT: 1
+    }
+
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
     with tf.variable_scope("policy_model") as scope:
@@ -62,7 +78,7 @@ class BCOACH_acrobot(BCOACH):
     Nstates = []
     Actions = []
 
-    for i in range(int(round(self.M) / self.alpha)):
+    for i in range(int(round(self.M / self.alpha))):
       if terminal:
         state = self.env.reset()
 
@@ -84,6 +100,18 @@ class BCOACH_acrobot(BCOACH):
         self.log_writer.write("Collecting idm training data " + str(i+1) + "\n")
 
     return States, Nstates, Actions
+
+  def get_feedback_label(self, h_fb, nstate):
+    """get new state transition label for this environment using feedback"""
+    fb_value = self.feedback_dict.get(h_fb)
+
+    # Acting on only pole angle
+    new_s_transition = np.copy(nstate)
+    #new_s_transition[0][0] += self.errorConst*fb_value
+    #new_s_transition[0][1] += self.errorConst*fb_value*5
+    #new_s_transition[0][2] -= self.errorConst*fb_value
+    #new_s_transition[0][3] -= self.errorConst*fb_value*5
+    return new_s_transition
 
   def post_demonstration(self, M):
     """using policy to generate (s_t, s_t+1) and action pairs"""
@@ -123,7 +151,7 @@ class BCOACH_acrobot(BCOACH):
       total_reward += reward
       if args.render:
         self.env.render()
-        time.sleep(0.05)
+        time.sleep(self.render_delay)
 
     return total_reward
     

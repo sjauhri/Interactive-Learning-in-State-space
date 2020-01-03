@@ -97,6 +97,7 @@ class BCOACH_mcar(BCOACH):
 
       if i and (i+1) % 1000 == 0:
         print("Collecting idm training data ", i+1)
+        self.log_writer.write("Collecting idm training data " + str(i+1) + "\n")
 
     return States, Nstates, Actions
 
