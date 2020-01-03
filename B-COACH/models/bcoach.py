@@ -188,6 +188,7 @@ class BCOACH():
     """update policy using given label"""
     # Get action from idm
     A = self.eval_idm(state, nstate)
+    print("Eval_IDM action: ", A)
 
     # Train single step
     self.sess.run(self.policy_train_step, feed_dict={

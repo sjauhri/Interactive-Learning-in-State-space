@@ -20,7 +20,7 @@ class BCOACH_mcar(BCOACH):
     # 0.01, 0.05, 0.1, 0.5
     self.errorConst = 0.1
     # Render time delay for this environment (in s)
-    self.render_delay = 0.05
+    self.render_delay = 0.1
     # Choose which feedback to act on with fb dictionary
     self.feedback_dict = {
       H_NULL: 0,
@@ -107,8 +107,8 @@ class BCOACH_mcar(BCOACH):
 
     # Acting on only pole angle
     new_s_transition = np.copy(nstate)
-    new_s_transition[0][0] += self.errorConst * fb_value
-    new_s_transition[0][1] += self.errorConst * fb_value
+    #new_s_transition[0][0] += self.errorConst * fb_value
+    new_s_transition[0][1] += self.errorConst * fb_value *5
     return new_s_transition
 
   def post_demonstration(self, M):
