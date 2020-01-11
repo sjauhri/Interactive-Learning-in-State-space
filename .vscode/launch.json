@@ -1,0 +1,16 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "bcoach_contcartpole",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/snehal/Desktop/Thesis/IfO/B-COACH/models/bcoach_contcartpole.py",
+            "console": "integratedTerminal",            
+            "args": ["--mode=train","--input_file=B-COACH/demonstration/expert_obs/CartPole-v0.pkl","--result_dir=B-COACH/results/bcoach/contcartpole/","--model_dir=B-COACH/model/bcoach/contcartpole/","--maxEpochs=50","--numExperiments=1","--cont_actions"]            
+        }
+    ]
+}

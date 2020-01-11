@@ -132,15 +132,17 @@ class BCOACH():
         self.update_policy_feedback()
 
         # Act using action based on h_feedback
-        a = np.reshape(a, [-1])
-        A = np.argmax(a)
+        A = np.reshape(a, [-1])
+        if not args.cont_actions:
+          A = np.argmax(A)
         state, _, terminal, _ = self.env.step(A)
         state = np.reshape(state, [-1, self.state_dim])
       else:
         # Use current policy
         # Map action from state
-        a = np.reshape(self.eval_policy(state), [-1])
-        A = np.argmax(a)
+        A = np.reshape(self.eval_policy(state), [-1])
+        if not args.cont_actions:
+          A = np.argmax(A)
 
         # Act
         state, _, terminal, _ = self.env.step(A)
