@@ -1,0 +1,2 @@
+#!/bin/bash
+python3 models/bco_biped.py --mode=train --input_file=demonstration/expert_obs/BipedalWalker-v2_reduced.pkl --result_dir=results/bco/biped/ --model_dir=model/bco/biped/ --print_freq=1 --save_freq=1 --render

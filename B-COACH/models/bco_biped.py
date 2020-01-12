@@ -2,12 +2,13 @@ from utils import *
 from bco import BCO
 import gym
 
-class BCO_hcheetah(BCO):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=5000, M=200):
+class BCO_biped(BCO):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=10000, M=500):
     BCO.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M)
 
     # set which game to play
-    self.env = gym.make('HalfCheetah-v2')    
+    self.env = gym.make('BipedalWalker-v2')    
+    #import pdb; pdb.set_trace()
   
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
@@ -59,15 +60,17 @@ class BCO_hcheetah(BCO):
     for i in range(int(round(self.M / self.alpha))):
       if terminal:
         state = self.env.reset()
+        state = state[0:14]     # Reduce state
 
       prev_s = state
       state = np.reshape(state, [-1, self.state_dim])
 
       # Continuos action space
-      # Hopper actions between -1 and 1
+      # Actions between -1 and 1
       A = np.random.uniform(-1, 1, self.action_dim)
 
       state, _, terminal, _ = self.env.step(A)
+      state = state[0:14]     # Reduce state
 
       States.append(prev_s)
       Nstates.append(state)
@@ -75,6 +78,7 @@ class BCO_hcheetah(BCO):
 
       if i and (i+1) % 1000 == 0:
         print("Collecting idm training data ", i+1)
+        self.log_writer.write("Collecting idm training data " + str(i+1) + "\n")
 
     return States, Nstates, Actions
 
@@ -88,6 +92,7 @@ class BCO_hcheetah(BCO):
     for i in range(M):
       if terminal:
         state = self.env.reset()
+        state = state[0:14]     # Reduce state
 
       prev_s = state
       state = np.reshape(state, [-1,self.state_dim])
@@ -95,6 +100,7 @@ class BCO_hcheetah(BCO):
       # Continuos action space      
       A = np.reshape(self.eval_policy(state), [-1])
       state, _, terminal, _ = self.env.step(A)
+      state = state[0:14]     # Reduce state
 
       States.append(prev_s)
       Nstates.append(state)
@@ -106,14 +112,15 @@ class BCO_hcheetah(BCO):
     """getting the reward by current policy model"""
     terminal = False
     total_reward = 0
-    state = self.env.reset()    
+    state = self.env.reset()
+    state = state[0:14]     # Reduce state
 
     while not terminal:
-    #for i in range(250):
       state = np.reshape(state, [-1,self.state_dim])
       # Continuos action space
       A = np.reshape(self.eval_policy(state), [-1])
       state, reward, terminal, _ = self.env.step(A)
+      state = state[0:14]   # Reduce state
       total_reward += reward
       if args.render:
         self.env.render()
@@ -121,5 +128,5 @@ class BCO_hcheetah(BCO):
     return total_reward
     
 if __name__ == "__main__":
-  bco = BCO_hcheetah(17, 6, lr=args.lr, maxEpochs=args.maxEpochs)
+  bco = BCO_biped(14, 4, lr=args.lr, maxEpochs=args.maxEpochs) # Reduced states from 24 to 14. Not using LiDAR measurements
   bco.run()

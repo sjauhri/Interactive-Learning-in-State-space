@@ -2,7 +2,7 @@ from utils import *
 from bco import BCO
 import gym
 
-class BCO_hopper(BCO):
+class BCO_hcheetah(BCO):
   def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=5000, M=200):
     BCO.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M)
 
@@ -121,5 +121,5 @@ class BCO_hopper(BCO):
     return total_reward
     
 if __name__ == "__main__":
-  bco = BCO_hopper(17, 6, lr=args.lr, maxEpochs=args.maxEpochs)
+  bco = BCO_hcheetah(17, 6, lr=args.lr, maxEpochs=args.maxEpochs)
   bco.run()

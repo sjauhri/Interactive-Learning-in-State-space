@@ -10,7 +10,7 @@ class BCO():
     self.maxEpochs = maxEpochs              # maximum epochs
     self.epochTrainIts = epochTrainIts      # maximum training iterations every epoch
     self.batch_size = batch_size            # batch size
-    self.alpha = 1#0.01                       # alpha = | post_demo | / | pre_demo |
+    self.alpha = 0.01                       # alpha = | post_demo | / | pre_demo |
     self.M = M                              # samples to update inverse dynamic model
     self.ExpBuff  = []                      # Experience buffer for replay
 
@@ -40,9 +40,10 @@ class BCO():
     with open(args.input_filename, 'rb') as f:
       expert_data = pickle.load(f)
       inputs = expert_data['observations']
-      targets = expert_data['observations_next']
+      targets = expert_data['observations_next']    
     
-    num_samples = len(inputs)
+    #import pdb; pdb.set_trace()
+    num_samples = len(inputs)            
     if(num_samples > 10000):      
       inputs = inputs[0:10000]
       targets = targets[0:10000]
