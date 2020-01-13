@@ -1,10 +1,10 @@
 from utils import *
-from bcoach import BCOACH
+from bcoach_modified_biped import BCOACH
 from feedback import *
 import gym
 
 class BCOACH_biped(BCOACH):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=10000, M=500):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=5000, M=500):
     BCOACH.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M)
 
     # set which game to play
@@ -19,9 +19,9 @@ class BCOACH_biped(BCOACH):
     self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5
-    self.errorConst = 0.05
+    self.errorConst = 0.1
     # Render time delay for this environment (in s)
-    self.render_delay = 0.05
+    self.render_delay = 0.02
     # Choose which feedback to act on with fb dictionary
     self.feedback_dict = {
       H_NULL: 0,      
@@ -105,14 +105,22 @@ class BCOACH_biped(BCOACH):
 
   def get_feedback_label(self, h_fb, nstate):
     """get new state transition label for this environment using feedback"""
-    fb_value = self.feedback_dict.get(h_fb)
-        
-    # Acting on only ????
+    # Acting on only hip joint angle and velocity
     new_s_transition = np.copy(nstate)
-    #new_s_transition[0][0] += self.errorConst*fb_value
-    #new_s_transition[0][1] += self.errorConst*fb_value*5
-    #new_s_transition[0][2] -= self.errorConst*fb_value
-    #new_s_transition[0][3] -= self.errorConst*fb_value*5
+    
+    if (h_fb == H_LEFT):
+      # Light brown (hind) leg
+      new_s_transition[0][4] -= self.errorConst*5
+      new_s_transition[0][5] -= self.errorConst*5
+    elif (h_fb == H_RIGHT):
+      # Light brown (hind) leg
+      new_s_transition[0][4] += self.errorConst*5
+      new_s_transition[0][5] += self.errorConst*5
+      # Dark brown (fore) leg
+      #new_s_transition[0][9] += self.errorConst*5
+      #new_s_transition[0][10] += self.errorConst*5
+      #new_s_transition[0][10] -= self.errorConst*fb_value*5
+        
     return new_s_transition
 
   def post_demonstration(self, M):

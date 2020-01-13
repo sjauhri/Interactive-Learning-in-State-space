@@ -9,7 +9,8 @@ import time
 parser = argparse.ArgumentParser()
 parser.add_argument("--input_filename", default="demonstration/expert_obs/CartPole-v0.pkl", help="the demonstration inputs")
 parser.add_argument("--mode", default="train", choices=["train", "test"], required=True)
-parser.add_argument("--model_dir", help="where to save/restore the model")
+parser.add_argument("--model_dir", help="where to save the model")
+parser.add_argument("--prev_model_dir", help="where to restore the model from")
 parser.add_argument("--result_dir", default="results/", help="where to save the results")
 
 parser.add_argument("--numExperiments", type=int, default=5, help="the number times the entire experiment is run")
@@ -17,6 +18,8 @@ parser.add_argument("--maxEpochs", type=int, default=50, help="the number of ove
 parser.add_argument("--epochTrainIts", type=int, default=5000, help="the number of training iterations executed every epoch")
 parser.add_argument("--M", type=int, default=50, help="the number of post demonstration examples")
 parser.add_argument('--printTime', action='store_true')
+parser.add_argument('--usePrevModel', action='store_true')
+
 
 parser.add_argument("--batch_size", type=int, default=32, help="number of examples in batch")
 parser.add_argument("--lr", type=float, default=0.001, help="initial learning rate for adam SGD")

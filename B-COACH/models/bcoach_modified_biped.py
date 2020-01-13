@@ -10,7 +10,7 @@ class BCOACH():
     self.maxEpochs = maxEpochs              # maximum epochs
     self.epochTrainIts = epochTrainIts      # maximum training iterations every epoch
     self.batch_size = batch_size            # batch size
-    self.alpha = 0.01                       # alpha = | post_demo | / | pre_demo |
+    self.alpha = 0.1#0.01                       # alpha = | post_demo | / | pre_demo |
     self.M = M                              # samples to update inverse dynamic model
     self.ExpBuff  = []                      # Experience buffer for replay
     self.DemoBuff  = []                     # Demonstration buffer
@@ -90,6 +90,7 @@ class BCOACH():
     """COACH algorithm incorporating human feedback"""
     terminal = False
     state = self.env.reset()
+    state = state[0:14]     # Reduce state
     state = np.reshape(state, [-1, self.state_dim])
     t_counter = 0
     h_counter = 0
@@ -136,6 +137,7 @@ class BCOACH():
         if not args.cont_actions:
           A = np.argmax(A)
         state, _, terminal, _ = self.env.step(A)
+        state = state[0:14]     # Reduce state
         state = np.reshape(state, [-1, self.state_dim])
       else:
         # Use current policy
@@ -146,6 +148,7 @@ class BCOACH():
 
         # Act
         state, _, terminal, _ = self.env.step(A)
+        state = state[0:14]     # Reduce state
         state = np.reshape(state, [-1, self.state_dim])
 
         # Train every k time steps
@@ -245,16 +248,21 @@ class BCOACH():
   def train(self):
     """training the policy model and inverse dynamic model"""    
     
-    # Start session
-    self.sess.run(tf.global_variables_initializer())
+    if args.usePrevModel:
+      saver_prev = tf.train.Saver()
+      saver_prev.restore(self.sess, args.prev_model_dir)
+      print('Loaded previous model and session')
+    else:
+      # Start session
+      self.sess.run(tf.global_variables_initializer())
 
-    print("\n[Training]")
-    # pre demonstration to update inverse dynamic model
-    S, nS, A = self.pre_demonstration()
-    # Add to Experience Buffer
-    for id in range(0, len(S)):
-      self.ExpBuff.append((S[id], nS[id], A[id]))
-    self.update_idm()
+      print("\n[Training]")
+      # pre demonstration to update inverse dynamic model
+      S, nS, A = self.pre_demonstration()
+      # Add to Experience Buffer
+      for id in range(0, len(S)):
+        self.ExpBuff.append((S[id], nS[id], A[id]))
+      self.update_idm()
     
     # Init model saver
     saver = tf.train.Saver(max_to_keep=1)
@@ -264,6 +272,7 @@ class BCOACH():
         return freq > 0 and ((it+1) % freq==0 or it == self.maxEpochs-1)
 
       # update policy pi #######################
+      #self.update_policy()
       #if should(5):
         #self.update_policy()
       ##########################################
@@ -300,11 +309,11 @@ class BCOACH():
 
       # Debug
       # After 5 iterations, redo pre demo learning
-      if should(5):
-        S, nS, A = self.pre_demonstration()
-        for id in range(0, len(S)):
-          self.ExpBuff.append((S[id], nS[id], A[id]))
-        self.update_idm()
+      # if should(5):
+      #   S, nS, A = self.pre_demonstration()
+      #   for id in range(0, len(S)):
+      #     self.ExpBuff.append((S[id], nS[id], A[id]))
+      #   self.update_idm()
 
 
   def test(self):

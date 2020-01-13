@@ -15,8 +15,8 @@ class BCO():
     self.ExpBuff  = []                      # Experience buffer for replay
 
     # initial session
-    config = tf.ConfigProto()  
-    config.gpu_options.allow_growth=True
+    config = tf.ConfigProto()
+    config.gpu_options.allow_growth = True
     self.sess = tf.Session(config=config)
 
     # set the input placeholder
@@ -111,11 +111,11 @@ class BCO():
     """update inverse dynamic model"""
     num = len(self.ExpBuff)
     if(num >= self.batch_size):
-      for it in range(1, self.epochTrainIts+1):        
+      for it in range(1, self.epochTrainIts+1):
         minibatch_ids = np.random.choice(len(self.ExpBuff), self.batch_size)
         batch_s = [self.ExpBuff[id][0] for id in minibatch_ids]
         batch_ns = [self.ExpBuff[id][1] for id in minibatch_ids]
-        batch_a = [self.ExpBuff[id][2] for id in minibatch_ids]        
+        batch_a = [self.ExpBuff[id][2] for id in minibatch_ids]
         self.sess.run(self.idm_train_step, feed_dict={
           self.state : batch_s,
           self.nstate: batch_ns,
@@ -125,7 +125,7 @@ class BCO():
         if it % 500 == 0:
           idm_loss = self.get_idm_loss(batch_s, batch_ns, batch_a)
           print('IDM train: iteration: %5d, idm_loss: %8.6f' % (it, idm_loss))
-          self.log_writer.write("IDM train: iteration: " + str(it) + ", idm_loss: " + str(idm_loss) + "\n")
+          self.log_writer.write("IDM train: iteration: " + str(it) + ", idm_loss: " + format(idm_loss, '8.6f') + "\n")
     else:
       print("Error!! Batch size greater than number of samples provided for training")
 
