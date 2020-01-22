@@ -12,5 +12,13 @@
             "console": "integratedTerminal",            
             "args": ["--mode=train","--input_file=B-COACH/demonstration/expert_obs/CartPole-v0.pkl","--result_dir=B-COACH/results/bcoach/contcartpole/","--model_dir=B-COACH/model/bcoach/contcartpole/","--maxEpochs=50","--numExperiments=1","--cont_actions"]            
         }
+        {
+            "name": "bcoach_lunarlandercont",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/snehal/Desktop/Thesis/IfO/B-COACH/models/bcoach_lunarlandercont.py",
+            "console": "integratedTerminal",            
+            "args": ["--mode=train","--input_file=B-COACH/demonstration/expert_obs/LunarLanderContinuous-v2.pkl","--result_dir=B-COACH/results/bcoach/lunarlandercont/","--model_dir=B-COACH/model/bcoach/lunarlandercont/","--maxEpochs=50","--numExperiments=1","--cont_actions"]
+        }
     ]
 }

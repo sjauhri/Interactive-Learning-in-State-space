@@ -1,37 +1,14 @@
 from utils import *
-from bcoach_modified_biped import BCOACH
-from feedback import *
+from bco import BCO
 import gym
 
-class BCOACH_biped(BCOACH):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=5000, M=500):
-    BCOACH.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M)
+class BCO_lunarlandercont(BCO):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=5000, M=100):
+    BCO.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M)
 
     # set which game to play
-    self.env = gym.make('BipedalWalker-v2')    
+    self.env = gym.make('LunarLanderContinuous-v2')
     #import pdb; pdb.set_trace()
-    self.env.reset()
-    self.env.render()  # Make the environment visible
-    #pdb.set_trace()
-    #print(self.env.observation_space.high)
-
-    # Initialise Human feedback (call render before this)
-    self.human_feedback = Feedback(self.env)
-    # Set error constant multiplier for this environment
-    # 0.01, 0.05, 0.1, 0.5
-    self.errorConst = 0.1
-    # Render time delay for this environment (in s)
-    self.render_delay = 0.02
-    # Choose which feedback to act on with fb dictionary
-    self.feedback_dict = {
-      H_NULL: 0,      
-      H_UP: 0,
-      H_DOWN: 0,
-      H_LEFT: -1,
-      H_RIGHT: 1,
-      ALT_LEFT: -2,
-      ALT_RIGHT: 2
-    }
   
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
@@ -43,7 +20,7 @@ class BCOACH_biped(BCOACH):
         policy_h1 = tf.nn.leaky_relu(policy_h1, 0.2, name="LeakyRelu_1")
         policy_h2 = tf.layers.dense(policy_h1, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
         policy_h2 = tf.nn.leaky_relu(policy_h2, 0.2, name="LeakyRelu_2")
-
+      
       with tf.variable_scope("output") as scope:
         self.tmp_policy_pred_action = tf.layers.dense(policy_h2, self.action_dim, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")
         self.policy_pred_action = tf.clip_by_value(self.tmp_policy_pred_action, clip_value_min=-1, clip_value_max=1)
@@ -59,9 +36,9 @@ class BCOACH_biped(BCOACH):
       with tf.variable_scope("input") as scope:
         idm_input = tf.concat([self.state, self.nstate], 1)
       with tf.variable_scope("model") as scope:
-        idm_h1 = tf.layers.dense(idm_input, 100, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
+        idm_h1 = tf.layers.dense(idm_input, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
         idm_h1 = tf.nn.leaky_relu(idm_h1, 0.2, name="LeakyRelu_1")
-        idm_h2 = tf.layers.dense(idm_h1, 100, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
+        idm_h2 = tf.layers.dense(idm_h1, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
         idm_h2 = tf.nn.leaky_relu(idm_h2, 0.2, name="LeakyRelu_2")
 
       with tf.variable_scope("output") as scope:
@@ -82,8 +59,7 @@ class BCOACH_biped(BCOACH):
 
     for i in range(int(round(self.M / self.alpha))):
       if terminal:
-        state = self.env.reset()
-        state = state[0:14]     # Reduce state
+        state = self.env.reset()        
 
       prev_s = state
       state = np.reshape(state, [-1, self.state_dim])
@@ -92,8 +68,7 @@ class BCOACH_biped(BCOACH):
       # Actions between -1 and 1
       A = np.random.uniform(-1, 1, self.action_dim)
 
-      state, _, terminal, _ = self.env.step(A)
-      state = state[0:14]     # Reduce state
+      state, _, terminal, _ = self.env.step(A)      
 
       States.append(prev_s)
       Nstates.append(state)
@@ -105,33 +80,6 @@ class BCOACH_biped(BCOACH):
 
     return States, Nstates, Actions
 
-  def get_feedback_label(self, h_fb, nstate):
-    """get new state transition label for this environment using feedback"""
-    # Acting on only hull angle
-    new_s_transition = np.copy(nstate)
-
-    fb_value = self.feedback_dict.get(h_fb)
-    #new_s_transition[0][0] += self.errorConst*fb_value*5
-    
-    # if (h_fb == ALT_LEFT):
-    #   # Light brown (hind) leg
-    #   #new_s_transition[0][4] -= self.errorConst*5
-    #   new_s_transition[0][5] -= self.errorConst*5
-    # elif (h_fb == ALT_RIGHT):
-    #   # Light brown (hind) leg
-    #   #new_s_transition[0][4] += self.errorConst*5
-    #   new_s_transition[0][5] += self.errorConst*5
-    # elif (h_fb == H_LEFT):
-    #   # Dark brown (fore) leg
-    #   #new_s_transition[0][9] -= self.errorConst*5
-    #   new_s_transition[0][10] -= self.errorConst*5
-    # elif (h_fb == H_RIGHT):
-    #   # Dark brown (fore) leg
-    #   #new_s_transition[0][9] += self.errorConst*5
-    #   new_s_transition[0][10] += self.errorConst*5      
-        
-    return new_s_transition
-
   def post_demonstration(self, M):
     """using policy to generate (s_t, s_t+1) and action pairs"""
     terminal = True
@@ -141,16 +89,14 @@ class BCOACH_biped(BCOACH):
 
     for i in range(M):
       if terminal:
-        state = self.env.reset()
-        state = state[0:14]     # Reduce state
+        state = self.env.reset()        
 
       prev_s = state
       state = np.reshape(state, [-1,self.state_dim])
 
       # Continuos action space      
       A = np.reshape(self.eval_policy(state), [-1])
-      state, _, terminal, _ = self.env.step(A)
-      state = state[0:14]     # Reduce state
+      state, _, terminal, _ = self.env.step(A)      
 
       States.append(prev_s)
       Nstates.append(state)
@@ -162,22 +108,19 @@ class BCOACH_biped(BCOACH):
     """getting the reward by current policy model"""
     terminal = False
     total_reward = 0
-    state = self.env.reset()
-    state = state[0:14]     # Reduce state
+    state = self.env.reset()    
 
     while not terminal:
       state = np.reshape(state, [-1,self.state_dim])
       # Continuos action space
       A = np.reshape(self.eval_policy(state), [-1])
-      state, reward, terminal, _ = self.env.step(A)
-      state = state[0:14]   # Reduce state
+      state, reward, terminal, _ = self.env.step(A)      
       total_reward += reward
       if args.render:
         self.env.render()
-        #time.sleep(self.render_delay)
 
     return total_reward
     
 if __name__ == "__main__":
-  bcoach = BCOACH_biped(14, 4, lr=args.lr, maxEpochs=args.maxEpochs) # Reduced states from 24 to 14. Not using LiDAR measurements
-  bcoach.run()
+  bco = BCO_lunarlandercont(8, 2, lr=args.lr, maxEpochs=args.maxEpochs) # Reduced states from 24 to 14. Not using LiDAR measurements
+  bco.run()

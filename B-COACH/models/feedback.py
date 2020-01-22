@@ -5,6 +5,8 @@ H_UP = 1
 H_DOWN = 2
 H_LEFT = 3
 H_RIGHT = 4
+ALT_LEFT = 5
+ALT_RIGHT = 6
 
 class Feedback:
     def __init__(self, env):
@@ -25,9 +27,13 @@ class Feedback:
             self.h_fb = H_UP
         if k == key.DOWN:
             self.h_fb = H_DOWN
+        if k == key.Z:
+            self.h_fb = ALT_LEFT
+        if k == key.X:
+            self.h_fb = ALT_RIGHT
 
     def key_release(self, k, mod):
-        if k == key.LEFT or k == key.RIGHT or k == key.UP or k == key.DOWN:
+        if k == key.LEFT or k == key.RIGHT or k == key.UP or k == key.DOWN or k==key.Z or k==key.X:
             self.h_fb = H_NULL
 
     def get_h(self):

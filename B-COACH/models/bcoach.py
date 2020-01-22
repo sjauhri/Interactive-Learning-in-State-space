@@ -10,7 +10,7 @@ class BCOACH():
     self.maxEpochs = maxEpochs              # maximum epochs
     self.epochTrainIts = epochTrainIts      # maximum training iterations every epoch
     self.batch_size = batch_size            # batch size
-    self.alpha = 0.01                       # alpha = | post_demo | / | pre_demo |
+    self.alpha = 1#0.01                       # alpha = | post_demo | / | pre_demo |
     self.M = M                              # samples to update inverse dynamic model
     self.ExpBuff  = []                      # Experience buffer for replay
     self.DemoBuff  = []                     # Demonstration buffer
