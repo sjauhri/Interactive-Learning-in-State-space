@@ -17,8 +17,8 @@ class BCOACH_lunarlandercont(BCOACH):
     # Initialise Human feedback (call render before this)
     self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
-    # 0.01, 0.05, 0.1, 0.5
-    self.errorConst = 1
+    # 0.01, 0.05, 0.1, 0.5, 1, 5
+    self.errorConst = 0.5
     # Render time delay for this environment (in s)
     self.render_delay = 0.05
     # Choose which feedback to act on with fb dictionary
@@ -103,22 +103,17 @@ class BCOACH_lunarlandercont(BCOACH):
   def get_feedback_label(self, h_fb, nstate):
     """get new state transition label for this environment using feedback"""
     #fb_value = self.feedback_dict.get(h_fb)
-        
-    # Acting on only pole angle
+    
     new_s_transition = np.copy(nstate)
-    #new_s_transition[0][0] += self.errorConst*fb_value*5
-    #new_s_transition[0][1] += self.errorConst*fb_value*5
-    #new_s_transition[0][2] -= self.errorConst*fb_value
-    #new_s_transition[0][3] -= self.errorConst*fb_value*5
 
-    if (h_fb == H_LEFT):    
-      new_s_transition[0][0] -= self.errorConst*5
+    if (h_fb == H_LEFT): # Angular velocity
+      new_s_transition[0][5] += self.errorConst
     elif (h_fb == H_RIGHT):
-      new_s_transition[0][0] += self.errorConst*5
+      new_s_transition[0][5] -= self.errorConst
     elif (h_fb == H_UP):
-      new_s_transition[0][1] += self.errorConst*5
+      new_s_transition[0][3] += self.errorConst
     elif (h_fb == H_DOWN):
-      new_s_transition[0][1] -= self.errorConst*5      
+      new_s_transition[0][3] -= self.errorConst
     
     return new_s_transition
 

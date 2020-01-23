@@ -245,8 +245,13 @@ class BCOACH():
   def train(self):
     """training the policy model and inverse dynamic model"""    
     
-    # Start session
-    self.sess.run(tf.global_variables_initializer())
+    if args.usePrevModel:
+      saver_prev = tf.train.Saver()
+      saver_prev.restore(self.sess, args.prev_model_dir)
+      print('Loaded previous model and session')
+    else:
+      # Start session
+      self.sess.run(tf.global_variables_initializer())
 
     print("\n[Training]")
     # pre demonstration to update inverse dynamic model
