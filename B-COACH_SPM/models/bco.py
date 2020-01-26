@@ -1,7 +1,7 @@
 from utils import *
 import gym
 
-class BCOACH():
+class BCO():
   def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=5000, M=50, batch_size=32):
     # set initial value
     self.state_dim = state_shape            # state dimension
@@ -10,12 +10,9 @@ class BCOACH():
     self.maxEpochs = maxEpochs              # maximum epochs
     self.epochTrainIts = epochTrainIts      # maximum training iterations every epoch
     self.batch_size = batch_size            # batch size
-    self.alpha = 0.1#0.01                       # alpha = | post_demo | / | pre_demo |
+    self.alpha = 0.01                       # alpha = | post_demo | / | pre_demo |
     self.M = M                              # samples to update inverse dynamic model
     self.ExpBuff  = []                      # Experience buffer for replay
-    self.DemoBuff  = []                     # Demonstration buffer
-    self.maxDemoBuffSize = 500              # Max Demonstration buffer size
-    self.coach_training_rate  = 10          # COACH training rate in the episode
 
     # initial session
     config = tf.ConfigProto()
@@ -43,14 +40,15 @@ class BCOACH():
     with open(args.input_filename, 'rb') as f:
       expert_data = pickle.load(f)
       inputs = expert_data['observations']
-      targets = expert_data['observations_next']
+      targets = expert_data['observations_next']    
     
-    num_samples = len(inputs)
-    if(num_samples > 10000):
+    #import pdb; pdb.set_trace()
+    num_samples = len(inputs)            
+    if(num_samples > 10000):      
       inputs = inputs[0:10000]
       targets = targets[0:10000]
       num_samples = 10000
-    print("Loaded %d demonstrations" % num_samples)
+    print("Loaded %d demonstrations" % num_samples)    
 
     return num_samples, inputs, targets
 
@@ -76,7 +74,7 @@ class BCOACH():
     })
 
   def eval_idm(self, state, nstate):
-    """get the action by inverse dynamic model from current state and next state"""
+    """get the action by inverse dynamic model from current state and next state"""    
     return self.sess.run(self.idm_pred_action, feed_dict={
       self.state: state,
       self.nstate: nstate
@@ -84,81 +82,6 @@ class BCOACH():
 
   def pre_demonstration(self):
     """uniform sample action to generate (s_t, s_t+1) and action pairs"""
-    raise NotImplementedError
-
-  def coach(self):
-    """COACH algorithm incorporating human feedback"""
-    terminal = False
-    state = self.env.reset()
-    state = state[0:14]     # Reduce state
-    state = np.reshape(state, [-1, self.state_dim])
-    t_counter = 0
-    h_counter = 0
-
-    # Iterate over the episode
-    while((not terminal) and (not self.human_feedback.ask_for_done()) ):        
-      self.env.render()  # Make the environment visible
-      time.sleep(self.render_delay)    # Add delay to rendering if necessary
-      
-      # Store previous_state
-      prev_s = state
-
-      # Get feedback signal
-      h_fb = self.human_feedback.get_h()
-      # Debug
-      # h_fb = 3
-
-      # Update policy
-      if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero
-        print("Feedback", self.feedback_dict.get(h_fb))
-        h_counter += 1 # Feedback counter
-
-        # Get new state transition label using feedback
-        new_s_transition = self.get_feedback_label(h_fb, state)
-
-        # Get action from idm
-        a = self.eval_idm(state, new_s_transition)
-        print("Eval_IDM action: ", a)
-
-        # Update policy (immediate)
-        self.update_policy_feedback_immediate(state, a)
-
-        # Add state transition pair to demo buffer
-        self.DemoBuff.append((state[0], new_s_transition[0]))
-        # If Demo buffer full, remove oldest entry
-        if (len(self.DemoBuff) > self.maxDemoBuffSize):
-            self.DemoBuff.pop(0)
-
-        # Train with batch from Demo buffer (if enough entries exist)
-        self.update_policy_feedback()
-
-        # Act using action based on h_feedback
-        A = np.reshape(a, [-1])
-        if not args.cont_actions:
-          A = np.argmax(A)
-        state, _, terminal, _ = self.env.step(A)
-        state = state[0:14]     # Reduce state
-        state = np.reshape(state, [-1, self.state_dim])
-      else:
-        # Use current policy
-        # Map action from state
-        A = np.reshape(self.eval_policy(state), [-1])
-        if not args.cont_actions:
-          A = np.argmax(A)
-
-        # Act
-        state, _, terminal, _ = self.env.step(A)
-        state = state[0:14]     # Reduce state
-        state = np.reshape(state, [-1, self.state_dim])
-
-        # Train every k time steps
-      if t_counter % self.coach_training_rate == 0:
-        self.update_policy_feedback()
-
-      t_counter += 1 # Time counter
-
-  def get_feedback_label(self, h_fb, nstate):
-    """get new state transition label using feedback"""
     raise NotImplementedError
 
   def post_demonstration(self, M):
@@ -182,31 +105,8 @@ class BCOACH():
       if it % 500 == 0:
         policy_loss = self.get_policy_loss(batch_s, batch_a)
         print('Policy train: iteration: %5d, policy_loss: %8.6f' % (it, policy_loss))
-        self.log_writer.write("Policy train: iteration: " + str(it) + ", policy_loss: " + format(policy_loss, '8.6f') + "\n")
+        self.log_writer.write("Policy train: iteration: " + str(it) + ", policy_loss: " + str(policy_loss) + "\n")
  
-  def update_policy_feedback(self):
-    """update policy using labels from Demo Buffer"""
-    num = len(self.DemoBuff)
-    if(num >= self.batch_size):
-      minibatch_ids = np.random.choice(len(self.DemoBuff), self.batch_size)
-      batch_s = [self.DemoBuff[id][0] for id in minibatch_ids]
-      batch_ns = [self.DemoBuff[id][1] for id in minibatch_ids]
-      batch_a = self.eval_idm(batch_s, batch_ns)
-
-      self.sess.run(self.policy_train_step, feed_dict={
-      self.state : batch_s,
-      self.action: batch_a
-      })
-
-  def update_policy_feedback_immediate(self, state, action):
-    """update policy using given label"""
-
-    # Train single step
-    self.sess.run(self.policy_train_step, feed_dict={
-      self.state : state,
-      self.action: action
-      })
-
   def update_idm(self):
     """update inverse dynamic model"""
     num = len(self.ExpBuff)
@@ -246,25 +146,18 @@ class BCOACH():
     return idm_loss
 
   def train(self):
-    """training the policy model and inverse dynamic model"""    
+    """training the policy model and inverse dynamic model by behavioral cloning"""    
     
-    if args.usePrevSession:
-      saver_prev = tf.train.Saver()
-      saver_prev.restore(self.sess, args.prev_session_dir)
-      print('Loaded previous model and session')
+    # Start session
+    self.sess.run(tf.global_variables_initializer())
 
-      # Reinit policy here if you wish
-    else:
-      # Start session
-      self.sess.run(tf.global_variables_initializer())
-
-      print("\n[Training]")
-      # pre demonstration to update inverse dynamic model
-      S, nS, A = self.pre_demonstration()
-      # Add to Experience Buffer
-      for id in range(0, len(S)):
-        self.ExpBuff.append((S[id], nS[id], A[id]))
-      self.update_idm()
+    print("\n[Training]")
+    # pre demonstration to update inverse dynamic model
+    S, nS, A = self.pre_demonstration()
+    # Add to Experience Buffer
+    for id in range(0, len(S)):
+      self.ExpBuff.append((S[id], nS[id], A[id]))
+    self.update_idm()
     
     # Init model saver
     saver = tf.train.Saver(max_to_keep=1)
@@ -273,20 +166,25 @@ class BCOACH():
       def should(freq):
         return freq > 0 and ((it+1) % freq==0 or it == self.maxEpochs-1)
 
-      # update policy pi #######################
-      #self.update_policy()
-      #if should(5):
-        #self.update_policy()
-      ##########################################
-      # COACH      
-      self.coach()
+      # update policy pi
+      currTime = time.time()
+      self.update_policy()
+      
+      # Print time taken for debug
+      if (args.printTime and should(args.print_freq)):
+        print("Policy Learning time: ", time.time() - currTime)    
 
-      # update inverse dynamic model ##############
-      # S, nS, A = self.post_demonstration(self.M)
-      # for id in range(0, len(S)):
-      #   self.ExpBuff.append((S[id], nS[id], A[id]))
-      # self.update_idm()
-      #############################################
+      # update inverse dynamic model
+      S, nS, A = self.post_demonstration(self.M)
+      for id in range(0, len(S)):
+        self.ExpBuff.append((S[id], nS[id], A[id]))        
+      currTime = time.time()
+      self.update_idm()
+      
+      # Print time taken for debug
+      if (args.printTime and should(args.print_freq)):
+        print("Model Learning time: ", time.time() - currTime)      
+
       if should(args.print_freq):
         policy_reward = self.eval_rwd_policy()
 
@@ -294,15 +192,15 @@ class BCOACH():
         S, nS = self.sample_demo(int(round(self.demo_examples/20))) # 5% of the demo data
         A = self.eval_idm(S, nS)
         policy_loss = self.get_policy_loss(S, A)
-        # ......................................................
-
-        # Check idm loss on another data set....................
+        # ...............................................        
+        
+        # Check idm loss on another data set.................
         S, nS, A = self.post_demonstration(self.M)
         idm_loss = self.get_idm_loss(S, nS, A)
-        # ......................................................
+        # ...............................................
         print('iteration: %5d, total_reward: %5.1f, policy_loss: %8.6f, idm_loss: %8.6f' % ((it+1), policy_reward, policy_loss, idm_loss))
-        self.result_writer.write( str(it+1) + " , " + format(policy_reward, '8.6f') + " , " + format(policy_loss, '8.6f') + " , " + format(idm_loss, '8.6f') + "\n" )
-        self.log_writer.write("\n" + "iteration: " + str(it+1) + ", total_reward: " + str(policy_reward) + ", policy_loss: " + format(policy_loss, '8.6f') + ", idm_loss: " + format(idm_loss, '8.6f') + "\n" + "\n")
+        self.result_writer.write( str(it+1) + " , " + str(policy_reward) + " , " + str(policy_loss) + " , " + str(idm_loss) + "\n" )
+        self.log_writer.write("\n" + "iteration: " + str(it+1) + ", total_reward: " + str(policy_reward) + ", policy_loss: " + str(policy_loss) + ", idm_loss: " + str(idm_loss) + "\n" + "\n")
 
       # saving model
       if should(args.save_freq):
@@ -311,11 +209,11 @@ class BCOACH():
 
       # Debug
       # After 5 iterations, redo pre demo learning
-      # if should(5):
-      #   S, nS, A = self.pre_demonstration()
-      #   for id in range(0, len(S)):
-      #     self.ExpBuff.append((S[id], nS[id], A[id]))
-      #   self.update_idm()
+      #if should(5):
+      #  S, nS, A = self.pre_demonstration()
+      #for id in range(0, len(S)):
+      #  self.ExpBuff.append((S[id], nS[id], A[id]))
+      #  self.update_idm()
 
 
   def test(self):
@@ -342,7 +240,7 @@ class BCOACH():
 
       # store datetime for saving logs
       self.logTime = dt.datetime.now().strftime('%d%m%H%M')
-          
+      
       for exp in range(0, args.numExperiments):
         
         # Set random seed for experiment
