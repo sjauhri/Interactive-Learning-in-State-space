@@ -104,11 +104,10 @@ class BCOACH_contmcar(BCOACH):
     """get new state transition label for this environment using feedback"""
     fb_value = self.feedback_dict.get(h_fb)
         
-    # Acting on only pole angle
+    # Acting on only speed
     new_s_transition = np.copy(nstate)
     #new_s_transition[0][0] += self.errorConst*fb_value*5
-    new_s_transition[0][1] += self.errorConst*fb_value*100
-    print(new_s_transition)
+    new_s_transition[0][1] += self.errorConst*fb_value*100    
     return new_s_transition
 
   def post_demonstration(self, M):

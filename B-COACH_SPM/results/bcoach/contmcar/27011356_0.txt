@@ -1,0 +1,20 @@
+Collecting idm training data 1000
+Collecting idm training data 2000
+Collecting idm training data 3000
+Collecting idm training data 4000
+Collecting idm training data 5000
+Collecting idm training data 6000
+Collecting idm training data 7000
+Collecting idm training data 8000
+Collecting idm training data 9000
+Collecting idm training data 10000
+Collecting idm training data 11000
+Collecting idm training data 12000
+IDM train: iteration: 500, idm_loss: 0.463896
+IDM train: iteration: 1000, idm_loss: 0.454472
+IDM train: iteration: 1500, idm_loss: 0.259466
+IDM train: iteration: 2000, idm_loss: 0.254062
+IDM train: iteration: 2500, idm_loss: 0.343656
+IDM train: iteration: 3000, idm_loss: 0.495673
+IDM train: iteration: 3500, idm_loss: 0.332379
+IDM train: iteration: 4000, idm_loss: 0.243636

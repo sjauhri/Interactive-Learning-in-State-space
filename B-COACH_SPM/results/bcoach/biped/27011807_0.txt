@@ -1,0 +1,12 @@
+
+iteration: 1, total_reward: 310.2685165240068, policy_loss: 0.026438, idm_loss: 0.057359
+
+
+iteration: 2, total_reward: -87.37130777282019, policy_loss: 0.026001, idm_loss: 0.071361
+
+
+iteration: 3, total_reward: 0.5301370986817631, policy_loss: 0.025459, idm_loss: 0.053146
+
+
+iteration: 4, total_reward: -92.0966737234133, policy_loss: 0.026297, idm_loss: 0.047936
+

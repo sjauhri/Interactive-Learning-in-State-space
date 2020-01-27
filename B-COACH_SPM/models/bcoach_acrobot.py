@@ -18,7 +18,7 @@ class BCOACH_acrobot(BCOACH):
     self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5
-    self.errorConst = 0.1
+    self.errorConst = 0.05
     # Render time delay for this environment (in s)
     self.render_delay = 0.1
     # Choose which feedback to act on with fb dictionary
@@ -107,9 +107,9 @@ class BCOACH_acrobot(BCOACH):
 
     # Acting on only pole angle
     new_s_transition = np.copy(nstate)
-    new_s_transition[0][2] += self.errorConst*fb_value*2
-    new_s_transition[0][3] += self.errorConst*fb_value*2
-    new_s_transition[0][5] += self.errorConst*fb_value*10
+    new_s_transition[0][2] += self.errorConst*fb_value*4
+    new_s_transition[0][3] += self.errorConst*fb_value*4
+    new_s_transition[0][5] += self.errorConst*fb_value*20
     return new_s_transition
 
   def post_demonstration(self, M):

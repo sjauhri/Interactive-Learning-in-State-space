@@ -4,7 +4,7 @@ from feedback import *
 import gym
 
 class BCOACH_biped(BCOACH):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=5000, M=500):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=9000, M=500):
     BCOACH.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M)
 
     # set which game to play
@@ -113,22 +113,22 @@ class BCOACH_biped(BCOACH):
     fb_value = self.feedback_dict.get(h_fb)
     #new_s_transition[0][0] += self.errorConst*fb_value*5
     
-    # if (h_fb == ALT_LEFT):
-    #   # Light brown (hind) leg
-    #   #new_s_transition[0][4] -= self.errorConst*5
-    #   new_s_transition[0][5] -= self.errorConst*5
-    # elif (h_fb == ALT_RIGHT):
-    #   # Light brown (hind) leg
-    #   #new_s_transition[0][4] += self.errorConst*5
-    #   new_s_transition[0][5] += self.errorConst*5
-    # elif (h_fb == H_LEFT):
-    #   # Dark brown (fore) leg
-    #   #new_s_transition[0][9] -= self.errorConst*5
-    #   new_s_transition[0][10] -= self.errorConst*5
-    # elif (h_fb == H_RIGHT):
-    #   # Dark brown (fore) leg
-    #   #new_s_transition[0][9] += self.errorConst*5
-    #   new_s_transition[0][10] += self.errorConst*5      
+    if (h_fb == ALT_LEFT):
+      # Light brown (hind) leg
+      #new_s_transition[0][4] -= self.errorConst*5
+      new_s_transition[0][5] -= self.errorConst*5
+    elif (h_fb == ALT_RIGHT):
+      # Light brown (hind) leg
+      #new_s_transition[0][4] += self.errorConst*5
+      new_s_transition[0][5] += self.errorConst*5
+    elif (h_fb == H_LEFT):
+      # Dark brown (fore) leg
+      #new_s_transition[0][9] -= self.errorConst*5
+      new_s_transition[0][10] -= self.errorConst*5
+    elif (h_fb == H_RIGHT):
+      # Dark brown (fore) leg
+      #new_s_transition[0][9] += self.errorConst*5
+      new_s_transition[0][10] += self.errorConst*5      
         
     return new_s_transition
 

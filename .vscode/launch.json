@@ -20,5 +20,13 @@
             "console": "integratedTerminal",            
             "args": ["--mode=train","--input_file=B-COACH/demonstration/expert_obs/LunarLanderContinuous-v2.pkl","--result_dir=B-COACH/results/bcoach/lunarlandercont/","--model_dir=B-COACH/model/bcoach/lunarlandercont/","--maxEpochs=50","--numExperiments=1","--cont_actions"]
         }
+        {
+            "name": "bcoach_spm_cartpole",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/snehal/Desktop/Thesis/IfO/B-COACH_SPM/models/bcoach_spm_cartpole.py",
+            "console": "integratedTerminal",            
+            "args": ["--mode=train","--input_file=B-COACH_SPM/demonstration/expert_obs/CartPole-v0.pkl","--result_dir=B-COACH_SPM/results/bcoach_spm/cartpole/","--model_dir=B-COACH_SPM/model/bcoach_spm/cartpole/","--maxEpochs=50","--numExperiments=1","--useSPM"]
+        }        
     ]
 }

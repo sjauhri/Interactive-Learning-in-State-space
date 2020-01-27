@@ -10,7 +10,7 @@ class BCOACH_SPM():
     self.maxEpochs = maxEpochs              # maximum epochs
     self.epochTrainIts = epochTrainIts      # maximum training iterations every epoch
     self.batch_size = batch_size            # batch size
-    self.alpha = 1#0.01                       # alpha = | post_demo | / | pre_demo |
+    self.alpha = 0.01                       # alpha = | post_demo | / | pre_demo |
     self.M = M                              # samples to update inverse dynamic model
     self.ExpBuff  = []                      # Experience buffer for replay
     self.DemoBuff  = []                     # Demonstration buffer
@@ -27,6 +27,7 @@ class BCOACH_SPM():
       self.state = tf.placeholder(tf.float32, [None, self.state_dim], name="state")
       self.state_corrected = tf.placeholder(tf.float32, [None, 1], name="state_corrected")
       self.nstate = tf.placeholder(tf.float32, [None, self.state_dim], name="next_state")
+      self.nstate_partial = tf.placeholder(tf.float32, [None, (self.state_dim-1)], name="next_state_partial")
       self.action = tf.placeholder(tf.float32, [None, self.action_dim], name="action")
     
     # build policy model, inverse dynamic model and state prediction model
@@ -86,10 +87,7 @@ class BCOACH_SPM():
 
   def eval_spm(self, state, state_corrected):
     """get the action by inverse dynamic model from current state and next state"""
-    return self.sess.run(self.spm_pred_state, feed_dict={
-      self.state: state,
-      self.state_corrected: state_corrected
-    })
+    raise NotImplementedError
 
   def pre_demonstration(self):
     """uniform sample action to generate (s_t, s_t+1) and action pairs"""
@@ -130,6 +128,9 @@ class BCOACH_SPM():
         # Get action from idm
         a = self.eval_idm(state, new_s_transition)
         print("Eval_IDM action: ", a)
+        # Debug incorrect action
+        if (self.feedback_dict.get(h_fb) != a[0][1]):
+          xys = 5
 
         # Update policy (immediate)
         self.update_policy_feedback_immediate(state, a)
@@ -258,12 +259,12 @@ class BCOACH_SPM():
     })
     return idm_loss
 
-  def get_spm_loss(self, state, state_corrected, nstate):
+  def get_spm_loss(self, state, state_corrected, nstate_partial):
     """get state prediction model loss"""
     spm_loss = self.sess.run(self.spm_loss, feed_dict={
       self.state: state,
       self.state_corrected: state_corrected,
-      self.nstate: nstate      
+      self.nstate_partial: nstate_partial    
     })
     return spm_loss    
 

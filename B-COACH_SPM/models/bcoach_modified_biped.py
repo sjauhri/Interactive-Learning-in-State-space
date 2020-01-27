@@ -10,7 +10,7 @@ class BCOACH():
     self.maxEpochs = maxEpochs              # maximum epochs
     self.epochTrainIts = epochTrainIts      # maximum training iterations every epoch
     self.batch_size = batch_size            # batch size
-    self.alpha = 0.1#0.01                       # alpha = | post_demo | / | pre_demo |
+    self.alpha = 0.1                       # alpha = | post_demo | / | pre_demo |
     self.M = M                              # samples to update inverse dynamic model
     self.ExpBuff  = []                      # Experience buffer for replay
     self.DemoBuff  = []                     # Demonstration buffer
@@ -311,11 +311,11 @@ class BCOACH():
 
       # Debug
       # After 5 iterations, redo pre demo learning
-      # if should(5):
+      if should(5):
       #   S, nS, A = self.pre_demonstration()
       #   for id in range(0, len(S)):
       #     self.ExpBuff.append((S[id], nS[id], A[id]))
-      #   self.update_idm()
+         self.update_idm()
 
 
   def test(self):
