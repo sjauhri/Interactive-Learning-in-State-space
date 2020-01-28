@@ -129,12 +129,12 @@ class BCOACH_SPM():
         a = self.eval_idm(state, new_s_transition)
         print("Eval_IDM action: ", a)
         # Debug incorrect action
-        if not args.cont_actions:
-          if ((self.feedback_dict.get(h_fb) == -1 and a[0][1] == 1) or (self.feedback_dict.get(h_fb) == 1 and a[0][0] == 1)):
-            print("MISLABEL!")
-        else:
-          if ((self.feedback_dict.get(h_fb) == -1 and a > 0) or (self.feedback_dict.get(h_fb) == 1 and a < 0)):
-            print("MISLABEL!")
+        # if not args.cont_actions:
+        #   if ((self.feedback_dict.get(h_fb) == -1 and a[0][1] == 1) or (self.feedback_dict.get(h_fb) == 1 and a[0][0] == 1)):
+        #     print("MISLABEL!")
+        # else:
+        #   if ((self.feedback_dict.get(h_fb) == -1 and a[0][1] > 0.5) or (self.feedback_dict.get(h_fb) == 1 and a[0][1] < -0.5)):
+        #     print("MISLABEL!")
 
         # Update policy (immediate)
         self.update_policy_feedback_immediate(state, a)

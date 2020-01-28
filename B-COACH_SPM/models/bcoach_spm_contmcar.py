@@ -1,11 +1,11 @@
 from utils import *
-from bcoach import BCOACH
+from bcoach_spm import BCOACH_SPM
 from feedback import *
 import gym
 
-class BCOACH_contmcar(BCOACH):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=4000, M=120, batch_size=16):
-    BCOACH.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M, batch_size=batch_size)
+class BCOACH_SPM_contmcar(BCOACH_SPM):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=10000, M=120, batch_size=16):
+    BCOACH_SPM.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M, batch_size=batch_size)
 
     # set which game to play
     self.env = gym.make('MountainCarContinuous-v0')
@@ -18,7 +18,7 @@ class BCOACH_contmcar(BCOACH):
     self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5
-    self.errorConst = 0.07
+    self.errorConst = 0.05
     # Render time delay for this environment (in s)
     self.render_delay = 0.05
     # Choose which feedback to act on with fb dictionary
@@ -70,6 +70,26 @@ class BCOACH_contmcar(BCOACH):
       with tf.variable_scope("train_step") as scope:
         self.idm_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.idm_loss)
 
+  def build_spm_model(self):
+    """building the state prediction model as two fully connnected layers with leaky relu"""
+    with tf.variable_scope("state_prediction_model") as scope:
+      with tf.variable_scope("input") as scope:
+        spm_input = tf.concat([self.state, self.state_corrected], 1)
+      with tf.variable_scope("model") as scope:
+        spm_h1 = tf.layers.dense(spm_input, 16, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
+        spm_h1 = tf.nn.leaky_relu(spm_h1, 0.2, name="LeakyRelu_1")
+        spm_h2 = tf.layers.dense(spm_h1, 16, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
+        spm_h2 = tf.nn.leaky_relu(spm_h2, 0.2, name="LeakyRelu_2")
+
+      with tf.variable_scope("output") as scope:
+        self.spm_pred_state = tf.layers.dense(spm_h2, (self.state_dim-1), kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")
+
+      with tf.variable_scope("loss") as scope:
+        self.spm_loss = tf.reduce_mean(tf.squared_difference(self.spm_pred_state, self.nstate_partial))
+      with tf.variable_scope("train_step") as scope:
+        self.spm_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.spm_loss)
+
+
   def pre_demonstration(self):
     """uniform sample action to generate (s_t, s_t+1) and action pairs"""
     terminal = True
@@ -109,6 +129,50 @@ class BCOACH_contmcar(BCOACH):
     #new_s_transition[0][0] += self.errorConst*fb_value*5
     new_s_transition[0][1] += self.errorConst*fb_value*100
     return new_s_transition
+
+  def get_state_corrected(self, h_fb, nstate):
+    """get corrected state label for this environment using feedback"""
+    fb_value = self.feedback_dict.get(h_fb)
+
+    # Acting on only speed
+    state_corrected = np.copy(nstate)
+    #state_corrected[0][0] += self.errorConst*fb_value
+    state_corrected[0][1] += self.errorConst*fb_value*2
+    return state_corrected[0][1] # Change this!!
+
+  def eval_spm(self, state, state_corrected):
+    """get the action by inverse dynamic model from current state and next state"""
+    nstate_partial = self.sess.run(self.spm_pred_state, feed_dict={
+      self.state: state,
+      self.state_corrected: state_corrected
+    })
+    nstate = np.insert(nstate_partial, 1, values=state_corrected, axis=1)
+    return nstate
+
+  def update_spm(self):
+    """update state prediction model"""
+    for it in range(1, self.epochTrainIts+1):
+      # Choose demos or experience
+      minibatch_ids = np.random.choice(len(self.ExpBuff), self.batch_size)
+      batch_s = [self.ExpBuff[id][0] for id in minibatch_ids]
+      batch_ns = [self.ExpBuff[id][1] for id in minibatch_ids]     
+
+      #batch_s, batch_ns =  self.sample_demo(self.batch_size)
+      # Use the corresponding state from next_state as corrected state
+      batch_state_corrected = [ [st[1]] for st in batch_ns ]
+      # Remove this state column from batch_ns
+      batch_ns_partial = np.delete(batch_ns, 1, axis=1)
+      self.sess.run(self.spm_train_step, feed_dict={
+      self.state: batch_s,
+      self.state_corrected: batch_state_corrected,
+      self.nstate_partial: batch_ns_partial
+      })
+      # Debug
+      if it % 500 == 0:
+        # TODO: Get loss on another dataset
+        spm_loss = self.get_spm_loss(batch_s, batch_state_corrected, batch_ns_partial)
+        print('SPM train: iteration: %5d, spm_loss: %8.6f' % (it, spm_loss))
+        self.log_writer.write("SPM train: iteration: " + str(it) + ", spm_loss: " + format(spm_loss, '8.6f') + "\n")
 
   def post_demonstration(self, M):
     """using policy to generate (s_t, s_t+1) and action pairs"""
@@ -153,5 +217,5 @@ class BCOACH_contmcar(BCOACH):
     return total_reward
     
 if __name__ == "__main__":
-  bcoach = BCOACH_contmcar(2, 1, lr=args.lr, maxEpochs=args.maxEpochs)
-  bcoach.run()
+  bcoach_spm = BCOACH_SPM_contmcar(2, 1, lr=args.lr, maxEpochs=args.maxEpochs)
+  bcoach_spm.run()

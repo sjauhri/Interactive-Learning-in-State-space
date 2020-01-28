@@ -35,6 +35,22 @@
             "program": "/home/snehal/Desktop/Thesis/IfO/B-COACH_SPM/models/bcoach_spm_contcartpole.py",
             "console": "integratedTerminal",            
             "args": ["--mode=train","--input_file=B-COACH_SPM/demonstration/expert_obs/CartPole-v0.pkl","--result_dir=B-COACH_SPM/results/bcoach_spm/contcartpole/","--model_dir=B-COACH_SPM/model/bcoach_spm/contcartpole/","--maxEpochs=50","--numExperiments=1","--useSPM","--cont_actions"]
-        }     
+        }
+        {
+            "name": "bcoach_spm_contmcar",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/snehal/Desktop/Thesis/IfO/B-COACH_SPM/models/bcoach_spm_contmcar.py",
+            "console": "integratedTerminal",            
+            "args": ["--mode=train","--input_file=B-COACH_SPM/demonstration/expert_obs/MountainCar-v0.pkl","--result_dir=B-COACH_SPM/results/bcoach_spm/contmcar/","--model_dir=B-COACH_SPM/model/bcoach_spm/contmcar/","--maxEpochs=50","--numExperiments=1","--useSPM","--cont_actions"]
+        }
+        {
+            "name": "bcoach_spm_lunarlandercont",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/snehal/Desktop/Thesis/IfO/B-COACH_SPM/models/bcoach_spm_lunarlandercont.py",
+            "console": "integratedTerminal",            
+            "args": ["--mode=train","--input_file=B-COACH_SPM/demonstration/expert_obs/LunarLanderContinuous-v2.pkl","--result_dir=B-COACH_SPM/results/bcoach_spm/lunarlandercont/","--model_dir=B-COACH_SPM/model/bcoach_spm/lunarlandercont/","--maxEpochs=50","--numExperiments=1","--useSPM","--cont_actions"]
+        }        
     ]
 }
