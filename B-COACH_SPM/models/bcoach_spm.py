@@ -129,8 +129,12 @@ class BCOACH_SPM():
         a = self.eval_idm(state, new_s_transition)
         print("Eval_IDM action: ", a)
         # Debug incorrect action
-        if (self.feedback_dict.get(h_fb) != a[0][1]):
-          xys = 5
+        if not args.cont_actions:
+          if ((self.feedback_dict.get(h_fb) == -1 and a[0][1] == 1) or (self.feedback_dict.get(h_fb) == 1 and a[0][0] == 1)):
+            print("MISLABEL!")
+        else:
+          if ((self.feedback_dict.get(h_fb) == -1 and a > 0) or (self.feedback_dict.get(h_fb) == 1 and a < 0)):
+            print("MISLABEL!")
 
         # Update policy (immediate)
         self.update_policy_feedback_immediate(state, a)
@@ -282,15 +286,16 @@ class BCOACH_SPM():
       self.sess.run(tf.global_variables_initializer())
 
     print("\n[Training]")
-    if args.useSPM:      
-      # Train the state prediction model using demonstration
-      self.update_spm()
     # pre demonstration to update inverse dynamic model
     S, nS, A = self.pre_demonstration()
     # Add to Experience Buffer
     for id in range(0, len(S)):
       self.ExpBuff.append((S[id], nS[id], A[id]))
     self.update_idm()
+
+    if args.useSPM:      
+      # Train the state prediction model
+      self.update_spm()
     
     # Init model saver
     saver = tf.train.Saver(max_to_keep=1)
@@ -336,11 +341,11 @@ class BCOACH_SPM():
 
       # Debug
       # After 5 iterations, redo pre demo learning
-      if should(5):
-        S, nS, A = self.pre_demonstration()
-        for id in range(0, len(S)):
-          self.ExpBuff.append((S[id], nS[id], A[id]))
-        self.update_idm()
+      # if should(5):
+      #   S, nS, A = self.pre_demonstration()
+      #   for id in range(0, len(S)):
+      #     self.ExpBuff.append((S[id], nS[id], A[id]))
+      #   self.update_idm()
 
 
   def test(self):

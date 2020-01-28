@@ -3,12 +3,12 @@ from bcoach_spm import BCOACH_SPM
 from feedback import *
 import gym
 
-class BCOACH_SPM_cartpole(BCOACH_SPM):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=5000, M=10, batch_size=8):  
+class BCOACH_SPM_contcartpole(BCOACH_SPM):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=5000, M=50, batch_size=8):  
     BCOACH_SPM.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M, batch_size=batch_size)
 
     # set which game to play
-    self.env = gym.make('CartPole-v0')
+    self.env = gym.make('Continuous-CartPole-COACH-v1')
     self.env.reset()
     self.env.render()  # Make the environment visible
     #pdb.set_trace()
@@ -20,7 +20,7 @@ class BCOACH_SPM_cartpole(BCOACH_SPM):
     # 0.01, 0.05, 0.1, 0.5
     self.errorConst = 0.05
     # Render time delay for this environment (in s)
-    self.render_delay = 0.1
+    self.render_delay = 0.05
     # Choose which feedback to act on with fb dictionary
     self.feedback_dict = {
       H_NULL: 0,      
@@ -42,12 +42,11 @@ class BCOACH_SPM_cartpole(BCOACH_SPM):
         policy_h2 = tf.nn.leaky_relu(policy_h2, 0.2, name="LeakyRelu_2")
 
       with tf.variable_scope("output") as scope:
-        policy_pred_action = tf.layers.dense(policy_h2, self.action_dim, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")
-        self.tmp_policy_pred_action = policy_pred_action
-        self.policy_pred_action = tf.one_hot(tf.argmax(policy_pred_action, axis=1), self.action_dim, name="one_hot")
+        self.tmp_policy_pred_action = tf.layers.dense(policy_h2, self.action_dim, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")
+        self.policy_pred_action = tf.clip_by_value(self.tmp_policy_pred_action, clip_value_min=-1, clip_value_max=1)
 
       with tf.variable_scope("loss") as scope:
-        self.policy_loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.action, logits=policy_pred_action))
+        self.policy_loss = tf.reduce_mean(tf.squared_difference(self.policy_pred_action, self.action))
       with tf.variable_scope("train_step") as scope:
         self.policy_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.policy_loss)
 
@@ -63,11 +62,11 @@ class BCOACH_SPM_cartpole(BCOACH_SPM):
         idm_h2 = tf.nn.leaky_relu(idm_h2, 0.2, name="LeakyRelu_2")
 
       with tf.variable_scope("output") as scope:
-        idm_pred_action = tf.layers.dense(idm_h2, self.action_dim, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")
-        self.idm_pred_action = tf.one_hot(tf.argmax(idm_pred_action, axis=1), self.action_dim, name="one_hot")
+        self.tmp_idm_pred_action = tf.layers.dense(idm_h2, self.action_dim, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")
+        self.idm_pred_action = tf.clip_by_value(self.tmp_idm_pred_action, clip_value_min=-1, clip_value_max=1)
 
       with tf.variable_scope("loss") as scope:
-        self.idm_loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.action, logits=idm_pred_action))
+        self.idm_loss = tf.reduce_mean(tf.squared_difference(self.idm_pred_action, self.action))
       with tf.variable_scope("train_step") as scope:
         self.idm_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.idm_loss)
 
@@ -105,15 +104,15 @@ class BCOACH_SPM_cartpole(BCOACH_SPM):
       prev_s = state
       state = np.reshape(state, [-1, self.state_dim])
 
-      A = np.random.randint(self.action_dim)
-      a = np.zeros([self.action_dim])
-      a[A] = 1
+      # Continuos action space
+      # Actions between -1 and 1
+      A = np.random.uniform(-1, 1, self.action_dim)
 
       state, _, terminal, _ = self.env.step(A)
 
       States.append(prev_s)
       Nstates.append(state)
-      Actions.append(a)
+      Actions.append(A)
 
       if i and (i+1) % 1000 == 0:
         print("Collecting idm training data ", i+1)
@@ -193,13 +192,13 @@ class BCOACH_SPM_cartpole(BCOACH_SPM):
       prev_s = state
       state = np.reshape(state, [-1,self.state_dim])
 
-      a = np.reshape(self.eval_policy(state), [-1])
-      A = np.argmax(a)
+      # Continuos action space
+      A = np.reshape(self.eval_policy(state), [-1])
       state, _, terminal, _ = self.env.step(A)
 
       States.append(prev_s)
       Nstates.append(state)
-      Actions.append(a)
+      Actions.append(A)
 
     return States, Nstates, Actions
 
@@ -211,8 +210,8 @@ class BCOACH_SPM_cartpole(BCOACH_SPM):
 
     while not terminal:
       state = np.reshape(state, [-1,self.state_dim])
-      a = np.reshape(self.eval_policy(state), [-1])
-      A = np.argmax(a)
+      # Continuos action space
+      A = np.reshape(self.eval_policy(state), [-1])
       state, reward, terminal, _ = self.env.step(A)
       total_reward += reward
       if args.render:
@@ -222,5 +221,5 @@ class BCOACH_SPM_cartpole(BCOACH_SPM):
     return total_reward
     
 if __name__ == "__main__":
-  bcoach_spm = BCOACH_SPM_cartpole(4, 2, lr=args.lr, maxEpochs=args.maxEpochs)
+  bcoach_spm = BCOACH_SPM_contcartpole(4, 1, lr=args.lr, maxEpochs=args.maxEpochs)
   bcoach_spm.run()
