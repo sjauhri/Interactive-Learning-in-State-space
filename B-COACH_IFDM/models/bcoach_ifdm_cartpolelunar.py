@@ -19,7 +19,7 @@ class BCOACH_cartpole(BCOACH):
     self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5
-    self.errorConst = 0.1
+    self.errorConst = 0.05
     # Render time delay for this environment (in s)
     self.render_delay = 0.1
     # Choose which feedback is valid with fb dictionary
@@ -108,11 +108,14 @@ class BCOACH_cartpole(BCOACH):
     """get corrected state label for this environment using feedback"""
     state_corrected = np.copy(state)
 
-    # Correcting Velocity
-    if (h_fb == H_LEFT):
-      state_corrected = state_corrected[1] - self.errorConst
+    if (h_fb == H_LEFT): # Angular velocity
+      state_corrected = state_corrected[5] + self.errorConst      
     elif (h_fb == H_RIGHT):
-      state_corrected = state_corrected[1] + self.errorConst    
+      state_corrected = state_corrected[5] - self.errorConst      
+    elif (h_fb == H_UP): # Vertical velocity
+      state_corrected = state_corrected[3] + self.errorConst
+    elif (h_fb == H_DOWN):
+      state_corrected = state_corrected[3] - self.errorConst
     return state_corrected
 
   def get_action(self, h_fb, state, state_corrected):
@@ -129,15 +132,19 @@ class BCOACH_cartpole(BCOACH):
       # Query ifdm to get next state
       nstate = fdm_cart(state, curr_action)
 
-      # Check cost      
-      cost = state_corrected - nstate[1]
-      
+      # Check cost
+      if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity
+        cost = state_corrected - nstate[5]
+      else:                                       # Vertical velocity
+        cost = state_corrected - nstate[3]
       # Check for min_cost
       if(cost < min_cost):
         min_cost = cost
         min_action = curr_action
 
-    return min_action
+
+
+    return Action
 
   def coach(self):
     """COACH algorithm incorporating human feedback"""

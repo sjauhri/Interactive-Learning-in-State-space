@@ -128,8 +128,8 @@ class BCOACH():
     if(num >= self.batch_size):
       minibatch_ids = np.random.choice(len(self.DemoBuff), self.batch_size)
       batch_s = [self.DemoBuff[id][0] for id in minibatch_ids]
-      batch_ns = [self.DemoBuff[id][1] for id in minibatch_ids]
-      batch_a = self.eval_idm(batch_s, batch_ns)
+      batch_a = [self.DemoBuff[id][1] for id in minibatch_ids]
+      #batch_a = self.eval_idm(batch_s, batch_ns)
 
       self.sess.run(self.policy_train_step, feed_dict={
       self.state : batch_s,

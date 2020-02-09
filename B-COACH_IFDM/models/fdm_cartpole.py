@@ -7,13 +7,13 @@ permalink: https://perma.cc/C9ZM-652R
 import math
 import numpy as np
 
-def fdm_cart(self, state, action):
+def fdm_cart(state, action):
     # valid actions are 0 (left) and 1 (right)
     x, x_dot, theta, theta_dot = state
     force = 0
     if action==1:
         force = 10.0
-    elif action[1]==1:
+    else:
         force = -10.0
     costheta = math.cos(theta)
     sintheta = math.sin(theta)
