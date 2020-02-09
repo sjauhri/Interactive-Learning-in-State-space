@@ -14,7 +14,8 @@ class BCOACH_SPM():
     self.M = M                              # samples to update inverse dynamic model
     self.ExpBuff  = []                      # Experience buffer for replay
     self.DemoBuff  = []                     # Demonstration buffer
-    self.maxDemoBuffSize = 500              # Max Demonstration buffer size
+    self.maxExpBuffSize = 20000             # Max Experience buffer size
+    self.maxDemoBuffSize = 1500             # Max Demonstration buffer size
     self.coach_training_rate  = 10          # COACH training rate in the episode
 
     # initial session
@@ -26,14 +27,16 @@ class BCOACH_SPM():
     with tf.variable_scope("placeholder") as scope:
       self.state = tf.placeholder(tf.float32, [None, self.state_dim], name="state")
       self.state_corrected = tf.placeholder(tf.float32, [None, 1], name="state_corrected")
+      self.state_corrected2 = tf.placeholder(tf.float32, [None, 1], name="state_corrected2")
       self.nstate = tf.placeholder(tf.float32, [None, self.state_dim], name="next_state")
       self.nstate_partial = tf.placeholder(tf.float32, [None, (self.state_dim-1)], name="next_state_partial")
+      self.nstate_partial2 = tf.placeholder(tf.float32, [None, (self.state_dim-1)], name="next_state_partial2")
       self.action = tf.placeholder(tf.float32, [None, self.action_dim], name="action")
     
     # build policy model, inverse dynamic model and state prediction model
     self.build_policy_model()
     self.build_idm_model()
-    self.build_spm_model()
+    self.build_spm_model()    
 
     # tensorboard output (TODO: Check if you really need tensorboard)
     #writer = tf.summary.FileWriter("logdir/", graph=self.sess.graph)
@@ -123,7 +126,7 @@ class BCOACH_SPM():
         if args.useSPM:
           state_corrected = self.get_state_corrected(h_fb, state)
           state_corrected = np.reshape(state_corrected, [-1, 1])
-          new_s_transition = self.eval_spm(state, state_corrected)        
+          new_s_transition = self.eval_spm(state, state_corrected, h_fb)
         else:
           new_s_transition = self.get_feedback_label(h_fb, state)        
 
@@ -243,10 +246,14 @@ class BCOACH_SPM():
         })
         # Debug
         if it % 500 == 0:
-          # Check idm loss on another data set....................
-          S, nS, A = self.post_demonstration(self.M)
-          idm_loss = self.get_idm_loss(S, nS, A)          
-          # idm_loss = self.get_idm_loss(batch_s, batch_ns, batch_a)
+          # Check idm loss
+          minibatch_ids = np.random.choice(len(self.ExpBuff), self.M)
+          batch_s = [self.ExpBuff[id][0] for id in minibatch_ids]
+          batch_ns = [self.ExpBuff[id][1] for id in minibatch_ids]
+          batch_a = [self.ExpBuff[id][2] for id in minibatch_ids]
+          #S, nS, A = self.post_demonstration(self.M)
+          #idm_loss = self.get_idm_loss(S, nS, A)
+          idm_loss = self.get_idm_loss(batch_s, batch_ns, batch_a)
           print('IDM train: iteration: %5d, idm_loss: %8.6f' % (it, idm_loss))
           self.log_writer.write("IDM train: iteration: " + str(it) + ", idm_loss: " + format(idm_loss, '8.6f') + "\n")
     else:
@@ -271,15 +278,6 @@ class BCOACH_SPM():
       self.action: action
     })
     return idm_loss
-
-  def get_spm_loss(self, state, state_corrected, nstate_partial):
-    """get state prediction model loss"""
-    spm_loss = self.sess.run(self.spm_loss, feed_dict={
-      self.state: state,
-      self.state_corrected: state_corrected,
-      self.nstate_partial: nstate_partial    
-    })
-    return spm_loss    
 
   def train(self):
     """training the policy model and inverse dynamic model"""    
@@ -350,10 +348,12 @@ class BCOACH_SPM():
 
       # Debug
       # After 5 iterations, redo pre demo learning
-      # if should(5):
+      # if should(2):
       #   S, nS, A = self.pre_demonstration()
       #   for id in range(0, len(S)):
       #     self.ExpBuff.append((S[id], nS[id], A[id]))
+      #     if (len(self.ExpBuff) > self.maxExpBuffSize):
+      #       self.ExpBuff.pop(0)
       #   self.update_idm()
 
 

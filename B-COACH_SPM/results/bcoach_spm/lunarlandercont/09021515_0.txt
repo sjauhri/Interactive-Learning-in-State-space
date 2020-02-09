@@ -1,0 +1,54 @@
+Collecting idm training data 1000
+Collecting idm training data 2000
+Collecting idm training data 3000
+Collecting idm training data 4000
+Collecting idm training data 5000
+Collecting idm training data 6000
+Collecting idm training data 7000
+Collecting idm training data 8000
+Collecting idm training data 9000
+Collecting idm training data 10000
+Collecting idm training data 11000
+Collecting idm training data 12000
+Collecting idm training data 13000
+Collecting idm training data 14000
+Collecting idm training data 15000
+Collecting idm training data 16000
+Collecting idm training data 17000
+Collecting idm training data 18000
+Collecting idm training data 19000
+Collecting idm training data 20000
+IDM train: iteration: 500, idm_loss: 0.002951
+IDM train: iteration: 1000, idm_loss: 0.002367
+IDM train: iteration: 1500, idm_loss: 0.020943
+IDM train: iteration: 2000, idm_loss: 0.006755
+IDM train: iteration: 2500, idm_loss: 0.021180
+IDM train: iteration: 3000, idm_loss: 0.007574
+IDM train: iteration: 3500, idm_loss: 0.011230
+IDM train: iteration: 4000, idm_loss: 0.020399
+IDM train: iteration: 4500, idm_loss: 0.027580
+IDM train: iteration: 5000, idm_loss: 0.029008
+IDM train: iteration: 5500, idm_loss: 0.068398
+IDM train: iteration: 6000, idm_loss: 0.041391
+IDM train: iteration: 6500, idm_loss: 0.027999
+IDM train: iteration: 7000, idm_loss: 0.035234
+SPM train: iteration: 500, spm_loss: 0.084991
+SPM train: iteration: 1000, spm_loss: 0.049176
+SPM train: iteration: 1500, spm_loss: 0.027878
+SPM train: iteration: 2000, spm_loss: 0.022871
+SPM train: iteration: 2500, spm_loss: 0.019045
+SPM train: iteration: 3000, spm_loss: 0.012711
+SPM train: iteration: 3500, spm_loss: 0.012562
+SPM train: iteration: 4000, spm_loss: 0.011603
+SPM train: iteration: 4500, spm_loss: 0.011562
+SPM train: iteration: 5000, spm_loss: 0.007905
+SPM train: iteration: 5500, spm_loss: 0.008274
+SPM train: iteration: 6000, spm_loss: 0.008238
+SPM train: iteration: 6500, spm_loss: 0.008162
+SPM train: iteration: 7000, spm_loss: 0.008064
+
+iteration: 1, total_reward: -120.35981938679134, policy_loss: 0.161509, idm_loss: 0.140055
+
+
+iteration: 2, total_reward: -117.53528708275115, policy_loss: 0.176927, idm_loss: 0.112853
+

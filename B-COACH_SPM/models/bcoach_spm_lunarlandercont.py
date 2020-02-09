@@ -29,6 +29,8 @@ class BCOACH_SPM_lunarlandercont(BCOACH_SPM):
       H_LEFT: 1,
       H_RIGHT: 1
     }
+
+    self.build_spm_model2()
   
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
@@ -89,6 +91,25 @@ class BCOACH_SPM_lunarlandercont(BCOACH_SPM):
       with tf.variable_scope("train_step") as scope:
         self.spm_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.spm_loss)
 
+  def build_spm_model2(self):
+    """building the state prediction model as two fully connnected layers with leaky relu"""
+    with tf.variable_scope("state_prediction_model2") as scope:
+      with tf.variable_scope("input") as scope:
+        spm2_input = tf.concat([self.state, self.state_corrected2], 1)
+      with tf.variable_scope("model") as scope:
+        spm2_h1 = tf.layers.dense(spm2_input, 16, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
+        spm2_h1 = tf.nn.leaky_relu(spm2_h1, 0.2, name="LeakyRelu_1")
+        spm2_h2 = tf.layers.dense(spm2_h1, 16, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
+        spm2_h2 = tf.nn.leaky_relu(spm2_h2, 0.2, name="LeakyRelu_2")
+
+      with tf.variable_scope("output") as scope:
+        self.spm_pred_state2 = tf.layers.dense(spm2_h2, (self.state_dim-1), kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")
+
+      with tf.variable_scope("loss") as scope:
+        self.spm_loss2 = tf.reduce_mean(tf.squared_difference(self.spm_pred_state2, self.nstate_partial2))
+      with tf.variable_scope("train_step") as scope:
+        self.spm_train_step2 = tf.train.AdamOptimizer(self.lr).minimize(self.spm_loss2)        
+
 
   def pre_demonstration(self):
     """uniform sample action to generate (s_t, s_t+1) and action pairs"""
@@ -144,23 +165,50 @@ class BCOACH_SPM_lunarlandercont(BCOACH_SPM):
     state_corrected = np.copy(nstate)
 
     if (h_fb == H_LEFT): # Angular velocity
-      state_corrected[0][5] += self.errorConst      
+      state_corrected = state_corrected[0][5] + self.errorConst      
     elif (h_fb == H_RIGHT):
-      state_corrected[0][5] -= self.errorConst      
-    # elif (h_fb == H_UP):
-    #   state_corrected[0][3] += self.errorConst
-    # elif (h_fb == H_DOWN):
-    #   state_corrected[0][3] -= self.errorConst
-    return state_corrected[0][5] # Change this!!
+      state_corrected = state_corrected[0][5] - self.errorConst      
+    elif (h_fb == H_UP):
+      state_corrected = state_corrected[0][3] + self.errorConst
+    elif (h_fb == H_DOWN):
+      state_corrected = state_corrected[0][3] - self.errorConst
+    return state_corrected
 
-  def eval_spm(self, state, state_corrected):
+  def eval_spm(self, state, state_corrected, h_fb):
     """get the action by inverse dynamic model from current state and next state"""
-    nstate_partial = self.sess.run(self.spm_pred_state, feed_dict={
-      self.state: state,
-      self.state_corrected: state_corrected
-    })
-    nstate = np.insert(nstate_partial, 5, values=state_corrected, axis=1)
+
+    if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)):
+      nstate_partial = self.sess.run(self.spm_pred_state, feed_dict={
+        self.state: state,
+        self.state_corrected: state_corrected
+      })
+      nstate = np.insert(nstate_partial, 5, values=state_corrected, axis=1)
+    else:
+      nstate_partial = self.sess.run(self.spm_pred_state2, feed_dict={
+        self.state: state,
+        self.state_corrected2: state_corrected
+      })
+      nstate = np.insert(nstate_partial, 3, values=state_corrected, axis=1)
+
     return nstate
+
+  def get_spm_loss(self, state, state_corrected, nstate_partial):
+    """get state prediction model loss"""
+    spm_loss = self.sess.run(self.spm_loss, feed_dict={
+      self.state: state,
+      self.state_corrected: state_corrected,
+      self.nstate_partial: nstate_partial
+    })
+    return spm_loss
+
+  def get_spm_loss2(self, state, state_corrected2, nstate_partial2):
+    """get state prediction model loss"""
+    spm_loss2 = self.sess.run(self.spm_loss2, feed_dict={
+      self.state: state,
+      self.state_corrected2: state_corrected2,
+      self.nstate_partial2: nstate_partial2    
+    })
+    return spm_loss2
 
   def update_spm(self):
     """update state prediction model"""
@@ -173,19 +221,41 @@ class BCOACH_SPM_lunarlandercont(BCOACH_SPM):
       #batch_s, batch_ns =  self.sample_demo(self.batch_size)
       # Use the corresponding state from next_state as corrected state
       batch_state_corrected = [ [st[5]] for st in batch_ns ]
+      batch_state_corrected2 = [ [st[3]] for st in batch_ns ]
       # Remove this state column from batch_ns
       batch_ns_partial = np.delete(batch_ns, 5, axis=1)
+      batch_ns_partial2 = np.delete(batch_ns, 3, axis=1)
+      
       self.sess.run(self.spm_train_step, feed_dict={
       self.state: batch_s,
       self.state_corrected: batch_state_corrected,
       self.nstate_partial: batch_ns_partial
       })
+
+      self.sess.run(self.spm_train_step2, feed_dict={
+      self.state: batch_s,
+      self.state_corrected2: batch_state_corrected2,
+      self.nstate_partial2: batch_ns_partial2
+      })
+
       # Debug
       if it % 500 == 0:
-        # TODO: Get loss on another dataset
-        spm_loss = self.get_spm_loss(batch_s, batch_state_corrected, batch_ns_partial)
+        # Check loss on another data set.................
+        S, nS = self.sample_demo(int(round(self.demo_examples/20))) # 5% of the demo data      
+        # Use the corresponding state from next_state as corrected state
+        S_corrected = [ [st[5]] for st in nS ]
+        S_corrected2 = [ [st[3]] for st in nS ]
+        # Remove this state column from nS
+        nS_partial = np.delete(nS, 5, axis=1)
+        nS_partial2 = np.delete(nS, 3, axis=1)
+        spm_loss = self.get_spm_loss(S, S_corrected, nS_partial)
+        spm_loss2 = self.get_spm_loss2(S, S_corrected2, nS_partial2)
+        #spm_loss = self.get_spm_loss(batch_s, batch_state_corrected, batch_ns_partial)
         print('SPM train: iteration: %5d, spm_loss: %8.6f' % (it, spm_loss))
         self.log_writer.write("SPM train: iteration: " + str(it) + ", spm_loss: " + format(spm_loss, '8.6f') + "\n")
+        print('SPM2 train: iteration: %5d, spm2_loss: %8.6f' % (it, spm_loss2))
+        self.log_writer.write("SPM2 train: iteration: " + str(it) + ", spm2_loss: " + format(spm_loss2, '8.6f') + "\n")
+        
 
   def post_demonstration(self, M):
     """using policy to generate (s_t, s_t+1) and action pairs"""

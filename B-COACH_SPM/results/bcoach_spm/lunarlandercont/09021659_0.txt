@@ -1,0 +1,42 @@
+Collecting idm training data 1000
+Collecting idm training data 2000
+Collecting idm training data 3000
+Collecting idm training data 4000
+Collecting idm training data 5000
+Collecting idm training data 6000
+Collecting idm training data 7000
+Collecting idm training data 8000
+Collecting idm training data 9000
+Collecting idm training data 10000
+Collecting idm training data 11000
+Collecting idm training data 12000
+Collecting idm training data 13000
+Collecting idm training data 14000
+Collecting idm training data 15000
+Collecting idm training data 16000
+Collecting idm training data 17000
+Collecting idm training data 18000
+Collecting idm training data 19000
+Collecting idm training data 20000
+IDM train: iteration: 500, idm_loss: 0.337633
+IDM train: iteration: 1000, idm_loss: 0.326899
+IDM train: iteration: 1500, idm_loss: 0.292020
+IDM train: iteration: 2000, idm_loss: 0.213588
+IDM train: iteration: 2500, idm_loss: 0.192237
+IDM train: iteration: 3000, idm_loss: 0.211565
+IDM train: iteration: 3500, idm_loss: 0.234167
+IDM train: iteration: 4000, idm_loss: 0.170131
+IDM train: iteration: 4500, idm_loss: 0.108268
+IDM train: iteration: 5000, idm_loss: 0.154609
+IDM train: iteration: 5500, idm_loss: 0.100747
+IDM train: iteration: 6000, idm_loss: 0.162863
+IDM train: iteration: 6500, idm_loss: 0.085253
+IDM train: iteration: 7000, idm_loss: 0.086377
+SPM train: iteration: 500, spm_loss: 0.088667
+SPM2 train: iteration: 500, spm2_loss: 0.082913
+SPM train: iteration: 1000, spm_loss: 0.060334
+SPM2 train: iteration: 1000, spm2_loss: 0.064669
+SPM train: iteration: 1500, spm_loss: 0.044591
+SPM2 train: iteration: 1500, spm2_loss: 0.054766
+SPM train: iteration: 2000, spm_loss: 0.029839
+SPM2 train: iteration: 2000, spm2_loss: 0.038089

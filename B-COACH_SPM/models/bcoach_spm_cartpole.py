@@ -145,7 +145,7 @@ class BCOACH_SPM_cartpole(BCOACH_SPM):
     #state_corrected[0][3] -= self.errorConst*fb_value*5
     return state_corrected[0][1] # Change this!!
 
-  def eval_spm(self, state, state_corrected):
+  def eval_spm(self, state, state_corrected, h_fb):
     """get the action by inverse dynamic model from current state and next state"""
     nstate_partial = self.sess.run(self.spm_pred_state, feed_dict={
       self.state: state,
@@ -154,6 +154,15 @@ class BCOACH_SPM_cartpole(BCOACH_SPM):
     nstate = np.insert(nstate_partial, 1, values=state_corrected, axis=1)
     return nstate
 
+  def get_spm_loss(self, state, state_corrected, nstate_partial):
+    """get state prediction model loss"""
+    spm_loss = self.sess.run(self.spm_loss, feed_dict={
+      self.state: state,
+      self.state_corrected: state_corrected,
+      self.nstate_partial: nstate_partial    
+    })
+    return spm_loss
+    
   def update_spm(self):
     """update state prediction model"""
     for it in range(1, self.epochTrainIts+1):
@@ -173,9 +182,15 @@ class BCOACH_SPM_cartpole(BCOACH_SPM):
       self.nstate_partial: batch_ns_partial
       })
       # Debug
-      if it % 500 == 0:
-        # TODO: Get loss on another dataset
-        spm_loss = self.get_spm_loss(batch_s, batch_state_corrected, batch_ns_partial)
+      if it % 500 == 0:        
+        # Check loss on another data set.................
+        S, nS = self.sample_demo(int(round(self.demo_examples/20))) # 5% of the demo data      
+        # Use the corresponding state from next_state as corrected state
+        S_corrected = [ [st[1]] for st in nS ]
+        # Remove this state column from nS
+        nS_partial = np.delete(nS, 1, axis=1)
+        spm_loss = self.get_spm_loss(S, S_corrected, nS_partial)
+        #spm_loss = self.get_spm_loss(batch_s, batch_state_corrected, batch_ns_partial)
         print('SPM train: iteration: %5d, spm_loss: %8.6f' % (it, spm_loss))
         self.log_writer.write("SPM train: iteration: " + str(it) + ", spm_loss: " + format(spm_loss, '8.6f') + "\n")
 

@@ -13,6 +13,7 @@ class BCO():
     self.alpha = 0.01                       # alpha = | post_demo | / | pre_demo |
     self.M = M                              # samples to update inverse dynamic model
     self.ExpBuff  = []                      # Experience buffer for replay
+    self.maxExpBuffSize = 20000             # Max Experience buffer size
 
     # initial session
     config = tf.ConfigProto()
@@ -126,10 +127,14 @@ class BCO():
         })
         # Debug
         if it % 500 == 0:
-          # Check idm loss on another data set....................
-          S, nS, A = self.post_demonstration(self.M)
-          idm_loss = self.get_idm_loss(S, nS, A)          
-          # idm_loss = self.get_idm_loss(batch_s, batch_ns, batch_a)
+          # Check idm loss
+          minibatch_ids = np.random.choice(len(self.ExpBuff), self.M)
+          batch_s = [self.ExpBuff[id][0] for id in minibatch_ids]
+          batch_ns = [self.ExpBuff[id][1] for id in minibatch_ids]
+          batch_a = [self.ExpBuff[id][2] for id in minibatch_ids]
+          #S, nS, A = self.post_demonstration(self.M)
+          #idm_loss = self.get_idm_loss(S, nS, A)
+          idm_loss = self.get_idm_loss(batch_s, batch_ns, batch_a)
           print('IDM train: iteration: %5d, idm_loss: %8.6f' % (it, idm_loss))
           self.log_writer.write("IDM train: iteration: " + str(it) + ", idm_loss: " + format(idm_loss, '8.6f') + "\n")
     else:
@@ -222,11 +227,13 @@ class BCO():
 
       # Debug
       # After 5 iterations, redo pre demo learning
-      # if should(5):
-      #  S, nS, A = self.pre_demonstration()
-      # for id in range(0, len(S)):
-      #  self.ExpBuff.append((S[id], nS[id], A[id]))
-      #  self.update_idm()
+      # if should(2):
+      #   S, nS, A = self.pre_demonstration()
+      #   for id in range(0, len(S)):
+      #     self.ExpBuff.append((S[id], nS[id], A[id]))
+      #     if (len(self.ExpBuff) > self.maxExpBuffSize):
+      #       self.ExpBuff.pop(0)
+      #   self.update_idm()
 
 
   def test(self):
