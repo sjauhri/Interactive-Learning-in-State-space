@@ -14,7 +14,8 @@ class BCOACH():
     self.M = M                              # samples to update inverse dynamic model
     self.ExpBuff  = []                      # Experience buffer for replay
     self.DemoBuff  = []                     # Demonstration buffer
-    self.maxDemoBuffSize = 500              # Max Demonstration buffer size
+    self.maxExpBuffSize = 20000             # Max Experience buffer size
+    self.maxDemoBuffSize = 1500             # Max Demonstration buffer size
     self.coach_training_rate  = 10          # COACH training rate in the episode
 
     # initial session
@@ -177,7 +178,11 @@ class BCOACH():
       })
       # Debug
       if it % 500 == 0:
-        policy_loss = self.get_policy_loss(batch_s, batch_a)
+        # Check policy loss on another data set.................
+        S, nS = self.sample_demo(int(round(self.demo_examples/20))) # 5% of the demo data
+        A = self.eval_idm(S, nS)
+        policy_loss = self.get_policy_loss(S, A)
+        #policy_loss = self.get_policy_loss(batch_s, batch_a)
         print('Policy train: iteration: %5d, policy_loss: %8.6f' % (it, policy_loss))
         self.log_writer.write("Policy train: iteration: " + str(it) + ", policy_loss: " + format(policy_loss, '8.6f') + "\n")
  
@@ -220,6 +225,13 @@ class BCOACH():
         })
         # Debug
         if it % 500 == 0:
+          # Check idm loss
+          minibatch_ids = np.random.choice(len(self.ExpBuff), self.M)
+          batch_s = [self.ExpBuff[id][0] for id in minibatch_ids]
+          batch_ns = [self.ExpBuff[id][1] for id in minibatch_ids]
+          batch_a = [self.ExpBuff[id][2] for id in minibatch_ids]
+          #S, nS, A = self.post_demonstration(self.M)
+          #idm_loss = self.get_idm_loss(S, nS, A)
           idm_loss = self.get_idm_loss(batch_s, batch_ns, batch_a)
           print('IDM train: iteration: %5d, idm_loss: %8.6f' % (it, idm_loss))
           self.log_writer.write("IDM train: iteration: " + str(it) + ", idm_loss: " + format(idm_loss, '8.6f') + "\n")
@@ -300,17 +312,19 @@ class BCOACH():
         self.result_writer.write( str(it+1) + " , " + format(policy_reward, '8.6f') + " , " + format(policy_loss, '8.6f') + " , " + format(idm_loss, '8.6f') + "\n" )
         self.log_writer.write("\n" + "iteration: " + str(it+1) + ", total_reward: " + str(policy_reward) + ", policy_loss: " + format(policy_loss, '8.6f') + ", idm_loss: " + format(idm_loss, '8.6f') + "\n" + "\n")
 
-      # saving model
+      # saving session
       if should(args.save_freq):
-        print('saving model')
+        print('saving session')
         saver.save(self.sess, args.model_dir)
 
       # Debug
       # After 5 iterations, redo pre demo learning
-      # if should(5):
+      # if should(2):
       #   S, nS, A = self.pre_demonstration()
       #   for id in range(0, len(S)):
       #     self.ExpBuff.append((S[id], nS[id], A[id]))
+      #     if (len(self.ExpBuff) > self.maxExpBuffSize):
+      #       self.ExpBuff.pop(0)
       #   self.update_idm()
 
 
@@ -338,7 +352,7 @@ class BCOACH():
 
       # store datetime for saving logs
       self.logTime = dt.datetime.now().strftime('%d%m%H%M')
-          
+      
       for exp in range(0, args.numExperiments):
         
         # Set random seed for experiment
