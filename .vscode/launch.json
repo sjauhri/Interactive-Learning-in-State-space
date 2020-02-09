@@ -51,6 +51,14 @@
             "program": "/home/snehal/Desktop/Thesis/IfO/B-COACH_SPM/models/bcoach_spm_lunarlandercont.py",
             "console": "integratedTerminal",            
             "args": ["--mode=train","--input_file=B-COACH_SPM/demonstration/expert_obs/LunarLanderContinuous-v2.pkl","--result_dir=B-COACH_SPM/results/bcoach_spm/lunarlandercont/","--model_dir=B-COACH_SPM/model/bcoach_spm/lunarlandercont/","--maxEpochs=50","--numExperiments=1","--useSPM","--cont_actions"]
-        }        
+        }
+        {
+            "name": "bcoach_ifdm_cartpole",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/snehal/Desktop/Thesis/IfO/B-COACH_IFDM/models/bcoach_ifdm_cartpole.py",
+            "console": "integratedTerminal",            
+            "args": ["--mode=train","--input_file=B-COACH_IFDM/demonstration/expert_obs/CartPole-v0.pkl","--result_dir=B-COACH_IFDM/results/bcoach_ifdm/cartpole/","--model_dir=B-COACH_IFDM/model/bcoach_ifdm/cartpole/","--maxEpochs=50","--numExperiments=1"]            
+        }      
     ]
 }
