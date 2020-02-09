@@ -271,8 +271,8 @@ class BCOACH():
         return freq > 0 and ((it+1) % freq==0 or it == self.maxEpochs-1)
 
       # update policy pi #######################
-      if should(2):
-        self.update_policy()
+      #if should(2):
+        #self.update_policy()
       ##########################################
       # COACH      
       self.coach()

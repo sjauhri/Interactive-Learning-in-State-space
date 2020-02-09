@@ -8,6 +8,7 @@ class BCO_reacher(BCO):
 
     # set which game to play
     self.env = gym.make('Reacher-v2')
+    import pdb; pdb.set_trace()
   
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
