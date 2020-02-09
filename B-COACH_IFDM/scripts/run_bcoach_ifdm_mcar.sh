@@ -1,0 +1,2 @@
+#!/bin/bash
+python3 models/bcoach_ifdm_mcar.py --mode=train --input_file=demonstration/expert_obs/MountainCar-v0.pkl --result_dir=results/bcoach_ifdm/mcar/ --model_dir=model/bcoach_ifdm/mcar/ --print_freq=1 --save_freq=1 --maxEpochs=50 --numExperiments=1

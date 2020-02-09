@@ -1,5 +1,0 @@
-Collecting idm training data 1000
-Collecting idm training data 2000
-Collecting idm training data 3000
-Collecting idm training data 4000
-Collecting idm training data 5000
