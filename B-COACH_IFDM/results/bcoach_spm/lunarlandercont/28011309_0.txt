@@ -1,0 +1,48 @@
+Collecting idm training data 1000
+Collecting idm training data 2000
+Collecting idm training data 3000
+Collecting idm training data 4000
+Collecting idm training data 5000
+Collecting idm training data 6000
+Collecting idm training data 7000
+Collecting idm training data 8000
+Collecting idm training data 9000
+Collecting idm training data 10000
+Collecting idm training data 11000
+Collecting idm training data 12000
+Collecting idm training data 13000
+Collecting idm training data 14000
+Collecting idm training data 15000
+Collecting idm training data 16000
+Collecting idm training data 17000
+Collecting idm training data 18000
+Collecting idm training data 19000
+Collecting idm training data 20000
+IDM train: iteration: 500, idm_loss: 0.330668
+IDM train: iteration: 1000, idm_loss: 0.327047
+IDM train: iteration: 1500, idm_loss: 0.316098
+IDM train: iteration: 2000, idm_loss: 0.141852
+IDM train: iteration: 2500, idm_loss: 0.209855
+IDM train: iteration: 3000, idm_loss: 0.210835
+IDM train: iteration: 3500, idm_loss: 0.167590
+IDM train: iteration: 4000, idm_loss: 0.150076
+IDM train: iteration: 4500, idm_loss: 0.069402
+IDM train: iteration: 5000, idm_loss: 0.117570
+IDM train: iteration: 5500, idm_loss: 0.094644
+IDM train: iteration: 6000, idm_loss: 0.117999
+IDM train: iteration: 6500, idm_loss: 0.093576
+IDM train: iteration: 7000, idm_loss: 0.092460
+SPM train: iteration: 500, spm_loss: 0.011495
+SPM train: iteration: 1000, spm_loss: 0.005817
+SPM train: iteration: 1500, spm_loss: 0.004633
+SPM train: iteration: 2000, spm_loss: 0.005134
+SPM train: iteration: 2500, spm_loss: 0.001174
+SPM train: iteration: 3000, spm_loss: 0.000770
+SPM train: iteration: 3500, spm_loss: 0.001903
+SPM train: iteration: 4000, spm_loss: 0.003673
+SPM train: iteration: 4500, spm_loss: 0.000314
+SPM train: iteration: 5000, spm_loss: 0.000524
+SPM train: iteration: 5500, spm_loss: 0.000403
+SPM train: iteration: 6000, spm_loss: 0.003242
+SPM train: iteration: 6500, spm_loss: 0.008262
+SPM train: iteration: 7000, spm_loss: 0.000200

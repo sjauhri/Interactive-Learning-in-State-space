@@ -1,0 +1,59 @@
+Collecting idm training data 1000
+Collecting idm training data 2000
+Collecting idm training data 3000
+Collecting idm training data 4000
+Collecting idm training data 5000
+IDM train: iteration: 500, idm_loss: 0.216024
+IDM train: iteration: 1000, idm_loss: 0.179228
+IDM train: iteration: 1500, idm_loss: 0.154541
+IDM train: iteration: 2000, idm_loss: 0.130709
+IDM train: iteration: 2500, idm_loss: 0.148401
+IDM train: iteration: 3000, idm_loss: 0.127282
+IDM train: iteration: 3500, idm_loss: 0.140354
+IDM train: iteration: 4000, idm_loss: 0.122607
+IDM train: iteration: 4500, idm_loss: 0.128089
+IDM train: iteration: 5000, idm_loss: 0.125686
+IDM train: iteration: 5500, idm_loss: 0.148621
+IDM train: iteration: 6000, idm_loss: 0.116887
+IDM train: iteration: 6500, idm_loss: 0.123067
+IDM train: iteration: 7000, idm_loss: 0.095046
+IDM train: iteration: 7500, idm_loss: 0.095737
+IDM train: iteration: 8000, idm_loss: 0.105100
+IDM train: iteration: 8500, idm_loss: 0.111978
+IDM train: iteration: 9000, idm_loss: 0.099916
+
+iteration: 1, total_reward: -111.71190272999617, policy_loss: 0.381300, idm_loss: 0.390299
+
+
+iteration: 2, total_reward: -111.90660697794023, policy_loss: 0.404572, idm_loss: 0.382818
+
+
+iteration: 3, total_reward: -111.99880612309401, policy_loss: 0.369507, idm_loss: 0.390983
+
+
+iteration: 4, total_reward: -111.95510410447419, policy_loss: 0.387174, idm_loss: 0.384449
+
+
+iteration: 5, total_reward: -111.96929042432208, policy_loss: 0.380829, idm_loss: 0.390122
+
+
+iteration: 6, total_reward: -111.80046599852542, policy_loss: 0.390872, idm_loss: 0.392179
+
+
+iteration: 7, total_reward: -111.76673656029689, policy_loss: 0.385734, idm_loss: 0.384343
+
+
+iteration: 8, total_reward: -111.60351704630567, policy_loss: 0.384444, idm_loss: 0.390955
+
+
+iteration: 9, total_reward: -111.82619446844917, policy_loss: 0.382484, idm_loss: 0.384498
+
+
+iteration: 10, total_reward: -112.18212575349958, policy_loss: 0.377576, idm_loss: 0.386127
+
+
+iteration: 11, total_reward: -111.81810990262093, policy_loss: 0.394380, idm_loss: 0.383068
+
+
+iteration: 12, total_reward: -111.8147798419781, policy_loss: 0.381263, idm_loss: 0.392264
+

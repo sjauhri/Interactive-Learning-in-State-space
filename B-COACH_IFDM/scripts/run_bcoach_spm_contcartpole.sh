@@ -1,0 +1,2 @@
+#!/bin/bash
+python3 models/bcoach_spm_contcartpole.py --mode=train --input_file=demonstration/expert_obs/CartPole-v0.pkl --result_dir=results/bcoach_spm/contcartpole/ --model_dir=model/bcoach_spm/contcartpole/ --maxEpochs=50 --numExperiments=1 --cont_actions --useSPM
