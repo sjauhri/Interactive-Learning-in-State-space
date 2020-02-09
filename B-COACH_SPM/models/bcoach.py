@@ -177,7 +177,11 @@ class BCOACH():
       })
       # Debug
       if it % 500 == 0:
-        policy_loss = self.get_policy_loss(batch_s, batch_a)
+        # Check policy loss on another data set.................
+        S, nS = self.sample_demo(int(round(self.demo_examples/20))) # 5% of the demo data
+        A = self.eval_idm(S, nS)
+        policy_loss = self.get_policy_loss(S, A)
+        #policy_loss = self.get_policy_loss(batch_s, batch_a)
         print('Policy train: iteration: %5d, policy_loss: %8.6f' % (it, policy_loss))
         self.log_writer.write("Policy train: iteration: " + str(it) + ", policy_loss: " + format(policy_loss, '8.6f') + "\n")
  
@@ -220,7 +224,10 @@ class BCOACH():
         })
         # Debug
         if it % 500 == 0:
-          idm_loss = self.get_idm_loss(batch_s, batch_ns, batch_a)
+          # Check idm loss on another data set....................
+          S, nS, A = self.post_demonstration(self.M)
+          idm_loss = self.get_idm_loss(S, nS, A)          
+          # idm_loss = self.get_idm_loss(batch_s, batch_ns, batch_a)
           print('IDM train: iteration: %5d, idm_loss: %8.6f' % (it, idm_loss))
           self.log_writer.write("IDM train: iteration: " + str(it) + ", idm_loss: " + format(idm_loss, '8.6f') + "\n")
     else:
@@ -300,9 +307,9 @@ class BCOACH():
         self.result_writer.write( str(it+1) + " , " + format(policy_reward, '8.6f') + " , " + format(policy_loss, '8.6f') + " , " + format(idm_loss, '8.6f') + "\n" )
         self.log_writer.write("\n" + "iteration: " + str(it+1) + ", total_reward: " + str(policy_reward) + ", policy_loss: " + format(policy_loss, '8.6f') + ", idm_loss: " + format(idm_loss, '8.6f') + "\n" + "\n")
 
-      # saving model
+      # saving session
       if should(args.save_freq):
-        print('saving model')
+        print('saving session')
         saver.save(self.sess, args.model_dir)
 
       # Debug
@@ -338,7 +345,7 @@ class BCOACH():
 
       # store datetime for saving logs
       self.logTime = dt.datetime.now().strftime('%d%m%H%M')
-          
+      
       for exp in range(0, args.numExperiments):
         
         # Set random seed for experiment

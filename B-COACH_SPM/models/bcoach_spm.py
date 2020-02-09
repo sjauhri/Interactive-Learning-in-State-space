@@ -119,11 +119,13 @@ class BCOACH_SPM():
         print("Feedback", self.feedback_dict.get(h_fb))
         h_counter += 1 # Feedback counter
 
-        # Get new state transition label using feedback and state prediction model
-        #new_s_transition = self.get_feedback_label(h_fb, state)
-        state_corrected = self.get_state_corrected(h_fb, state)
-        state_corrected = np.reshape(state_corrected, [-1, 1])
-        new_s_transition = self.eval_spm(state, state_corrected)
+        # Get new state transition label using feedback and optionally state prediction model
+        if args.useSPM:
+          state_corrected = self.get_state_corrected(h_fb, state)
+          state_corrected = np.reshape(state_corrected, [-1, 1])
+          new_s_transition = self.eval_spm(state, state_corrected)        
+        else:
+          new_s_transition = self.get_feedback_label(h_fb, state)        
 
         # Get action from idm
         a = self.eval_idm(state, new_s_transition)
@@ -194,7 +196,11 @@ class BCOACH_SPM():
       })
       # Debug
       if it % 500 == 0:
-        policy_loss = self.get_policy_loss(batch_s, batch_a)
+        # Check policy loss on another data set.................
+        S, nS = self.sample_demo(int(round(self.demo_examples/20))) # 5% of the demo data
+        A = self.eval_idm(S, nS)
+        policy_loss = self.get_policy_loss(S, A)
+        #policy_loss = self.get_policy_loss(batch_s, batch_a)
         print('Policy train: iteration: %5d, policy_loss: %8.6f' % (it, policy_loss))
         self.log_writer.write("Policy train: iteration: " + str(it) + ", policy_loss: " + format(policy_loss, '8.6f') + "\n")
  
@@ -237,7 +243,10 @@ class BCOACH_SPM():
         })
         # Debug
         if it % 500 == 0:
-          idm_loss = self.get_idm_loss(batch_s, batch_ns, batch_a)
+          # Check idm loss on another data set....................
+          S, nS, A = self.post_demonstration(self.M)
+          idm_loss = self.get_idm_loss(S, nS, A)          
+          # idm_loss = self.get_idm_loss(batch_s, batch_ns, batch_a)
           print('IDM train: iteration: %5d, idm_loss: %8.6f' % (it, idm_loss))
           self.log_writer.write("IDM train: iteration: " + str(it) + ", idm_loss: " + format(idm_loss, '8.6f') + "\n")
     else:
@@ -278,7 +287,7 @@ class BCOACH_SPM():
     if args.usePrevSession:
       saver_prev = tf.train.Saver()
       saver_prev.restore(self.sess, args.prev_session_dir)
-      print('Loaded previous models and session')
+      print('Loaded previous model and session')
 
       # Reinit policy here if you wish
     else:
@@ -293,7 +302,7 @@ class BCOACH_SPM():
       self.ExpBuff.append((S[id], nS[id], A[id]))
     self.update_idm()
 
-    if args.useSPM:      
+    if args.useSPM:
       # Train the state prediction model
       self.update_spm()
     
@@ -305,7 +314,7 @@ class BCOACH_SPM():
         return freq > 0 and ((it+1) % freq==0 or it == self.maxEpochs-1)
 
       # update policy pi #######################
-      #if should(5):
+      #if should(2):
         #self.update_policy()
       ##########################################
       # COACH      
@@ -372,7 +381,7 @@ class BCOACH_SPM():
 
       # store datetime for saving logs
       self.logTime = dt.datetime.now().strftime('%d%m%H%M')
-          
+      
       for exp in range(0, args.numExperiments):
         
         # Set random seed for experiment

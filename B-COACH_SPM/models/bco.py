@@ -40,15 +40,14 @@ class BCO():
     with open(args.input_filename, 'rb') as f:
       expert_data = pickle.load(f)
       inputs = expert_data['observations']
-      targets = expert_data['observations_next']    
+      targets = expert_data['observations_next']
     
-    #import pdb; pdb.set_trace()
-    num_samples = len(inputs)            
-    if(num_samples > 10000):      
+    num_samples = len(inputs)
+    if(num_samples > 10000):
       inputs = inputs[0:10000]
       targets = targets[0:10000]
       num_samples = 10000
-    print("Loaded %d demonstrations" % num_samples)    
+    print("Loaded %d demonstrations" % num_samples)
 
     return num_samples, inputs, targets
 
@@ -74,7 +73,7 @@ class BCO():
     })
 
   def eval_idm(self, state, nstate):
-    """get the action by inverse dynamic model from current state and next state"""    
+    """get the action by inverse dynamic model from current state and next state"""
     return self.sess.run(self.idm_pred_action, feed_dict={
       self.state: state,
       self.nstate: nstate
@@ -103,9 +102,13 @@ class BCO():
       })
       # Debug
       if it % 500 == 0:
-        policy_loss = self.get_policy_loss(batch_s, batch_a)
+        # Check policy loss on another data set.................
+        S, nS = self.sample_demo(int(round(self.demo_examples/20))) # 5% of the demo data
+        A = self.eval_idm(S, nS)
+        policy_loss = self.get_policy_loss(S, A)
+        #policy_loss = self.get_policy_loss(batch_s, batch_a)
         print('Policy train: iteration: %5d, policy_loss: %8.6f' % (it, policy_loss))
-        self.log_writer.write("Policy train: iteration: " + str(it) + ", policy_loss: " + str(policy_loss) + "\n")
+        self.log_writer.write("Policy train: iteration: " + str(it) + ", policy_loss: " + format(policy_loss, '8.6f') + "\n")
  
   def update_idm(self):
     """update inverse dynamic model"""
@@ -123,7 +126,10 @@ class BCO():
         })
         # Debug
         if it % 500 == 0:
-          idm_loss = self.get_idm_loss(batch_s, batch_ns, batch_a)
+          # Check idm loss on another data set....................
+          S, nS, A = self.post_demonstration(self.M)
+          idm_loss = self.get_idm_loss(S, nS, A)          
+          # idm_loss = self.get_idm_loss(batch_s, batch_ns, batch_a)
           print('IDM train: iteration: %5d, idm_loss: %8.6f' % (it, idm_loss))
           self.log_writer.write("IDM train: iteration: " + str(it) + ", idm_loss: " + format(idm_loss, '8.6f') + "\n")
     else:
@@ -146,10 +152,17 @@ class BCO():
     return idm_loss
 
   def train(self):
-    """training the policy model and inverse dynamic model by behavioral cloning"""    
+    """training the policy model and inverse dynamic model"""    
     
-    # Start session
-    self.sess.run(tf.global_variables_initializer())
+    if args.usePrevSession:
+      saver_prev = tf.train.Saver()
+      saver_prev.restore(self.sess, args.prev_session_dir)
+      print('Loaded previous model and session')
+
+      # Reinit policy here if you wish
+    else:
+      # Start session
+      self.sess.run(tf.global_variables_initializer())
 
     print("\n[Training]")
     # pre demonstration to update inverse dynamic model
@@ -167,23 +180,23 @@ class BCO():
         return freq > 0 and ((it+1) % freq==0 or it == self.maxEpochs-1)
 
       # update policy pi
-      currTime = time.time()
+      # currTime = time.time()
       self.update_policy()
       
       # Print time taken for debug
-      if (args.printTime and should(args.print_freq)):
-        print("Policy Learning time: ", time.time() - currTime)    
+      # if (args.printTime and should(args.print_freq)):
+      #   print("Policy Learning time: ", time.time() - currTime)    
 
       # update inverse dynamic model
       S, nS, A = self.post_demonstration(self.M)
       for id in range(0, len(S)):
         self.ExpBuff.append((S[id], nS[id], A[id]))        
-      currTime = time.time()
+      # currTime = time.time()
       self.update_idm()
       
       # Print time taken for debug
-      if (args.printTime and should(args.print_freq)):
-        print("Model Learning time: ", time.time() - currTime)      
+      # if (args.printTime and should(args.print_freq)):
+      #   print("Model Learning time: ", time.time() - currTime)      
 
       if should(args.print_freq):
         policy_reward = self.eval_rwd_policy()
@@ -192,15 +205,15 @@ class BCO():
         S, nS = self.sample_demo(int(round(self.demo_examples/20))) # 5% of the demo data
         A = self.eval_idm(S, nS)
         policy_loss = self.get_policy_loss(S, A)
-        # ...............................................        
-        
-        # Check idm loss on another data set.................
+        # ......................................................
+
+        # Check idm loss on another data set....................
         S, nS, A = self.post_demonstration(self.M)
         idm_loss = self.get_idm_loss(S, nS, A)
-        # ...............................................
+        # ......................................................
         print('iteration: %5d, total_reward: %5.1f, policy_loss: %8.6f, idm_loss: %8.6f' % ((it+1), policy_reward, policy_loss, idm_loss))
-        self.result_writer.write( str(it+1) + " , " + str(policy_reward) + " , " + str(policy_loss) + " , " + str(idm_loss) + "\n" )
-        self.log_writer.write("\n" + "iteration: " + str(it+1) + ", total_reward: " + str(policy_reward) + ", policy_loss: " + str(policy_loss) + ", idm_loss: " + str(idm_loss) + "\n" + "\n")
+        self.result_writer.write( str(it+1) + " , " + format(policy_reward, '8.6f') + " , " + format(policy_loss, '8.6f') + " , " + format(idm_loss, '8.6f') + "\n" )
+        self.log_writer.write("\n" + "iteration: " + str(it+1) + ", total_reward: " + str(policy_reward) + ", policy_loss: " + format(policy_loss, '8.6f') + ", idm_loss: " + format(idm_loss, '8.6f') + "\n" + "\n")
 
       # saving model
       if should(args.save_freq):
@@ -209,9 +222,9 @@ class BCO():
 
       # Debug
       # After 5 iterations, redo pre demo learning
-      #if should(5):
+      # if should(5):
       #  S, nS, A = self.pre_demonstration()
-      #for id in range(0, len(S)):
+      # for id in range(0, len(S)):
       #  self.ExpBuff.append((S[id], nS[id], A[id]))
       #  self.update_idm()
 

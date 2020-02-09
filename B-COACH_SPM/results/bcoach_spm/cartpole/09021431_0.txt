@@ -1,0 +1,48 @@
+Collecting idm training data 1000
+IDM train: iteration: 500, idm_loss: 0.024675
+IDM train: iteration: 1000, idm_loss: 0.002448
+IDM train: iteration: 1500, idm_loss: 0.000881
+IDM train: iteration: 2000, idm_loss: 0.000489
+IDM train: iteration: 2500, idm_loss: 0.000310
+IDM train: iteration: 3000, idm_loss: 0.000177
+IDM train: iteration: 3500, idm_loss: 0.000100
+IDM train: iteration: 4000, idm_loss: 0.000064
+IDM train: iteration: 4500, idm_loss: 0.000048
+IDM train: iteration: 5000, idm_loss: 0.000038
+SPM train: iteration: 500, spm_loss: 0.028164
+SPM train: iteration: 1000, spm_loss: 0.002099
+SPM train: iteration: 1500, spm_loss: 0.001963
+SPM train: iteration: 2000, spm_loss: 0.002619
+SPM train: iteration: 2500, spm_loss: 0.004448
+SPM train: iteration: 3000, spm_loss: 0.000951
+SPM train: iteration: 3500, spm_loss: 0.000521
+SPM train: iteration: 4000, spm_loss: 0.000318
+SPM train: iteration: 4500, spm_loss: 0.000147
+SPM train: iteration: 5000, spm_loss: 0.000199
+
+iteration: 1, total_reward: 10.0, policy_loss: 0.694246, idm_loss: 0.000039
+
+
+iteration: 2, total_reward: 9.0, policy_loss: 0.693261, idm_loss: 0.000033
+
+
+iteration: 3, total_reward: 10.0, policy_loss: 0.690602, idm_loss: 0.000023
+
+
+iteration: 4, total_reward: 10.0, policy_loss: 0.689705, idm_loss: 0.000043
+
+
+iteration: 5, total_reward: 59.0, policy_loss: 0.691871, idm_loss: 0.000042
+
+
+iteration: 6, total_reward: 11.0, policy_loss: 0.695687, idm_loss: 0.000041
+
+
+iteration: 7, total_reward: 11.0, policy_loss: 0.690136, idm_loss: 0.000041
+
+
+iteration: 8, total_reward: 200.0, policy_loss: 0.684732, idm_loss: 0.000039
+
+
+iteration: 9, total_reward: 200.0, policy_loss: 0.684328, idm_loss: 0.000041
+

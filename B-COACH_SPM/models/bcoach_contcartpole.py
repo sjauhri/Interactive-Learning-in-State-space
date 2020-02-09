@@ -107,7 +107,7 @@ class BCOACH_contcartpole(BCOACH):
     # Acting on only pole angle
     new_s_transition = np.copy(nstate)
     #new_s_transition[0][0] += self.errorConst*fb_value
-    new_s_transition[0][1] += self.errorConst*fb_value*2
+    new_s_transition[0][1] += self.errorConst*fb_value*5
     #new_s_transition[0][2] -= self.errorConst*fb_value
     #new_s_transition[0][3] -= self.errorConst*fb_value*5
     return new_s_transition
