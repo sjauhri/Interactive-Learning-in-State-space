@@ -1,6 +1,7 @@
 from utils import *
 from bcoach_ifdm import BCOACH
 from feedback import *
+from fdms import *
 import gym
 
 class BCOACH_lunarlander(BCOACH):
@@ -18,10 +19,10 @@ class BCOACH_lunarlander(BCOACH):
     self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1, 5
-    self.errorConst = 0.25
+    self.errorConst = 0.2
     # Render time delay for this environment (in s)
     self.render_delay = 0.05
-    # Choose which feedback to act on with fb dictionary
+    # Choose which feedback is valid with fb dictionary
     self.feedback_dict = {
       H_NULL: 0,      
       H_UP: 1,
@@ -29,6 +30,8 @@ class BCOACH_lunarlander(BCOACH):
       H_LEFT: 1,
       H_RIGHT: 1
     }
+
+    self.ifdm_queries = 24 # Four discrete actions. (Easy)
   
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
@@ -101,22 +104,46 @@ class BCOACH_lunarlander(BCOACH):
 
     return States, Nstates, Actions
 
-  def get_feedback_label(self, h_fb, nstate):
-    """get new state transition label for this environment using feedback"""
-    #fb_value = self.feedback_dict.get(h_fb)
-    
-    new_s_transition = np.copy(nstate)
+  def get_state_corrected(self, h_fb, state):
+    """get corrected state label for this environment using feedback"""
+    state_corrected = np.copy(state)
 
     if (h_fb == H_LEFT): # Angular velocity
-      new_s_transition[0][5] += self.errorConst
+      state_corrected = state_corrected[5] + self.errorConst      
     elif (h_fb == H_RIGHT):
-      new_s_transition[0][5] -= self.errorConst
-    elif (h_fb == H_UP):
-      new_s_transition[0][3] += self.errorConst
+      state_corrected = state_corrected[5] - self.errorConst      
+    elif (h_fb == H_UP): # Vertical velocity
+      state_corrected = state_corrected[3] + self.errorConst
     elif (h_fb == H_DOWN):
-      new_s_transition[0][3] -= self.errorConst
+      state_corrected = state_corrected[3] - self.errorConst
+    return state_corrected
+
+  def get_action(self, h_fb, state, state_corrected):
+    """get action to achieve close next state close to state_corrected"""
+    # Discrete Actions
+    min_action = np.random.randint(self.action_dim)
+    min_cost = np.Inf
     
-    return new_s_transition
+    for iter in range(1, self.ifdm_queries+1):
+      # Choose random action
+      # Discrete actions
+      curr_action = np.random.randint(self.action_dim)
+
+      # Query ifdm to get next state
+      nstate = fdm_cart(state, curr_action)
+
+      # Check cost
+      if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity
+        cost = abs(state_corrected - nstate[5])
+      else:                                       # Vertical velocity
+        cost = abs(state_corrected - nstate[3])
+      
+      # Check for min_cost
+      if(cost < min_cost):
+        min_cost = cost
+        min_action = curr_action
+
+    return min_action
 
   def coach(self):
     """COACH algorithm incorporating human feedback"""
@@ -140,16 +167,19 @@ class BCOACH_lunarlander(BCOACH):
       # h_fb = 3
 
       # Update policy
-      if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero
+      if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero i.e. is valid
         print("Feedback", self.feedback_dict.get(h_fb))
         h_counter += 1 # Feedback counter
 
         # Get new state transition label using feedback
-        new_s_transition = self.get_feedback_label(h_fb, state)        
+        state_corrected = self.get_state_corrected(h_fb, state[0])        
 
-        # Get action from idm
-        a = self.eval_idm(state, new_s_transition)
-        print("Eval_IDM action: ", a)
+        # Get action from ifdm
+        A = self.get_action(h_fb, state[0], state_corrected)
+        # Discrete actions: a = A in one hot with extra braces
+        a = np.zeros(self.action_dim)
+        a[A] = 1
+        print("Computed_IFDM action: ", a)
         # Debug incorrect action
         # if not args.cont_actions:
         #   if ((self.feedback_dict.get(h_fb) == -1 and a[0][1] == 1) or (self.feedback_dict.get(h_fb) == 1 and a[0][0] == 1)):
@@ -159,10 +189,11 @@ class BCOACH_lunarlander(BCOACH):
         #     print("MISLABEL!")
 
         # Update policy (immediate)
+        a = np.reshape(a, [-1, self.action_dim])
         self.update_policy_feedback_immediate(state, a)
 
         # Add state transition pair to demo buffer
-        self.DemoBuff.append((state[0], new_s_transition[0]))
+        self.DemoBuff.append((state[0], a[0]))
         # If Demo buffer full, remove oldest entry
         if (len(self.DemoBuff) > self.maxDemoBuffSize):
             self.DemoBuff.pop(0)
@@ -176,6 +207,7 @@ class BCOACH_lunarlander(BCOACH):
         A = np.argmax(A)
         state, _, terminal, _ = self.env.step(A)
         state = np.reshape(state, [-1, self.state_dim])
+        # TODO: Add to ExpBuff
       else:
         # Use current policy
         # Map action from state
@@ -186,13 +218,14 @@ class BCOACH_lunarlander(BCOACH):
         # Act
         state, _, terminal, _ = self.env.step(A)
         state = np.reshape(state, [-1, self.state_dim])
+        # TODO: Add to ExpBuff
 
         # Train every k time steps
       if t_counter % self.coach_training_rate == 0:
         self.update_policy_feedback()
 
       t_counter += 1 # Time counter
-      
+
   def post_demonstration(self, M):
     """using policy to generate (s_t, s_t+1) and action pairs"""
     terminal = True

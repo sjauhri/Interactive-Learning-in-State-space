@@ -1,7 +1,7 @@
 from utils import *
 from bcoach_ifdm import BCOACH
 from feedback import *
-from fdm_cartpole import *
+from fdms import *
 import gym
 
 class BCOACH_cartpole(BCOACH):
@@ -27,7 +27,7 @@ class BCOACH_cartpole(BCOACH):
       H_NULL: 0,      
       H_UP: 0,
       H_DOWN: 0,
-      H_LEFT: -1,
+      H_LEFT: 1,
       H_RIGHT: 1
     }
 
@@ -129,8 +129,8 @@ class BCOACH_cartpole(BCOACH):
       # Query ifdm to get next state
       nstate = fdm_cart(state, curr_action)
 
-      # Check cost      
-      cost = state_corrected - nstate[1]
+      # Check cost
+      cost = abs(state_corrected - nstate[1])
       
       # Check for min_cost
       if(cost < min_cost):
@@ -196,6 +196,9 @@ class BCOACH_cartpole(BCOACH):
         self.update_policy_feedback()
 
         # Act using action based on h_feedback
+        A = np.reshape(a, [-1])        
+        # Discrete actions
+        A = np.argmax(A)
         state, _, terminal, _ = self.env.step(A)
         state = np.reshape(state, [-1, self.state_dim])
         # TODO: Add to ExpBuff
