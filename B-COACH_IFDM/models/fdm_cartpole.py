@@ -1,12 +1,15 @@
 """
+Model imported from OpenAI Gym environements:
+
 Classic cart-pole system implemented by Rich Sutton et al.
 Copied from http://incompleteideas.net/sutton/book/code/pole.c
 permalink: https://perma.cc/C9ZM-652R
 """
+
 import math
 import numpy as np
 
-def fdm_cart(state, action):
+def fdm(state, action):
     # valid actions are 0 (left) and 1 (right)
     x, x_dot, theta, theta_dot = state
     force = 0

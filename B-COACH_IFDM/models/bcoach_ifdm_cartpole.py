@@ -1,7 +1,7 @@
 from utils import *
 from bcoach_ifdm import BCOACH
 from feedback import *
-from fdms import *
+from fdm_cartpole import *
 import gym
 
 class BCOACH_cartpole(BCOACH):
@@ -28,7 +28,8 @@ class BCOACH_cartpole(BCOACH):
       H_UP: 0,
       H_DOWN: 0,
       H_LEFT: 1,
-      H_RIGHT: 1
+      H_RIGHT: 1,
+      DO_NOTHING: 0
     }
 
     self.ifdm_queries = 10 # Two discrete actions. (Easy)
@@ -121,13 +122,13 @@ class BCOACH_cartpole(BCOACH):
     min_action = np.random.randint(self.action_dim)
     min_cost = np.Inf
     
-    for iter in range(1, self.ifdm_queries+1):
+    for _ in range(1, self.ifdm_queries+1):
       # Choose random action
       # Discrete actions
       curr_action = np.random.randint(self.action_dim)
 
       # Query ifdm to get next state
-      nstate = fdm_cart(state, curr_action)
+      nstate = fdm(state, curr_action)
 
       # Check cost
       cost = abs(state_corrected - nstate[1])

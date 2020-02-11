@@ -1,7 +1,7 @@
 from utils import *
 from bcoach_ifdm import BCOACH
 from feedback import *
-from fdms import *
+from fdm_lunarl import *
 import gym
 
 class BCOACH_lunarlander(BCOACH):
@@ -19,16 +19,17 @@ class BCOACH_lunarlander(BCOACH):
     self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1, 5
-    self.errorConst = 0.2
+    self.errorConst = 0.1
     # Render time delay for this environment (in s)
     self.render_delay = 0.05
     # Choose which feedback is valid with fb dictionary
     self.feedback_dict = {
-      H_NULL: 0,      
+      H_NULL: 0,
       H_UP: 1,
       H_DOWN: 1,
       H_LEFT: 1,
-      H_RIGHT: 1
+      H_RIGHT: 1,
+      DO_NOTHING: 1
     }
 
     self.ifdm_queries = 24 # Four discrete actions. (Easy)
@@ -40,9 +41,9 @@ class BCOACH_lunarlander(BCOACH):
         policy_input = self.state
       with tf.variable_scope("model") as scope:
         policy_h1 = tf.layers.dense(policy_input, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
-        policy_h1 = tf.nn.leaky_relu(policy_h1, 0.2, name="LeakyRelu_1")
+        policy_h1 = tf.nn.leaky_relu(policy_h1, 0.001, name="LeakyRelu_1")
         policy_h2 = tf.layers.dense(policy_h1, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
-        policy_h2 = tf.nn.leaky_relu(policy_h2, 0.2, name="LeakyRelu_2")
+        policy_h2 = tf.nn.leaky_relu(policy_h2, 0.001, name="LeakyRelu_2")
 
       with tf.variable_scope("output") as scope:
         policy_pred_action = tf.layers.dense(policy_h2, self.action_dim, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")
@@ -115,7 +116,7 @@ class BCOACH_lunarlander(BCOACH):
     elif (h_fb == H_UP): # Vertical velocity
       state_corrected = state_corrected[3] + self.errorConst
     elif (h_fb == H_DOWN):
-      state_corrected = state_corrected[3] - self.errorConst
+      state_corrected = state_corrected[3] - self.errorConst/5
     return state_corrected
 
   def get_action(self, h_fb, state, state_corrected):
@@ -124,24 +125,27 @@ class BCOACH_lunarlander(BCOACH):
     min_action = np.random.randint(self.action_dim)
     min_cost = np.Inf
     
-    for iter in range(1, self.ifdm_queries+1):
-      # Choose random action
-      # Discrete actions
-      curr_action = np.random.randint(self.action_dim)
+    if (h_fb == DO_NOTHING):
+      min_action = 0 # Do Nothing action
+    else:      
+      for _ in range(1, self.ifdm_queries+1):
+        # Choose random action
+        # Discrete actions
+        curr_action = np.random.randint(self.action_dim)
 
-      # Query ifdm to get next state
-      nstate = fdm_cart(state, curr_action)
+        # Query ifdm to get next state
+        nstate = fdm(state, curr_action)
 
-      # Check cost
-      if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity
-        cost = abs(state_corrected - nstate[5])
-      else:                                       # Vertical velocity
-        cost = abs(state_corrected - nstate[3])
-      
-      # Check for min_cost
-      if(cost < min_cost):
-        min_cost = cost
-        min_action = curr_action
+        # Check cost
+        if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity
+          cost = abs(state_corrected - nstate[5])
+        else:                                       # Vertical velocity
+          cost = abs(state_corrected - nstate[3])
+        
+        # Check for min_cost
+        if(cost < min_cost):
+          min_cost = cost
+          min_action = curr_action
 
     return min_action
 
@@ -202,15 +206,15 @@ class BCOACH_lunarlander(BCOACH):
         self.update_policy_feedback()
 
         # Act using action based on h_feedback
-        A = np.reshape(a, [-1])        
+        A = np.reshape(a, [-1])
         # Discrete actions
-        A = np.argmax(A)
+        A = np.argmax(A)        
         state, _, terminal, _ = self.env.step(A)
         state = np.reshape(state, [-1, self.state_dim])
         # TODO: Add to ExpBuff
       else:
         # Use current policy
-        # Map action from state
+        # Map action from state        
         A = np.reshape(self.eval_policy(state), [-1])
         # Discrete actions
         A = np.argmax(A)

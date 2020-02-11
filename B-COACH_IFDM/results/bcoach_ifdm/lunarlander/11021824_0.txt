@@ -1,0 +1,54 @@
+
+iteration: 1, total_reward: -323.15080117925555, policy_loss: 0.844226, idm_loss: 1.353883
+
+
+iteration: 2, total_reward: -1002.3721751577772, policy_loss: 0.911627, idm_loss: 1.332196
+
+
+iteration: 3, total_reward: -149.29795863418337, policy_loss: 1.938401, idm_loss: 1.360824
+
+
+iteration: 4, total_reward: -319.8147432336143, policy_loss: 1.303464, idm_loss: 1.357368
+
+
+iteration: 5, total_reward: -313.7217741597887, policy_loss: 1.961350, idm_loss: 1.324066
+
+
+iteration: 6, total_reward: -527.2001599393852, policy_loss: 2.285246, idm_loss: 1.361881
+
+
+iteration: 7, total_reward: -567.7809183961363, policy_loss: 1.587482, idm_loss: 1.338292
+
+
+iteration: 8, total_reward: -130.23826272967148, policy_loss: 2.532895, idm_loss: 1.359087
+
+
+iteration: 9, total_reward: 39.35621194791048, policy_loss: 1.952500, idm_loss: 1.350225
+
+
+iteration: 10, total_reward: -41.28309877660871, policy_loss: 2.016267, idm_loss: 1.352408
+
+
+iteration: 11, total_reward: -67.4311282913643, policy_loss: 1.828245, idm_loss: 1.359915
+
+
+iteration: 12, total_reward: -110.84908867100609, policy_loss: 2.107780, idm_loss: 1.359088
+
+
+iteration: 13, total_reward: 47.96573930213549, policy_loss: 2.503497, idm_loss: 1.350019
+
+
+iteration: 14, total_reward: -96.92134427365876, policy_loss: 1.890331, idm_loss: 1.340316
+
+
+iteration: 15, total_reward: -583.1285858375397, policy_loss: 2.318538, idm_loss: 1.356949
+
+
+iteration: 16, total_reward: -39.28737389218367, policy_loss: 2.365656, idm_loss: 1.366821
+
+
+iteration: 17, total_reward: 69.9384152650606, policy_loss: 2.408698, idm_loss: 1.380557
+
+
+iteration: 18, total_reward: 22.96366283556742, policy_loss: 2.229208, idm_loss: 1.364892
+

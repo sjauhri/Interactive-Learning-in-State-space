@@ -205,11 +205,11 @@ class BCOACH():
 
     print("\n[Training]")
     # pre demonstration to update inverse dynamic model
-    S, nS, A = self.pre_demonstration()
+    # S, nS, A = self.pre_demonstration()
     # Add to Experience Buffer
-    for id in range(0, len(S)):
-      self.ExpBuff.append((S[id], nS[id], A[id]))
-    self.update_idm()
+    # for id in range(0, len(S)):
+    #   self.ExpBuff.append((S[id], nS[id], A[id]))
+    # self.update_idm()
     
     # Init model saver
     saver = tf.train.Saver(max_to_keep=1)
