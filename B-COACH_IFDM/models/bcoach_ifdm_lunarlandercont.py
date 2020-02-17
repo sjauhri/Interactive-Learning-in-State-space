@@ -1,6 +1,7 @@
 from utils import *
 from bcoach_ifdm import BCOACH
 from feedback import *
+from fdm_lunarl import *
 import gym
 
 class BCOACH_lunarlandercont(BCOACH):
@@ -18,18 +19,21 @@ class BCOACH_lunarlandercont(BCOACH):
     self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1, 5
-    self.errorConst = 0.25
+    self.errorConst = 0.1
     # Render time delay for this environment (in s)
     self.render_delay = 0.05
-    # Choose which feedback to act on with fb dictionary
+    # Choose which feedback is valid with fb dictionary
     self.feedback_dict = {
-      H_NULL: 0,      
+      H_NULL: 0,
       H_UP: 1,
       H_DOWN: 1,
       H_LEFT: 1,
-      H_RIGHT: 1
+      H_RIGHT: 1,
+      DO_NOTHING: 1
     }
-  
+
+    self.ifdm_queries = 100 # Two continous actions.
+
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
     with tf.variable_scope("policy_model") as scope:
@@ -37,9 +41,9 @@ class BCOACH_lunarlandercont(BCOACH):
         policy_input = self.state
       with tf.variable_scope("model") as scope:
         policy_h1 = tf.layers.dense(policy_input, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
-        policy_h1 = tf.nn.leaky_relu(policy_h1, 0.2, name="LeakyRelu_1")
+        policy_h1 = tf.nn.leaky_relu(policy_h1, 0.1, name="LeakyRelu_1")
         policy_h2 = tf.layers.dense(policy_h1, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
-        policy_h2 = tf.nn.leaky_relu(policy_h2, 0.2, name="LeakyRelu_2")
+        policy_h2 = tf.nn.leaky_relu(policy_h2, 0.1, name="LeakyRelu_2")
 
       with tf.variable_scope("output") as scope:
         self.tmp_policy_pred_action = tf.layers.dense(policy_h2, self.action_dim, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")
@@ -50,25 +54,24 @@ class BCOACH_lunarlandercont(BCOACH):
       with tf.variable_scope("train_step") as scope:
         self.policy_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.policy_loss)
 
-  def build_idm_model(self):
-    """building the inverse dynamic model as two fully connnected layers with leaky relu"""
-    with tf.variable_scope("inverse_dynamic_model") as scope:
+  def build_fdm_model(self):
+    """building the forward dynamics model as two fully connnected layers with leaky relu"""
+    with tf.variable_scope("forward_dynamic_model") as scope:
       with tf.variable_scope("input") as scope:
-        idm_input = tf.concat([self.state, self.nstate], 1)
+        fdm_input = tf.concat([self.state, self.action], 1)
       with tf.variable_scope("model") as scope:
-        idm_h1 = tf.layers.dense(idm_input, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
-        idm_h1 = tf.nn.leaky_relu(idm_h1, 0.2, name="LeakyRelu_1")
-        idm_h2 = tf.layers.dense(idm_h1, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
-        idm_h2 = tf.nn.leaky_relu(idm_h2, 0.2, name="LeakyRelu_2")
+        fdm_h1 = tf.layers.dense(fdm_input, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
+        fdm_h1 = tf.nn.leaky_relu(fdm_h1, 0.2, name="LeakyRelu_1")
+        fdm_h2 = tf.layers.dense(fdm_h1, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
+        fdm_h2 = tf.nn.leaky_relu(fdm_h2, 0.2, name="LeakyRelu_2")
 
-      with tf.variable_scope("output") as scope:
-        self.tmp_idm_pred_action = tf.layers.dense(idm_h2, self.action_dim, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")
-        self.idm_pred_action = tf.clip_by_value(self.tmp_idm_pred_action, clip_value_min=-1, clip_value_max=1)
+      with tf.variable_scope("output") as scope:                
+        self.fdm_pred_state = tf.layers.dense(fdm_h2, self.state_dim, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")        
 
       with tf.variable_scope("loss") as scope:
-        self.idm_loss = tf.reduce_mean(tf.squared_difference(self.idm_pred_action, self.action))
+        self.fdm_loss = tf.reduce_mean(tf.squared_difference(self.fdm_pred_state, self.nstate))
       with tf.variable_scope("train_step") as scope:
-        self.idm_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.idm_loss)
+        self.fdm_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.fdm_loss)
 
   def pre_demonstration(self):
     """uniform sample action to generate (s_t, s_t+1) and action pairs"""
@@ -95,27 +98,84 @@ class BCOACH_lunarlandercont(BCOACH):
       Actions.append(A)
 
       if i and (i+1) % 1000 == 0:
-        print("Collecting idm training data ", i+1)
-        self.log_writer.write("Collecting idm training data " + str(i+1) + "\n")
+        print("Collecting dynamics training data ", i+1)
+        self.log_writer.write("Collecting dynamics training data " + str(i+1) + "\n")
 
     return States, Nstates, Actions
 
-  def get_feedback_label(self, h_fb, nstate):
-    """get new state transition label for this environment using feedback"""
-    #fb_value = self.feedback_dict.get(h_fb)
-    
-    new_s_transition = np.copy(nstate)
+  def get_state_corrected(self, h_fb, state):
+    """get corrected state label for this environment using feedback"""
+    state_corrected = np.copy(state)
 
     if (h_fb == H_LEFT): # Angular velocity
-      new_s_transition[0][5] += self.errorConst
+      state_corrected = state_corrected[5] + self.errorConst      
     elif (h_fb == H_RIGHT):
-      new_s_transition[0][5] -= self.errorConst
-    elif (h_fb == H_UP):
-      new_s_transition[0][3] += self.errorConst
+      state_corrected = state_corrected[5] - self.errorConst      
+    elif (h_fb == H_UP): # Vertical velocity
+      state_corrected = state_corrected[3] + self.errorConst
     elif (h_fb == H_DOWN):
-      new_s_transition[0][3] -= self.errorConst
+      state_corrected = state_corrected[3] - self.errorConst/5
+    return state_corrected
+
+  def get_corrected_action(self, h_fb, state, state_corrected):
+    """get action to achieve next state close to state_corrected"""
+    # Continous Actions
+    min_action = np.random.uniform(-1, 1, self.action_dim)
+    min_cost = np.Inf
     
-    return new_s_transition
+    if (h_fb == DO_NOTHING):
+      min_action = np.array((0,0)) # Do Nothing action
+    else:      
+      for _ in range(1, self.ifdm_queries+1):
+        # Choose random action
+        # Continous Actions
+        curr_action = np.random.uniform(-1, 1, self.action_dim)
+        # Discretization
+        # val_set = [0.2*x for x in range(-5,6)]
+        # curr_action = np.random.choice(val_set, self.action_dim)
+
+        # Query ifdm to get next state
+        nstate = fdm_cont(state, curr_action)
+
+        # Check cost
+        if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity
+          cost = abs(state_corrected - nstate[5])
+        else:                                       # Vertical velocity
+          cost = abs(state_corrected - nstate[3])
+        
+        # Check for min_cost
+        if(cost < min_cost):
+          min_cost = cost
+          min_action = curr_action
+
+    return min_action
+
+  def get_action(self, state, nstate_required):
+    """get action to achieve next state close to nstate_required"""
+    # Continous Actions
+    min_action = np.random.uniform(-1, 1, self.action_dim)
+    min_cost = np.Inf
+        
+    for _ in range(1, self.ifdm_queries+1):
+      # Choose random action
+      # Continous Actions
+      curr_action = np.random.uniform(-1, 1, self.action_dim)
+      # Discretization
+      # val_set = [0.2*x for x in range(-5,6)]
+      # curr_action = np.random.choice(val_set, self.action_dim)
+
+      # Query ifdm to get next state
+      nstate = fdm_cont(state, curr_action)
+
+      # Check cost
+      cost = abs(nstate_required - nstate)      
+      
+      # Check for min_cost
+      if(cost < min_cost):
+        min_cost = cost
+        min_action = curr_action
+
+    return min_action    
 
   def coach(self):
     """COACH algorithm incorporating human feedback"""
@@ -139,22 +199,30 @@ class BCOACH_lunarlandercont(BCOACH):
       # h_fb = 3
 
       # Update policy
-      if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero
+      if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero i.e. is valid
         print("Feedback", self.feedback_dict.get(h_fb))
         h_counter += 1 # Feedback counter
 
         # Get new state transition label using feedback
-        new_s_transition = self.get_feedback_label(h_fb, state)
+        state_corrected = self.get_state_corrected(h_fb, state[0])        
 
-        # Get action from idm
-        a = self.eval_idm(state, new_s_transition)
-        print("Eval_IDM action: ", a)
+        # Get action from ifdm
+        A = self.get_corrected_action(h_fb, state[0], state_corrected)
+        print("Computed_IFDM action: ", A)
+        # Debug incorrect action
+        # if not args.cont_actions:
+        #   if ((self.feedback_dict.get(h_fb) == -1 and a[0][1] == 1) or (self.feedback_dict.get(h_fb) == 1 and a[0][0] == 1)):
+        #     print("MISLABEL!")
+        # else:
+        #   if ((self.feedback_dict.get(h_fb) == -1 and a[0][1] > 0.5) or (self.feedback_dict.get(h_fb) == 1 and a[0][1] < -0.5)):
+        #     print("MISLABEL!")
 
         # Update policy (immediate)
-        self.update_policy_feedback_immediate(state, a)
+        A = np.reshape(A, [-1, self.action_dim])
+        self.update_policy_feedback_immediate(state, A)
 
         # Add state transition pair to demo buffer
-        self.DemoBuff.append((state[0], new_s_transition[0]))
+        self.DemoBuff.append((state[0], A[0]))
         # If Demo buffer full, remove oldest entry
         if (len(self.DemoBuff) > self.maxDemoBuffSize):
             self.DemoBuff.pop(0)
@@ -163,9 +231,10 @@ class BCOACH_lunarlandercont(BCOACH):
         self.update_policy_feedback()
 
         # Act using action based on h_feedback
-        A = np.reshape(a, [-1])
+        A = np.reshape(A, [-1])
         state, _, terminal, _ = self.env.step(A)
         state = np.reshape(state, [-1, self.state_dim])
+        # TODO: Add to ExpBuff
       else:
         # Use current policy
         # Map action from state
@@ -174,13 +243,13 @@ class BCOACH_lunarlandercont(BCOACH):
         # Act
         state, _, terminal, _ = self.env.step(A)
         state = np.reshape(state, [-1, self.state_dim])
+        # TODO: Add to ExpBuff
 
         # Train every k time steps
       if t_counter % self.coach_training_rate == 0:
         self.update_policy_feedback()
 
       t_counter += 1 # Time counter
-
 
   def post_demonstration(self, M):
     """using policy to generate (s_t, s_t+1) and action pairs"""

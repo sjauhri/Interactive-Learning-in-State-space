@@ -1,0 +1,87 @@
+
+iteration: 1, total_reward: -371.92491340457536, policy_loss: 1.252844, idm_loss: 1.429672
+
+Policy train: iteration: 500, policy_loss: 0.001884
+Policy train: iteration: 1000, policy_loss: 0.000573
+Policy train: iteration: 1500, policy_loss: 0.000208
+Policy train: iteration: 2000, policy_loss: 0.000124
+Policy train: iteration: 2500, policy_loss: 0.000079
+Policy train: iteration: 3000, policy_loss: 0.000056
+Policy train: iteration: 3500, policy_loss: 0.000033
+Policy train: iteration: 4000, policy_loss: 0.000020
+Policy train: iteration: 4500, policy_loss: 0.000015
+Policy train: iteration: 5000, policy_loss: 0.000012
+Policy train: iteration: 5500, policy_loss: 0.000006
+Policy train: iteration: 6000, policy_loss: 0.000006
+Policy train: iteration: 6500, policy_loss: 0.000005
+Policy train: iteration: 7000, policy_loss: 0.000003
+
+iteration: 2, total_reward: -161.47291309425424, policy_loss: 1.315432, idm_loss: 1.383386
+
+
+iteration: 3, total_reward: -378.5111429694793, policy_loss: 0.758468, idm_loss: 1.359685
+
+Policy train: iteration: 500, policy_loss: 0.003062
+Policy train: iteration: 1000, policy_loss: 0.001021
+Policy train: iteration: 1500, policy_loss: 0.000438
+Policy train: iteration: 2000, policy_loss: 0.000311
+Policy train: iteration: 2500, policy_loss: 0.000216
+Policy train: iteration: 3000, policy_loss: 0.000093
+Policy train: iteration: 3500, policy_loss: 0.000079
+Policy train: iteration: 4000, policy_loss: 0.000076
+Policy train: iteration: 4500, policy_loss: 0.000063
+Policy train: iteration: 5000, policy_loss: 0.000036
+Policy train: iteration: 5500, policy_loss: 0.000024
+Policy train: iteration: 6000, policy_loss: 0.000022
+Policy train: iteration: 6500, policy_loss: 0.000012
+Policy train: iteration: 7000, policy_loss: 0.000011
+
+iteration: 4, total_reward: -125.83734530332937, policy_loss: 1.187208, idm_loss: 1.363108
+
+
+iteration: 5, total_reward: -47.74590156269674, policy_loss: 2.289524, idm_loss: 1.375688
+
+Policy train: iteration: 500, policy_loss: 0.002863
+Policy train: iteration: 1000, policy_loss: 0.000957
+Policy train: iteration: 1500, policy_loss: 0.000452
+Policy train: iteration: 2000, policy_loss: 0.000266
+Policy train: iteration: 2500, policy_loss: 0.000190
+Policy train: iteration: 3000, policy_loss: 0.000133
+Policy train: iteration: 3500, policy_loss: 0.000081
+Policy train: iteration: 4000, policy_loss: 0.000054
+Policy train: iteration: 4500, policy_loss: 0.000045
+Policy train: iteration: 5000, policy_loss: 0.000030
+Policy train: iteration: 5500, policy_loss: 0.000018
+Policy train: iteration: 6000, policy_loss: 0.000013
+Policy train: iteration: 6500, policy_loss: 0.000014
+Policy train: iteration: 7000, policy_loss: 0.000010
+
+iteration: 6, total_reward: -169.6355771534005, policy_loss: 1.515635, idm_loss: 1.364195
+
+
+iteration: 7, total_reward: -311.1443945422272, policy_loss: 1.330189, idm_loss: 1.356757
+
+Policy train: iteration: 500, policy_loss: 0.001176
+Policy train: iteration: 1000, policy_loss: 0.000387
+Policy train: iteration: 1500, policy_loss: 0.000200
+Policy train: iteration: 2000, policy_loss: 0.000124
+Policy train: iteration: 2500, policy_loss: 0.000063
+Policy train: iteration: 3000, policy_loss: 0.000045
+Policy train: iteration: 3500, policy_loss: 0.000028
+Policy train: iteration: 4000, policy_loss: 0.000019
+Policy train: iteration: 4500, policy_loss: 0.000013
+Policy train: iteration: 5000, policy_loss: 0.000010
+Policy train: iteration: 5500, policy_loss: 0.000007
+Policy train: iteration: 6000, policy_loss: 0.000006
+Policy train: iteration: 6500, policy_loss: 0.000004
+Policy train: iteration: 7000, policy_loss: 0.000003
+
+iteration: 8, total_reward: -690.6526530338061, policy_loss: 0.000004, idm_loss: 1.320991
+
+
+iteration: 9, total_reward: -21.558471817948018, policy_loss: 2.529373, idm_loss: 1.362530
+
+Policy train: iteration: 500, policy_loss: 0.002672
+Policy train: iteration: 1000, policy_loss: 0.000861
+Policy train: iteration: 1500, policy_loss: 0.000520
+Policy train: iteration: 2000, policy_loss: 0.000300

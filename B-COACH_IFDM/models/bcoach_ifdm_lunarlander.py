@@ -41,9 +41,9 @@ class BCOACH_lunarlander(BCOACH):
         policy_input = self.state
       with tf.variable_scope("model") as scope:
         policy_h1 = tf.layers.dense(policy_input, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
-        policy_h1 = tf.nn.leaky_relu(policy_h1, 0.001, name="LeakyRelu_1")
+        policy_h1 = tf.nn.leaky_relu(policy_h1, 0.1, name="LeakyRelu_1")
         policy_h2 = tf.layers.dense(policy_h1, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
-        policy_h2 = tf.nn.leaky_relu(policy_h2, 0.001, name="LeakyRelu_2")
+        policy_h2 = tf.nn.leaky_relu(policy_h2, 0.1, name="LeakyRelu_2")
 
       with tf.variable_scope("output") as scope:
         policy_pred_action = tf.layers.dense(policy_h2, self.action_dim, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")
@@ -55,25 +55,24 @@ class BCOACH_lunarlander(BCOACH):
       with tf.variable_scope("train_step") as scope:
         self.policy_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.policy_loss)
 
-  def build_idm_model(self):
-    """building the inverse dynamic model as two fully connnected layers with leaky relu"""
-    with tf.variable_scope("inverse_dynamic_model") as scope:
+  def build_fdm_model(self):
+    """building the forward dynamics model as two fully connnected layers with leaky relu"""
+    with tf.variable_scope("forward_dynamic_model") as scope:
       with tf.variable_scope("input") as scope:
-        idm_input = tf.concat([self.state, self.nstate], 1)
+        fdm_input = tf.concat([self.state, self.action], 1)
       with tf.variable_scope("model") as scope:
-        idm_h1 = tf.layers.dense(idm_input, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
-        idm_h1 = tf.nn.leaky_relu(idm_h1, 0.2, name="LeakyRelu_1")
-        idm_h2 = tf.layers.dense(idm_h1, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
-        idm_h2 = tf.nn.leaky_relu(idm_h2, 0.2, name="LeakyRelu_2")
+        fdm_h1 = tf.layers.dense(fdm_input, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
+        fdm_h1 = tf.nn.leaky_relu(fdm_h1, 0.2, name="LeakyRelu_1")
+        fdm_h2 = tf.layers.dense(fdm_h1, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
+        fdm_h2 = tf.nn.leaky_relu(fdm_h2, 0.2, name="LeakyRelu_2")
 
-      with tf.variable_scope("output") as scope:
-        idm_pred_action = tf.layers.dense(idm_h2, self.action_dim, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")
-        self.idm_pred_action = tf.one_hot(tf.argmax(idm_pred_action, axis=1), self.action_dim, name="one_hot")
+      with tf.variable_scope("output") as scope:                
+        self.fdm_pred_state = tf.layers.dense(fdm_h2, self.state_dim, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")        
 
       with tf.variable_scope("loss") as scope:
-        self.idm_loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.action, logits=idm_pred_action))
+        self.fdm_loss = tf.reduce_mean(tf.squared_difference(self.fdm_pred_state, self.nstate))
       with tf.variable_scope("train_step") as scope:
-        self.idm_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.idm_loss)
+        self.fdm_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.fdm_loss)
 
   def pre_demonstration(self):
     """uniform sample action to generate (s_t, s_t+1) and action pairs"""
@@ -100,8 +99,8 @@ class BCOACH_lunarlander(BCOACH):
       Actions.append(a)
 
       if i and (i+1) % 1000 == 0:
-        print("Collecting idm training data ", i+1)
-        self.log_writer.write("Collecting idm training data " + str(i+1) + "\n")
+        print("Collecting dynamics training data ", i+1)
+        self.log_writer.write("Collecting dynamics training data " + str(i+1) + "\n")
 
     return States, Nstates, Actions
 
@@ -119,8 +118,8 @@ class BCOACH_lunarlander(BCOACH):
       state_corrected = state_corrected[3] - self.errorConst/5
     return state_corrected
 
-  def get_action(self, h_fb, state, state_corrected):
-    """get action to achieve close next state close to state_corrected"""
+  def get_corrected_action(self, h_fb, state, state_corrected):
+    """get action to achieve next state close to state_corrected"""
     # Discrete Actions
     min_action = np.random.randint(self.action_dim)
     min_cost = np.Inf
@@ -130,7 +129,7 @@ class BCOACH_lunarlander(BCOACH):
     else:      
       for _ in range(1, self.ifdm_queries+1):
         # Choose random action
-        # Discrete actions
+        # Discrete Actions
         curr_action = np.random.randint(self.action_dim)
 
         # Query ifdm to get next state
@@ -138,7 +137,7 @@ class BCOACH_lunarlander(BCOACH):
 
         # Check cost
         if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity
-          cost = abs(state_corrected - nstate[5])
+          cost = abs(state_corrected - nstate[2])
         else:                                       # Vertical velocity
           cost = abs(state_corrected - nstate[3])
         
@@ -148,6 +147,30 @@ class BCOACH_lunarlander(BCOACH):
           min_action = curr_action
 
     return min_action
+
+  def get_action(self, state, nstate_required):
+    """get action to achieve next state close to nstate_required"""
+    # Discrete Actions
+    min_action = np.random.randint(self.action_dim)
+    min_cost = np.Inf
+        
+    for _ in range(1, self.ifdm_queries+1):
+      # Choose random action
+      # Discrete Actions
+      curr_action = np.random.randint(self.action_dim)
+
+      # Query ifdm to get next state
+      nstate = fdm_cont(state, curr_action)
+
+      # Check cost
+      cost = abs(nstate_required - nstate)      
+      
+      # Check for min_cost
+      if(cost < min_cost):
+        min_cost = cost
+        min_action = curr_action
+
+    return min_action    
 
   def coach(self):
     """COACH algorithm incorporating human feedback"""
@@ -179,7 +202,7 @@ class BCOACH_lunarlander(BCOACH):
         state_corrected = self.get_state_corrected(h_fb, state[0])        
 
         # Get action from ifdm
-        A = self.get_action(h_fb, state[0], state_corrected)
+        A = self.get_corrected_action(h_fb, state[0], state_corrected)
         # Discrete actions: a = A in one hot with extra braces
         a = np.zeros(self.action_dim)
         a[A] = 1
@@ -214,7 +237,7 @@ class BCOACH_lunarlander(BCOACH):
         # TODO: Add to ExpBuff
       else:
         # Use current policy
-        # Map action from state        
+        # Map action from state
         A = np.reshape(self.eval_policy(state), [-1])
         # Discrete actions
         A = np.argmax(A)
