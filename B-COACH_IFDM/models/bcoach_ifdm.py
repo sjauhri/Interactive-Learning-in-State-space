@@ -107,9 +107,11 @@ class BCOACH():
     """update policy model"""
     for it in range(1, self.epochTrainIts+1):
       batch_s, batch_ns =  self.sample_demo(self.batch_size)
-      # TODO: get_action
-      ################################
-      batch_a = self.eval_fdm(batch_s, batch_ns)
+      batch_a = []
+      for i in range(self.batch_size):
+        batch_a.append(self.get_action(batch_s[i],batch_ns[i]))
+      batch_a = np.reshape(batch_a, [-1, self.action_dim])
+      
       self.sess.run(self.policy_train_step, feed_dict={
       self.state : batch_s,
       self.action: batch_a
@@ -117,11 +119,12 @@ class BCOACH():
       # Debug
       if it % 500 == 0:
         # Check policy loss on another data set.................
-        S, nS = self.sample_demo(int(round(self.demo_examples/20))) # 5% of the demo data
-        # TODO: get_action
-        ################################
-        A = self.eval_fdm(S, nS)
-        policy_loss = self.get_policy_loss(S, A)        
+        S, nS = self.sample_demo(int(round(self.demo_examples/100))) # 1% of the demo data
+        A = []
+        for i in range(len(S)):
+          A.append(self.get_action(S[i],nS[i]))
+        A = np.reshape(A, [-1, self.action_dim])
+        policy_loss = self.get_policy_loss(S, A)
         print('Policy train: iteration: %5d, policy_loss: %8.6f' % (it, policy_loss))
         self.log_writer.write("Policy train: iteration: " + str(it) + ", policy_loss: " + format(policy_loss, '8.6f') + "\n")
  
@@ -219,8 +222,8 @@ class BCOACH():
         return freq > 0 and ((it+1) % freq==0 or it == self.maxEpochs-1)
 
       # update policy pi #######################
-      if should(2):
-        self.update_policy()
+      # if should(1):
+      #   self.update_policy()
       ##########################################
       # COACH      
       self.coach()
@@ -235,10 +238,11 @@ class BCOACH():
         policy_reward = self.eval_rwd_policy()
 
         # Check policy loss on another data set.................
-        S, nS = self.sample_demo(int(round(self.demo_examples/20))) # 5% of the demo data
-        # TODO: get_action
-        ##################################
-        A = self.eval_fdm(S, nS)
+        S, nS = self.sample_demo(int(round(self.demo_examples/100))) # 1% of the demo data
+        A = []
+        for i in range(len(S)):
+          A.append(self.get_action(S[i],nS[i]))
+        A = np.reshape(A, [-1, self.action_dim])
         policy_loss = self.get_policy_loss(S, A)
         # ......................................................
 
@@ -294,7 +298,7 @@ class BCOACH():
       for exp in range(0, args.numExperiments):
         
         # Set random seed for experiment
-        np.random.seed(exp)
+        np.random.seed(exp+1)
         
         self.result_writer = open(args.result_dir + self.logTime + "_" + str(exp) + ".csv", "w") # csv episode result log
         self.result_writer.write("iteration,total_reward,policy_loss,fdm_loss\n")

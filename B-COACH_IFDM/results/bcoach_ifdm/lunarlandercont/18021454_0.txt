@@ -1,0 +1,104 @@
+
+episode_reward: -117.4
+iteration: 1, total_reward: -436.30959304948317, policy_loss: 0.337658, fdm_loss: 0.504808
+
+
+episode_reward: -65.2
+iteration: 2, total_reward: -206.92408764737166, policy_loss: 0.233511, fdm_loss: 0.324879
+
+
+episode_reward:  25.4
+iteration: 3, total_reward: -286.6418762289743, policy_loss: 0.223596, fdm_loss: 0.292734
+
+
+episode_reward: 246.8
+iteration: 4, total_reward: -189.64714798741852, policy_loss: 0.261256, fdm_loss: 0.149831
+
+
+episode_reward: -88.7
+iteration: 5, total_reward: -352.0283673710487, policy_loss: 0.197934, fdm_loss: 0.183851
+
+
+episode_reward:  35.0
+iteration: 6, total_reward: -66.85735748866475, policy_loss: 0.215006, fdm_loss: 0.213920
+
+
+episode_reward: 280.8
+iteration: 7, total_reward: -218.34215893093653, policy_loss: 0.253079, fdm_loss: 0.285802
+
+
+episode_reward: -105.7
+iteration: 8, total_reward: -236.84706049677942, policy_loss: 0.199595, fdm_loss: 0.271636
+
+
+episode_reward: 269.6
+iteration: 9, total_reward: -193.85931740763496, policy_loss: 0.200673, fdm_loss: 0.241783
+
+
+episode_reward: -291.2
+iteration: 10, total_reward: -158.0129280577411, policy_loss: 0.193115, fdm_loss: 0.271144
+
+
+episode_reward:  -1.4
+iteration: 11, total_reward: -159.68374055446623, policy_loss: 0.222334, fdm_loss: 0.323528
+
+
+episode_reward: -173.3
+iteration: 12, total_reward: -177.22585600231264, policy_loss: 0.247686, fdm_loss: 0.268556
+
+
+episode_reward: -68.9
+iteration: 13, total_reward: -293.1300199680512, policy_loss: 0.212602, fdm_loss: 0.303737
+
+
+episode_reward: 271.7
+iteration: 14, total_reward: -333.2763667887428, policy_loss: 0.178678, fdm_loss: 0.268488
+
+
+episode_reward: 256.4
+iteration: 15, total_reward: -253.54529629870567, policy_loss: 0.219379, fdm_loss: 0.286209
+
+
+episode_reward: 278.9
+iteration: 16, total_reward: 28.584706343452183, policy_loss: 0.200661, fdm_loss: 0.275966
+
+
+episode_reward: 272.2
+iteration: 17, total_reward: -338.7022602279759, policy_loss: 0.216206, fdm_loss: 0.263956
+
+
+episode_reward: 240.7
+iteration: 18, total_reward: -121.79379040294292, policy_loss: 0.218340, fdm_loss: 0.351871
+
+
+episode_reward: 229.8
+iteration: 19, total_reward: -281.0669745875912, policy_loss: 0.278951, fdm_loss: 0.228535
+
+
+episode_reward: 256.3
+iteration: 20, total_reward: -189.86008197368, policy_loss: 0.218349, fdm_loss: 0.246980
+
+
+episode_reward: 230.8
+iteration: 21, total_reward: -53.06389279543532, policy_loss: 0.218862, fdm_loss: 0.262067
+
+
+episode_reward: -42.3
+iteration: 22, total_reward: -96.06540824641232, policy_loss: 0.206893, fdm_loss: 0.156159
+
+
+episode_reward: 221.9
+iteration: 23, total_reward: -151.7185399429934, policy_loss: 0.210384, fdm_loss: 0.238558
+
+
+episode_reward: 235.9
+iteration: 24, total_reward: -14.463114101050023, policy_loss: 0.231830, fdm_loss: 0.255605
+
+
+episode_reward: 251.8
+iteration: 25, total_reward: -3.406903330594965, policy_loss: 0.215930, fdm_loss: 0.119879
+
+
+episode_reward: 258.7
+iteration: 26, total_reward: 261.699885955155, policy_loss: 0.203903, fdm_loss: 0.125281
+

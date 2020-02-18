@@ -33,7 +33,7 @@ class BCOACH_lunarlander(BCOACH):
     }
 
     self.ifdm_queries = 24 # Four discrete actions. (Easy)
-  
+
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
     with tf.variable_scope("policy_model") as scope:
@@ -41,9 +41,9 @@ class BCOACH_lunarlander(BCOACH):
         policy_input = self.state
       with tf.variable_scope("model") as scope:
         policy_h1 = tf.layers.dense(policy_input, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
-        policy_h1 = tf.nn.leaky_relu(policy_h1, 0.1, name="LeakyRelu_1")
+        policy_h1 = tf.nn.leaky_relu(policy_h1, 0.2, name="LeakyRelu_1")
         policy_h2 = tf.layers.dense(policy_h1, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
-        policy_h2 = tf.nn.leaky_relu(policy_h2, 0.1, name="LeakyRelu_2")
+        policy_h2 = tf.nn.leaky_relu(policy_h2, 0.2, name="LeakyRelu_2")
 
       with tf.variable_scope("output") as scope:
         policy_pred_action = tf.layers.dense(policy_h2, self.action_dim, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")
@@ -108,6 +108,7 @@ class BCOACH_lunarlander(BCOACH):
     """get corrected state label for this environment using feedback"""
     state_corrected = np.copy(state)
 
+    # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()
     if (h_fb == H_LEFT): # Angular velocity
       state_corrected = state_corrected[5] + self.errorConst      
     elif (h_fb == H_RIGHT):
@@ -137,7 +138,7 @@ class BCOACH_lunarlander(BCOACH):
 
         # Check cost
         if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity
-          cost = abs(state_corrected - nstate[2])
+          cost = abs(state_corrected - nstate[5])
         else:                                       # Vertical velocity
           cost = abs(state_corrected - nstate[3])
         
@@ -146,7 +147,11 @@ class BCOACH_lunarlander(BCOACH):
           min_cost = cost
           min_action = curr_action
 
-    return min_action
+    # Discrete actions: return a = A in one hot
+    min_a = np.zeros(self.action_dim)
+    min_a[min_action] = 1
+
+    return min_a
 
   def get_action(self, state, nstate_required):
     """get action to achieve next state close to nstate_required"""
@@ -160,21 +165,26 @@ class BCOACH_lunarlander(BCOACH):
       curr_action = np.random.randint(self.action_dim)
 
       # Query ifdm to get next state
-      nstate = fdm_cont(state, curr_action)
+      nstate = fdm(state, curr_action)
 
       # Check cost
-      cost = abs(nstate_required - nstate)      
+      cost = sum(abs(nstate_required - nstate))
       
       # Check for min_cost
       if(cost < min_cost):
         min_cost = cost
         min_action = curr_action
 
-    return min_action    
+    # Discrete actions: return a = A in one hot
+    min_a = np.zeros(self.action_dim)
+    min_a[min_action] = 1
+
+    return min_a
 
   def coach(self):
     """COACH algorithm incorporating human feedback"""
     terminal = False
+    total_reward = 0
     state = self.env.reset()
     state = np.reshape(state, [-1, self.state_dim])
     t_counter = 0
@@ -202,10 +212,7 @@ class BCOACH_lunarlander(BCOACH):
         state_corrected = self.get_state_corrected(h_fb, state[0])        
 
         # Get action from ifdm
-        A = self.get_corrected_action(h_fb, state[0], state_corrected)
-        # Discrete actions: a = A in one hot with extra braces
-        a = np.zeros(self.action_dim)
-        a[A] = 1
+        a = self.get_corrected_action(h_fb, state[0], state_corrected)
         print("Computed_IFDM action: ", a)
         # Debug incorrect action
         # if not args.cont_actions:
@@ -231,8 +238,9 @@ class BCOACH_lunarlander(BCOACH):
         # Act using action based on h_feedback
         A = np.reshape(a, [-1])
         # Discrete actions
-        A = np.argmax(A)        
-        state, _, terminal, _ = self.env.step(A)
+        A = np.argmax(A)
+        state, reward, terminal, _ = self.env.step(A)
+        total_reward += reward
         state = np.reshape(state, [-1, self.state_dim])
         # TODO: Add to ExpBuff
       else:
@@ -243,7 +251,8 @@ class BCOACH_lunarlander(BCOACH):
         A = np.argmax(A)
 
         # Act
-        state, _, terminal, _ = self.env.step(A)
+        state, reward, terminal, _ = self.env.step(A)
+        total_reward += reward
         state = np.reshape(state, [-1, self.state_dim])
         # TODO: Add to ExpBuff
 
@@ -252,6 +261,9 @@ class BCOACH_lunarlander(BCOACH):
         self.update_policy_feedback()
 
       t_counter += 1 # Time counter
+
+    print('episode_reward: %5.1f' % (total_reward))
+    self.log_writer.write("\n" + "episode_reward: " + format(total_reward, '5.1f'))
 
   def post_demonstration(self, M):
     """using policy to generate (s_t, s_t+1) and action pairs"""
