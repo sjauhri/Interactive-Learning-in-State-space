@@ -51,7 +51,7 @@ class BCOACH():
       inputs = inputs[0:10000]
       targets = targets[0:10000]
       num_samples = 10000
-    print("Loaded %d demonstrations" % num_samples)
+    print("[Loaded %d demonstrations]" % num_samples)
 
     return num_samples, inputs, targets
 
@@ -199,20 +199,24 @@ class BCOACH():
     if args.usePrevSession:
       saver_prev = tf.train.Saver()
       saver_prev.restore(self.sess, args.prev_session_dir)
-      print('Loaded previous model and session')
+      print('[Loaded previous model and session]')
 
-      # Reinit policy here if you wish
+      # NOTE: Re-init policy here if you wish
     else:
       # Start session
-      self.sess.run(tf.global_variables_initializer())
+      self.sess.run(tf.global_variables_initializer())            
+    
+      # Optional: Learn FDM using pre-demonstration exploration
+      # print("\n[Pre-Demonstration to learn FDM]")
+      # S, nS, A = self.pre_demonstration()
+      # Add to Experience Buffer
+      # for id in range(0, len(S)):
+      #   self.ExpBuff.append((S[id], nS[id], A[id]))
+      # self.update_fdm()
 
-    print("\n[Training]")
-    # pre demonstration to update forward dynamic model
-    # S, nS, A = self.pre_demonstration()
-    # Add to Experience Buffer
-    # for id in range(0, len(S)):
-    #   self.ExpBuff.append((S[id], nS[id], A[id]))
-    # self.update_fdm()
+      # Optional: Train initial policy from demonstrations
+      # print("\n[Training initial policy]")      
+      # self.update_policy()
     
     # Init model saver
     saver = tf.train.Saver(max_to_keep=1)
@@ -235,7 +239,12 @@ class BCOACH():
       # self.update_fdm()
       #############################################
       if should(args.print_freq):
-        policy_reward = self.eval_rwd_policy()
+
+        policy_reward = 0
+        numTrials = 10
+        for _ in range(numTrials):
+          policy_reward += self.eval_rwd_policy()
+        avg_reward = policy_reward/numTrials
 
         # Check policy loss on another data set.................
         S, nS = self.sample_demo(int(round(self.demo_examples/100))) # 1% of the demo data
@@ -250,9 +259,9 @@ class BCOACH():
         S, nS, A = self.post_demonstration(self.M)
         fdm_loss = self.get_fdm_loss(S, nS, A)
         # ......................................................
-        print('iteration: %5d, total_reward: %5.1f, policy_loss: %8.6f, fdm_loss: %8.6f' % ((it+1), policy_reward, policy_loss, fdm_loss))
-        self.result_writer.write( str(it+1) + " , " + format(policy_reward, '8.6f') + " , " + format(policy_loss, '8.6f') + " , " + format(fdm_loss, '8.6f') + "\n" )
-        self.log_writer.write("\n" + "iteration: " + str(it+1) + ", total_reward: " + str(policy_reward) + ", policy_loss: " + format(policy_loss, '8.6f') + ", fdm_loss: " + format(fdm_loss, '8.6f') + "\n" + "\n")
+        print('iteration: %5d, average_reward: %5.1f, policy_loss: %8.6f, fdm_loss: %8.6f' % ((it+1), avg_reward, policy_loss, fdm_loss))
+        self.result_writer.write( str(it+1) + " , " + format(avg_reward, '8.6f') + " , " + format(policy_loss, '8.6f') + " , " + format(fdm_loss, '8.6f') + "\n" )
+        self.log_writer.write("\n" + "iteration: " + str(it+1) + ", average_reward: " + str(avg_reward) + ", policy_loss: " + format(policy_loss, '8.6f') + ", fdm_loss: " + format(fdm_loss, '8.6f') + "\n" + "\n")
 
       # saving session
       if should(args.save_freq):
@@ -301,7 +310,7 @@ class BCOACH():
         np.random.seed(exp+1)
         
         self.result_writer = open(args.result_dir + self.logTime + "_" + str(exp) + ".csv", "w") # csv episode result log
-        self.result_writer.write("iteration,total_reward,policy_loss,fdm_loss\n")
+        self.result_writer.write("iteration,average_reward,policy_loss,fdm_loss\n")
 
         self.log_writer = open(args.result_dir + self.logTime + "_" + str(exp) + ".txt", "w") # txt debug log with everything
         

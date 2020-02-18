@@ -108,11 +108,12 @@ class BCOACH_cartpole(BCOACH):
     """get corrected state label for this environment using feedback"""
     state_corrected = np.copy(state)
 
+    # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()
     # Correcting Velocity
     if (h_fb == H_LEFT):
       state_corrected = state_corrected[1] - self.errorConst
     elif (h_fb == H_RIGHT):
-      state_corrected = state_corrected[1] + self.errorConst    
+      state_corrected = state_corrected[1] + self.errorConst
     return state_corrected
 
   def get_corrected_action(self, h_fb, state, state_corrected):

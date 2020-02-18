@@ -5,7 +5,7 @@ from fdm_lunarl import *
 import gym
 
 class BCOACH_lunarlander(BCOACH):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=7000, M=200, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=5000, M=200, batch_size=32):
     BCOACH.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M, batch_size=batch_size)
 
     # set which game to play

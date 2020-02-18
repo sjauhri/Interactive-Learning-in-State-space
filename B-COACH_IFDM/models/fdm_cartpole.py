@@ -11,12 +11,19 @@ import numpy as np
 
 def fdm(state, action):
     # valid actions are 0 (left) and 1 (right)
-    x, x_dot, theta, theta_dot = state
-    force = 0
+    # Convert to continous values -1.0 (left) and 1.0 (right)
     if action==1:
-        force = 10.0
+        action = 1.0
     else:
-        force = -10.0
+        action = -1.0
+
+    return fdm_cont(state, action)
+
+def fdm_cont(state, action):
+    # valid actions are -1.0 (left) to 1.0 (right)
+    x, x_dot, theta, theta_dot = state
+    force = 10.0 * np.squeeze(action)
+
     costheta = math.cos(theta)
     sintheta = math.sin(theta)
     temp = (force + 0.05 * theta_dot * theta_dot * sintheta) / 1.1

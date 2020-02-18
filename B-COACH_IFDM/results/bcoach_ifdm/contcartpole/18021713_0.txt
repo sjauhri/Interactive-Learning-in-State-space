@@ -1,0 +1,16 @@
+
+episode_reward: 246.0
+iteration: 1, average_reward: 68.5, policy_loss: 0.830469, fdm_loss: 0.002018
+
+
+episode_reward: 500.0
+iteration: 2, average_reward: 77.1, policy_loss: 0.816794, fdm_loss: 0.018107
+
+
+episode_reward: 500.0
+iteration: 3, average_reward: 242.9, policy_loss: 0.779514, fdm_loss: 0.004178
+
+
+episode_reward: 500.0
+iteration: 4, average_reward: 500.0, policy_loss: 0.790465, fdm_loss: 0.011559
+
