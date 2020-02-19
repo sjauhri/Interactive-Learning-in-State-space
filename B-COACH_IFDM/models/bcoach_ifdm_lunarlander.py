@@ -135,15 +135,15 @@ class BCOACH_lunarlander(BCOACH):
 
         # Query ifdm to get next state (true or learnt)
         # True FDM:
-        # nstate = fdm(state, curr_action)
+        nstate = fdm(state, curr_action)
         # Learnt FDM:
-        state = np.reshape(state, [-1, self.state_dim])
-        # Discrete Actions
-        a = np.zeros(self.action_dim)
-        a[curr_action] = 1
-        A = np.reshape(a, [-1, self.action_dim])
-        nstate = self.eval_fdm(state, A)
-        nstate = np.reshape(nstate, [-1])
+        # state = np.reshape(state, [-1, self.state_dim])
+        # # Discrete Actions
+        # a = np.zeros(self.action_dim)
+        # a[curr_action] = 1
+        # A = np.reshape(a, [-1, self.action_dim])
+        # nstate = self.eval_fdm(state, A)
+        # nstate = np.reshape(nstate, [-1])
 
         # Check cost
         if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity
@@ -175,15 +175,15 @@ class BCOACH_lunarlander(BCOACH):
 
       # Query ifdm to get next state (true or learnt)
       # True FDM:
-      # nstate = fdm(state, curr_action)
+      nstate = fdm(state, curr_action)
       # Learnt FDM:
-      state = np.reshape(state, [-1, self.state_dim])
-      # Discrete Actions
-      a = np.zeros(self.action_dim)
-      a[curr_action] = 1
-      A = np.reshape(a, [-1, self.action_dim])
-      nstate = self.eval_fdm(state, A)
-      nstate = np.reshape(nstate, [-1])
+      # state = np.reshape(state, [-1, self.state_dim])
+      # # Discrete Actions
+      # a = np.zeros(self.action_dim)
+      # a[curr_action] = 1
+      # A = np.reshape(a, [-1, self.action_dim])
+      # nstate = self.eval_fdm(state, A)
+      # nstate = np.reshape(nstate, [-1])
 
       # Check cost
       cost = sum(abs(nstate_required - nstate))
