@@ -194,7 +194,7 @@ class BCOACH():
     return fdm_loss
 
   def train(self):
-    """training the policy and forward dynamics model"""    
+    """training the policy and forward dynamics model"""
     
     if args.usePrevSession:
       saver_prev = tf.train.Saver()
@@ -204,18 +204,18 @@ class BCOACH():
       # NOTE: Re-init policy here if you wish
     else:
       # Start session
-      self.sess.run(tf.global_variables_initializer())            
+      self.sess.run(tf.global_variables_initializer())
     
       # Optional: Learn FDM using pre-demonstration exploration
-      # print("\n[Pre-Demonstration to learn FDM]")
-      # S, nS, A = self.pre_demonstration()
+      print("\n[Pre-Demonstration to learn FDM]")
+      S, nS, A = self.pre_demonstration()
       # Add to Experience Buffer
-      # for id in range(0, len(S)):
-      #   self.ExpBuff.append((S[id], nS[id], A[id]))
-      # self.update_fdm()
+      for id in range(0, len(S)):
+        self.ExpBuff.append((S[id], nS[id], A[id]))
+      self.update_fdm()
 
       # Optional: Train initial policy from demonstrations
-      # print("\n[Training initial policy]")      
+      # print("\n[Training initial policy]")
       # self.update_policy()
     
     # Init model saver
@@ -229,14 +229,12 @@ class BCOACH():
       # if should(1):
       #   self.update_policy()
       ##########################################
-      # COACH      
+      # COACH
       self.coach()
 
-      # update forward dynamic model ##############
-      # S, nS, A = self.post_demonstration(self.M)
-      # for id in range(0, len(S)):
-      #   self.ExpBuff.append((S[id], nS[id], A[id]))
-      # self.update_fdm()
+      # update forward dynamic model ##############      
+      # if should(2):
+      #   self.update_fdm()
       #############################################
       if should(args.print_freq):
 

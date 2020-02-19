@@ -5,7 +5,7 @@ from fdm_lunarl import *
 import gym
 
 class BCOACH_lunarlander(BCOACH):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=5000, M=200, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=8000, M=200, batch_size=32):
     BCOACH.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M, batch_size=batch_size)
 
     # set which game to play
@@ -86,7 +86,7 @@ class BCOACH_lunarlander(BCOACH):
         state = self.env.reset()
 
       prev_s = state
-      state = np.reshape(state, [-1, self.state_dim])
+      # state = np.reshape(state, [-1, self.state_dim])
 
       A = np.random.randint(self.action_dim)
       a = np.zeros([self.action_dim])
@@ -133,8 +133,17 @@ class BCOACH_lunarlander(BCOACH):
         # Discrete Actions
         curr_action = np.random.randint(self.action_dim)
 
-        # Query ifdm to get next state
-        nstate = fdm(state, curr_action)
+        # Query ifdm to get next state (true or learnt)
+        # True FDM:
+        # nstate = fdm(state, curr_action)
+        # Learnt FDM:
+        state = np.reshape(state, [-1, self.state_dim])
+        # Discrete Actions
+        a = np.zeros(self.action_dim)
+        a[curr_action] = 1
+        A = np.reshape(a, [-1, self.action_dim])
+        nstate = self.eval_fdm(state, A)
+        nstate = np.reshape(nstate, [-1])
 
         # Check cost
         if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity
@@ -164,8 +173,17 @@ class BCOACH_lunarlander(BCOACH):
       # Discrete Actions
       curr_action = np.random.randint(self.action_dim)
 
-      # Query ifdm to get next state
-      nstate = fdm(state, curr_action)
+      # Query ifdm to get next state (true or learnt)
+      # True FDM:
+      # nstate = fdm(state, curr_action)
+      # Learnt FDM:
+      state = np.reshape(state, [-1, self.state_dim])
+      # Discrete Actions
+      a = np.zeros(self.action_dim)
+      a[curr_action] = 1
+      A = np.reshape(a, [-1, self.action_dim])
+      nstate = self.eval_fdm(state, A)
+      nstate = np.reshape(nstate, [-1])
 
       # Check cost
       cost = sum(abs(nstate_required - nstate))
@@ -205,7 +223,7 @@ class BCOACH_lunarlander(BCOACH):
 
       # Update policy
       if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero i.e. is valid
-        print("Feedback", self.feedback_dict.get(h_fb))
+        print("Feedback", h_fb)
         h_counter += 1 # Feedback counter
 
         # Get new state transition label using feedback
@@ -236,25 +254,32 @@ class BCOACH_lunarlander(BCOACH):
         self.update_policy_feedback()
 
         # Act using action based on h_feedback
-        A = np.reshape(a, [-1])
+        a = np.reshape(a, [-1])
         # Discrete actions
-        A = np.argmax(A)
+        A = np.argmax(a)
         state, reward, terminal, _ = self.env.step(A)
         total_reward += reward
         state = np.reshape(state, [-1, self.state_dim])
-        # TODO: Add to ExpBuff
+
+        # Add to ExpBuff
+        self.ExpBuff.append((prev_s[0], state[0], a))
+        if (len(self.ExpBuff) > self.maxExpBuffSize):
+          self.ExpBuff.pop(0)
       else:
         # Use current policy
         # Map action from state
-        A = np.reshape(self.eval_policy(state), [-1])
+        a = np.reshape(self.eval_policy(state), [-1])
         # Discrete actions
-        A = np.argmax(A)
+        A = np.argmax(a)
 
         # Act
         state, reward, terminal, _ = self.env.step(A)
         total_reward += reward
         state = np.reshape(state, [-1, self.state_dim])
-        # TODO: Add to ExpBuff
+        # Add to ExpBuff
+        self.ExpBuff.append((prev_s[0], state[0], a))
+        if (len(self.ExpBuff) > self.maxExpBuffSize):
+          self.ExpBuff.pop(0)
 
         # Train every k time steps
       if t_counter % self.coach_training_rate == 0:
