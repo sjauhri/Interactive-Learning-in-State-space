@@ -207,12 +207,12 @@ class BCOACH():
       self.sess.run(tf.global_variables_initializer())
     
       # Optional: Learn FDM using pre-demonstration exploration
-      print("\n[Pre-Demonstration to learn FDM]")
-      S, nS, A = self.pre_demonstration()
-      # Add to Experience Buffer
-      for id in range(0, len(S)):
-        self.ExpBuff.append((S[id], nS[id], A[id]))
-      self.update_fdm()
+      # print("\n[Pre-Demonstration to learn FDM]")
+      # S, nS, A = self.pre_demonstration()
+      # # Add to Experience Buffer
+      # for id in range(0, len(S)):
+      #   self.ExpBuff.append((S[id], nS[id], A[id]))
+      # self.update_fdm()
 
       # Optional: Train initial policy from demonstrations
       # print("\n[Training initial policy]")
