@@ -137,9 +137,9 @@ class BCOACH_lunarlandercont(BCOACH):
 
         # Query ifdm to get next state (true or learnt)
         # True FDM:
-        nstate = fdm(state, curr_action)
+        nstate = fdm_cont(state, curr_action)
         # Learnt FDM:
-        state = np.reshape(state, [-1, self.state_dim])
+        # state = np.reshape(state, [-1, self.state_dim])
         # Continuous Actions
         # A = np.reshape(curr_action, [-1, self.action_dim])
         # nstate = self.eval_fdm(state, A)
@@ -174,7 +174,7 @@ class BCOACH_lunarlandercont(BCOACH):
 
       # Query ifdm to get next state (true or learnt)
       # True FDM:
-      nstate = fdm(state, curr_action)
+      nstate = fdm_cont(state, curr_action)
       # Learnt FDM:
       # state = np.reshape(state, [-1, self.state_dim])
       # # Continuous Actions
