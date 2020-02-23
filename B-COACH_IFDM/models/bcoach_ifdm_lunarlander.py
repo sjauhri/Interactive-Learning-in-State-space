@@ -3,6 +3,7 @@ from bcoach_ifdm import BCOACH
 from feedback import *
 from fdm_lunarl import *
 import gym
+import time
 
 class BCOACH_lunarlander(BCOACH):
   def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=8000, M=200, batch_size=32):
@@ -127,7 +128,10 @@ class BCOACH_lunarlander(BCOACH):
     
     if (h_fb == DO_NOTHING):
       min_action = 0 # Do Nothing action
-    else:      
+      # Debug: equal timing
+      time.sleep(0.004)
+    else:
+      prev_time = time.time()
       for _ in range(1, self.ifdm_queries+1):
         # Choose random action
         # Discrete Actions
@@ -155,6 +159,8 @@ class BCOACH_lunarlander(BCOACH):
         if(cost < min_cost):
           min_cost = cost
           min_action = curr_action
+      # Debug: equal timing
+      print(time.time() - prev_time)
 
     # Discrete actions: return a = A in one hot
     min_a = np.zeros(self.action_dim)
@@ -266,6 +272,9 @@ class BCOACH_lunarlander(BCOACH):
         if (len(self.ExpBuff) > self.maxExpBuffSize):
           self.ExpBuff.pop(0)
       else:
+        # Debug: equal timing
+        time.sleep(0.004)
+
         # Use current policy
         # Map action from state
         a = np.reshape(self.eval_policy(state), [-1])

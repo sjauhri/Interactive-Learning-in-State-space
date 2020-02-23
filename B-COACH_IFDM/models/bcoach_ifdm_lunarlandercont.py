@@ -3,6 +3,7 @@ from bcoach_ifdm import BCOACH
 from feedback import *
 from fdm_lunarl import *
 import gym
+import time
 
 class BCOACH_lunarlandercont(BCOACH):
   def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=5000, M=200, batch_size=32):
@@ -125,8 +126,11 @@ class BCOACH_lunarlandercont(BCOACH):
     min_cost = np.Inf
     
     if (h_fb == DO_NOTHING):
-      min_action = np.array((-0.1,0)) # Do Nothing action
-    else:      
+      min_action = np.array((-0.5,0)) # Do Nothing action
+      # Debug: equal timing
+      time.sleep(0.02)
+    else:
+      # prev_time = time.time()
       for _ in range(1, self.ifdm_queries+1):
         # Choose random action
         # Continous Actions
@@ -155,6 +159,8 @@ class BCOACH_lunarlandercont(BCOACH):
         if(cost < min_cost):
           min_cost = cost
           min_action = curr_action
+      # Debug: equal timing
+      # print(time.time() - prev_time)
 
     return min_action
 
@@ -224,7 +230,7 @@ class BCOACH_lunarlandercont(BCOACH):
 
         # Get action from ifdm
         a = self.get_corrected_action(h_fb, state[0], state_corrected)
-        print("Computed_IFDM action: ", a)
+        # print("Computed_IFDM action: ", a)
         # Debug incorrect action
         # if not args.cont_actions:
         #   if ((self.feedback_dict.get(h_fb) == -1 and a[0][1] == 1) or (self.feedback_dict.get(h_fb) == 1 and a[0][0] == 1)):
@@ -259,6 +265,9 @@ class BCOACH_lunarlandercont(BCOACH):
         if (len(self.ExpBuff) > self.maxExpBuffSize):
           self.ExpBuff.pop(0)
       else:
+        # Debug: equal timing
+        time.sleep(0.02)
+
         # Use current policy
         # Map action from state
         a = np.reshape(self.eval_policy(state), [-1])

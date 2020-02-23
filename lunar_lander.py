@@ -131,8 +131,8 @@ class LunarLander(gym.Env, EzPickle):
 
         # terrain
         CHUNKS = 11
-        #height = self.np_random.uniform(0, H/2, size=(CHUNKS+1,) )
-        height = [3.09998586, 1.08093684, 5.54006752, 2.09032493, 5.6831945,  0.8786443, 2.78254244, 5.16813211, 3.01017845, 0.1806666,  5.66644107, 3.72253987]
+        height = self.np_random.uniform(0, H/2, size=(CHUNKS+1,) )
+        # height = [3.09998586, 1.08093684, 5.54006752, 2.09032493, 5.6831945,  0.8786443, 2.78254244, 5.16813211, 3.01017845, 0.1806666,  5.66644107, 3.72253987]
         chunk_x  = [W/(CHUNKS-1)*i for i in range(CHUNKS)]
         self.helipad_x1 = chunk_x[CHUNKS//2-1]
         self.helipad_x2 = chunk_x[CHUNKS//2+1]

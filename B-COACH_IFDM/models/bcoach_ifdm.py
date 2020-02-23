@@ -15,7 +15,7 @@ class BCOACH():
     self.ExpBuff  = []                      # Experience buffer for replay
     self.DemoBuff  = []                     # Demonstration buffer
     self.maxExpBuffSize = 20000             # Max Experience buffer size
-    self.maxDemoBuffSize = 1500             # Max Demonstration buffer size
+    self.maxDemoBuffSize = 2000             # Max Demonstration buffer size
     self.coach_training_rate  = 10          # COACH training rate in the episode
 
     # initial session
