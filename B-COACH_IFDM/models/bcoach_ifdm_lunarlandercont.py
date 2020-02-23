@@ -125,7 +125,7 @@ class BCOACH_lunarlandercont(BCOACH):
     min_cost = np.Inf
     
     if (h_fb == DO_NOTHING):
-      min_action = np.array((0,0)) # Do Nothing action
+      min_action = np.array((-0.5,0)) # Do Nothing action
     else:      
       for _ in range(1, self.ifdm_queries+1):
         # Choose random action

@@ -231,7 +231,7 @@ class BCOACH_lunarlander(BCOACH):
 
         # Get action from ifdm
         a = self.get_corrected_action(h_fb, state[0], state_corrected)
-        print("Computed_IFDM action: ", a)
+        # print("Computed_IFDM action: ", a)
         # Debug incorrect action
         # if not args.cont_actions:
         #   if ((self.feedback_dict.get(h_fb) == -1 and a[0][1] == 1) or (self.feedback_dict.get(h_fb) == 1 and a[0][0] == 1)):
