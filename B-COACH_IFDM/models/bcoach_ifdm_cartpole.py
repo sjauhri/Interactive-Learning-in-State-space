@@ -86,7 +86,7 @@ class BCOACH_cartpole(BCOACH):
         state = self.env.reset()
 
       prev_s = state
-      state = np.reshape(state, [-1, self.state_dim])
+      # state = np.reshape(state, [-1, self.state_dim])
 
       A = np.random.randint(self.action_dim)
       a = np.zeros([self.action_dim])
@@ -127,8 +127,17 @@ class BCOACH_cartpole(BCOACH):
       # Discrete actions
       curr_action = np.random.randint(self.action_dim)
 
-      # Query ifdm to get next state
+      # Query ifdm to get next state (true or learnt)
+      # True FDM:
       nstate = fdm(state, curr_action)
+      # Learnt FDM:
+      # state = np.reshape(state, [-1, self.state_dim])
+      # # Discrete Actions
+      # a = np.zeros(self.action_dim)
+      # a[curr_action] = 1
+      # A = np.reshape(a, [-1, self.action_dim])
+      # nstate = self.eval_fdm(state, A)
+      # nstate = np.reshape(nstate, [-1])
 
       # Check cost
       cost = abs(state_corrected - nstate[1])
@@ -155,8 +164,17 @@ class BCOACH_cartpole(BCOACH):
       # Discrete Actions
       curr_action = np.random.randint(self.action_dim)
 
-      # Query ifdm to get next state
+      # Query ifdm to get next state (true or learnt)
+      # True FDM:
       nstate = fdm(state, curr_action)
+      # Learnt FDM:
+      # state = np.reshape(state, [-1, self.state_dim])
+      # # Discrete Actions
+      # a = np.zeros(self.action_dim)
+      # a[curr_action] = 1
+      # A = np.reshape(a, [-1, self.action_dim])
+      # nstate = self.eval_fdm(state, A)
+      # nstate = np.reshape(nstate, [-1])
 
       # Check cost
       cost = sum(abs(nstate_required - nstate))
@@ -196,7 +214,7 @@ class BCOACH_cartpole(BCOACH):
 
       # Update policy
       if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero i.e. is valid
-        print("Feedback", self.feedback_dict.get(h_fb))
+        # print("Feedback", h_fb)
         h_counter += 1 # Feedback counter
 
         # Get new state transition label using feedback
@@ -204,7 +222,7 @@ class BCOACH_cartpole(BCOACH):
 
         # Get action from ifdm
         a = self.get_corrected_action(h_fb, state[0], state_corrected)
-        print("Computed_IFDM action: ", a)
+        # print("Computed_IFDM action: ", a)
         # Debug incorrect action
         # if not args.cont_actions:
         #   if ((self.feedback_dict.get(h_fb) == -1 and a[0][1] == 1) or (self.feedback_dict.get(h_fb) == 1 and a[0][0] == 1)):
@@ -227,25 +245,32 @@ class BCOACH_cartpole(BCOACH):
         self.update_policy_feedback()
 
         # Act using action based on h_feedback
-        A = np.reshape(a, [-1])
+        a = np.reshape(a, [-1])
         # Discrete actions
-        A = np.argmax(A)
+        A = np.argmax(a)
         state, reward, terminal, _ = self.env.step(A)
         total_reward += reward
         state = np.reshape(state, [-1, self.state_dim])
-        # TODO: Add to ExpBuff
+
+        # Add to ExpBuff
+        self.ExpBuff.append((prev_s[0], state[0], a))
+        if (len(self.ExpBuff) > self.maxExpBuffSize):
+          self.ExpBuff.pop(0)
       else:
         # Use current policy
         # Map action from state
-        A = np.reshape(self.eval_policy(state), [-1])
+        a = np.reshape(self.eval_policy(state), [-1])
         # Discrete actions
-        A = np.argmax(A)
+        A = np.argmax(a)
 
         # Act
         state, reward, terminal, _ = self.env.step(A)
         total_reward += reward
         state = np.reshape(state, [-1, self.state_dim])
-        # TODO: Add to ExpBuff
+        # Add to ExpBuff
+        self.ExpBuff.append((prev_s[0], state[0], a))
+        if (len(self.ExpBuff) > self.maxExpBuffSize):
+          self.ExpBuff.pop(0)
 
         # Train every k time steps
       if t_counter % self.coach_training_rate == 0:

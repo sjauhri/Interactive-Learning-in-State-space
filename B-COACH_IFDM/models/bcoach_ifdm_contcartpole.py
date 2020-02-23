@@ -129,8 +129,15 @@ class BCOACH_contcartpole(BCOACH):
       # val_set = [0.2*x for x in range(-5,6)]
       # curr_action = np.random.choice(val_set, self.action_dim)
 
-      # Query ifdm to get next state
+      # Query ifdm to get next state (true or learnt)
+      # True FDM:
       nstate = fdm_cont(state, curr_action)
+      # Learnt FDM:
+      # state = np.reshape(state, [-1, self.state_dim])
+      # Continuous Actions
+      # A = np.reshape(curr_action, [-1, self.action_dim])
+      # nstate = self.eval_fdm(state, A)
+      # nstate = np.reshape(nstate, [-1])
 
       # Check cost
       cost = abs(state_corrected - nstate[1])
@@ -156,8 +163,15 @@ class BCOACH_contcartpole(BCOACH):
       # val_set = [0.2*x for x in range(-5,6)]
       # curr_action = np.random.choice(val_set, self.action_dim)
 
-      # Query ifdm to get next state
+      # Query ifdm to get next state (true or learnt)
+      # True FDM:
       nstate = fdm_cont(state, curr_action)
+      # Learnt FDM:
+      # state = np.reshape(state, [-1, self.state_dim])
+      # # Continuous Actions
+      # A = np.reshape(curr_action, [-1, self.action_dim])
+      # nstate = self.eval_fdm(state, A)
+      # nstate = np.reshape(nstate, [-1])
 
       # Check cost
       cost = sum(abs(nstate_required - nstate))
@@ -193,15 +207,15 @@ class BCOACH_contcartpole(BCOACH):
 
       # Update policy
       if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero i.e. is valid
-        print("Feedback", self.feedback_dict.get(h_fb))
+        # print("Feedback", h_fb)
         h_counter += 1 # Feedback counter
 
         # Get new state transition label using feedback
         state_corrected = self.get_state_corrected(h_fb, state[0])        
 
         # Get action from ifdm
-        A = self.get_corrected_action(h_fb, state[0], state_corrected)
-        print("Computed_IFDM action: ", A)
+        a = self.get_corrected_action(h_fb, state[0], state_corrected)
+        # print("Computed_IFDM action: ", a)
         # Debug incorrect action
         # if not args.cont_actions:
         #   if ((self.feedback_dict.get(h_fb) == -1 and a[0][1] == 1) or (self.feedback_dict.get(h_fb) == 1 and a[0][0] == 1)):
@@ -211,11 +225,11 @@ class BCOACH_contcartpole(BCOACH):
         #     print("MISLABEL!")
 
         # Update policy (immediate)
-        A = np.reshape(A, [-1, self.action_dim])
-        self.update_policy_feedback_immediate(state, A)
+        a = np.reshape(a, [-1, self.action_dim])
+        self.update_policy_feedback_immediate(state, a)
 
         # Add state transition pair to demo buffer
-        self.DemoBuff.append((state[0], A[0]))
+        self.DemoBuff.append((state[0], a[0]))
         # If Demo buffer full, remove oldest entry
         if (len(self.DemoBuff) > self.maxDemoBuffSize):
             self.DemoBuff.pop(0)
@@ -224,21 +238,32 @@ class BCOACH_contcartpole(BCOACH):
         self.update_policy_feedback()
 
         # Act using action based on h_feedback
-        A = np.reshape(A, [-1])
+        a = np.reshape(a, [-1])
+        # Continuous actions
+        A = np.copy(a)
         state, reward, terminal, _ = self.env.step(A)
         total_reward += reward
         state = np.reshape(state, [-1, self.state_dim])
-        # TODO: Add to ExpBuff
+
+        # Add to ExpBuff
+        self.ExpBuff.append((prev_s[0], state[0], a))
+        if (len(self.ExpBuff) > self.maxExpBuffSize):
+          self.ExpBuff.pop(0)
       else:
         # Use current policy
         # Map action from state
-        A = np.reshape(self.eval_policy(state), [-1])
+        a = np.reshape(self.eval_policy(state), [-1])
+        # Continuous actions
+        A = np.copy(a)
 
         # Act
         state, reward, terminal, _ = self.env.step(A)
         total_reward += reward
         state = np.reshape(state, [-1, self.state_dim])
-        # TODO: Add to ExpBuff
+        # Add to ExpBuff
+        self.ExpBuff.append((prev_s[0], state[0], a))
+        if (len(self.ExpBuff) > self.maxExpBuffSize):
+          self.ExpBuff.pop(0)
 
         # Train every k time steps
       if t_counter % self.coach_training_rate == 0:

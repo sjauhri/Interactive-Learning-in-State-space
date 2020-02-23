@@ -223,7 +223,7 @@ class BCOACH_lunarlander(BCOACH):
 
       # Update policy
       if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero i.e. is valid
-        print("Feedback", h_fb)
+        # print("Feedback", h_fb)
         h_counter += 1 # Feedback counter
 
         # Get new state transition label using feedback
