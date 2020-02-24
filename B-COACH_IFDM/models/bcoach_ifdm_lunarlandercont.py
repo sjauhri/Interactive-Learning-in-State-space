@@ -129,9 +129,37 @@ class BCOACH_lunarlandercont(BCOACH):
       min_action = np.array((-0.5,0)) # Do Nothing action
       # Debug: equal timing
       time.sleep(0.02)
+    elif (args.learntFDM):
+      # prev_time = time.time()
+      # Learnt FDM:
+
+      # state = np.reshape(state, [-1, self.state_dim])
+      # Make a vector of same states
+      States = np.tile(state, (self.ifdm_queries,1))
+      # Choose random actions
+      # Continuous Actions
+      # A = np.reshape(curr_action, [-1, self.action_dim])
+      Actions = np.random.uniform(-1, 1, (self.ifdm_queries,self.action_dim) )
+      # Query ifdm to get next state
+      Nstates = self.eval_fdm(States, Actions)
+      # nstate = np.reshape(nstate, [-1])
+
+      # Calculate cost            
+      if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity
+        # Automatic broadcasting - CHECK!
+        cost = abs(state_corrected - Nstates[:][5])
+      else:                                       # Vertical velocity
+        cost = abs(state_corrected - Nstates[:][3])
+
+      # Check for min_cost
+      min_cost_index = cost.argmin(axis=0)
+      min_action = Actions[min_cost_index]
+
     else:
       # prev_time = time.time()
       for _ in range(1, self.ifdm_queries+1):
+        # True FDM:
+
         # Choose random action
         # Continous Actions
         curr_action = np.random.uniform(-1, 1, self.action_dim)
@@ -139,15 +167,8 @@ class BCOACH_lunarlandercont(BCOACH):
         # val_set = [0.2*x for x in range(-5,6)]
         # curr_action = np.random.choice(val_set, self.action_dim)
 
-        # Query ifdm to get next state (true or learnt)
-        # True FDM:
+        # Query ifdm to get next state
         nstate = fdm_cont(state, curr_action)
-        # Learnt FDM:
-        # state = np.reshape(state, [-1, self.state_dim])
-        # Continuous Actions
-        # A = np.reshape(curr_action, [-1, self.action_dim])
-        # nstate = self.eval_fdm(state, A)
-        # nstate = np.reshape(nstate, [-1])
 
         # Check cost
         if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity
@@ -169,32 +190,36 @@ class BCOACH_lunarlandercont(BCOACH):
     # Continous Actions
     min_action = np.random.uniform(-1, 1, self.action_dim)
     min_cost = np.Inf
-        
-    for _ in range(1, self.ifdm_queries+1):
-      # Choose random action
-      # Continous Actions
-      curr_action = np.random.uniform(-1, 1, self.action_dim)
-      # Discretization
-      # val_set = [0.2*x for x in range(-5,6)]
-      # curr_action = np.random.choice(val_set, self.action_dim)
-
-      # Query ifdm to get next state (true or learnt)
-      # True FDM:
-      nstate = fdm_cont(state, curr_action)
+    
+    if (args.learntFDM):
       # Learnt FDM:
       # state = np.reshape(state, [-1, self.state_dim])
-      # # Continuous Actions
-      # A = np.reshape(curr_action, [-1, self.action_dim])
-      # nstate = self.eval_fdm(state, A)
-      # nstate = np.reshape(nstate, [-1])
+      # Make a vector of same state
+      S = np.full((len(state),self.ifdm_queries),state) 
+      # Continuous Actions
+      A = np.reshape(curr_action, [-1, self.action_dim])
+      nstate = self.eval_fdm(state, A)
+      nstate = np.reshape(nstate, [-1])
+    else:
+      # True FDM:
+      for _ in range(1, self.ifdm_queries+1):
+        # Choose random action
+        # Continous Actions
+        curr_action = np.random.uniform(-1, 1, self.action_dim)
+        # Discretization
+        # val_set = [0.2*x for x in range(-5,6)]
+        # curr_action = np.random.choice(val_set, self.action_dim)
 
-      # Check cost
-      cost = sum(abs(nstate_required - nstate))
-      
-      # Check for min_cost
-      if(cost < min_cost):
-        min_cost = cost
-        min_action = curr_action
+        # Query ifdm to get next state        
+        nstate = fdm_cont(state, curr_action)
+
+        # Check cost
+        cost = sum(abs(nstate_required - nstate))
+        
+        # Check for min_cost
+        if(cost < min_cost):
+          min_cost = cost
+          min_action = curr_action
 
     return min_action    
 

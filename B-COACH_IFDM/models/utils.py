@@ -19,7 +19,7 @@ parser.add_argument("--epochTrainIts", type=int, default=5000, help="the number 
 parser.add_argument("--M", type=int, default=50, help="the number of post demonstration examples")
 parser.add_argument('--printTime', action='store_true')
 parser.add_argument('--usePrevSession', action='store_true')
-parser.add_argument('--useSPM', action='store_true')
+parser.add_argument('--learntFDM', action='store_true')
 
 
 parser.add_argument("--batch_size", type=int, default=32, help="number of examples in batch")
