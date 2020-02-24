@@ -160,7 +160,7 @@ class BCOACH_lunarlander(BCOACH):
           min_cost = cost
           min_action = curr_action
       # Debug: equal timing
-      print(time.time() - prev_time)
+      # print(time.time() - prev_time)
 
     # Discrete actions: return a = A in one hot
     min_a = np.zeros(self.action_dim)
