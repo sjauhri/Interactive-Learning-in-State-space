@@ -19,7 +19,7 @@ class BCOACH_lunarlander(BCOACH):
     # Initialise Human feedback (call render before this)
     self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
-    # 0.01, 0.05, 0.1, 0.5, 1, 5
+    # 0.01, 0.05, 0.1, 0.5, 1
     self.errorConst = 0.1
     # Render time delay for this environment (in s)
     self.render_delay = 0.05

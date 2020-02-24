@@ -207,16 +207,18 @@ class BCOACH():
       self.sess.run(tf.global_variables_initializer())
     
       # Optional: Learn FDM using pre-demonstration exploration
-      # print("\n[Pre-Demonstration to learn FDM]")
-      # S, nS, A = self.pre_demonstration()
-      # # Add to Experience Buffer
-      # for id in range(0, len(S)):
-      #   self.ExpBuff.append((S[id], nS[id], A[id]))
-      # self.update_fdm()
+      if (args.learntFDM):
+        print("\n[Pre-Demonstration to learn FDM]")
+        S, nS, A = self.pre_demonstration()
+        # Add to Experience Buffer
+        for id in range(0, len(S)):
+          self.ExpBuff.append((S[id], nS[id], A[id]))
+        self.update_fdm()
 
       # Optional: Train initial policy from demonstrations
-      # print("\n[Training initial policy]")
-      # self.update_policy()
+      if (args.initPolicy):      
+        print("\n[Training initial policy]")
+        self.update_policy()
     
     # Init model saver
     saver = tf.train.Saver(max_to_keep=1)
@@ -229,6 +231,7 @@ class BCOACH():
       # if should(1):
       #   self.update_policy()
       ##########################################
+      
       # COACH
       self.coach()
 
@@ -236,6 +239,7 @@ class BCOACH():
       # if should(2):
       #   self.update_fdm()
       #############################################
+      
       if should(args.print_freq):
 
         policy_reward = 0
@@ -265,16 +269,6 @@ class BCOACH():
       if should(args.save_freq):
         print('saving session')
         saver.save(self.sess, args.model_dir)
-
-      # Debug
-      # After 5 iterations, redo pre demo dynamics learning
-      # if should(2):
-      #   S, nS, A = self.pre_demonstration()
-      #   for id in range(0, len(S)):
-      #     self.ExpBuff.append((S[id], nS[id], A[id]))
-      #     if (len(self.ExpBuff) > self.maxExpBuffSize):
-      #       self.ExpBuff.pop(0)
-      #   self.update_fdm()
 
 
   def test(self):

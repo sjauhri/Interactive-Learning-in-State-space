@@ -19,8 +19,8 @@ class BCOACH_lunarlandercont(BCOACH):
     # Initialise Human feedback (call render before this)
     self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
-    # 0.01, 0.05, 0.1, 0.5, 1, 5
-    self.errorConst = 0.1
+    # 0.01, 0.05, 0.1, 0.5, 1
+    self.errorConst = 0.08
     # Render time delay for this environment (in s)
     self.render_delay = 0.05
     # Choose which feedback is valid with fb dictionary
@@ -127,33 +127,38 @@ class BCOACH_lunarlandercont(BCOACH):
     
     if (h_fb == DO_NOTHING):
       min_action = np.array((-0.5,0)) # Do Nothing action
-      # Debug: equal timing
-      time.sleep(0.02)
+      if (args.learntFDM):
+        # Debug: equal timing
+        # time.sleep(0.02)
+        pass
+      else:
+        # Debug: equal timing
+        time.sleep(0.02)
     elif (args.learntFDM):
       # prev_time = time.time()
       # Learnt FDM:
-
-      # state = np.reshape(state, [-1, self.state_dim])
+      
       # Make a vector of same states
       States = np.tile(state, (self.ifdm_queries,1))
       # Choose random actions
       # Continuous Actions
-      # A = np.reshape(curr_action, [-1, self.action_dim])
       Actions = np.random.uniform(-1, 1, (self.ifdm_queries,self.action_dim) )
       # Query ifdm to get next state
-      Nstates = self.eval_fdm(States, Actions)
-      # nstate = np.reshape(nstate, [-1])
+      Nstates = self.eval_fdm(States, Actions)      
 
-      # Calculate cost            
+      # Calculate cost
       if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity
-        # Automatic broadcasting - CHECK!
-        cost = abs(state_corrected - Nstates[:][5])
+        # Automatic broadcasting
+        cost = abs(state_corrected - Nstates[:,5])
       else:                                       # Vertical velocity
-        cost = abs(state_corrected - Nstates[:][3])
+        cost = abs(state_corrected - Nstates[:,3])
 
       # Check for min_cost
       min_cost_index = cost.argmin(axis=0)
       min_action = Actions[min_cost_index]
+
+      # Debug: equal timing
+      # print(time.time() - prev_time)
 
     else:
       # prev_time = time.time()
@@ -193,13 +198,23 @@ class BCOACH_lunarlandercont(BCOACH):
     
     if (args.learntFDM):
       # Learnt FDM:
-      # state = np.reshape(state, [-1, self.state_dim])
-      # Make a vector of same state
-      S = np.full((len(state),self.ifdm_queries),state) 
+      
+      # Make a vector of same states
+      States = np.tile(state, (self.ifdm_queries,1))
+      # Choose random actions
       # Continuous Actions
-      A = np.reshape(curr_action, [-1, self.action_dim])
-      nstate = self.eval_fdm(state, A)
-      nstate = np.reshape(nstate, [-1])
+      Actions = np.random.uniform(-1, 1, (self.ifdm_queries,self.action_dim) )
+      # Query ifdm to get next state
+      Nstates = self.eval_fdm(States, Actions)      
+
+      # Calculate cost
+      # Automatic broadcasting
+      cost = np.sum(abs(nstate_required - Nstates[:]) , axis=1)
+
+      # Check for min_cost
+      min_cost_index = cost.argmin(axis=0)
+      min_action = Actions[min_cost_index]
+
     else:
       # True FDM:
       for _ in range(1, self.ifdm_queries+1):
@@ -242,8 +257,6 @@ class BCOACH_lunarlandercont(BCOACH):
 
       # Get feedback signal
       h_fb = self.human_feedback.get_h()
-      # Debug
-      # h_fb = 3
 
       # Update policy
       if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero i.e. is valid
@@ -290,8 +303,13 @@ class BCOACH_lunarlandercont(BCOACH):
         if (len(self.ExpBuff) > self.maxExpBuffSize):
           self.ExpBuff.pop(0)
       else:
-        # Debug: equal timing
-        time.sleep(0.02)
+        if (args.learntFDM):
+          # Debug: equal timing
+          # time.sleep(0.02)
+          pass
+        else:
+          # Debug: equal timing
+          time.sleep(0.02)
 
         # Use current policy
         # Map action from state

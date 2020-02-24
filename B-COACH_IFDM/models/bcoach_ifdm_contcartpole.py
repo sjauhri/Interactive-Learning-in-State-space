@@ -5,7 +5,7 @@ from fdm_cartpole import *
 import gym
 
 class BCOACH_contcartpole(BCOACH):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=1000, M=10, batch_size=8):  
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=4000, M=50, batch_size=8):  
     BCOACH.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M, batch_size=batch_size)
 
     # set which game to play
@@ -19,7 +19,7 @@ class BCOACH_contcartpole(BCOACH):
     self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5
-    self.errorConst = 0.1
+    self.errorConst = 0.2
     # Render time delay for this environment (in s)
     self.render_delay = 0.05
     # Choose which feedback is valid with fb dictionary
@@ -32,7 +32,7 @@ class BCOACH_contcartpole(BCOACH):
       DO_NOTHING: 0
     }
 
-    self.ifdm_queries = 30 # One continous action.
+    self.ifdm_queries = 40 # One continous action.
   
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
@@ -121,31 +121,43 @@ class BCOACH_contcartpole(BCOACH):
     min_action = np.random.uniform(-1, 1, self.action_dim)
     min_cost = np.Inf
     
-    for _ in range(1, self.ifdm_queries+1):
-      # Choose random action
-      # Continous Actions
-      curr_action = np.random.uniform(-1, 1, self.action_dim)
-      # Discretization
-      # val_set = [0.2*x for x in range(-5,6)]
-      # curr_action = np.random.choice(val_set, self.action_dim)
-
-      # Query ifdm to get next state (true or learnt)
-      # True FDM:
-      nstate = fdm_cont(state, curr_action)
+    if (args.learntFDM):
       # Learnt FDM:
-      # state = np.reshape(state, [-1, self.state_dim])
-      # Continuous Actions
-      # A = np.reshape(curr_action, [-1, self.action_dim])
-      # nstate = self.eval_fdm(state, A)
-      # nstate = np.reshape(nstate, [-1])
-
-      # Check cost
-      cost = abs(state_corrected - nstate[1])
       
+      # Make a vector of same states
+      States = np.tile(state, (self.ifdm_queries,1))
+      # Choose random actions
+      # Continuous Actions
+      Actions = np.random.uniform(-1, 1, (self.ifdm_queries,self.action_dim) )
+      # Query ifdm to get next state
+      Nstates = self.eval_fdm(States, Actions)      
+
+      # Calculate cost
+      # Automatic broadcasting
+      cost = abs(state_corrected - Nstates[:,1]) # Velocity
+
       # Check for min_cost
-      if(cost < min_cost):
-        min_cost = cost
-        min_action = curr_action
+      min_cost_index = cost.argmin(axis=0)
+      min_action = Actions[min_cost_index]
+
+    else:
+      for _ in range(1, self.ifdm_queries+1):
+        # True FDM:
+
+        # Choose random action
+        # Continous Actions
+        curr_action = np.random.uniform(-1, 1, self.action_dim)
+
+        # Query ifdm to get next state
+        nstate = fdm_cont(state, curr_action)
+
+        # Check cost
+        cost = abs(state_corrected - nstate[1])
+        
+        # Check for min_cost
+        if(cost < min_cost):
+          min_cost = cost
+          min_action = curr_action
 
     return min_action
 
@@ -154,32 +166,43 @@ class BCOACH_contcartpole(BCOACH):
     # Continous Actions
     min_action = np.random.uniform(-1, 1, self.action_dim)
     min_cost = np.Inf
-        
-    for _ in range(1, self.ifdm_queries+1):
-      # Choose random action
-      # Continous Actions
-      curr_action = np.random.uniform(-1, 1, self.action_dim)
-      # Discretization
-      # val_set = [0.2*x for x in range(-5,6)]
-      # curr_action = np.random.choice(val_set, self.action_dim)
-
-      # Query ifdm to get next state (true or learnt)
-      # True FDM:
-      nstate = fdm_cont(state, curr_action)
+    
+    if (args.learntFDM):
       # Learnt FDM:
-      # state = np.reshape(state, [-1, self.state_dim])
-      # # Continuous Actions
-      # A = np.reshape(curr_action, [-1, self.action_dim])
-      # nstate = self.eval_fdm(state, A)
-      # nstate = np.reshape(nstate, [-1])
-
-      # Check cost
-      cost = sum(abs(nstate_required - nstate))
       
+      # Make a vector of same states
+      States = np.tile(state, (self.ifdm_queries,1))
+      # Choose random actions
+      # Continuous Actions
+      Actions = np.random.uniform(-1, 1, (self.ifdm_queries,self.action_dim) )
+      # Query ifdm to get next state
+      Nstates = self.eval_fdm(States, Actions)      
+
+      # Calculate cost
+      # Automatic broadcasting
+      cost = np.sum(abs(nstate_required - Nstates[:]) , axis=1)
+
       # Check for min_cost
-      if(cost < min_cost):
-        min_cost = cost
-        min_action = curr_action
+      min_cost_index = cost.argmin(axis=0)
+      min_action = Actions[min_cost_index]
+
+    else:
+      # True FDM:
+      for _ in range(1, self.ifdm_queries+1):
+        # Choose random action
+        # Continous Actions
+        curr_action = np.random.uniform(-1, 1, self.action_dim)
+
+        # Query ifdm to get next state        
+        nstate = fdm_cont(state, curr_action)
+
+        # Check cost
+        cost = sum(abs(nstate_required - nstate))
+        
+        # Check for min_cost
+        if(cost < min_cost):
+          min_cost = cost
+          min_action = curr_action
 
     return min_action    
 
@@ -202,12 +225,10 @@ class BCOACH_contcartpole(BCOACH):
 
       # Get feedback signal
       h_fb = self.human_feedback.get_h()
-      # Debug
-      # h_fb = 3
 
       # Update policy
       if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero i.e. is valid
-        # print("Feedback", h_fb)
+        print("Feedback", h_fb)
         h_counter += 1 # Feedback counter
 
         # Get new state transition label using feedback
@@ -215,7 +236,7 @@ class BCOACH_contcartpole(BCOACH):
 
         # Get action from ifdm
         a = self.get_corrected_action(h_fb, state[0], state_corrected)
-        # print("Computed_IFDM action: ", a)
+        print("Computed_IFDM action: ", a)
         # Debug incorrect action
         # if not args.cont_actions:
         #   if ((self.feedback_dict.get(h_fb) == -1 and a[0][1] == 1) or (self.feedback_dict.get(h_fb) == 1 and a[0][0] == 1)):

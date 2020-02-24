@@ -74,7 +74,7 @@
             "request": "launch",
             "program": "/home/snehal/Desktop/Thesis/IfO/B-COACH_IFDM/models/bcoach_ifdm_lunarlandercont.py",
             "console": "integratedTerminal",            
-            "args": ["--mode=train","--input_file=B-COACH_IFDM/demonstration/expert_obs/LunarLanderContinuous-v2.pkl","--result_dir=B-COACH_IFDM/results/bcoach_ifdm/lunarlandercont/","--model_dir=B-COACH_IFDM/model/bcoach_ifdm/lunarlandercont/","--maxEpochs=50","--numExperiments=1"]
+            "args": ["--mode=train","--input_file=B-COACH_IFDM/demonstration/expert_obs/LunarLanderContinuous-v2.pkl","--result_dir=B-COACH_IFDM/results/bcoach_ifdm/lunarlandercont/","--model_dir=B-COACH_IFDM/model/bcoach_ifdm/lunarlandercont/","--maxEpochs=50","--numExperiments=1","--learntFDM"]
         }
     ]
 }

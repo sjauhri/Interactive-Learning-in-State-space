@@ -20,6 +20,7 @@ parser.add_argument("--M", type=int, default=50, help="the number of post demons
 parser.add_argument('--printTime', action='store_true')
 parser.add_argument('--usePrevSession', action='store_true')
 parser.add_argument('--learntFDM', action='store_true')
+parser.add_argument('--initPolicy', action='store_true')
 
 
 parser.add_argument("--batch_size", type=int, default=32, help="number of examples in batch")
