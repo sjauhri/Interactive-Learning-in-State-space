@@ -1,9 +1,8 @@
 from utils import *
 from bcoach_ifdm import BCOACH
-from feedback import *
+from feedback_ext import *
 from fdm_reacher import *
 import gym
-import time
 
 class BCOACH_reacher(BCOACH):
   def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=5000, M=200, batch_size=32):
@@ -16,11 +15,11 @@ class BCOACH_reacher(BCOACH):
     #pdb.set_trace()
     #print(self.env.observation_space.high)
 
-    # Initialise Human feedback (call render before this)
-    self.human_feedback = Feedback(self.env)
+    # Initialise Human feedback in external window
+    self.human_feedback = Feedback_ext()
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
-    self.errorConst = 0.08
+    self.errorConst = 0.5
     # Render time delay for this environment (in s)
     self.render_delay = 0.05
     # Choose which feedback is valid with fb dictionary
@@ -109,14 +108,14 @@ class BCOACH_reacher(BCOACH):
     state_corrected = np.copy(state)
 
     # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()
-    if (h_fb == H_LEFT): # Horizontal position
-      state_corrected = state_corrected[4] - self.errorConst      
+    if (h_fb == H_LEFT): # Horizontal velocity
+      state_corrected = state_corrected[6] - self.errorConst      
     elif (h_fb == H_RIGHT):
-      state_corrected = state_corrected[4] + self.errorConst      
-    elif (h_fb == H_UP): # Vertical position
-      state_corrected = state_corrected[5] + self.errorConst
+      state_corrected = state_corrected[6] + self.errorConst      
+    elif (h_fb == H_UP): # Vertical velocity
+      state_corrected = state_corrected[7] + self.errorConst
     elif (h_fb == H_DOWN):
-      state_corrected = state_corrected[5] - self.errorConst
+      state_corrected = state_corrected[7] - self.errorConst
     return state_corrected
 
   def get_corrected_action(self, h_fb, state, state_corrected):
@@ -148,11 +147,11 @@ class BCOACH_reacher(BCOACH):
       Nstates = self.eval_fdm(States, Actions)      
 
       # Calculate cost
-      if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Horizontal position
+      if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Horizontal velocity
         # Automatic broadcasting
-        cost = abs(state_corrected - Nstates[:,4])
-      else:                                       # Vertical position
-        cost = abs(state_corrected - Nstates[:,5])
+        cost = abs(state_corrected - Nstates[:,6])
+      else:                                       # Vertical velocity
+        cost = abs(state_corrected - Nstates[:,7])
 
       # Check for min_cost
       min_cost_index = cost.argmin(axis=0)
@@ -168,7 +167,8 @@ class BCOACH_reacher(BCOACH):
 
         # Choose random action
         # Continous Actions
-        curr_action = np.random.uniform(-1, 1, self.action_dim)
+        # curr_action = np.random.uniform(-1, 1, self.action_dim)
+        curr_action = [0, np.random.uniform(-1, 1, 1)]
         # Discretization
         # val_set = [0.2*x for x in range(-5,6)]
         # curr_action = np.random.choice(val_set, self.action_dim)
@@ -177,10 +177,10 @@ class BCOACH_reacher(BCOACH):
         nstate = fdm_cont(state, curr_action)
 
         # Check cost
-        if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Horizontal position
-          cost = abs(state_corrected - nstate[4])
-        else:                                       # Vertical position
-          cost = abs(state_corrected - nstate[5])
+        if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Horizontal velocity
+          cost = abs(state_corrected - nstate[6])
+        else:                                       # Vertical velocity
+          cost = abs(state_corrected - nstate[7])
         
         # Check for min_cost
         if(cost < min_cost):
@@ -221,12 +221,13 @@ class BCOACH_reacher(BCOACH):
       for _ in range(1, self.ifdm_queries+1):
         # Choose random action
         # Continous Actions
-        curr_action = np.random.uniform(-1, 1, self.action_dim)
+        # curr_action = np.random.uniform(-1, 1, self.action_dim)
+        curr_action = [0, np.random.uniform(-1, 1, 1)]
         # Discretization
         # val_set = [0.2*x for x in range(-5,6)]
         # curr_action = np.random.choice(val_set, self.action_dim)
 
-        # Query ifdm to get next state        
+        # Query ifdm to get next state
         nstate = fdm_cont(state, curr_action)
 
         # Check cost
@@ -251,6 +252,7 @@ class BCOACH_reacher(BCOACH):
     # Iterate over the episode
     while((not terminal) and (not self.human_feedback.ask_for_done()) ):        
       self.env.render()  # Make the environment visible
+      self.human_feedback.viewer.render() # Render the additional feedback window
       time.sleep(self.render_delay)    # Add delay to rendering if necessary
       
       # Store previous_state
@@ -269,7 +271,7 @@ class BCOACH_reacher(BCOACH):
 
         # Get action from ifdm
         a = self.get_corrected_action(h_fb, state[0], state_corrected)
-        # print("Computed_IFDM action: ", a)
+        print("Computed_IFDM action: ", a)
         # Debug incorrect action
         # if not args.cont_actions:
         #   if ((self.feedback_dict.get(h_fb) == -1 and a[0][1] == 1) or (self.feedback_dict.get(h_fb) == 1 and a[0][0] == 1)):
@@ -335,7 +337,8 @@ class BCOACH_reacher(BCOACH):
       t_counter += 1 # Time counter
 
     print('episode_reward: %5.1f' % (total_reward))
-    self.log_writer.write("\n" + "episode_reward: " + format(total_reward, '5.1f'))
+    # self.log_writer.write("\n" + "episode_reward: " + format(total_reward, '5.1f'))
+    self.log_writer.write("\n" + "episode_reward: " + total_reward)
 
   def post_demonstration(self, M):
     """using policy to generate (s_t, s_t+1) and action pairs"""

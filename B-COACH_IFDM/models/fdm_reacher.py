@@ -4,7 +4,6 @@ Model imported from OpenAI Gym environements:
 Reacher: Mujoco environment
 """
 
-import math
 import numpy as np
 from gym import utils
 from gym.envs.mujoco import mujoco_env
@@ -16,29 +15,20 @@ class FDM_ReacherEnv(mujoco_env.MujocoEnv, utils.EzPickle):
         self.goal = [-0.11977868, 0.11620387] ############################## GOAL
 
     def step(self, a):
-        # vec = self.get_body_com("fingertip")-self.get_body_com("target")
-        # reward_dist = - np.linalg.norm(vec)
-        # reward_ctrl = - np.square(a).sum()
-        # reward = reward_dist + reward_ctrl
         self.do_simulation(a, self.frame_skip)
         ob = self._get_obs()
-        # done = False
-        return ob #reward, done, dict(reward_dist=reward_dist, reward_ctrl=reward_ctrl)
-
-    # def viewer_setup(self):
-    #     self.viewer.cam.trackbodyid = 0
+        return ob, 0, 0, 0
 
     def reset_model(self, state):
-        # qpos = self.np_random.uniform(low=-0.1, high=0.1, size=self.model.nq) + self.init_qpos
-        # while True:
-        #     self.goal = self.np_random.uniform(low=-.2, high=.2, size=2)
-        #     if np.linalg.norm(self.goal) < 0.2:
-        #         break
         qpos = np.zeros(4)
-        qpos[:2] = theta # Figure out theta from state        
+        
+        # theta1 = -inf to +inf
+        qpos[0] = np.arctan2(state[2], state[0])
+        # theta2 = -pi to +pi
+        qpos[1] = np.arctan2(state[3], state[1])
+        
         qpos[-2:] = self.goal
         
-        # qvel = self.init_qvel + self.np_random.uniform(low=-.005, high=.005, size=self.model.nv)
         qvel = np.zeros(4)
         qvel[:2] = state[6:8]
         qvel[-2:] = 0
@@ -56,8 +46,6 @@ class FDM_ReacherEnv(mujoco_env.MujocoEnv, utils.EzPickle):
             self.get_body_com("fingertip") - self.get_body_com("target")
         ])
 
-
-# fdm_env = gym.make('Reacher-v2')
 fdm_env = FDM_ReacherEnv()
 
 def fdm_cont(state, action):
@@ -65,4 +53,16 @@ def fdm_cont(state, action):
     fdm_env.reset_model(state)
 
     # valid actions are -1.0 to 1.0
-    return fdm_env.step(action)
+    nstate, _, _, _ = fdm_env.step(action)
+    return nstate
+
+# Test script
+# python
+# from models.fdm_reacher import *
+# import gym
+# env = gym.make('Reacher-v2')
+# st = env.reset()
+# st1 = fdm_cont(st, [-0.1,0.1])
+# st2 = env.step([-0.1,0.1])
+# st1
+# st2
