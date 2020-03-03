@@ -167,8 +167,8 @@ class BCOACH_reacher(BCOACH):
 
         # Choose random action
         # Continous Actions
-        # curr_action = np.random.uniform(-1, 1, self.action_dim)
-        curr_action = [0, np.random.uniform(-1, 1, 1)]
+        curr_action = np.random.uniform(-1, 1, self.action_dim)
+        curr_action[0] = 0 # Debug
         # Discretization
         # val_set = [0.2*x for x in range(-5,6)]
         # curr_action = np.random.choice(val_set, self.action_dim)
@@ -337,8 +337,7 @@ class BCOACH_reacher(BCOACH):
       t_counter += 1 # Time counter
 
     print('episode_reward: %5.1f' % (total_reward))
-    # self.log_writer.write("\n" + "episode_reward: " + format(total_reward, '5.1f'))
-    self.log_writer.write("\n" + "episode_reward: " + total_reward)
+    self.log_writer.write("\n" + "episode_reward: " + format(total_reward, '5.1f'))    
 
   def post_demonstration(self, M):
     """using policy to generate (s_t, s_t+1) and action pairs"""
