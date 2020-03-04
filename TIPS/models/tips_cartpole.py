@@ -5,7 +5,7 @@ from fdm_cartpole import *
 import gym
 
 class TIPS_cartpole(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=20, epochTrainIts=5000, dynamicsSamples=1000, batch_size=8):  
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=30, epochTrainIts=5000, dynamicsSamples=1000, batch_size=8):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
@@ -31,7 +31,7 @@ class TIPS_cartpole(TIPS):
     }
 
     self.ifdm_queries = 10 # Two discrete actions. (Easy)
-  
+
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
     with tf.variable_scope("policy_model") as scope:
@@ -117,7 +117,6 @@ class TIPS_cartpole(TIPS):
     """get action to achieve next state close to state_corrected"""
 
     if (args.learnFDM):
-      # prev_time = time.time()
       # Learnt FDM:
       
       # Make a vector of same states
@@ -135,13 +134,9 @@ class TIPS_cartpole(TIPS):
       # Check for min_cost
       min_cost_index = cost.argmin(axis=0)
       min_a = Actions[min_cost_index]
-
-      # Debug: equal timing
-      # print(time.time() - prev_time)
     else:
-      # prev_time = time.time()
-
       # True FDM:
+
       # Discrete Actions
       min_action = np.random.randint(self.action_dim)
       min_cost = np.Inf
@@ -165,9 +160,6 @@ class TIPS_cartpole(TIPS):
       # Discrete actions: return a = A in one hot
       min_a = np.zeros(self.action_dim)
       min_a[min_action] = 1
-
-      # Debug: equal timing
-      # print(time.time() - prev_time)
 
     return min_a
 
@@ -280,15 +272,8 @@ class TIPS_cartpole(TIPS):
         if (len(self.ExpBuff) > self.maxExpBuffSize):
           self.ExpBuff.pop(0)
       else:
-        if (args.learnFDM):
-          # Debug: equal timing
-          # time.sleep(0.02)
-          pass
-        else:
-          # Debug: equal timing
-          time.sleep(0.02)
-
         # Use current policy
+
         # Map action from state
         a = np.reshape(self.eval_policy(state), [-1])
         # Discrete actions

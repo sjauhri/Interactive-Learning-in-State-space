@@ -3,26 +3,23 @@ from tips import TIPS
 from feedback import *
 from fdm_lunarl import *
 import gym
-import time
 
 class TIPS_lunarlander(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=8000, M=200, batch_size=32):
-    TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M, batch_size=batch_size)
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=40, epochTrainIts=5000,  dynamicsSamples=15000, batch_size=32):
+    TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
     self.env = gym.make('LunarLander-v2')
     self.env.reset()
     self.env.render()  # Make the environment visible
-    #pdb.set_trace()
-    #print(self.env.observation_space.high)
 
     # Initialise Human feedback (call render before this)
     self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
-    self.errorConst = 0.1
+    self.errorConst = 0.25
     # Render time delay for this environment (in s)
-    self.render_delay = 0.05
+    self.render_delay = 0.07
     # Choose which feedback is valid with fb dictionary
     self.feedback_dict = {
       H_NULL: 0,
@@ -75,19 +72,18 @@ class TIPS_lunarlander(TIPS):
       with tf.variable_scope("train_step") as scope:
         self.fdm_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.fdm_loss)
 
-  def pre_demonstration(self):
+  def dynamics_sampling(self):
     """uniform sample action to generate (s_t, s_t+1) and action pairs"""
     terminal = True
     States = []
     Nstates = []
     Actions = []
 
-    for i in range(int(round(self.M / self.alpha))):
+    for i in range(self.dynamicsSamples):
       if terminal:
         state = self.env.reset()
 
       prev_s = state
-      # state = np.reshape(state, [-1, self.state_dim])
 
       A = np.random.randint(self.action_dim)
       a = np.zeros([self.action_dim])
@@ -122,32 +118,46 @@ class TIPS_lunarlander(TIPS):
 
   def get_corrected_action(self, h_fb, state, state_corrected):
     """get action to achieve next state close to state_corrected"""
-    # Discrete Actions
-    min_action = np.random.randint(self.action_dim)
-    min_cost = np.Inf
-    
+
     if (h_fb == DO_NOTHING):
-      min_action = 0 # Do Nothing action
+      min_a = [1, 0, 0, 0] # Do Nothing action
       # Debug: equal timing
       time.sleep(0.004)
+    elif (args.learnFDM):
+      # Learnt FDM:
+      
+      # Make a vector of same states
+      States = np.tile(state, (self.ifdm_queries,1))
+      # Choose random actions
+      # Discrete Actions
+      a = np.eye(self.action_dim)
+      Actions = a[np.random.choice(a.shape[0], size=self.ifdm_queries)]
+      # Query ifdm to get next state
+      Nstates = self.eval_fdm(States, Actions)
+
+      # Calculate cost
+      if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity
+        cost = abs(state_corrected - Nstates[:,5]) # Automatic broadcasting
+      else:                                       # Vertical velocity
+        cost = abs(state_corrected - Nstates[:,3]) # Automatic broadcasting
+
+      # Check for min_cost
+      min_cost_index = cost.argmin(axis=0)
+      min_a = Actions[min_cost_index]
     else:
-      prev_time = time.time()
+      # True FDM:
+
+      # Discrete Actions
+      min_action = np.random.randint(self.action_dim)
+      min_cost = np.Inf
+
       for _ in range(1, self.ifdm_queries+1):
         # Choose random action
-        # Discrete Actions
+        # Discrete actions
         curr_action = np.random.randint(self.action_dim)
 
-        # Query ifdm to get next state (true or learnt)
-        # True FDM:
+        # Query ifdm to get next state
         nstate = fdm(state, curr_action)
-        # Learnt FDM:
-        # state = np.reshape(state, [-1, self.state_dim])
-        # # Discrete Actions
-        # a = np.zeros(self.action_dim)
-        # a[curr_action] = 1
-        # A = np.reshape(a, [-1, self.action_dim])
-        # nstate = self.eval_fdm(state, A)
-        # nstate = np.reshape(nstate, [-1])
 
         # Check cost
         if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity
@@ -162,51 +172,65 @@ class TIPS_lunarlander(TIPS):
       # Debug: equal timing
       # print(time.time() - prev_time)
 
-    # Discrete actions: return a = A in one hot
-    min_a = np.zeros(self.action_dim)
-    min_a[min_action] = 1
+      # Discrete actions: return a = A in one hot
+      min_a = np.zeros(self.action_dim)
+      min_a[min_action] = 1
 
     return min_a
 
   def get_action(self, state, nstate_required):
     """get action to achieve next state close to nstate_required"""
-    # Discrete Actions
-    min_action = np.random.randint(self.action_dim)
-    min_cost = np.Inf
-        
-    for _ in range(1, self.ifdm_queries+1):
-      # Choose random action
-      # Discrete Actions
-      curr_action = np.random.randint(self.action_dim)
 
-      # Query ifdm to get next state (true or learnt)
-      # True FDM:
-      nstate = fdm(state, curr_action)
+    if (args.learnFDM):
       # Learnt FDM:
-      # state = np.reshape(state, [-1, self.state_dim])
-      # # Discrete Actions
-      # a = np.zeros(self.action_dim)
-      # a[curr_action] = 1
-      # A = np.reshape(a, [-1, self.action_dim])
-      # nstate = self.eval_fdm(state, A)
-      # nstate = np.reshape(nstate, [-1])
-
-      # Check cost
-      cost = sum(abs(nstate_required - nstate))
       
-      # Check for min_cost
-      if(cost < min_cost):
-        min_cost = cost
-        min_action = curr_action
+      # Make a vector of same states
+      States = np.tile(state, (self.ifdm_queries,1))
+      # Choose random actions
+      # Discrete Actions
+      a = np.eye(self.action_dim)
+      Actions = a[np.random.choice(a.shape[0], size=self.ifdm_queries)]
+      # Query ifdm to get next state
+      Nstates = self.eval_fdm(States, Actions)
 
-    # Discrete actions: return a = A in one hot
-    min_a = np.zeros(self.action_dim)
-    min_a[min_action] = 1
+      # Calculate cost
+      cost = np.sum(abs(nstate_required - Nstates[:]), axis=1) # Automatic broadcasting
+
+      # Check for min_cost
+      min_cost_index = cost.argmin(axis=0)
+      min_a = Actions[min_cost_index]
+
+    else:
+      # True FDM:
+
+      # Discrete Actions
+      min_action = np.random.randint(self.action_dim)
+      min_cost = np.Inf
+
+      for _ in range(1, self.ifdm_queries+1):
+        # Choose random action
+        # Discrete Actions
+        curr_action = np.random.randint(self.action_dim)
+
+        # Query ifdm to get next state      
+        nstate = fdm(state, curr_action)
+
+        # Check cost
+        cost = sum(abs(nstate_required - nstate))
+        
+        # Check for min_cost
+        if(cost < min_cost):
+          min_cost = cost
+          min_action = curr_action
+
+      # Discrete actions: return a = A in one hot
+      min_a = np.zeros(self.action_dim)
+      min_a[min_action] = 1
 
     return min_a
 
-  def coach(self):
-    """COACH algorithm incorporating human feedback"""
+  def feedback_run(self):
+    """run and train agent using D-COACH framework incorporating human feedback"""
     terminal = False
     total_reward = 0
     state = self.env.reset()
@@ -224,11 +248,9 @@ class TIPS_lunarlander(TIPS):
 
       # Get feedback signal
       h_fb = self.human_feedback.get_h()
-      # Debug
-      # h_fb = 3
 
-      # Update policy
       if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero i.e. is valid
+        # Update policy
         # print("Feedback", h_fb)
         h_counter += 1 # Feedback counter
 
@@ -237,14 +259,7 @@ class TIPS_lunarlander(TIPS):
 
         # Get action from ifdm
         a = self.get_corrected_action(h_fb, state[0], state_corrected)
-        # print("Computed_IFDM action: ", a)
-        # Debug incorrect action
-        # if not args.cont_actions:
-        #   if ((self.feedback_dict.get(h_fb) == -1 and a[0][1] == 1) or (self.feedback_dict.get(h_fb) == 1 and a[0][0] == 1)):
-        #     print("MISLABEL!")
-        # else:
-        #   if ((self.feedback_dict.get(h_fb) == -1 and a[0][1] > 0.5) or (self.feedback_dict.get(h_fb) == 1 and a[0][1] < -0.5)):
-        #     print("MISLABEL!")
+        # print("Computed Action: ", a)
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
@@ -276,6 +291,7 @@ class TIPS_lunarlander(TIPS):
         time.sleep(0.004)
 
         # Use current policy
+
         # Map action from state
         a = np.reshape(self.eval_policy(state), [-1])
         # Discrete actions
@@ -291,7 +307,7 @@ class TIPS_lunarlander(TIPS):
           self.ExpBuff.pop(0)
 
         # Train every k time steps
-      if t_counter % self.coach_training_rate == 0:
+      if t_counter % self.feedback_training_rate == 0:
         self.update_policy_feedback()
 
       t_counter += 1 # Time counter
@@ -299,32 +315,8 @@ class TIPS_lunarlander(TIPS):
     print('episode_reward: %5.1f' % (total_reward))
     self.log_writer.write("\n" + "episode_reward: " + format(total_reward, '5.1f'))
 
-  def post_demonstration(self, M):
-    """using policy to generate (s_t, s_t+1) and action pairs"""
-    terminal = True
-    States = []
-    Nstates = []
-    Actions = []
-
-    for i in range(M):
-      if terminal:
-        state = self.env.reset()
-
-      prev_s = state
-      state = np.reshape(state, [-1,self.state_dim])
-
-      a = np.reshape(self.eval_policy(state), [-1])
-      A = np.argmax(a)
-      state, _, terminal, _ = self.env.step(A)
-
-      States.append(prev_s)
-      Nstates.append(state)
-      Actions.append(a)
-
-    return States, Nstates, Actions
-
   def eval_rwd_policy(self):
-    """getting the reward by current policy model"""
+    """getting the reward by current policy"""
     terminal = False
     total_reward = 0
     state = self.env.reset()
@@ -342,5 +334,5 @@ class TIPS_lunarlander(TIPS):
     return total_reward
     
 if __name__ == "__main__":
-  tips = TIPS_lunarlander(8, 4, lr=args.lr, maxEpochs=args.maxEpochs)
+  tips = TIPS_lunarlander(8, 4, lr=args.lr, maxEpisodes=args.maxEpisodes)
   tips.run()

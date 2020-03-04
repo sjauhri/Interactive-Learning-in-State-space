@@ -171,7 +171,7 @@ class TIPS():
           batch_a = [self.ExpBuff[id][2] for id in minibatch_ids]
 
           fdm_loss = self.get_fdm_loss(batch_s, batch_ns, batch_a)
-          # print('FDM train: iteration: %5d, fdm_loss: %8.6f' % (it, fdm_loss))
+          print('FDM train: iteration: %5d, fdm_loss: %8.6f' % (it, fdm_loss))
           self.log_writer.write("FDM train: iteration: " + str(it) + ", fdm_loss: " + format(fdm_loss, '8.6f') + "\n")
     else:
       print("Error!! Batch size greater than number of samples provided for training")
@@ -254,7 +254,7 @@ class TIPS():
 
         # Optional: Update forward dynamic model
         if (args.learnFDM):
-          if (it < 5):
+          if (it < 3):
             self.update_fdm()        
         
         if should(args.print_freq):
