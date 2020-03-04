@@ -127,14 +127,14 @@ class TIPS_lunarlandercont(TIPS):
     
     if (h_fb == DO_NOTHING):
       min_action = np.array((-0.5,0)) # Do Nothing action
-      if (args.learntFDM):
+      if (args.learnFDM):
         # Debug: equal timing
         # time.sleep(0.02)
         pass
       else:
         # Debug: equal timing
         time.sleep(0.02)
-    elif (args.learntFDM):
+    elif (args.learnFDM):
       # prev_time = time.time()
       # Learnt FDM:
       
@@ -196,7 +196,7 @@ class TIPS_lunarlandercont(TIPS):
     min_action = np.random.uniform(-1, 1, self.action_dim)
     min_cost = np.Inf
     
-    if (args.learntFDM):
+    if (args.learnFDM):
       # Learnt FDM:
       
       # Make a vector of same states
@@ -303,7 +303,7 @@ class TIPS_lunarlandercont(TIPS):
         if (len(self.ExpBuff) > self.maxExpBuffSize):
           self.ExpBuff.pop(0)
       else:
-        if (args.learntFDM):
+        if (args.learnFDM):
           # Debug: equal timing
           # time.sleep(0.02)
           pass

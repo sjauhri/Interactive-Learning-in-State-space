@@ -207,7 +207,7 @@ class TIPS():
       self.sess.run(tf.global_variables_initializer())
     
       # Optional: Learn FDM using pre-demonstration exploration
-      if (args.learntFDM):
+      if (args.learnFDM):
         print("\n[Pre-Demonstration to learn FDM]")
         S, nS, A = self.pre_demonstration()
         # Add to Experience Buffer
@@ -222,6 +222,9 @@ class TIPS():
     
     # Init model saver
     saver = tf.train.Saver(max_to_keep=1)
+    # save current session    
+    print('saving session')
+    saver.save(self.sess, args.session_dir)
 
     for it in range(self.maxEpochs):
       def should(freq):
@@ -268,20 +271,20 @@ class TIPS():
       # saving session
       if should(args.save_freq):
         print('saving session')
-        saver.save(self.sess, args.model_dir)
+        saver.save(self.sess, args.session_dir)
 
 
   def test(self):
     saver = tf.train.Saver()
-    saver.restore(self.sess, args.model_dir)
+    saver.restore(self.sess, args.session_dir)
     print('\n[Testing]\nFinal reward: %5.1f' % self.eval_rwd_policy())
 
   def run(self):
-    if not os.path.exists(args.model_dir):
-      os.makedirs(args.model_dir)
+    if not os.path.exists(args.session_dir):
+      os.makedirs(args.session_dir)
 
     if args.mode == 'test':
-      if args.model_dir is None:
+      if args.session_dir is None:
         raise Exception("checkpoint required for test mode")
 
       self.test()

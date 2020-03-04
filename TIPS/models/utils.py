@@ -9,7 +9,7 @@ import time
 parser = argparse.ArgumentParser()
 parser.add_argument("--input_filename", default="demonstration/expert_obs/CartPole-v0.pkl", help="the demonstration inputs")
 parser.add_argument("--mode", default="train", choices=["train", "test"], required=True)
-parser.add_argument("--model_dir", help="where to save the model")
+parser.add_argument("--session_dir", help="where to save the session")
 parser.add_argument("--prev_session_dir", help="where to restore the session from")
 parser.add_argument("--result_dir", default="results/", help="where to save the results")
 
@@ -19,8 +19,9 @@ parser.add_argument("--epochTrainIts", type=int, default=5000, help="the number 
 parser.add_argument("--M", type=int, default=50, help="the number of post demonstration examples")
 parser.add_argument('--printTime', action='store_true')
 parser.add_argument('--usePrevSession', action='store_true')
-parser.add_argument('--learntFDM', action='store_true')
+parser.add_argument('--learnFDM', action='store_true')
 parser.add_argument('--initPolicy', action='store_true')
+parser.add_argument('--teach', action='store_true')
 
 
 parser.add_argument("--batch_size", type=int, default=32, help="number of examples in batch")

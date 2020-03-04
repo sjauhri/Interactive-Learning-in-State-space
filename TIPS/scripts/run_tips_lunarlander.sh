@@ -1,2 +1,2 @@
 #!/bin/bash
-python3 models/tips_lunarlander.py --mode=train --input_file=demonstration/expert_obs/LunarLander-v2.pkl --result_dir=results/tips/lunarlander/ --model_dir=model/tips/lunarlander/ --maxEpochs=50 --numExperiments=1
+python3 models/tips_lunarlander.py --mode=train --input_file=demonstration/expert_obs/LunarLander-v2.pkl --result_dir=results/tips/lunarlander/ --session_dir=session/tips/lunarlander/ --maxEpochs=50 --numExperiments=1
