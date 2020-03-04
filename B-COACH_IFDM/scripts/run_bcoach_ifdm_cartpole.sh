@@ -1,2 +1,0 @@
-#!/bin/bash
-python3 models/bcoach_ifdm_cartpole.py --mode=train --input_file=demonstration/expert_obs/CartPole-v0.pkl --result_dir=results/bcoach_ifdm/cartpole/ --model_dir=model/bcoach_ifdm/cartpole/ --maxEpochs=50 --numExperiments=1

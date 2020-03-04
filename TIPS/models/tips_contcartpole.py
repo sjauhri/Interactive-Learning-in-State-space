@@ -1,48 +1,48 @@
 from utils import *
-from bcoach_ifdm import BCOACH
-from feedback_ext import *
-from fdm_reacher import *
+from tips import TIPS
+from feedback import *
+from fdm_cartpole import *
 import gym
 
-class BCOACH_reacher(BCOACH):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=6000, M=150, batch_size=32):
-    BCOACH.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M, batch_size=batch_size)
+class TIPS_contcartpole(TIPS):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=4000, M=50, batch_size=8):  
+    TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M, batch_size=batch_size)
 
     # set which game to play
-    self.env = gym.make('Reacher-v2')
+    self.env = gym.make('Continuous-CartPole-COACH-v1')
     self.env.reset()
     self.env.render()  # Make the environment visible
     #pdb.set_trace()
     #print(self.env.observation_space.high)
 
-    # Initialise Human feedback in external window
-    self.human_feedback = Feedback_ext()
+    # Initialise Human feedback (call render before this)
+    self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
-    # 0.01, 0.05, 0.1, 0.5, 1
-    self.errorConst = 1
+    # 0.01, 0.05, 0.1, 0.5
+    self.errorConst = 0.2
     # Render time delay for this environment (in s)
     self.render_delay = 0.05
     # Choose which feedback is valid with fb dictionary
     self.feedback_dict = {
       H_NULL: 0,
-      H_UP: 1,
-      H_DOWN: 1,
+      H_UP: 0,
+      H_DOWN: 0,
       H_LEFT: 1,
       H_RIGHT: 1,
-      DO_NOTHING: 1
+      DO_NOTHING: 0
     }
 
-    self.ifdm_queries = 100 # Two continous actions.
-
+    self.ifdm_queries = 40 # One continous action.
+  
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
     with tf.variable_scope("policy_model") as scope:
       with tf.variable_scope("input") as scope:
         policy_input = self.state
       with tf.variable_scope("model") as scope:
-        policy_h1 = tf.layers.dense(policy_input, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
+        policy_h1 = tf.layers.dense(policy_input, 8, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
         policy_h1 = tf.nn.leaky_relu(policy_h1, 0.2, name="LeakyRelu_1")
-        policy_h2 = tf.layers.dense(policy_h1, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
+        policy_h2 = tf.layers.dense(policy_h1, 8, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
         policy_h2 = tf.nn.leaky_relu(policy_h2, 0.2, name="LeakyRelu_2")
 
       with tf.variable_scope("output") as scope:
@@ -60,9 +60,9 @@ class BCOACH_reacher(BCOACH):
       with tf.variable_scope("input") as scope:
         fdm_input = tf.concat([self.state, self.action], 1)
       with tf.variable_scope("model") as scope:
-        fdm_h1 = tf.layers.dense(fdm_input, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
+        fdm_h1 = tf.layers.dense(fdm_input, 8, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
         fdm_h1 = tf.nn.leaky_relu(fdm_h1, 0.2, name="LeakyRelu_1")
-        fdm_h2 = tf.layers.dense(fdm_h1, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
+        fdm_h2 = tf.layers.dense(fdm_h1, 8, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
         fdm_h2 = tf.nn.leaky_relu(fdm_h2, 0.2, name="LeakyRelu_2")
 
       with tf.variable_scope("output") as scope:                
@@ -108,36 +108,20 @@ class BCOACH_reacher(BCOACH):
     state_corrected = np.copy(state)
 
     # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()
-    if (h_fb == H_LEFT): # Angular velocity of 1st joint
-      state_corrected = state_corrected[6] + self.errorConst      
+    # Correcting Velocity
+    if (h_fb == H_LEFT):
+      state_corrected = state_corrected[1] - self.errorConst
     elif (h_fb == H_RIGHT):
-      state_corrected = state_corrected[6] - self.errorConst      
-    elif (h_fb == H_UP): # Angular velocity of 2nd joint
-      state_corrected = state_corrected[7] + self.errorConst
-    elif (h_fb == H_DOWN):
-      state_corrected = state_corrected[7] - self.errorConst
+      state_corrected = state_corrected[1] + self.errorConst
     return state_corrected
 
   def get_corrected_action(self, h_fb, state, state_corrected):
     """get action to achieve next state close to state_corrected"""
     # Continous Actions
-    # min_action = np.random.uniform(-1, 1, self.action_dim)
-    min_action = [1,1] # Start with Max action
-    min_state_diff = np.Inf
+    min_action = np.random.uniform(-1, 1, self.action_dim)
     min_cost = np.Inf
     
-    if (h_fb == DO_NOTHING):
-      min_action = np.array((0,0)) # Do Nothing action
-      if (args.learntFDM):
-        # Debug: equal timing
-        # time.sleep(0.02)
-        pass
-      else:
-        # Debug: equal timing
-        # time.sleep(0.02)
-        pass
-    elif (args.learntFDM):
-      # prev_time = time.time()
+    if (args.learntFDM):
       # Learnt FDM:
       
       # Make a vector of same states
@@ -149,55 +133,31 @@ class BCOACH_reacher(BCOACH):
       Nstates = self.eval_fdm(States, Actions)      
 
       # Calculate cost
-      if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity of 1st joint
-        # Automatic broadcasting
-        cost = abs(state_corrected - Nstates[:,6])
-      else:                                       # Angular velocity of 2nd joint
-        cost = abs(state_corrected - Nstates[:,7])
+      # Automatic broadcasting
+      cost = abs(state_corrected - Nstates[:,1]) # Velocity
 
       # Check for min_cost
       min_cost_index = cost.argmin(axis=0)
       min_action = Actions[min_cost_index]
 
-      # Debug: equal timing
-      # print(time.time() - prev_time)
-
     else:
-      # prev_time = time.time()
       for _ in range(1, self.ifdm_queries+1):
         # True FDM:
 
         # Choose random action
-        # Continous Actions (small)
-        curr_action = np.random.uniform(-0.4, 0.4, self.action_dim)
-        # curr_action[0] = 0 # Debug
-        # Discretization
-        # val_set = [0.1*x for x in range(-5,6)]
-        # curr_action = np.random.choice(val_set, self.action_dim)
+        # Continous Actions
+        curr_action = np.random.uniform(-1, 1, self.action_dim)
 
         # Query ifdm to get next state
         nstate = fdm_cont(state, curr_action)
 
         # Check cost
-        if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity of 1st joint
-          cost = abs(state_corrected - nstate[6])
-        else:                                       # Angular velocity of 2nd joint
-          cost = abs(state_corrected - nstate[7])
+        cost = abs(state_corrected - nstate[1])
         
-        # Check for min_cost and non-uniqueness
-        if((cost < min_cost) or (abs(min_cost-cost) < 0.1)): # If cost is lower or in neighborhood
-          # # Choose smaller action
-          # if(np.linalg.norm(curr_action) < np.linalg.norm(min_action)):
-          #   min_cost = cost
-          #   min_action = curr_action
-          # Choose smaller state_diff
-          if(np.linalg.norm(state-nstate) < min_state_diff):
-            min_cost = cost
-            min_action = curr_action
-            min_state_diff = np.linalg.norm(state-nstate)
-
-      # Debug: equal timing
-      # print(time.time() - prev_time)
+        # Check for min_cost
+        if(cost < min_cost):
+          min_cost = cost
+          min_action = curr_action
 
     return min_action
 
@@ -231,12 +191,9 @@ class BCOACH_reacher(BCOACH):
       for _ in range(1, self.ifdm_queries+1):
         # Choose random action
         # Continous Actions
-        curr_action = np.random.uniform(-1, 1, self.action_dim)        
-        # Discretization
-        # val_set = [0.2*x for x in range(-5,6)]
-        # curr_action = np.random.choice(val_set, self.action_dim)
+        curr_action = np.random.uniform(-1, 1, self.action_dim)
 
-        # Query ifdm to get next state
+        # Query ifdm to get next state        
         nstate = fdm_cont(state, curr_action)
 
         # Check cost
@@ -261,7 +218,6 @@ class BCOACH_reacher(BCOACH):
     # Iterate over the episode
     while((not terminal) and (not self.human_feedback.ask_for_done()) ):        
       self.env.render()  # Make the environment visible
-      self.human_feedback.viewer.render() # Render the additional feedback window
       time.sleep(self.render_delay)    # Add delay to rendering if necessary
       
       # Store previous_state
@@ -272,7 +228,7 @@ class BCOACH_reacher(BCOACH):
 
       # Update policy
       if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero i.e. is valid
-        # print("Feedback", h_fb)
+        print("Feedback", h_fb)
         h_counter += 1 # Feedback counter
 
         # Get new state transition label using feedback
@@ -315,21 +271,11 @@ class BCOACH_reacher(BCOACH):
         if (len(self.ExpBuff) > self.maxExpBuffSize):
           self.ExpBuff.pop(0)
       else:
-        if (args.learntFDM):
-          # Debug: equal timing
-          # time.sleep(0.02)
-          pass
-        else:
-          # Debug: equal timing
-          # time.sleep(0.02)
-          pass
-
         # Use current policy
         # Map action from state
         a = np.reshape(self.eval_policy(state), [-1])
         # Continuous actions
         A = np.copy(a)
-        # A = np.zeros(self.action_dim) # Debug
 
         # Act
         state, reward, terminal, _ = self.env.step(A)
@@ -347,7 +293,7 @@ class BCOACH_reacher(BCOACH):
       t_counter += 1 # Time counter
 
     print('episode_reward: %5.1f' % (total_reward))
-    self.log_writer.write("\n" + "episode_reward: " + format(total_reward, '5.1f'))    
+    self.log_writer.write("\n" + "episode_reward: " + format(total_reward, '5.1f'))
 
   def post_demonstration(self, M):
     """using policy to generate (s_t, s_t+1) and action pairs"""
@@ -392,5 +338,5 @@ class BCOACH_reacher(BCOACH):
     return total_reward
     
 if __name__ == "__main__":
-  bcoach = BCOACH_reacher(11, 2, lr=args.lr, maxEpochs=args.maxEpochs)
-  bcoach.run()
+  tips = TIPS_contcartpole(4, 1, lr=args.lr, maxEpochs=args.maxEpochs)
+  tips.run()

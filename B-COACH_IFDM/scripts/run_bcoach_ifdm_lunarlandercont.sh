@@ -1,2 +1,0 @@
-#!/bin/bash
-python3 models/bcoach_ifdm_lunarlandercont.py --mode=train --input_file=demonstration/expert_obs/LunarLanderContinuous-v2.pkl --result_dir=results/bcoach_ifdm/lunarlandercont/ --model_dir=model/bcoach_ifdm/lunarlandercont/ --maxEpochs=50 --numExperiments=1

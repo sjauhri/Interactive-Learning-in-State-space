@@ -1,13 +1,13 @@
 from utils import *
-from bcoach_ifdm import BCOACH
+from tips import TIPS
 from feedback import *
 from fdm_lunarl import *
 import gym
 import time
 
-class BCOACH_lunarlander(BCOACH):
+class TIPS_lunarlander(TIPS):
   def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=8000, M=200, batch_size=32):
-    BCOACH.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M, batch_size=batch_size)
+    TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M, batch_size=batch_size)
 
     # set which game to play
     self.env = gym.make('LunarLander-v2')
@@ -342,5 +342,5 @@ class BCOACH_lunarlander(BCOACH):
     return total_reward
     
 if __name__ == "__main__":
-  bcoach = BCOACH_lunarlander(8, 4, lr=args.lr, maxEpochs=args.maxEpochs)
-  bcoach.run()
+  tips = TIPS_lunarlander(8, 4, lr=args.lr, maxEpochs=args.maxEpochs)
+  tips.run()

@@ -53,36 +53,36 @@
             "args": ["--mode=train","--input_file=B-COACH_SPM/demonstration/expert_obs/LunarLanderContinuous-v2.pkl","--result_dir=B-COACH_SPM/results/bcoach_spm/lunarlandercont/","--model_dir=B-COACH_SPM/model/bcoach_spm/lunarlandercont/","--maxEpochs=50","--numExperiments=1","--useSPM","--cont_actions"]
         }
         {
-            "name": "bcoach_ifdm_cartpole",
+            "name": "tips_cartpole",
             "type": "python",
             "request": "launch",
-            "program": "/home/snehal/Desktop/Thesis/IfO/B-COACH_IFDM/models/bcoach_ifdm_cartpole.py",
+            "program": "/home/snehal/Desktop/Thesis/IfO/TIPS/models/tips_cartpole.py",
             "console": "integratedTerminal",            
-            "args": ["--mode=train","--input_file=B-COACH_IFDM/demonstration/expert_obs/CartPole-v0.pkl","--result_dir=B-COACH_IFDM/results/bcoach_ifdm/cartpole/","--model_dir=B-COACH_IFDM/model/bcoach_ifdm/cartpole/","--maxEpochs=50","--numExperiments=1"]            
+            "args": ["--mode=train","--input_file=TIPS/demonstration/expert_obs/CartPole-v0.pkl","--result_dir=TIPS/results/tips/cartpole/","--model_dir=TIPS/model/tips/cartpole/","--maxEpochs=50","--numExperiments=1"]            
         }
         {
-            "name": "bcoach_ifdm_lunarlander",
+            "name": "tips_lunarlander",
             "type": "python",
             "request": "launch",
-            "program": "/home/snehal/Desktop/Thesis/IfO/B-COACH_IFDM/models/bcoach_ifdm_lunarlander.py",
+            "program": "/home/snehal/Desktop/Thesis/IfO/TIPS/models/tips_lunarlander.py",
             "console": "integratedTerminal",            
-            "args": ["--mode=train","--input_file=B-COACH_IFDM/demonstration/expert_obs/LunarLander-v2.pkl","--result_dir=B-COACH_IFDM/results/bcoach_ifdm/lunarlander/","--model_dir=B-COACH_IFDM/model/bcoach_ifdm/lunarlander/","--maxEpochs=50","--numExperiments=1"]
+            "args": ["--mode=train","--input_file=TIPS/demonstration/expert_obs/LunarLander-v2.pkl","--result_dir=TIPS/results/tips/lunarlander/","--model_dir=TIPS/model/tips/lunarlander/","--maxEpochs=50","--numExperiments=1"]
         }
         {
-            "name": "bcoach_ifdm_lunarlandercont",
+            "name": "tips_lunarlandercont",
             "type": "python",
             "request": "launch",
-            "program": "/home/snehal/Desktop/Thesis/IfO/B-COACH_IFDM/models/bcoach_ifdm_lunarlandercont.py",
+            "program": "/home/snehal/Desktop/Thesis/IfO/TIPS/models/tips_lunarlandercont.py",
             "console": "integratedTerminal",            
-            "args": ["--mode=train","--input_file=B-COACH_IFDM/demonstration/expert_obs/LunarLanderContinuous-v2.pkl","--result_dir=B-COACH_IFDM/results/bcoach_ifdm/lunarlandercont/","--model_dir=B-COACH_IFDM/model/bcoach_ifdm/lunarlandercont/","--maxEpochs=50","--numExperiments=1","--learntFDM"]
+            "args": ["--mode=train","--input_file=TIPS/demonstration/expert_obs/LunarLanderContinuous-v2.pkl","--result_dir=TIPS/results/tips/lunarlandercont/","--model_dir=TIPS/model/tips/lunarlandercont/","--maxEpochs=50","--numExperiments=1","--learntFDM"]
         }
         {
-            "name": "bcoach_ifdm_reacher",
+            "name": "tips_reacher",
             "type": "python",
             "request": "launch",
-            "program": "/home/snehal/Desktop/Thesis/IfO/B-COACH_IFDM/models/bcoach_ifdm_reacher.py",
+            "program": "/home/snehal/Desktop/Thesis/IfO/TIPS/models/tips_reacher.py",
             "console": "integratedTerminal",            
-            "args": ["--mode=train","--input_file=B-COACH_IFDM/demonstration/expert_obs/Reacher-v2.pkl","--result_dir=B-COACH_IFDM/results/bcoach_ifdm/reacher/","--model_dir=B-COACH_IFDM/model/bcoach_ifdm/reacher/","--maxEpochs=50","--numExperiments=1"]
+            "args": ["--mode=train","--input_file=TIPS/demonstration/expert_obs/Reacher-v2.pkl","--result_dir=TIPS/results/tips/reacher/","--model_dir=TIPS/model/tips/reacher/","--maxEpochs=50","--numExperiments=1"]
         }        
     ]
 }

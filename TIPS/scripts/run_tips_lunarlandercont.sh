@@ -1,0 +1,2 @@
+#!/bin/bash
+python3 models/tips_lunarlandercont.py --mode=train --input_file=demonstration/expert_obs/LunarLanderContinuous-v2.pkl --result_dir=results/tips/lunarlandercont/ --model_dir=model/tips/lunarlandercont/ --maxEpochs=50 --numExperiments=1
