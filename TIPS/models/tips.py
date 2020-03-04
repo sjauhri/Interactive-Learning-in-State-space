@@ -325,7 +325,7 @@ class TIPS():
       for self.exp in range(0, args.numExperiments):
         
         # Set random seed for experiment
-        np.random.seed(args.numExperiments - self.exp)
+        np.random.seed(self.exp + 5)
         
         self.result_writer = open(args.result_dir + self.logTime + "_" + str(self.exp) + ".csv", "w") # csv episode result log
         self.result_writer.write("iteration,average_reward,policy_loss,fdm_loss\n")

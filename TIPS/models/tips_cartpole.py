@@ -5,7 +5,7 @@ from fdm_cartpole import *
 import gym
 
 class TIPS_cartpole(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=20, epochTrainIts=5000, dynamicsSamples=500, batch_size=8):  
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=20, epochTrainIts=5000, dynamicsSamples=1000, batch_size=8):  
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
