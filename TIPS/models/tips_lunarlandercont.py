@@ -3,7 +3,6 @@ from tips import TIPS
 from feedback import *
 from fdm_lunarl import *
 import gym
-import time
 
 class TIPS_lunarlandercont(TIPS):
   def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=5000, M=200, batch_size=32):
@@ -13,8 +12,6 @@ class TIPS_lunarlandercont(TIPS):
     self.env = gym.make('LunarLanderContinuous-v2')
     self.env.reset()
     self.env.render()  # Make the environment visible
-    #pdb.set_trace()
-    #print(self.env.observation_space.high)
 
     # Initialise Human feedback (call render before this)
     self.human_feedback = Feedback(self.env)
@@ -86,7 +83,6 @@ class TIPS_lunarlandercont(TIPS):
         state = self.env.reset()
 
       prev_s = state
-      state = np.reshape(state, [-1, self.state_dim])
 
       # Continuos action space
       # Actions between -1 and 1
@@ -110,9 +106,9 @@ class TIPS_lunarlandercont(TIPS):
 
     # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()
     if (h_fb == H_LEFT): # Angular velocity
-      state_corrected = state_corrected[5] + self.errorConst      
+      state_corrected = state_corrected[5] + self.errorConst
     elif (h_fb == H_RIGHT):
-      state_corrected = state_corrected[5] - self.errorConst      
+      state_corrected = state_corrected[5] - self.errorConst
     elif (h_fb == H_UP): # Vertical velocity
       state_corrected = state_corrected[3] + self.errorConst
     elif (h_fb == H_DOWN):
@@ -121,10 +117,7 @@ class TIPS_lunarlandercont(TIPS):
 
   def get_corrected_action(self, h_fb, state, state_corrected):
     """get action to achieve next state close to state_corrected"""
-    # Continous Actions
-    min_action = np.random.uniform(-1, 1, self.action_dim)
-    min_cost = np.Inf
-    
+
     if (h_fb == DO_NOTHING):
       min_action = np.array((-0.5,0)) # Do Nothing action
       if (args.learnFDM):
@@ -144,7 +137,7 @@ class TIPS_lunarlandercont(TIPS):
       # Continuous Actions
       Actions = np.random.uniform(-1, 1, (self.ifdm_queries,self.action_dim) )
       # Query ifdm to get next state
-      Nstates = self.eval_fdm(States, Actions)      
+      Nstates = self.eval_fdm(States, Actions)
 
       # Calculate cost
       if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity
@@ -159,12 +152,15 @@ class TIPS_lunarlandercont(TIPS):
 
       # Debug: equal timing
       # print(time.time() - prev_time)
-
     else:
       # prev_time = time.time()
-      for _ in range(1, self.ifdm_queries+1):
-        # True FDM:
 
+      # True FDM:
+      # Continous Actions
+      min_action = np.random.uniform(-1, 1, self.action_dim)
+      min_cost = np.Inf
+
+      for _ in range(1, self.ifdm_queries+1):
         # Choose random action
         # Continous Actions
         curr_action = np.random.uniform(-1, 1, self.action_dim)
@@ -192,10 +188,7 @@ class TIPS_lunarlandercont(TIPS):
 
   def get_action(self, state, nstate_required):
     """get action to achieve next state close to nstate_required"""
-    # Continous Actions
-    min_action = np.random.uniform(-1, 1, self.action_dim)
-    min_cost = np.Inf
-    
+
     if (args.learnFDM):
       # Learnt FDM:
       
@@ -205,7 +198,7 @@ class TIPS_lunarlandercont(TIPS):
       # Continuous Actions
       Actions = np.random.uniform(-1, 1, (self.ifdm_queries,self.action_dim) )
       # Query ifdm to get next state
-      Nstates = self.eval_fdm(States, Actions)      
+      Nstates = self.eval_fdm(States, Actions)
 
       # Calculate cost
       # Automatic broadcasting
@@ -217,6 +210,11 @@ class TIPS_lunarlandercont(TIPS):
 
     else:
       # True FDM:
+
+      # Continous Actions
+      min_action = np.random.uniform(-1, 1, self.action_dim)
+      min_cost = np.Inf
+
       for _ in range(1, self.ifdm_queries+1):
         # Choose random action
         # Continous Actions
@@ -239,7 +237,7 @@ class TIPS_lunarlandercont(TIPS):
     return min_action    
 
   def coach(self):
-    """COACH algorithm incorporating human feedback"""
+    """teach using D-COACH framework incorporating human feedback"""
     terminal = False
     total_reward = 0
     state = self.env.reset()
@@ -268,14 +266,6 @@ class TIPS_lunarlandercont(TIPS):
 
         # Get action from ifdm
         a = self.get_corrected_action(h_fb, state[0], state_corrected)
-        # print("Computed_IFDM action: ", a)
-        # Debug incorrect action
-        # if not args.cont_actions:
-        #   if ((self.feedback_dict.get(h_fb) == -1 and a[0][1] == 1) or (self.feedback_dict.get(h_fb) == 1 and a[0][0] == 1)):
-        #     print("MISLABEL!")
-        # else:
-        #   if ((self.feedback_dict.get(h_fb) == -1 and a[0][1] > 0.5) or (self.feedback_dict.get(h_fb) == 1 and a[0][1] < -0.5)):
-        #     print("MISLABEL!")
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])

@@ -2,21 +2,23 @@ from utils import *
 import gym
 
 class TIPS():
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=5000, M=50, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=40, epochTrainIts=5000, dynamicsSamples=5000, batch_size=32):
     # set initial value
     self.state_dim = state_shape            # state dimension
     self.action_dim = action_shape          # action dimension
-    self.lr = lr                            # model update learning rate
-    self.maxEpochs = maxEpochs              # maximum epochs
+
+    self.dynamicsSamples = dynamicsSamples  # number of samples to initially learn the dynamics
+    self.lr = lr                            # model/policy learning rate
     self.epochTrainIts = epochTrainIts      # maximum training iterations every epoch
     self.batch_size = batch_size            # batch size
-    self.alpha = 0.01                       # alpha = | post_demo | / | pre_demo |
-    self.M = M                              # samples to update forward dynamic model
+    
     self.ExpBuff  = []                      # Experience buffer for replay
     self.DemoBuff  = []                     # Demonstration buffer
     self.maxExpBuffSize = 20000             # Max Experience buffer size
     self.maxDemoBuffSize = 2000             # Max Demonstration buffer size
-    self.coach_training_rate  = 10          # COACH training rate in the episode
+    
+    self.maxEpisodes = maxEpisodes          # maximum episodes
+    self.feedback_training_rate  = 10       # Feedback training rate in the episode
 
     # initial session
     config = tf.ConfigProto()
@@ -51,7 +53,7 @@ class TIPS():
       inputs = inputs[0:10000]
       targets = targets[0:10000]
       num_samples = 10000
-    print("[Loaded %d demonstrations]" % num_samples)
+    print("[[[Loaded %d demonstrations]]]" % num_samples)
 
     return num_samples, inputs, targets
 
@@ -83,16 +85,12 @@ class TIPS():
       self.action: action
     })
 
-  def pre_demonstration(self):
-    """uniform sample action to generate (s_t, s_t+1) and action pairs"""
+  def dynamics_sampling(self):
+    """uniform sampling of actions to generate (s_t, s_t+1) and action pairs"""
     raise NotImplementedError
 
-  def coach(self):
-    """COACH algorithm incorporating human feedback"""
-    raise NotImplementedError
-
-  def post_demonstration(self, M):
-    """using policy to generate (s_t, s_t+1) and action pairs"""
+  def feedback_run(self):
+    """run and train using D-COACH framework incorporating human feedback"""
     raise NotImplementedError
 
   def eval_rwd_policy(self):
@@ -151,6 +149,7 @@ class TIPS():
 
   def update_fdm(self):
     """update forward dynamic model"""
+
     num = len(self.ExpBuff)
     if(num >= self.batch_size):
       for it in range(1, self.epochTrainIts+1):
@@ -166,13 +165,13 @@ class TIPS():
         # Debug
         if it % 500 == 0:
           # Check fdm loss
-          minibatch_ids = np.random.choice(len(self.ExpBuff), self.M)
+          minibatch_ids = np.random.choice(len(self.ExpBuff), int(round( self.dynamicsSamples/100 )) ) # 1% of the dynamics data
           batch_s = [self.ExpBuff[id][0] for id in minibatch_ids]
           batch_ns = [self.ExpBuff[id][1] for id in minibatch_ids]
           batch_a = [self.ExpBuff[id][2] for id in minibatch_ids]
 
           fdm_loss = self.get_fdm_loss(batch_s, batch_ns, batch_a)
-          print('FDM train: iteration: %5d, fdm_loss: %8.6f' % (it, fdm_loss))
+          # print('FDM train: iteration: %5d, fdm_loss: %8.6f' % (it, fdm_loss))
           self.log_writer.write("FDM train: iteration: " + str(it) + ", fdm_loss: " + format(fdm_loss, '8.6f') + "\n")
     else:
       print("Error!! Batch size greater than number of samples provided for training")
@@ -206,10 +205,10 @@ class TIPS():
       # Start session
       self.sess.run(tf.global_variables_initializer())
     
-      # Optional: Learn FDM using pre-demonstration exploration
+      # Optional: Learn FDM using random sampling
       if (args.learnFDM):
-        print("\n[Pre-Demonstration to learn FDM]")
-        S, nS, A = self.pre_demonstration()
+        print("\n[Random sampling to learn FDM]")
+        S, nS, A = self.dynamics_sampling()
         # Add to Experience Buffer
         for id in range(0, len(S)):
           self.ExpBuff.append((S[id], nS[id], A[id]))
@@ -225,54 +224,77 @@ class TIPS():
     # save current session    
     print('saving session')
     saver.save(self.sess, args.session_dir)
+    
+    if (args.runAgent):
+      # Execute agent policy
 
-    for it in range(self.maxEpochs):
-      def should(freq):
-        return freq > 0 and ((it+1) % freq==0 or it == self.maxEpochs-1)
+      # Iterate over episodes
+      for it in range(self.maxEpisodes):
+        def should(freq):
+          return freq > 0 and ((it+1) % freq==0 or it == self.maxEpisodes-1)
+        
+        # Optional: Countdown for trainer to be ready
+        print('[Running new episode in....]')
+        time.sleep(1)
+        print('3')
+        time.sleep(1)
+        print('2')
+        time.sleep(1)
+        print('1')
+        time.sleep(1)
+        print('Start')
+        # Optional: Update policy pi #######################
+        # if should(1):
+        #   self.update_policy()
+        ##########################################
+        
+        # Run with human feedback
+        self.feedback_run()
+        print('[Episode ended]')
 
-      # update policy pi #######################
-      # if should(1):
-      #   self.update_policy()
-      ##########################################
-      
-      # COACH
-      self.coach()
+        # Optional: Update forward dynamic model
+        if (args.learnFDM):
+          if (it < 5):
+            self.update_fdm()        
+        
+        if should(args.print_freq):
 
-      # update forward dynamic model ##############      
-      # if should(2):
-      #   self.update_fdm()
-      #############################################
-      
-      if should(args.print_freq):
+          policy_reward = 0
+          numTrials = 10
+          for _ in range(numTrials):
+            policy_reward += self.eval_rwd_policy()
+          avg_reward = policy_reward/numTrials
 
-        policy_reward = 0
-        numTrials = 10
-        for _ in range(numTrials):
-          policy_reward += self.eval_rwd_policy()
-        avg_reward = policy_reward/numTrials
+          # Check policy loss on another data set.................
+          S, nS = self.sample_demo(int(round(self.demo_examples/100))) # 1% of the demo data
+          A = []
+          for i in range(len(S)):
+            A.append(self.get_action(S[i],nS[i]))
+          A = np.reshape(A, [-1, self.action_dim])
+          policy_loss = self.get_policy_loss(S, A)
+          # ......................................................
 
-        # Check policy loss on another data set.................
-        S, nS = self.sample_demo(int(round(self.demo_examples/100))) # 1% of the demo data
-        A = []
-        for i in range(len(S)):
-          A.append(self.get_action(S[i],nS[i]))
-        A = np.reshape(A, [-1, self.action_dim])
-        policy_loss = self.get_policy_loss(S, A)
-        # ......................................................
+          # Check fdm loss on another data set....................
+          minibatch_ids = np.random.choice(len(self.ExpBuff), int(round( self.dynamicsSamples/100 )) ) # 1% of the dynamics data
+          batch_s = [self.ExpBuff[id][0] for id in minibatch_ids]
+          batch_ns = [self.ExpBuff[id][1] for id in minibatch_ids]
+          batch_a = [self.ExpBuff[id][2] for id in minibatch_ids]
 
-        # Check fdm loss on another data set....................
-        S, nS, A = self.post_demonstration(self.M)
-        fdm_loss = self.get_fdm_loss(S, nS, A)
-        # ......................................................
-        print('iteration: %5d, average_reward: %5.1f, policy_loss: %8.6f, fdm_loss: %8.6f' % ((it+1), avg_reward, policy_loss, fdm_loss))
-        self.result_writer.write( str(it+1) + " , " + format(avg_reward, '8.6f') + " , " + format(policy_loss, '8.6f') + " , " + format(fdm_loss, '8.6f') + "\n" )
-        self.log_writer.write("\n" + "iteration: " + str(it+1) + ", average_reward: " + str(avg_reward) + ", policy_loss: " + format(policy_loss, '8.6f') + ", fdm_loss: " + format(fdm_loss, '8.6f') + "\n" + "\n")
+          fdm_loss = self.get_fdm_loss(batch_s, batch_ns, batch_a)
+          # ......................................................
+          # print('iteration: %5d, average_reward: %5.1f, policy_loss: %8.6f, fdm_loss: %8.6f' % ((it+1), avg_reward, policy_loss, fdm_loss))
+          print('iteration: %5d, average_reward: %5.1f' % ((it+1), avg_reward))
+          self.result_writer.write( str(it+1) + " , " + format(avg_reward, '8.6f') + " , " + format(policy_loss, '8.6f') + " , " + format(fdm_loss, '8.6f') + "\n" )
+          self.log_writer.write("\n" + "iteration: " + str(it+1) + ", average_reward: " + str(avg_reward) + ", policy_loss: " + format(policy_loss, '8.6f') + ", fdm_loss: " + format(fdm_loss, '8.6f') + "\n" + "\n")
 
-      # saving session
-      if should(args.save_freq):
-        print('saving session')
-        saver.save(self.sess, args.session_dir)
-
+        # saving session
+        if should(args.save_freq):
+          print('saving session')
+          saver.save(self.sess, args.session_dir)
+    
+    else:      
+      # End: Not running agent
+      print("Note: Use --runAgent option to execute behavior\n[End]")
 
   def test(self):
     saver = tf.train.Saver()
@@ -299,15 +321,16 @@ class TIPS():
       # store datetime for saving logs
       self.logTime = dt.datetime.now().strftime('%d%m%H%M')
       
-      for exp in range(0, args.numExperiments):
+      self.exp = 0
+      for self.exp in range(0, args.numExperiments):
         
         # Set random seed for experiment
-        np.random.seed(args.numExperiments - exp)
+        np.random.seed(args.numExperiments - self.exp)
         
-        self.result_writer = open(args.result_dir + self.logTime + "_" + str(exp) + ".csv", "w") # csv episode result log
+        self.result_writer = open(args.result_dir + self.logTime + "_" + str(self.exp) + ".csv", "w") # csv episode result log
         self.result_writer.write("iteration,average_reward,policy_loss,fdm_loss\n")
 
-        self.log_writer = open(args.result_dir + self.logTime + "_" + str(exp) + ".txt", "w") # txt debug log with everything
+        self.log_writer = open(args.result_dir + self.logTime + "_" + str(self.exp) + ".txt", "w") # txt debug log with everything
         
         self.train() # Train epochs
         

@@ -12,8 +12,7 @@ class TIPS_reacher(TIPS):
     self.env = gym.make('Reacher-v2')
     self.env.reset()
     self.env.render()  # Make the environment visible
-    #pdb.set_trace()
-    #print(self.env.observation_space.high)
+    self.human_feedback.viewer.render() # Render the additional feedback window
 
     # Initialise Human feedback in external window
     self.human_feedback = Feedback_ext()
