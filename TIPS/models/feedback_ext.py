@@ -6,7 +6,8 @@ H_UP = 1
 H_DOWN = 2
 H_LEFT = 3
 H_RIGHT = 4
-DO_NOTHING = 5
+H_HOLD = 5
+DO_NOTHING = 6
 
 class Feedback_ext:
     def __init__(self):

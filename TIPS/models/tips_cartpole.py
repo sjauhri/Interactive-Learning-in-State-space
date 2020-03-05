@@ -5,7 +5,7 @@ from fdm_cartpole import *
 import gym
 
 class TIPS_cartpole(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=30, epochTrainIts=5000, dynamicsSamples=1000, batch_size=8):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=30, epochTrainIts=5000, dynamicsSamples=500, batch_size=8):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
@@ -27,6 +27,7 @@ class TIPS_cartpole(TIPS):
       H_DOWN: 0,
       H_LEFT: 1,
       H_RIGHT: 1,
+      H_HOLD: 1,
       DO_NOTHING: 0
     }
 
@@ -105,12 +106,14 @@ class TIPS_cartpole(TIPS):
     """get corrected state label for this environment using feedback"""
     state_corrected = np.copy(state)
 
-    # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()
-    # Correcting Velocity
+    # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()    
     if (h_fb == H_LEFT):
-      state_corrected = state_corrected[1] - self.errorConst
+      state_corrected = state_corrected[1] - self.errorConst # Correcting Velocity
     elif (h_fb == H_RIGHT):
-      state_corrected = state_corrected[1] + self.errorConst
+      state_corrected = state_corrected[1] + self.errorConst # Correcting Velocity
+    else: # (h_fb == H_HOLD)
+      state_corrected = state_corrected[2]  # HOLD pole angle
+    
     return state_corrected
 
   def get_corrected_action(self, h_fb, state, state_corrected):
@@ -129,7 +132,10 @@ class TIPS_cartpole(TIPS):
       Nstates = self.eval_fdm(States, Actions)
 
       # Calculate cost
-      cost = abs(state_corrected - Nstates[:,1]) # Automatic broadcasting
+      if (h_fb == H_HOLD):
+        cost = abs(state_corrected - Nstates[:,2]) # Corrected Pole Angle
+      else: # LEFT or RIGHT
+        cost = abs(state_corrected - Nstates[:,1]) # Corrected Velocity
 
       # Check for min_cost
       min_cost_index = cost.argmin(axis=0)
@@ -244,7 +250,7 @@ class TIPS_cartpole(TIPS):
 
         # Get action from ifdm
         a = self.get_corrected_action(h_fb, state[0], state_corrected)
-        # print("Computed Action: ", a)
+        print("Computed Action: ", a)
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
