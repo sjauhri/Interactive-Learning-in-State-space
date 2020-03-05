@@ -107,9 +107,9 @@ class TIPS_lunarlander(TIPS):
 
     # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()
     if (h_fb == H_LEFT): # Angular velocity
-      state_corrected = state_corrected[5] + self.errorConst      
+      state_corrected = state_corrected[5] + self.errorConst
     elif (h_fb == H_RIGHT):
-      state_corrected = state_corrected[5] - self.errorConst      
+      state_corrected = state_corrected[5] - self.errorConst
     elif (h_fb == H_UP): # Vertical velocity
       state_corrected = state_corrected[3] + self.errorConst
     elif (h_fb == H_DOWN):

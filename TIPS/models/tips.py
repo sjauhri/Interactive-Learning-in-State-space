@@ -254,7 +254,7 @@ class TIPS():
 
         # Optional: Update forward dynamic model
         if (args.learnFDM):
-          if (it < 3):
+          if should(2):
             self.update_fdm()        
         
         if should(args.print_freq):

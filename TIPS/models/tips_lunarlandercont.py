@@ -5,8 +5,8 @@ from fdm_lunarl import *
 import gym
 
 class TIPS_lunarlandercont(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=5000, M=200, batch_size=32):
-    TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M, batch_size=batch_size)
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=40, epochTrainIts=5000,  dynamicsSamples=10000, batch_size=32):
+    TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
     self.env = gym.make('LunarLanderContinuous-v2')
@@ -17,9 +17,9 @@ class TIPS_lunarlandercont(TIPS):
     self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
-    self.errorConst = 0.08
+    self.errorConst = 0.15
     # Render time delay for this environment (in s)
-    self.render_delay = 0.05
+    self.render_delay = 0.065
     # Choose which feedback is valid with fb dictionary
     self.feedback_dict = {
       H_NULL: 0,
@@ -30,7 +30,7 @@ class TIPS_lunarlandercont(TIPS):
       DO_NOTHING: 1
     }
 
-    self.ifdm_queries = 100 # Two continous actions.
+    self.ifdm_queries = 200 # Two continous actions.
 
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
@@ -71,14 +71,14 @@ class TIPS_lunarlandercont(TIPS):
       with tf.variable_scope("train_step") as scope:
         self.fdm_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.fdm_loss)
 
-  def pre_demonstration(self):
+  def dynamics_sampling(self):
     """uniform sample action to generate (s_t, s_t+1) and action pairs"""
     terminal = True
     States = []
     Nstates = []
     Actions = []
 
-    for i in range(int(round(self.M / self.alpha))):
+    for i in range(self.dynamicsSamples):
       if terminal:
         state = self.env.reset()
 
@@ -202,7 +202,7 @@ class TIPS_lunarlandercont(TIPS):
 
       # Calculate cost
       # Automatic broadcasting
-      cost = np.sum(abs(nstate_required - Nstates[:]) , axis=1)
+      cost = np.sum(abs(nstate_required - Nstates[:]), axis=1)
 
       # Check for min_cost
       min_cost_index = cost.argmin(axis=0)
@@ -236,8 +236,8 @@ class TIPS_lunarlandercont(TIPS):
 
     return min_action    
 
-  def coach(self):
-    """teach using D-COACH framework incorporating human feedback"""
+  def feedback_run(self):
+    """run and train agent using D-COACH framework incorporating human feedback"""
     terminal = False
     total_reward = 0
     state = self.env.reset()
@@ -256,8 +256,8 @@ class TIPS_lunarlandercont(TIPS):
       # Get feedback signal
       h_fb = self.human_feedback.get_h()
 
-      # Update policy
       if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero i.e. is valid
+        # Update policy
         # print("Feedback", h_fb)
         h_counter += 1 # Feedback counter
 
@@ -266,6 +266,7 @@ class TIPS_lunarlandercont(TIPS):
 
         # Get action from ifdm
         a = self.get_corrected_action(h_fb, state[0], state_corrected)
+        # print("Computed Action: ", a)
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
@@ -302,6 +303,7 @@ class TIPS_lunarlandercont(TIPS):
           time.sleep(0.02)
 
         # Use current policy
+
         # Map action from state
         a = np.reshape(self.eval_policy(state), [-1])
         # Continuous actions
@@ -317,7 +319,7 @@ class TIPS_lunarlandercont(TIPS):
           self.ExpBuff.pop(0)
 
         # Train every k time steps
-      if t_counter % self.coach_training_rate == 0:
+      if t_counter % self.feedback_training_rate == 0:
         self.update_policy_feedback()
 
       t_counter += 1 # Time counter
@@ -325,32 +327,8 @@ class TIPS_lunarlandercont(TIPS):
     print('episode_reward: %5.1f' % (total_reward))
     self.log_writer.write("\n" + "episode_reward: " + format(total_reward, '5.1f'))
 
-  def post_demonstration(self, M):
-    """using policy to generate (s_t, s_t+1) and action pairs"""
-    terminal = True
-    States = []
-    Nstates = []
-    Actions = []
-
-    for i in range(M):
-      if terminal:
-        state = self.env.reset()
-
-      prev_s = state
-      state = np.reshape(state, [-1,self.state_dim])
-
-      # Continuos action space
-      A = np.reshape(self.eval_policy(state), [-1])
-      state, _, terminal, _ = self.env.step(A)
-
-      States.append(prev_s)
-      Nstates.append(state)
-      Actions.append(A)
-
-    return States, Nstates, Actions
-
   def eval_rwd_policy(self):
-    """getting the reward by current policy model"""
+    """getting the reward by current policy"""
     terminal = False
     total_reward = 0
     state = self.env.reset()
@@ -368,5 +346,5 @@ class TIPS_lunarlandercont(TIPS):
     return total_reward
     
 if __name__ == "__main__":
-  tips = TIPS_lunarlandercont(8, 2, lr=args.lr, maxEpochs=args.maxEpochs)
+  tips = TIPS_lunarlandercont(8, 2, lr=args.lr, maxEpisodes=args.maxEpisodes)
   tips.run()
