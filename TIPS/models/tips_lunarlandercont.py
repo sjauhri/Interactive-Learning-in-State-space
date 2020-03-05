@@ -5,7 +5,7 @@ from fdm_lunarl import *
 import gym
 
 class TIPS_lunarlandercont(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=40, epochTrainIts=5000,  dynamicsSamples=10000, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=50, epochTrainIts=6000,  dynamicsSamples=5000, batch_size=32):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
@@ -17,9 +17,9 @@ class TIPS_lunarlandercont(TIPS):
     self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
-    self.errorConst = 0.15
+    self.errorConst = 0.2
     # Render time delay for this environment (in s)
-    self.render_delay = 0.065
+    self.render_delay = 0.065 # 0.05
     # Choose which feedback is valid with fb dictionary
     self.feedback_dict = {
       H_NULL: 0,
@@ -27,10 +27,11 @@ class TIPS_lunarlandercont(TIPS):
       H_DOWN: 1,
       H_LEFT: 1,
       H_RIGHT: 1,
-      DO_NOTHING: 1
+      H_HOLD: 1,
+      DO_NOTHING: 0
     }
 
-    self.ifdm_queries = 200 # Two continous actions.
+    self.ifdm_queries = 250 # Two continous actions.
 
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
@@ -72,7 +73,7 @@ class TIPS_lunarlandercont(TIPS):
         self.fdm_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.fdm_loss)
 
   def dynamics_sampling(self):
-    """uniform sample action to generate (s_t, s_t+1) and action pairs"""
+    """uniform sample action to generate (s_t, s_t+1, a_t) triplets"""
     terminal = True
     States = []
     Nstates = []
@@ -100,33 +101,72 @@ class TIPS_lunarlandercont(TIPS):
 
     return States, Nstates, Actions
 
+  def exploration_dynamics_sampling(self):
+    """using epsilon-greedy version of current policy to generate (s_t, s_t+1, a_t) triplets"""
+    terminal = True
+    States = []
+    Nstates = []
+    Actions = []
+
+    for i in range(int(round(self.dynamicsSamples/5))): # Using 20% of the initial dynamics samples
+      if terminal:
+        state = self.env.reset()
+
+      prev_s = state
+      state = np.reshape(state, [-1,self.state_dim])
+
+      # Using an epsilon-greedy policy for exploration of new actions
+      if (np.random.uniform(0,1) < 0.15):
+        # Continuos action space
+        # Actions between -1 and 1
+        A = np.random.uniform(-1, 1, self.action_dim)
+      else:
+        # Continuos action space
+        A = np.reshape(self.eval_policy(state), [-1])
+
+      state, _, terminal, _ = self.env.step(A)
+
+      States.append(prev_s)
+      Nstates.append(state)
+      Actions.append(A)
+
+      if i and (i+1) % 1000 == 0:
+        print("Collecting dynamics training data from exploration policy ", i+1)
+        self.log_writer.write("Collecting dynamics training data from exploration policy " + str(i+1) + "\n")
+
+    return States, Nstates, Actions
+
   def get_state_corrected(self, h_fb, state):
     """get corrected state label for this environment using feedback"""
     state_corrected = np.copy(state)
 
     # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()
-    if (h_fb == H_LEFT): # Angular velocity
-      state_corrected = state_corrected[5] + self.errorConst
-    elif (h_fb == H_RIGHT):
-      state_corrected = state_corrected[5] - self.errorConst
-    elif (h_fb == H_UP): # Vertical velocity
-      state_corrected = state_corrected[3] + self.errorConst
+    if (h_fb == H_LEFT):      
+      state_corrected[3] = 0                  # Zero vertical velocity
+      state_corrected[5] += self.errorConst   # Angular velocity
+    elif (h_fb == H_RIGHT):      
+      state_corrected[3] = 0                  # Zero vertical velocity
+      state_corrected[5] -= self.errorConst   # Angular velocity
+    elif (h_fb == H_UP):
+      state_corrected[3] += self.errorConst   # Vertical velocity
+      state_corrected[5] = 0                  # Zero angular velocity
     elif (h_fb == H_DOWN):
-      state_corrected = state_corrected[3] - self.errorConst/5
+      state_corrected[3] -= self.errorConst   # Vertical velocity
+      state_corrected[5] = 0                  # Zero angular velocity
     return state_corrected
 
   def get_corrected_action(self, h_fb, state, state_corrected):
     """get action to achieve next state close to state_corrected"""
 
-    if (h_fb == DO_NOTHING):
-      min_action = np.array((-0.5,0)) # Do Nothing action
+    if (h_fb == H_HOLD):
+      min_action = np.array((-0.5,0)) # Dont fire any engine
       if (args.learnFDM):
         # Debug: equal timing
         # time.sleep(0.02)
         pass
       else:
         # Debug: equal timing
-        time.sleep(0.02)
+        time.sleep(0.04)
     elif (args.learnFDM):
       # prev_time = time.time()
       # Learnt FDM:
@@ -140,11 +180,7 @@ class TIPS_lunarlandercont(TIPS):
       Nstates = self.eval_fdm(States, Actions)
 
       # Calculate cost
-      if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity
-        # Automatic broadcasting
-        cost = abs(state_corrected - Nstates[:,5])
-      else:                                       # Vertical velocity
-        cost = abs(state_corrected - Nstates[:,3])
+      cost = abs(state_corrected[3] - Nstates[:,3]) + abs(state_corrected[5] - Nstates[:,5])
 
       # Check for min_cost
       min_cost_index = cost.argmin(axis=0)
@@ -153,8 +189,6 @@ class TIPS_lunarlandercont(TIPS):
       # Debug: equal timing
       # print(time.time() - prev_time)
     else:
-      # prev_time = time.time()
-
       # True FDM:
       # Continous Actions
       min_action = np.random.uniform(-1, 1, self.action_dim)
@@ -172,17 +206,12 @@ class TIPS_lunarlandercont(TIPS):
         nstate = fdm_cont(state, curr_action)
 
         # Check cost
-        if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity
-          cost = abs(state_corrected - nstate[5])
-        else:                                       # Vertical velocity
-          cost = abs(state_corrected - nstate[3])
+        cost = abs(state_corrected[3] - nstate[3]) + abs(state_corrected[5] - nstate[5])
         
         # Check for min_cost
         if(cost < min_cost):
           min_cost = cost
           min_action = curr_action
-      # Debug: equal timing
-      # print(time.time() - prev_time)
 
     return min_action
 
@@ -300,7 +329,7 @@ class TIPS_lunarlandercont(TIPS):
           pass
         else:
           # Debug: equal timing
-          time.sleep(0.02)
+          time.sleep(0.04)
 
         # Use current policy
 

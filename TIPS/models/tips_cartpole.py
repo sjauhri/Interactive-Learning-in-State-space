@@ -74,7 +74,7 @@ class TIPS_cartpole(TIPS):
         self.fdm_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.fdm_loss)
 
   def dynamics_sampling(self):
-    """uniform sample action to generate (s_t, s_t+1) and action pairs"""
+    """uniform sample action to generate (s_t, s_t+1, a_t) triplets"""
     terminal = True
     States = []
     Nstates = []
@@ -102,17 +102,54 @@ class TIPS_cartpole(TIPS):
 
     return States, Nstates, Actions
 
+  def exploration_dynamics_sampling(self):
+    """using epsilon-greedy version of current policy to generate (s_t, s_t+1, a_t) triplets"""
+    terminal = True
+    States = []
+    Nstates = []
+    Actions = []
+
+    for i in range(int(round(self.dynamicsSamples/2))): # Using half the initial dynamics samples
+      if terminal:
+        state = self.env.reset()
+
+      prev_s = state
+      state = np.reshape(state, [-1,self.state_dim])
+
+      # Using an epsilon-greedy policy for exploration of new actions
+      if (np.random.uniform(0,1) < 0.15):
+        # Discrete action space
+        A = np.random.randint(self.action_dim)
+        a = np.zeros([self.action_dim])
+        a[A] = 1
+      else:
+        # Discrete action space
+        a = np.reshape(self.eval_policy(state), [-1])
+        A = np.argmax(a)
+
+      state, _, terminal, _ = self.env.step(A)
+
+      States.append(prev_s)
+      Nstates.append(state)
+      Actions.append(a)
+
+      if i and (i+1) % 1000 == 0:
+        print("Collecting dynamics training data from exploration policy ", i+1)
+        self.log_writer.write("Collecting dynamics training data from exploration policy " + str(i+1) + "\n")
+
+    return States, Nstates, Actions
+
   def get_state_corrected(self, h_fb, state):
     """get corrected state label for this environment using feedback"""
     state_corrected = np.copy(state)
 
     # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()    
     if (h_fb == H_LEFT):
-      state_corrected = state_corrected[1] - self.errorConst # Correcting Velocity
+      state_corrected[1] -= self.errorConst # Correcting Velocity
     elif (h_fb == H_RIGHT):
-      state_corrected = state_corrected[1] + self.errorConst # Correcting Velocity
+      state_corrected[1] += self.errorConst # Correcting Velocity
     else: # (h_fb == H_HOLD)
-      state_corrected = state_corrected[2]  # HOLD pole angle
+      state_corrected[3] = 0  # HOLD pole angular velocity zero
     
     return state_corrected
 
@@ -133,9 +170,9 @@ class TIPS_cartpole(TIPS):
 
       # Calculate cost
       if (h_fb == H_HOLD):
-        cost = abs(state_corrected - Nstates[:,2]) # Corrected Pole Angle
+        cost = abs(state_corrected[3] - Nstates[:,3]) # Corrected Pole Angular Velocity (Zero)
       else: # LEFT or RIGHT
-        cost = abs(state_corrected - Nstates[:,1]) # Corrected Velocity
+        cost = abs(state_corrected[1] - Nstates[:,1]) # Corrected Velocity
 
       # Check for min_cost
       min_cost_index = cost.argmin(axis=0)
@@ -156,7 +193,10 @@ class TIPS_cartpole(TIPS):
         nstate = fdm(state, curr_action)
 
         # Check cost
-        cost = abs(state_corrected - nstate[1])
+        if (h_fb == H_HOLD):
+          cost = abs(state_corrected[3] - nstate[3]) # Corrected Pole Angular Velocity (Zero)
+        else: # LEFT or RIGHT
+          cost = abs(state_corrected[1] - nstate[1]) # Corrected Velocity
         
         # Check for min_cost
         if(cost < min_cost):
@@ -250,7 +290,7 @@ class TIPS_cartpole(TIPS):
 
         # Get action from ifdm
         a = self.get_corrected_action(h_fb, state[0], state_corrected)
-        print("Computed Action: ", a)
+        # print("Computed Action: ", a)
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])

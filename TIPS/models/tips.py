@@ -15,7 +15,7 @@ class TIPS():
     self.ExpBuff  = []                      # Experience buffer for replay
     self.DemoBuff  = []                     # Demonstration buffer
     self.maxExpBuffSize = 20000             # Max Experience buffer size
-    self.maxDemoBuffSize = 2000             # Max Demonstration buffer size
+    self.maxDemoBuffSize = 6000             # Max Demonstration buffer size
     
     self.maxEpisodes = maxEpisodes          # maximum episodes
     self.feedback_training_rate  = 10       # Feedback training rate in the episode
@@ -87,6 +87,10 @@ class TIPS():
 
   def dynamics_sampling(self):
     """uniform sampling of actions to generate (s_t, s_t+1) and action pairs"""
+    raise NotImplementedError
+
+  def exploration_dynamics_sampling(self):
+    """using epsilon-greedy version of current policy to generate (s_t, s_t+1, a_t) triplets"""
     raise NotImplementedError
 
   def feedback_run(self):
@@ -252,17 +256,25 @@ class TIPS():
         self.feedback_run()
         print('[Episode ended]')
 
-        # Optional: Update forward dynamic model
+        # Optional: Update FDM
         if (args.learnFDM):
-          if should(2):
-            self.update_fdm()        
-        
-        if should(args.print_freq):
+          if (it < 10 and should(2)):
+            S, nS, A = self.exploration_dynamics_sampling() # Sample policy with exploration and update forward dynamic model
+            # Add to Experience Buffer
+            for id in range(0, len(S)):
+              self.ExpBuff.append((S[id], nS[id], A[id]))
+              if (len(self.ExpBuff) > self.maxExpBuffSize):
+                self.ExpBuff.pop(0)
+            # Update FDM
+            self.update_fdm()
 
+
+        if should(args.print_freq):
           policy_reward = 0
           numTrials = 10
-          for _ in range(numTrials):
+          for i in range(numTrials):
             policy_reward += self.eval_rwd_policy()
+            print("Background Trial: ", i)
           avg_reward = policy_reward/numTrials
 
           # Check policy loss on another data set.................
@@ -275,7 +287,7 @@ class TIPS():
           # ......................................................
 
           # Check fdm loss on another data set....................
-          minibatch_ids = np.random.choice(len(self.ExpBuff), int(round( self.dynamicsSamples/100 )) ) # 1% of the dynamics data
+          minibatch_ids = np.random.choice(len(self.ExpBuff), int(round( self.dynamicsSamples/10 )) ) # 10% of the dynamics data
           batch_s = [self.ExpBuff[id][0] for id in minibatch_ids]
           batch_ns = [self.ExpBuff[id][1] for id in minibatch_ids]
           batch_a = [self.ExpBuff[id][2] for id in minibatch_ids]
