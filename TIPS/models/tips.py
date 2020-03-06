@@ -49,10 +49,10 @@ class TIPS():
       targets = expert_data['observations_next']
     
     num_samples = len(inputs)
-    if(num_samples > 10000):
-      inputs = inputs[0:10000]
-      targets = targets[0:10000]
-      num_samples = 10000
+    if(num_samples > 15000):
+      inputs = inputs[0:15000]
+      targets = targets[0:15000]
+      num_samples = 15000
     print("[[[Loaded %d demonstrations]]]" % num_samples)
 
     return num_samples, inputs, targets
@@ -331,7 +331,7 @@ class TIPS():
       self.demo_examples, self.inputs, self.targets = self.load_demonstration()
 
       # store datetime for saving logs
-      self.logTime = dt.datetime.now().strftime('%d%m%H%M')
+      self.logTime = dt.datetime.now().strftime('%d%m%H%M%S')
       
       self.exp = 0
       for self.exp in range(0, args.numExperiments):
