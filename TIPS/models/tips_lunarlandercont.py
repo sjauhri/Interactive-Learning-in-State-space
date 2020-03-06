@@ -27,7 +27,7 @@ class TIPS_lunarlandercont(TIPS):
       H_DOWN: 1,
       H_LEFT: 1,
       H_RIGHT: 1,
-      H_HOLD: 1,
+      H_HOLD: 0,
       DO_NOTHING: 0
     }
 
@@ -158,7 +158,7 @@ class TIPS_lunarlandercont(TIPS):
   def get_corrected_action(self, h_fb, state, state_corrected):
     """get action to achieve next state close to state_corrected"""
 
-    if (h_fb == H_HOLD):
+    if (h_fb == H_DOWN):
       min_action = np.array((-2,0)) # Dont fire any engine
       if (args.learnFDM):
         # Debug: equal timing

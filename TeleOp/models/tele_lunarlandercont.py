@@ -2,7 +2,7 @@ from utils import *
 from feedback import *
 import gym
 
-class TELE_cartpole():
+class TELE_lunarlandercont():
   def __init__(self):    
 
     # For recording
@@ -13,7 +13,7 @@ class TELE_cartpole():
     self.maxDemoSize = 15000
     
     # Set which game to play
-    self.env = gym.make('CartPole-v0')
+    self.env = gym.make('LunarLanderContinuous-v2')
     self.action_dim = 2          # action dimension
 
     self.env.reset()
@@ -27,8 +27,8 @@ class TELE_cartpole():
     # Choose which feedback is valid with fb dictionary
     self.feedback_dict = {
       H_NULL: 0,
-      H_UP: 0,
-      H_DOWN: 0,
+      H_UP: 1,
+      H_DOWN: 1,
       H_LEFT: 1,
       H_RIGHT: 1,
       H_HOLD: 0,
@@ -52,23 +52,22 @@ class TELE_cartpole():
 
       if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero i.e. is valid
         # Get requested action
+        # Continuous actions
         if (h_fb == H_LEFT):
-          a = [1, 0]
-        else:# (h_fb == H_RIGHT):
+          a = [0, -1]
+        elif (h_fb == H_RIGHT):
           a = [0, 1]
-        # print("Requested Action: ", a)
-
-        # Discrete actions
-        A = np.argmax(a)
+        elif (h_fb == H_UP):
+          a = [1, 0]
+        elif (h_fb == H_DOWN):
+          a = [-1, 0]
       else:
-        # Random action
-        # Discrete actions
-        A = np.random.randint(self.action_dim)
-        a = np.zeros([self.action_dim])
-        a[A] = 1
+        # Do nothing action
+        # Continuous actions
+        a = [-1, 0]
 
       # Act
-      state, reward, terminal, _ = self.env.step(A)
+      state, reward, terminal, _ = self.env.step(a)
       total_reward += reward
 
       if (args.record):
@@ -110,7 +109,7 @@ class TELE_cartpole():
     print("Saved %d demonstration samples" % len(ob))
 
 if __name__ == "__main__":
-  tele = TELE_cartpole()
+  tele = TELE_lunarlandercont()
 
   if not os.path.exists(args.save_dir):
     os.makedirs(args.save_dir)
@@ -145,7 +144,6 @@ if __name__ == "__main__":
 
     average_reward = average_reward*(it)
     average_reward = (average_reward + reward)/(it+1)
-    
 
     print('episode_reward: %5.1f' % reward)
     print('Iteration %d: average_reward: %5.1f' % (it, average_reward))

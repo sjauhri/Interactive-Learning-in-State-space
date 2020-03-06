@@ -1,8 +1,8 @@
 from utils import *
-from feedback import *
+from feedback_ext import *
 import gym
 
-class TELE_cartpole():
+class TELE_reacher():
   def __init__(self):    
 
     # For recording
@@ -13,25 +13,26 @@ class TELE_cartpole():
     self.maxDemoSize = 15000
     
     # Set which game to play
-    self.env = gym.make('CartPole-v0')
+    self.env = gym.make('Reacher-v2')
     self.action_dim = 2          # action dimension
 
     self.env.reset()
     self.env.render()  # Make the environment visible
 
     # Initialise Human feedback (call render before this)
-    self.human_feedback = Feedback(self.env)
+    self.human_feedback = Feedback_ext()
+    self.human_feedback.viewer.render() # Render the additional feedback window
     
     # Render time delay for this environment (in s)
-    self.render_delay = 0.08
+    self.render_delay = 0.05
     # Choose which feedback is valid with fb dictionary
     self.feedback_dict = {
       H_NULL: 0,
-      H_UP: 0,
-      H_DOWN: 0,
+      H_UP: 1,
+      H_DOWN: 1,
       H_LEFT: 1,
       H_RIGHT: 1,
-      H_HOLD: 0,
+      H_HOLD: 1,
       DO_NOTHING: 0
     }
 
@@ -45,6 +46,7 @@ class TELE_cartpole():
     # Iterate over the episode
     while((not terminal) and (not self.human_feedback.ask_for_done()) and (not self.human_feedback.ask_for_end()) ):
       self.env.render()  # Make the environment visible
+      self.human_feedback.viewer.render() # Render the additional feedback window
       time.sleep(self.render_delay)    # Add delay to rendering if necessary
 
       # Get feedback signal
@@ -52,23 +54,22 @@ class TELE_cartpole():
 
       if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero i.e. is valid
         # Get requested action
+        # Continuous actions
         if (h_fb == H_LEFT):
-          a = [1, 0]
-        else:# (h_fb == H_RIGHT):
-          a = [0, 1]
-        # print("Requested Action: ", a)
-
-        # Discrete actions
-        A = np.argmax(a)
+          a = [0.2, 0]
+        elif (h_fb == H_RIGHT):
+          a = [-0.2, 0]
+        elif (h_fb == H_UP):
+          a = [0, 0.2]
+        elif (h_fb == H_DOWN):
+          a = [0, -0.2]
       else:
-        # Random action
-        # Discrete actions
-        A = np.random.randint(self.action_dim)
-        a = np.zeros([self.action_dim])
-        a[A] = 1
+        # Do nothing action
+        # Continuous actions
+        a = [0, 0]
 
       # Act
-      state, reward, terminal, _ = self.env.step(A)
+      state, reward, terminal, _ = self.env.step(a)
       total_reward += reward
 
       if (args.record):
@@ -110,7 +111,7 @@ class TELE_cartpole():
     print("Saved %d demonstration samples" % len(ob))
 
 if __name__ == "__main__":
-  tele = TELE_cartpole()
+  tele = TELE_reacher()
 
   if not os.path.exists(args.save_dir):
     os.makedirs(args.save_dir)
@@ -145,7 +146,6 @@ if __name__ == "__main__":
 
     average_reward = average_reward*(it)
     average_reward = (average_reward + reward)/(it+1)
-    
 
     print('episode_reward: %5.1f' % reward)
     print('Iteration %d: average_reward: %5.1f' % (it, average_reward))
