@@ -15,10 +15,10 @@ class TIPS():
     self.ExpBuff  = []                      # Experience buffer for replay
     self.DemoBuff  = []                     # Demonstration buffer
     self.maxExpBuffSize = 20000             # Max Experience buffer size
-    self.maxDemoBuffSize = 6000             # Max Demonstration buffer size
+    self.maxDemoBuffSize = 4000             # Max Demonstration buffer size
     
     self.maxEpisodes = maxEpisodes          # maximum episodes
-    self.feedback_training_rate  = 10       # Feedback training rate in the episode
+    self.feedback_training_rate  = 4        # Feedback training rate in the episode
 
     # initial session
     config = tf.ConfigProto()
@@ -169,7 +169,7 @@ class TIPS():
         # Debug
         if it % 500 == 0:
           # Check fdm loss
-          minibatch_ids = np.random.choice(len(self.ExpBuff), int(round( self.dynamicsSamples/100 )) ) # 1% of the dynamics data
+          minibatch_ids = np.random.choice(len(self.ExpBuff), int(round( self.dynamicsSamples/10 )) ) # 10% of the dynamics data
           batch_s = [self.ExpBuff[id][0] for id in minibatch_ids]
           batch_ns = [self.ExpBuff[id][1] for id in minibatch_ids]
           batch_a = [self.ExpBuff[id][2] for id in minibatch_ids]
@@ -258,7 +258,7 @@ class TIPS():
 
         # Optional: Update FDM
         if (args.learnFDM):
-          if (it < 10 and should(2)):
+          if (it < 16 and should(2)):
             S, nS, A = self.exploration_dynamics_sampling() # Sample policy with exploration and update forward dynamic model
             # Add to Experience Buffer
             for id in range(0, len(S)):
@@ -271,14 +271,14 @@ class TIPS():
 
         if should(args.print_freq):
           policy_reward = 0
-          numTrials = 10
+          numTrials = 9
           for i in range(numTrials):
             policy_reward += self.eval_rwd_policy()
-            print("Background Trial: ", i)
+            print("Background Trial: ", i+1)
           avg_reward = policy_reward/numTrials
 
           # Check policy loss on another data set.................
-          S, nS = self.sample_demo(int(round(self.demo_examples/100))) # 1% of the demo data
+          S, nS = self.sample_demo(int(round(self.demo_examples/10))) # 10% of the demo data
           A = []
           for i in range(len(S)):
             A.append(self.get_action(S[i],nS[i]))

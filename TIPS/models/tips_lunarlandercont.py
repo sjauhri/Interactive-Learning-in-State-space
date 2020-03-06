@@ -5,7 +5,7 @@ from fdm_lunarl import *
 import gym
 
 class TIPS_lunarlandercont(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=50, epochTrainIts=6000,  dynamicsSamples=5000, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=50, epochTrainIts=5000,  dynamicsSamples=10000, batch_size=32):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
@@ -108,7 +108,7 @@ class TIPS_lunarlandercont(TIPS):
     Nstates = []
     Actions = []
 
-    for i in range(int(round(self.dynamicsSamples/5))): # Using 20% of the initial dynamics samples
+    for i in range(int(round(self.dynamicsSamples/10))): # Using 10% of the initial dynamics samples
       if terminal:
         state = self.env.reset()
 
@@ -116,7 +116,7 @@ class TIPS_lunarlandercont(TIPS):
       state = np.reshape(state, [-1,self.state_dim])
 
       # Using an epsilon-greedy policy for exploration of new actions
-      if (np.random.uniform(0,1) < 0.15):
+      if (np.random.uniform(0,1) < 0.1):
         # Continuos action space
         # Actions between -1 and 1
         A = np.random.uniform(-1, 1, self.action_dim)
@@ -141,10 +141,10 @@ class TIPS_lunarlandercont(TIPS):
     state_corrected = np.copy(state)
 
     # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()
-    if (h_fb == H_LEFT):      
+    if (h_fb == H_LEFT):
       state_corrected[3] = 0                  # Zero vertical velocity
       state_corrected[5] += self.errorConst   # Angular velocity
-    elif (h_fb == H_RIGHT):      
+    elif (h_fb == H_RIGHT):
       state_corrected[3] = 0                  # Zero vertical velocity
       state_corrected[5] -= self.errorConst   # Angular velocity
     elif (h_fb == H_UP):
@@ -159,7 +159,7 @@ class TIPS_lunarlandercont(TIPS):
     """get action to achieve next state close to state_corrected"""
 
     if (h_fb == H_HOLD):
-      min_action = np.array((-1,0)) # Dont fire any engine
+      min_action = np.array((-2,0)) # Dont fire any engine
       if (args.learnFDM):
         # Debug: equal timing
         # time.sleep(0.02)
@@ -207,7 +207,7 @@ class TIPS_lunarlandercont(TIPS):
 
         # Check cost
         cost = abs(state_corrected[3] - nstate[3]) + abs(state_corrected[5] - nstate[5])
-        
+
         # Check for min_cost
         if(cost < min_cost):
           min_cost = cost
@@ -252,7 +252,7 @@ class TIPS_lunarlandercont(TIPS):
         # val_set = [0.2*x for x in range(-5,6)]
         # curr_action = np.random.choice(val_set, self.action_dim)
 
-        # Query ifdm to get next state        
+        # Query ifdm to get next state
         nstate = fdm_cont(state, curr_action)
 
         # Check cost
@@ -342,10 +342,10 @@ class TIPS_lunarlandercont(TIPS):
         state, reward, terminal, _ = self.env.step(A)
         total_reward += reward
         state = np.reshape(state, [-1, self.state_dim])
-        # Add to ExpBuff
-        self.ExpBuff.append((prev_s[0], state[0], a))
-        if (len(self.ExpBuff) > self.maxExpBuffSize):
-          self.ExpBuff.pop(0)
+        # # Add to ExpBuff
+        # self.ExpBuff.append((prev_s[0], state[0], a))
+        # if (len(self.ExpBuff) > self.maxExpBuffSize):
+        #   self.ExpBuff.pop(0)
 
         # Train every k time steps
       if t_counter % self.feedback_training_rate == 0:

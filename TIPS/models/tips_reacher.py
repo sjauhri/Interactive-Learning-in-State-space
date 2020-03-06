@@ -5,17 +5,17 @@ from fdm_reacher import *
 import gym
 
 class TIPS_reacher(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpochs=20, epochTrainIts=6000, M=150, batch_size=32):
-    TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpochs=maxEpochs, epochTrainIts=epochTrainIts, M=M, batch_size=batch_size)
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=20, epochTrainIts=4000,  dynamicsSamples=1000, batch_size=32):
+    TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
     self.env = gym.make('Reacher-v2')
     self.env.reset()
     self.env.render()  # Make the environment visible
-    self.human_feedback.viewer.render() # Render the additional feedback window
 
     # Initialise Human feedback in external window
     self.human_feedback = Feedback_ext()
+    self.human_feedback.viewer.render() # Render the additional feedback window
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
     self.errorConst = 1
@@ -28,10 +28,11 @@ class TIPS_reacher(TIPS):
       H_DOWN: 1,
       H_LEFT: 1,
       H_RIGHT: 1,
-      DO_NOTHING: 1
+      H_HOLD: 1,
+      DO_NOTHING: 0
     }
 
-    self.ifdm_queries = 100 # Two continous actions.
+    self.ifdm_queries = 250 # Two continous actions.
 
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
@@ -72,19 +73,18 @@ class TIPS_reacher(TIPS):
       with tf.variable_scope("train_step") as scope:
         self.fdm_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.fdm_loss)
 
-  def pre_demonstration(self):
-    """uniform sample action to generate (s_t, s_t+1) and action pairs"""
+  def dynamics_sampling(self):
+    """uniform sample action to generate (s_t, s_t+1, a_t) triplets"""
     terminal = True
     States = []
     Nstates = []
     Actions = []
 
-    for i in range(int(round(self.M / self.alpha))):
+    for i in range(self.dynamicsSamples):
       if terminal:
         state = self.env.reset()
 
       prev_s = state
-      state = np.reshape(state, [-1, self.state_dim])
 
       # Continuos action space
       # Actions between -1 and 1
@@ -102,110 +102,66 @@ class TIPS_reacher(TIPS):
 
     return States, Nstates, Actions
 
+  def exploration_dynamics_sampling(self):
+    """using epsilon-greedy version of current policy to generate (s_t, s_t+1, a_t) triplets"""
+    terminal = True
+    States = []
+    Nstates = []
+    Actions = []
+
+    for i in range(int(round(self.dynamicsSamples/5))): # Using 20% of the initial dynamics samples
+      if terminal:
+        state = self.env.reset()
+
+      prev_s = state
+      state = np.reshape(state, [-1,self.state_dim])
+
+      # Using an epsilon-greedy policy for exploration of new actions
+      if (np.random.uniform(0,1) < 0.15):
+        # Continuos action space
+        # Actions between -1 and 1
+        A = np.random.uniform(-1, 1, self.action_dim)
+      else:
+        # Continuos action space
+        A = np.reshape(self.eval_policy(state), [-1])
+
+      state, _, terminal, _ = self.env.step(A)
+
+      States.append(prev_s)
+      Nstates.append(state)
+      Actions.append(A)
+
+      if i and (i+1) % 1000 == 0:
+        print("Collecting dynamics training data from exploration policy ", i+1)
+        self.log_writer.write("Collecting dynamics training data from exploration policy " + str(i+1) + "\n")
+
+    return States, Nstates, Actions
+
   def get_state_corrected(self, h_fb, state):
     """get corrected state label for this environment using feedback"""
     state_corrected = np.copy(state)
 
     # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()
-    if (h_fb == H_LEFT): # Angular velocity of 1st joint
-      state_corrected = state_corrected[6] + self.errorConst      
+    if (h_fb == H_LEFT):
+      state_corrected[6] += self.errorConst  # Angular velocity of 1st joint
+      state_corrected[7] = 0                 # Zero angular velocity of 2nd joint
     elif (h_fb == H_RIGHT):
-      state_corrected = state_corrected[6] - self.errorConst      
-    elif (h_fb == H_UP): # Angular velocity of 2nd joint
-      state_corrected = state_corrected[7] + self.errorConst
+      state_corrected[6] -= self.errorConst  # Angular velocity of 1st joint
+      state_corrected[7] = 0                 # Zero angular velocity of 2nd joint
+    elif (h_fb == H_UP):
+      state_corrected[6] = 0                 # Zero angular velocity of 1st joint
+      state_corrected[7] += self.errorConst  # Angular velocity of 2nd joint
     elif (h_fb == H_DOWN):
-      state_corrected = state_corrected[7] - self.errorConst
+      state_corrected[6] = 0                 # Zero angular velocity of 1st joint
+      state_corrected[7] -= self.errorConst  # Angular velocity of 2nd joint
+    else:# (h_fb == H_HOLD):
+      state_corrected[6] = 0                 # Zero angular velocity of 1st joint
+      state_corrected[7] = 0                 # Zero angular velocity of 2nd joint
     return state_corrected
 
   def get_corrected_action(self, h_fb, state, state_corrected):
     """get action to achieve next state close to state_corrected"""
-    # Continous Actions
-    # min_action = np.random.uniform(-1, 1, self.action_dim)
-    min_action = [1,1] # Start with Max action
-    min_state_diff = np.Inf
-    min_cost = np.Inf
-    
-    if (h_fb == DO_NOTHING):
-      min_action = np.array((0,0)) # Do Nothing action
-      if (args.learnFDM):
-        # Debug: equal timing
-        # time.sleep(0.02)
-        pass
-      else:
-        # Debug: equal timing
-        # time.sleep(0.02)
-        pass
-    elif (args.learnFDM):
-      # prev_time = time.time()
-      # Learnt FDM:
-      
-      # Make a vector of same states
-      States = np.tile(state, (self.ifdm_queries,1))
-      # Choose random actions
-      # Continuous Actions
-      Actions = np.random.uniform(-1, 1, (self.ifdm_queries,self.action_dim) )
-      # Query ifdm to get next state
-      Nstates = self.eval_fdm(States, Actions)      
 
-      # Calculate cost
-      if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity of 1st joint
-        # Automatic broadcasting
-        cost = abs(state_corrected - Nstates[:,6])
-      else:                                       # Angular velocity of 2nd joint
-        cost = abs(state_corrected - Nstates[:,7])
-
-      # Check for min_cost
-      min_cost_index = cost.argmin(axis=0)
-      min_action = Actions[min_cost_index]
-
-      # Debug: equal timing
-      # print(time.time() - prev_time)
-
-    else:
-      # prev_time = time.time()
-      for _ in range(1, self.ifdm_queries+1):
-        # True FDM:
-
-        # Choose random action
-        # Continous Actions (small)
-        curr_action = np.random.uniform(-0.4, 0.4, self.action_dim)
-        # curr_action[0] = 0 # Debug
-        # Discretization
-        # val_set = [0.1*x for x in range(-5,6)]
-        # curr_action = np.random.choice(val_set, self.action_dim)
-
-        # Query ifdm to get next state
-        nstate = fdm_cont(state, curr_action)
-
-        # Check cost
-        if ((h_fb == H_LEFT) or (h_fb == H_RIGHT)): # Angular velocity of 1st joint
-          cost = abs(state_corrected - nstate[6])
-        else:                                       # Angular velocity of 2nd joint
-          cost = abs(state_corrected - nstate[7])
-        
-        # Check for min_cost and non-uniqueness
-        if((cost < min_cost) or (abs(min_cost-cost) < 0.1)): # If cost is lower or in neighborhood
-          # # Choose smaller action
-          # if(np.linalg.norm(curr_action) < np.linalg.norm(min_action)):
-          #   min_cost = cost
-          #   min_action = curr_action
-          # Choose smaller state_diff
-          if(np.linalg.norm(state-nstate) < min_state_diff):
-            min_cost = cost
-            min_action = curr_action
-            min_state_diff = np.linalg.norm(state-nstate)
-
-      # Debug: equal timing
-      # print(time.time() - prev_time)
-
-    return min_action
-
-  def get_action(self, state, nstate_required):
-    """get action to achieve next state close to nstate_required"""
-    # Continous Actions
-    min_action = np.random.uniform(-1, 1, self.action_dim)
-    min_cost = np.Inf
-    
     if (args.learnFDM):
       # Learnt FDM:
       
@@ -215,11 +171,72 @@ class TIPS_reacher(TIPS):
       # Continuous Actions
       Actions = np.random.uniform(-1, 1, (self.ifdm_queries,self.action_dim) )
       # Query ifdm to get next state
-      Nstates = self.eval_fdm(States, Actions)      
+      Nstates = self.eval_fdm(States, Actions)
+
+      # Calculate cost
+      cost = abs(state_corrected[6] - Nstates[:,6]) + abs(state_corrected[7] - Nstates[:,7])
+
+      # Check for min_cost
+      min_cost_index = cost.argmin(axis=0)
+      min_action = Actions[min_cost_index]
+    else:
+      # True FDM:
+
+      # Continous Actions
+      # min_action = np.random.uniform(-1, 1, self.action_dim)
+      min_action = [1,1] # Start with Max action
+      # min_state_diff = np.Inf
+      min_cost = np.Inf
+
+      for _ in range(1, self.ifdm_queries+1):
+        # Choose random action
+        # Continous Actions
+        curr_action = np.random.uniform(-1, 1, self.action_dim)
+        # Discretization
+        # val_set = [0.1*x for x in range(-5,6)]
+        # curr_action = np.random.choice(val_set, self.action_dim)
+
+        # Query ifdm to get next state
+        nstate = fdm_cont(state, curr_action)
+
+        # Check cost
+        cost = abs(state_corrected[6] - nstate[6]) + abs(state_corrected[7] - nstate[7])
+
+        # Check for min_cost
+        if(cost < min_cost):
+          min_cost = cost
+          min_action = curr_action
+        # # Check for min_cost and non-uniqueness
+        # if((cost < min_cost) or (abs(min_cost-cost) < 0.1)): # If cost is lower or in neighborhood
+        #   # # Choose smaller action
+        #   # if(np.linalg.norm(curr_action) < np.linalg.norm(min_action)):
+        #   #   min_cost = cost
+        #   #   min_action = curr_action
+        #   # Choose smaller state_diff
+        #   if(np.linalg.norm(state-nstate) < min_state_diff):
+        #     min_cost = cost
+        #     min_action = curr_action
+        #     min_state_diff = np.linalg.norm(state-nstate)
+
+    return min_action
+
+  def get_action(self, state, nstate_required):
+    """get action to achieve next state close to nstate_required"""
+
+    if (args.learnFDM):
+      # Learnt FDM:
+      
+      # Make a vector of same states
+      States = np.tile(state, (self.ifdm_queries,1))
+      # Choose random actions
+      # Continuous Actions
+      Actions = np.random.uniform(-1, 1, (self.ifdm_queries,self.action_dim) )
+      # Query ifdm to get next state
+      Nstates = self.eval_fdm(States, Actions)
 
       # Calculate cost
       # Automatic broadcasting
-      cost = np.sum(abs(nstate_required - Nstates[:]) , axis=1)
+      cost = np.sum(abs(nstate_required - Nstates[:]), axis=1)
 
       # Check for min_cost
       min_cost_index = cost.argmin(axis=0)
@@ -227,10 +244,15 @@ class TIPS_reacher(TIPS):
 
     else:
       # True FDM:
+
+      # Continous Actions
+      min_action = np.random.uniform(-1, 1, self.action_dim)
+      min_cost = np.Inf
+
       for _ in range(1, self.ifdm_queries+1):
         # Choose random action
         # Continous Actions
-        curr_action = np.random.uniform(-1, 1, self.action_dim)        
+        curr_action = np.random.uniform(-1, 1, self.action_dim)
         # Discretization
         # val_set = [0.2*x for x in range(-5,6)]
         # curr_action = np.random.choice(val_set, self.action_dim)
@@ -248,8 +270,8 @@ class TIPS_reacher(TIPS):
 
     return min_action    
 
-  def coach(self):
-    """COACH algorithm incorporating human feedback"""
+  def feedback_run(self):
+    """run and train agent using D-COACH framework incorporating human feedback"""
     terminal = False
     total_reward = 0
     state = self.env.reset()
@@ -269,8 +291,8 @@ class TIPS_reacher(TIPS):
       # Get feedback signal
       h_fb = self.human_feedback.get_h()
 
-      # Update policy
       if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero i.e. is valid
+        # Update policy
         # print("Feedback", h_fb)
         h_counter += 1 # Feedback counter
 
@@ -279,14 +301,7 @@ class TIPS_reacher(TIPS):
 
         # Get action from ifdm
         a = self.get_corrected_action(h_fb, state[0], state_corrected)
-        print("Computed_IFDM action: ", a)
-        # Debug incorrect action
-        # if not args.cont_actions:
-        #   if ((self.feedback_dict.get(h_fb) == -1 and a[0][1] == 1) or (self.feedback_dict.get(h_fb) == 1 and a[0][0] == 1)):
-        #     print("MISLABEL!")
-        # else:
-        #   if ((self.feedback_dict.get(h_fb) == -1 and a[0][1] > 0.5) or (self.feedback_dict.get(h_fb) == 1 and a[0][1] < -0.5)):
-        #     print("MISLABEL!")
+        # print("Computed_IFDM action: ", a)
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
@@ -314,21 +329,12 @@ class TIPS_reacher(TIPS):
         if (len(self.ExpBuff) > self.maxExpBuffSize):
           self.ExpBuff.pop(0)
       else:
-        if (args.learnFDM):
-          # Debug: equal timing
-          # time.sleep(0.02)
-          pass
-        else:
-          # Debug: equal timing
-          # time.sleep(0.02)
-          pass
-
         # Use current policy
+
         # Map action from state
         a = np.reshape(self.eval_policy(state), [-1])
         # Continuous actions
         A = np.copy(a)
-        # A = np.zeros(self.action_dim) # Debug
 
         # Act
         state, reward, terminal, _ = self.env.step(A)
@@ -340,40 +346,16 @@ class TIPS_reacher(TIPS):
           self.ExpBuff.pop(0)
 
         # Train every k time steps
-      if t_counter % self.coach_training_rate == 0:
+      if t_counter % self.feedback_training_rate == 0:
         self.update_policy_feedback()
 
       t_counter += 1 # Time counter
 
     print('episode_reward: %5.1f' % (total_reward))
-    self.log_writer.write("\n" + "episode_reward: " + format(total_reward, '5.1f'))    
-
-  def post_demonstration(self, M):
-    """using policy to generate (s_t, s_t+1) and action pairs"""
-    terminal = True
-    States = []
-    Nstates = []
-    Actions = []
-
-    for i in range(M):
-      if terminal:
-        state = self.env.reset()
-
-      prev_s = state
-      state = np.reshape(state, [-1,self.state_dim])
-
-      # Continuos action space
-      A = np.reshape(self.eval_policy(state), [-1])
-      state, _, terminal, _ = self.env.step(A)
-
-      States.append(prev_s)
-      Nstates.append(state)
-      Actions.append(A)
-
-    return States, Nstates, Actions
+    self.log_writer.write("\n" + "episode_reward: " + format(total_reward, '5.1f'))
 
   def eval_rwd_policy(self):
-    """getting the reward by current policy model"""
+    """getting the reward by current policy"""
     terminal = False
     total_reward = 0
     state = self.env.reset()
@@ -391,5 +373,5 @@ class TIPS_reacher(TIPS):
     return total_reward
     
 if __name__ == "__main__":
-  tips = TIPS_reacher(11, 2, lr=args.lr, maxEpochs=args.maxEpochs)
+  tips = TIPS_reacher(11, 2, lr=args.lr, maxEpisodes=args.maxEpisodes)
   tips.run()

@@ -1,0 +1,89 @@
+Collecting dynamics training data 1000
+FDM train: iteration: 500, fdm_loss: 0.370227
+FDM train: iteration: 1000, fdm_loss: 0.194791
+FDM train: iteration: 1500, fdm_loss: 0.116201
+FDM train: iteration: 2000, fdm_loss: 0.045543
+FDM train: iteration: 2500, fdm_loss: 0.040181
+FDM train: iteration: 3000, fdm_loss: 0.071775
+FDM train: iteration: 3500, fdm_loss: 0.436827
+FDM train: iteration: 4000, fdm_loss: 1.735209
+
+episode_reward: -51.6
+iteration: 1, average_reward: -19.47163374496543, policy_loss: 0.026710, fdm_loss: 0.126696
+
+
+episode_reward: -24.4FDM train: iteration: 500, fdm_loss: 0.015890
+FDM train: iteration: 1000, fdm_loss: 0.013079
+FDM train: iteration: 1500, fdm_loss: 0.012618
+FDM train: iteration: 2000, fdm_loss: 0.141429
+FDM train: iteration: 2500, fdm_loss: 0.446522
+FDM train: iteration: 3000, fdm_loss: 0.025923
+FDM train: iteration: 3500, fdm_loss: 0.111550
+FDM train: iteration: 4000, fdm_loss: 0.062090
+
+iteration: 2, average_reward: -17.410466731074518, policy_loss: 0.064693, fdm_loss: 0.020309
+
+
+episode_reward: -17.5
+iteration: 3, average_reward: -16.2418444850665, policy_loss: 0.069604, fdm_loss: 0.094334
+
+
+episode_reward: -29.9FDM train: iteration: 500, fdm_loss: 0.015720
+FDM train: iteration: 1000, fdm_loss: 0.029797
+FDM train: iteration: 1500, fdm_loss: 0.020982
+FDM train: iteration: 2000, fdm_loss: 0.023954
+FDM train: iteration: 2500, fdm_loss: 0.005115
+FDM train: iteration: 3000, fdm_loss: 0.008261
+FDM train: iteration: 3500, fdm_loss: 0.007386
+FDM train: iteration: 4000, fdm_loss: 0.013685
+
+iteration: 4, average_reward: -104.5837409780891, policy_loss: 0.026597, fdm_loss: 0.098802
+
+
+episode_reward: -25.4
+iteration: 5, average_reward: -16.12892926707574, policy_loss: 0.033079, fdm_loss: 0.063735
+
+
+episode_reward: -17.6FDM train: iteration: 500, fdm_loss: 0.014560
+FDM train: iteration: 1000, fdm_loss: 0.015632
+FDM train: iteration: 1500, fdm_loss: 0.034045
+FDM train: iteration: 2000, fdm_loss: 0.004607
+FDM train: iteration: 2500, fdm_loss: 0.009238
+FDM train: iteration: 3000, fdm_loss: 0.001549
+FDM train: iteration: 3500, fdm_loss: 0.002413
+FDM train: iteration: 4000, fdm_loss: 0.009264
+
+iteration: 6, average_reward: -13.756097213508777, policy_loss: 0.050566, fdm_loss: 0.021707
+
+
+episode_reward: -15.2
+iteration: 7, average_reward: -12.227063143302038, policy_loss: 0.023501, fdm_loss: 0.011148
+
+
+episode_reward: -10.5FDM train: iteration: 500, fdm_loss: 0.003758
+FDM train: iteration: 1000, fdm_loss: 0.001699
+FDM train: iteration: 1500, fdm_loss: 0.005659
+FDM train: iteration: 2000, fdm_loss: 0.006149
+FDM train: iteration: 2500, fdm_loss: 0.002602
+FDM train: iteration: 3000, fdm_loss: 0.003679
+FDM train: iteration: 3500, fdm_loss: 0.001724
+FDM train: iteration: 4000, fdm_loss: 0.007202
+
+iteration: 8, average_reward: -11.275695240099253, policy_loss: 0.030061, fdm_loss: 0.019351
+
+
+episode_reward: -13.8
+iteration: 9, average_reward: -12.560715165676456, policy_loss: 0.032736, fdm_loss: 0.019378
+
+
+episode_reward: -12.5FDM train: iteration: 500, fdm_loss: 0.002115
+FDM train: iteration: 1000, fdm_loss: 0.062654
+FDM train: iteration: 1500, fdm_loss: 0.005014
+FDM train: iteration: 2000, fdm_loss: 0.003261
+FDM train: iteration: 2500, fdm_loss: 0.001438
+FDM train: iteration: 3000, fdm_loss: 0.000714
+FDM train: iteration: 3500, fdm_loss: 0.002152
+FDM train: iteration: 4000, fdm_loss: 0.000395
+
+iteration: 10, average_reward: -13.187752080019687, policy_loss: 0.026985, fdm_loss: 0.024990
+

@@ -33,6 +33,8 @@ class Feedback_ext:
         if k == key.DOWN:
             self.h_fb = H_DOWN
         if k == key.Z:
+            self.h_fb = H_HOLD
+        if k == key.X:
             self.h_fb = DO_NOTHING
 
     def key_release(self, k, mod):
