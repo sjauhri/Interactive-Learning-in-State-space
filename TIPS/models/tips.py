@@ -273,8 +273,11 @@ class TIPS():
           policy_reward = 0
           numTrials = 9
           for i in range(numTrials):
-            policy_reward += self.eval_rwd_policy()
-            print("Background Trial: ", i+1)
+            curr_reward = self.eval_rwd_policy()
+            policy_reward += curr_reward
+            print("Background Trial: %d, reward: %5.1f" % (i+1, curr_reward))
+            self.log_writer.write("\n" + "Background Trial: " + str(i+1) + ", reward: " + str(curr_reward))
+            self.reward_writer.write(format(curr_reward, '8.6f') + "\n" )
           avg_reward = policy_reward/numTrials
 
           # Check policy loss on another data set.................
@@ -287,17 +290,18 @@ class TIPS():
           # ......................................................
 
           # Check fdm loss on another data set....................
-          minibatch_ids = np.random.choice(len(self.ExpBuff), int(round( self.dynamicsSamples/10 )) ) # 10% of the dynamics data
-          batch_s = [self.ExpBuff[id][0] for id in minibatch_ids]
-          batch_ns = [self.ExpBuff[id][1] for id in minibatch_ids]
-          batch_a = [self.ExpBuff[id][2] for id in minibatch_ids]
+          fdm_loss = 0
+          if (len(self.ExpBuff) > 0):
+            minibatch_ids = np.random.choice(len(self.ExpBuff), int(round( self.dynamicsSamples/10 )) ) # 10% of the dynamics data
+            batch_s = [self.ExpBuff[id][0] for id in minibatch_ids]
+            batch_ns = [self.ExpBuff[id][1] for id in minibatch_ids]
+            batch_a = [self.ExpBuff[id][2] for id in minibatch_ids]
 
-          fdm_loss = self.get_fdm_loss(batch_s, batch_ns, batch_a)
-          # ......................................................
-          # print('iteration: %5d, average_reward: %5.1f, policy_loss: %8.6f, fdm_loss: %8.6f' % ((it+1), avg_reward, policy_loss, fdm_loss))
-          print('iteration: %5d, average_reward: %5.1f' % ((it+1), avg_reward))
+            fdm_loss = self.get_fdm_loss(batch_s, batch_ns, batch_a)
+          # ......................................................          
+          print('Iteration: %5d, average_reward: %5.1f' % ((it+1), avg_reward))
           self.result_writer.write( str(it+1) + " , " + format(avg_reward, '8.6f') + " , " + format(policy_loss, '8.6f') + " , " + format(fdm_loss, '8.6f') + "\n" )
-          self.log_writer.write("\n" + "iteration: " + str(it+1) + ", average_reward: " + str(avg_reward) + ", policy_loss: " + format(policy_loss, '8.6f') + ", fdm_loss: " + format(fdm_loss, '8.6f') + "\n" + "\n")
+          self.log_writer.write("\n" + "Iteration: " + str(it+1) + ", average_reward: " + str(avg_reward) + ", policy_loss: " + format(policy_loss, '8.6f') + ", fdm_loss: " + format(fdm_loss, '8.6f') + "\n" + "\n")
 
         # saving session
         if should(args.save_freq):
@@ -340,11 +344,14 @@ class TIPS():
         np.random.seed(self.exp + 5)
         
         self.result_writer = open(args.result_dir + self.logTime + "_" + str(self.exp) + ".csv", "w") # csv episode result log
+        self.reward_writer = open(args.result_dir + self.logTime + "_rwd_" + str(self.exp) + ".csv", "w") # csv all rewards log
         self.result_writer.write("iteration,average_reward,policy_loss,fdm_loss\n")
+        self.reward_writer.write("agent_rewards\n")
 
         self.log_writer = open(args.result_dir + self.logTime + "_" + str(self.exp) + ".txt", "w") # txt debug log with everything
         
         self.train() # Train epochs
         
         self.result_writer.close()
+        self.reward_writer.close()
         self.log_writer.close()
