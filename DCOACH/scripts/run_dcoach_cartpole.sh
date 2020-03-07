@@ -1,0 +1,2 @@
+#!/bin/bash
+python3 models/dcoach_cartpole.py --mode=train --result_dir=results/dcoach/cartpole/ --session_dir=session/dcoach/cartpole/ --maxEpisodes=50 --numExperiments=1 #--usePrevSession --prev_session_dir=prev_sessions/dcoach/cartpole/

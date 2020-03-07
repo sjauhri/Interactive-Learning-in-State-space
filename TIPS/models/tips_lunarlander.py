@@ -20,6 +20,9 @@ class TIPS_lunarlander(TIPS):
     self.errorConst = 0.25
     # Render time delay for this environment (in s)
     self.render_delay = 0.07
+    # Feedback training rate in the episode    
+    self.feedback_training_rate  = 4
+    
     # Choose which feedback is valid with fb dictionary
     self.feedback_dict = {
       H_NULL: 0,

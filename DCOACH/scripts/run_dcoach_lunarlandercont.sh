@@ -1,0 +1,2 @@
+#!/bin/bash
+python3 models/dcoach_lunarlandercont.py --mode=train --result_dir=results/dcoach/lunarlandercont/ --session_dir=session/dcoach/lunarlandercont/ --maxEpisodes=50 --numExperiments=1 #--usePrevSession --prev_session_dir=prev_sessions/dcoach/lunarlandercont/

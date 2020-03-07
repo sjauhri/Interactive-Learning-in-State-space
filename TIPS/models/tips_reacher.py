@@ -21,6 +21,9 @@ class TIPS_reacher(TIPS):
     self.errorConst = 1
     # Render time delay for this environment (in s)
     self.render_delay = 0.05
+    # Feedback training rate in the episode
+    self.feedback_training_rate  = 10
+
     # Choose which feedback is valid with fb dictionary
     self.feedback_dict = {
       H_NULL: 0,

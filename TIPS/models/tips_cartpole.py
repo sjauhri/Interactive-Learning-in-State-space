@@ -20,6 +20,9 @@ class TIPS_cartpole(TIPS):
     self.errorConst = 0.2
     # Render time delay for this environment (in s)
     self.render_delay = 0.08
+    # Feedback training rate in the episode
+    self.feedback_training_rate  = 10
+
     # Choose which feedback is valid with fb dictionary
     self.feedback_dict = {
       H_NULL: 0,

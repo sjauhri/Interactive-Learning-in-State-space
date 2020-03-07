@@ -18,7 +18,6 @@ class TIPS():
     self.maxDemoBuffSize = 4000             # Max Demonstration buffer size
     
     self.maxEpisodes = maxEpisodes          # maximum episodes
-    self.feedback_training_rate  = 4        # Feedback training rate in the episode
 
     # initial session
     config = tf.ConfigProto()
