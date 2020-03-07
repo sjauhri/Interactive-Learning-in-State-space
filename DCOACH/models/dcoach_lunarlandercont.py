@@ -87,9 +87,9 @@ class DCOACH_lunarlandercont(DCOACH):
         elif (h_fb == H_DOWN):
           a[0] -= self.errorConst   # Don't fire bottom engine
           a[1] = 0                  # Don't fire side engine
-
         # print("Computed Action: ", a)
         # Clip action to permissible values
+        a = np.clip(a, -1, 1)
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
