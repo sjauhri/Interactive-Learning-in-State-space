@@ -1,0 +1,192 @@
+Collecting dynamics training data 1000
+FDM train: iteration: 500, fdm_loss: 0.340482
+FDM train: iteration: 1000, fdm_loss: 0.230888
+FDM train: iteration: 1500, fdm_loss: 0.116977
+FDM train: iteration: 2000, fdm_loss: 0.376171
+FDM train: iteration: 2500, fdm_loss: 0.081384
+FDM train: iteration: 3000, fdm_loss: 0.081452
+FDM train: iteration: 3500, fdm_loss: 0.439641
+FDM train: iteration: 4000, fdm_loss: 0.186716
+
+episode_reward: -32.9
+Background Trial: 1, reward: -13.406115365757659
+Background Trial: 2, reward: -13.459223704972391
+Background Trial: 3, reward: -13.765972176698238
+Background Trial: 4, reward: -13.906860658825021
+Background Trial: 5, reward: -14.01923729577291
+Background Trial: 6, reward: -14.321795429934097
+Background Trial: 7, reward: -13.617679945050808
+Background Trial: 8, reward: -14.413510779116454
+Background Trial: 9, reward: -13.724596771801778
+Iteration: 1, average_reward: -13.848332458658819, policy_loss: 0.009557, fdm_loss: 0.068698
+
+
+episode_reward: -15.8FDM train: iteration: 500, fdm_loss: 0.680388
+FDM train: iteration: 1000, fdm_loss: 0.073248
+FDM train: iteration: 1500, fdm_loss: 0.169358
+FDM train: iteration: 2000, fdm_loss: 0.268120
+FDM train: iteration: 2500, fdm_loss: 0.033496
+FDM train: iteration: 3000, fdm_loss: 0.039142
+FDM train: iteration: 3500, fdm_loss: 0.014912
+FDM train: iteration: 4000, fdm_loss: 0.055580
+
+Background Trial: 1, reward: -13.096982288164678
+Background Trial: 2, reward: -12.84983327065484
+Background Trial: 3, reward: -12.724949839757647
+Background Trial: 4, reward: -12.350116473661183
+Background Trial: 5, reward: -12.25964961709143
+Background Trial: 6, reward: -12.178120453516959
+Background Trial: 7, reward: -12.132289340645789
+Background Trial: 8, reward: -12.380863068856263
+Background Trial: 9, reward: -12.146133942413298
+Iteration: 2, average_reward: -12.457659810529119, policy_loss: 0.004716, fdm_loss: 0.036875
+
+
+episode_reward: -11.3
+Background Trial: 1, reward: -13.452818277405587
+Background Trial: 2, reward: -14.126123325170811
+Background Trial: 3, reward: -13.45512805439188
+Background Trial: 4, reward: -14.22767127827799
+Background Trial: 5, reward: -13.633778378933512
+Background Trial: 6, reward: -13.486906584259927
+Background Trial: 7, reward: -13.782594658104971
+Background Trial: 8, reward: -13.610535019927022
+Background Trial: 9, reward: -14.22401224840351
+Iteration: 3, average_reward: -13.777729758319468, policy_loss: 0.005749, fdm_loss: 0.027442
+
+
+episode_reward: -22.9FDM train: iteration: 500, fdm_loss: 0.049656
+FDM train: iteration: 1000, fdm_loss: 0.023536
+FDM train: iteration: 1500, fdm_loss: 0.035086
+FDM train: iteration: 2000, fdm_loss: 0.030996
+FDM train: iteration: 2500, fdm_loss: 0.020141
+FDM train: iteration: 3000, fdm_loss: 0.020861
+FDM train: iteration: 3500, fdm_loss: 0.035945
+FDM train: iteration: 4000, fdm_loss: 0.011064
+
+Background Trial: 1, reward: -12.237223372366156
+Background Trial: 2, reward: -12.508238850595742
+Background Trial: 3, reward: -12.315969882702909
+Background Trial: 4, reward: -11.71871426361344
+Background Trial: 5, reward: -12.014498112321853
+Background Trial: 6, reward: -12.124493359985287
+Background Trial: 7, reward: -11.744692135670268
+Background Trial: 8, reward: -12.053497065703557
+Background Trial: 9, reward: -12.275958767039969
+Iteration: 4, average_reward: -12.110365089999908, policy_loss: 0.005515, fdm_loss: 0.025127
+
+
+episode_reward: -11.9
+Background Trial: 1, reward: -10.042425357092291
+Background Trial: 2, reward: -10.077659256263201
+Background Trial: 3, reward: -10.018391114034117
+Background Trial: 4, reward: -10.36350698041556
+Background Trial: 5, reward: -9.988332326690342
+Background Trial: 6, reward: -9.980832189162776
+Background Trial: 7, reward: -10.245264255073188
+Background Trial: 8, reward: -9.787113288348293
+Background Trial: 9, reward: -9.81872785219401
+Iteration: 5, average_reward: -10.035805846585976, policy_loss: 0.007078, fdm_loss: 0.016751
+
+
+episode_reward:  -9.1FDM train: iteration: 500, fdm_loss: 0.022594
+FDM train: iteration: 1000, fdm_loss: 0.037705
+FDM train: iteration: 1500, fdm_loss: 0.028612
+FDM train: iteration: 2000, fdm_loss: 0.005021
+FDM train: iteration: 2500, fdm_loss: 0.048174
+FDM train: iteration: 3000, fdm_loss: 0.038650
+FDM train: iteration: 3500, fdm_loss: 0.009132
+FDM train: iteration: 4000, fdm_loss: 0.015163
+
+Background Trial: 1, reward: -14.288929042710539
+Background Trial: 2, reward: -14.50331534905864
+Background Trial: 3, reward: -14.51224630391741
+Background Trial: 4, reward: -14.363893108698248
+Background Trial: 5, reward: -14.607717927549757
+Background Trial: 6, reward: -14.194221049803659
+Background Trial: 7, reward: -14.746792778802883
+Background Trial: 8, reward: -14.620972752275387
+Background Trial: 9, reward: -14.734213288855797
+Iteration: 6, average_reward: -14.508033511296926, policy_loss: 0.005764, fdm_loss: 0.005305
+
+
+episode_reward: -13.7
+Background Trial: 1, reward: -12.624981615909975
+Background Trial: 2, reward: -12.945914059448711
+Background Trial: 3, reward: -12.512015583896357
+Background Trial: 4, reward: -13.34588235214979
+Background Trial: 5, reward: -12.802039785764194
+Background Trial: 6, reward: -12.973057244616307
+Background Trial: 7, reward: -12.67301393048952
+Background Trial: 8, reward: -12.940824478763451
+Background Trial: 9, reward: -13.086959261194309
+Iteration: 7, average_reward: -12.878298701359178, policy_loss: 0.006889, fdm_loss: 0.043900
+
+
+episode_reward: -11.9FDM train: iteration: 500, fdm_loss: 0.010522
+FDM train: iteration: 1000, fdm_loss: 0.014344
+FDM train: iteration: 1500, fdm_loss: 0.005015
+FDM train: iteration: 2000, fdm_loss: 0.047325
+FDM train: iteration: 2500, fdm_loss: 0.012358
+FDM train: iteration: 3000, fdm_loss: 0.019816
+FDM train: iteration: 3500, fdm_loss: 0.004410
+FDM train: iteration: 4000, fdm_loss: 0.007615
+
+Background Trial: 1, reward: -10.589881867206556
+Background Trial: 2, reward: -10.74359731524861
+Background Trial: 3, reward: -10.645067307422039
+Background Trial: 4, reward: -10.577272020592009
+Background Trial: 5, reward: -10.490673616397885
+Background Trial: 6, reward: -10.41955750705415
+Background Trial: 7, reward: -10.31118689122609
+Background Trial: 8, reward: -10.934077721143757
+Background Trial: 9, reward: -10.756173124584942
+Iteration: 8, average_reward: -10.607498596764003, policy_loss: 0.009755, fdm_loss: 0.005500
+
+
+episode_reward:  -9.4
+Background Trial: 1, reward: -9.814090064607933
+Background Trial: 2, reward: -9.706990773809773
+Background Trial: 3, reward: -9.401649990422225
+Background Trial: 4, reward: -9.483516098461491
+Background Trial: 5, reward: -10.177781718524646
+Background Trial: 6, reward: -10.012468156253282
+Background Trial: 7, reward: -9.64997000092994
+Background Trial: 8, reward: -9.707948140076873
+Background Trial: 9, reward: -9.462408144818209
+Iteration: 9, average_reward: -9.712980343100487, policy_loss: 0.007709, fdm_loss: 0.001928
+
+
+episode_reward:  -8.7FDM train: iteration: 500, fdm_loss: 0.027309
+FDM train: iteration: 1000, fdm_loss: 0.051791
+FDM train: iteration: 1500, fdm_loss: 0.010042
+FDM train: iteration: 2000, fdm_loss: 0.013767
+FDM train: iteration: 2500, fdm_loss: 0.011841
+FDM train: iteration: 3000, fdm_loss: 0.012763
+FDM train: iteration: 3500, fdm_loss: 0.008075
+FDM train: iteration: 4000, fdm_loss: 0.043084
+
+Background Trial: 1, reward: -9.30196615066922
+Background Trial: 2, reward: -8.784560558185401
+Background Trial: 3, reward: -8.297337590446267
+Background Trial: 4, reward: -8.86231102221667
+Background Trial: 5, reward: -8.2901796035415
+Background Trial: 6, reward: -8.790427790739123
+Background Trial: 7, reward: -8.759824746463382
+Background Trial: 8, reward: -9.266542255291851
+Background Trial: 9, reward: -9.018967365861483
+Iteration: 10, average_reward: -8.819124120379433, policy_loss: 0.008795, fdm_loss: 0.033194
+
+
+episode_reward:  -8.7
+Background Trial: 1, reward: -11.523713398139256
+Background Trial: 2, reward: -11.719152532338873
+Background Trial: 3, reward: -11.288600233351225
+Background Trial: 4, reward: -10.727317911024837
+Background Trial: 5, reward: -11.586905866334494
+Background Trial: 6, reward: -11.085974336681959
+Background Trial: 7, reward: -11.351696110816036
+Background Trial: 8, reward: -11.560585610295309
+Background Trial: 9, reward: -10.765644473890704
+Iteration: 11, average_reward: -11.289954496985853, policy_loss: 0.009308, fdm_loss: 0.008318
+
