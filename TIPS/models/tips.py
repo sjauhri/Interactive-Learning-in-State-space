@@ -257,7 +257,7 @@ class TIPS():
 
         # Optional: Update FDM
         if (args.learnFDM):
-          if (it < 16 and should(2)):
+          if (should(2)):
             S, nS, A = self.exploration_dynamics_sampling() # Sample policy with exploration and update forward dynamic model
             # Add to Experience Buffer
             for id in range(0, len(S)):
