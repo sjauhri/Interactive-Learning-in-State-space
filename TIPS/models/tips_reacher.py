@@ -284,9 +284,10 @@ class TIPS_reacher(TIPS):
 
     # Iterate over the episode
     while((not terminal) and (not self.human_feedback.ask_for_done()) ):        
-      self.env.render()  # Make the environment visible
+      self.env.render()  # Make the environment visible      
       self.human_feedback.viewer.render() # Render the additional feedback window
-      time.sleep(self.render_delay)    # Add delay to rendering if necessary
+      if (not args.fast):
+        time.sleep(self.render_delay)    # Add delay to rendering if necessary
       
       # Store previous_state
       prev_s = state

@@ -27,6 +27,7 @@ parser.add_argument('--initPolicy', action='store_true')
 parser.add_argument('--runAgent', action='store_true')
 
 parser.add_argument('--render', action='store_true')
+parser.add_argument('--fast', action='store_true')
 parser.add_argument("--save_freq", type=int, default=1, help="save session every save_freq episodes, 0 to disable")
 parser.add_argument("--print_freq", type=int, default=1, help="print current reward and loss every print_freq episodes, 0 to disable")
 
