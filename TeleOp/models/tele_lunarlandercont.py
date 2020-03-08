@@ -1,5 +1,5 @@
 from utils import *
-from feedback import *
+from feedback_lunar import *
 import gym
 
 class TELE_lunarlandercont():
@@ -20,7 +20,7 @@ class TELE_lunarlandercont():
     self.env.render()  # Make the environment visible
 
     # Initialise Human feedback (call render before this)
-    self.human_feedback = Feedback(self.env)
+    self.human_feedback = Feedback_lunar(self.env)
     
     # Render time delay for this environment (in s)
     self.render_delay = 0.08
@@ -32,7 +32,11 @@ class TELE_lunarlandercont():
       H_LEFT: 1,
       H_RIGHT: 1,
       H_HOLD: 0,
-      DO_NOTHING: 0
+      DO_NOTHING: 0,
+      H_UPLEFT: 1,
+      H_UPRIGHT: 1,
+      H_DOWNLEFT: 1,
+      H_DOWNRIGHT: 1
     }
 
   def run(self):
@@ -59,8 +63,17 @@ class TELE_lunarlandercont():
           a = [0, 1]
         elif (h_fb == H_UP):
           a = [1, 0]
+        elif (h_fb == H_UPLEFT):
+          a = [1, -1]
+        elif (h_fb == H_UPRIGHT):
+          a = [1, 1]
         elif (h_fb == H_DOWN):
           a = [-1, 0]
+        elif (h_fb == H_DOWNLEFT):
+          a = [-1, -1]
+        elif (h_fb == H_DOWNRIGHT):
+          a = [-1, 1]
+        # print("Action: ", a)
       else:
         # Do nothing action
         # Continuous actions
