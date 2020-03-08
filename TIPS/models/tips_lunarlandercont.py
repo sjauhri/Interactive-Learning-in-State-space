@@ -145,10 +145,10 @@ class TIPS_lunarlandercont(TIPS):
 
     # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()
     if (h_fb == H_LEFT):
-      state_corrected[3] = 0                  # Zero vertical velocity
+      # state_corrected[3] = 0                  # Zero vertical velocity
       state_corrected[5] += self.errorConst   # Angular velocity
     elif (h_fb == H_RIGHT):
-      state_corrected[3] = 0                  # Zero vertical velocity
+      # state_corrected[3] = 0                  # Zero vertical velocity
       state_corrected[5] -= self.errorConst   # Angular velocity
     elif (h_fb == H_UP):
       state_corrected[3] += self.errorConst   # Vertical velocity
@@ -183,7 +183,11 @@ class TIPS_lunarlandercont(TIPS):
       Nstates = self.eval_fdm(States, Actions)
 
       # Calculate cost
-      cost = abs(state_corrected[3] - Nstates[:,3]) + abs(state_corrected[5] - Nstates[:,5])
+      # cost = abs(state_corrected[3] - Nstates[:,3]) + abs(state_corrected[5] - Nstates[:,5])
+      if (h_fb == H_LEFT or h_fb == H_RIGHT):
+        cost = abs(state_corrected[5] - Nstates[:,5])
+      else:
+        cost = abs(state_corrected[3] - Nstates[:,3]) + abs(state_corrected[5] - Nstates[:,5])
 
       # Check for min_cost
       min_cost_index = cost.argmin(axis=0)
@@ -209,7 +213,11 @@ class TIPS_lunarlandercont(TIPS):
         nstate = fdm_cont(state, curr_action)
 
         # Check cost
-        cost = abs(state_corrected[3] - nstate[3]) + abs(state_corrected[5] - nstate[5])
+        # cost = abs(state_corrected[3] - nstate[3]) + abs(state_corrected[5] - nstate[5])
+        if (h_fb == H_LEFT or h_fb == H_RIGHT):
+          cost = abs(state_corrected[5] - nstate[5])
+        else:
+          cost = abs(state_corrected[3] - nstate[3]) + abs(state_corrected[5] - nstate[5])
 
         # Check for min_cost
         if(cost < min_cost):
