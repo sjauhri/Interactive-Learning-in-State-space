@@ -66,9 +66,9 @@ class TIPS_lunarlandercont(TIPS):
       with tf.variable_scope("input") as scope:
         fdm_input = tf.concat([self.state, self.action], 1)
       with tf.variable_scope("model") as scope:
-        fdm_h1 = tf.layers.dense(fdm_input, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
+        fdm_h1 = tf.layers.dense(fdm_input, 64, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
         fdm_h1 = tf.nn.leaky_relu(fdm_h1, 0.2, name="LeakyRelu_1")
-        fdm_h2 = tf.layers.dense(fdm_h1, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
+        fdm_h2 = tf.layers.dense(fdm_h1, 64, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
         fdm_h2 = tf.nn.leaky_relu(fdm_h2, 0.2, name="LeakyRelu_2")
 
       with tf.variable_scope("output") as scope:                
