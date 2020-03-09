@@ -24,6 +24,10 @@ class TELE_lunarlandercont():
     
     # Render time delay for this environment (in s)
     self.render_delay = 0.08
+
+    # Min reward for environment
+    self.min_reward = 0 # Atleast land lunarlander to be considered demonstration
+
     # Choose which feedback is valid with fb dictionary
     self.feedback_dict = {
       H_NULL: 0,
@@ -44,7 +48,9 @@ class TELE_lunarlandercont():
     terminal = False
     total_reward = 0
     state = self.env.reset()
-    self.observations.append(state)
+    observations = []
+    actions = []
+    observations.append(state)
 
     # Iterate over the episode
     while((not terminal) and (not self.human_feedback.ask_for_done()) and (not self.human_feedback.ask_for_end()) ):
@@ -83,14 +89,10 @@ class TELE_lunarlandercont():
       state, reward, terminal, _ = self.env.step(a)
       total_reward += reward
 
-      if (args.record):
-        self.observations.append(state)
-        self.actions.append(a)
-        if (len(self.observations) > self.maxDemoSize):
-          self.observations.pop(0)
-          self.actions.pop(0)
+      observations.append(state)
+      actions.append(a)
 
-    return total_reward
+    return total_reward, observations, actions
 
   def save(self):
     # Save demonstrations in pickle file
@@ -136,10 +138,14 @@ if __name__ == "__main__":
   # Track average reward
   average_reward = 0
 
+  # Successes
+  success_count = 0
+
   # Iterate over episodes
   for it in range(args.maxEpisodes):
 
     # Optional: Countdown for trainer to be ready
+    print("[Minimum reward for success is %5.1f]" % tele.min_reward)
     print('[Running new episode in....]')
     time.sleep(1)
     print('3')
@@ -150,13 +156,20 @@ if __name__ == "__main__":
     time.sleep(1)
     print('Start')
     
-    reward = tele.run()
+    reward, obs, acts = tele.run()
 
     if(tele.human_feedback.ask_for_end()):
       break
 
-    average_reward = average_reward*(it)
-    average_reward = (average_reward + reward)/(it+1)
+    if (reward >= tele.min_reward): # Min reward to consider it as demonstration
+      print("[SUCCESS]")
+      success_count += 1
+      tele.observations.extend(obs)
+      tele.actions.extend(obs)
+      
+      # Average success rewards
+      average_reward = average_reward*(success_count-1)
+      average_reward = (average_reward + reward)/(success_count)
 
     print('episode_reward: %5.1f' % reward)
     print('Iteration %d: average_reward: %5.1f' % (it, average_reward))
