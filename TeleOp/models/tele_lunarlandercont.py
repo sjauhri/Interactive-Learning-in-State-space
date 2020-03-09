@@ -23,7 +23,7 @@ class TELE_lunarlandercont():
     self.human_feedback = Feedback_lunar(self.env)
     
     # Render time delay for this environment (in s)
-    self.render_delay = 0.08
+    self.render_delay = 0.075
 
     # Min reward for environment
     self.min_reward = 0 # Atleast land lunarlander to be considered demonstration

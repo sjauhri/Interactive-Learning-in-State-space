@@ -74,7 +74,7 @@
             "request": "launch",
             "program": "/home/snehal/Desktop/Thesis/IfO/TIPS/models/tips_lunarlandercont.py",
             "console": "integratedTerminal",            
-            "args": ["--mode=train","--input_file=TIPS/demonstration/expert_obs/LunarLanderContinuous-v2.pkl","--result_dir=TIPS/results/tips/lunarlandercont/","--model_dir=TIPS/model/tips/lunarlandercont/","--maxEpochs=50","--numExperiments=1","--learntFDM"]
+            "args": ["--mode=train","--input_file=TIPS/demonstration/expert_obs/LunarLanderContinuous-v2.pkl","--result_dir=TIPS/results/tips/lunarlandercont/","--session_dir=TIPS/model/tips/lunarlandercont/","--maxEpisodes=50","--numExperiments=1","--learnFDM","--runAgent"]
         }
         {
             "name": "tips_reacher",

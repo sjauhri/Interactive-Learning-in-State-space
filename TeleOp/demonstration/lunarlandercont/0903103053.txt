@@ -1,2 +1,0 @@
-
-Iteration 0: average_reward:  62.5
