@@ -1,0 +1,144 @@
+Collecting dynamics training data 1000
+Collecting dynamics training data 2000
+Collecting dynamics training data 3000
+Collecting dynamics training data 4000
+Collecting dynamics training data 5000
+Collecting dynamics training data 6000
+Collecting dynamics training data 7000
+Collecting dynamics training data 8000
+Collecting dynamics training data 9000
+Collecting dynamics training data 10000
+FDM train: iteration: 500, fdm_loss: 0.008945
+FDM train: iteration: 1000, fdm_loss: 0.007164
+FDM train: iteration: 1500, fdm_loss: 0.011639
+FDM train: iteration: 2000, fdm_loss: 0.008318
+FDM train: iteration: 2500, fdm_loss: 0.006562
+FDM train: iteration: 3000, fdm_loss: 0.007575
+FDM train: iteration: 3500, fdm_loss: 0.005807
+FDM train: iteration: 4000, fdm_loss: 0.003284
+FDM train: iteration: 4500, fdm_loss: 0.006164
+FDM train: iteration: 5000, fdm_loss: 0.005386
+
+episode_reward:  -8.5
+Background Trial: 1, reward: -143.5722791482953
+Background Trial: 2, reward: -295.58868499381197
+Background Trial: 3, reward: -43.623770535557455
+Background Trial: 4, reward: -130.52939606736044
+Background Trial: 5, reward: -47.37078660932236
+Background Trial: 6, reward: -45.55498779593336
+Background Trial: 7, reward: -35.661058950873965
+Background Trial: 8, reward: -96.2670763309356
+Background Trial: 9, reward: -43.0819886995327
+Iteration: 1, average_reward: -97.9166699035137, policy_loss: 0.477205, fdm_loss: 0.005017
+
+
+episode_reward: 264.3Collecting dynamics training data from exploration policy 1000
+FDM train: iteration: 500, fdm_loss: 0.008200
+FDM train: iteration: 1000, fdm_loss: 0.002874
+FDM train: iteration: 1500, fdm_loss: 0.007135
+FDM train: iteration: 2000, fdm_loss: 0.004752
+FDM train: iteration: 2500, fdm_loss: 0.005672
+FDM train: iteration: 3000, fdm_loss: 0.003707
+FDM train: iteration: 3500, fdm_loss: 0.007818
+FDM train: iteration: 4000, fdm_loss: 0.008570
+FDM train: iteration: 4500, fdm_loss: 0.003263
+FDM train: iteration: 5000, fdm_loss: 0.006021
+
+Background Trial: 1, reward: -27.157543239193345
+Background Trial: 2, reward: -402.7793201194804
+Background Trial: 3, reward: -15.053957930545366
+Background Trial: 4, reward: -302.81028062608834
+Background Trial: 5, reward: -225.49197047497074
+Background Trial: 6, reward: 35.22024514774773
+Background Trial: 7, reward: -110.21067845661187
+Background Trial: 8, reward: -106.62003111178218
+Background Trial: 9, reward: 40.02965629712506
+Iteration: 2, average_reward: -123.8748756126444, policy_loss: 0.504348, fdm_loss: 0.005435
+
+
+episode_reward:  44.4
+Background Trial: 1, reward: -375.18071600118975
+Background Trial: 2, reward: -371.5853666112603
+Background Trial: 3, reward: -297.9438012620005
+Background Trial: 4, reward: -107.68967591734122
+Background Trial: 5, reward: -365.6684437032852
+Background Trial: 6, reward: -155.76567636762172
+Background Trial: 7, reward: -213.61552521479638
+Background Trial: 8, reward: -93.86146145880011
+Background Trial: 9, reward: -365.39846407201446
+Iteration: 3, average_reward: -260.74545895647884, policy_loss: 0.492453, fdm_loss: 0.004420
+
+
+episode_reward: -35.8Collecting dynamics training data from exploration policy 1000
+FDM train: iteration: 500, fdm_loss: 0.002449
+FDM train: iteration: 1000, fdm_loss: 0.004017
+FDM train: iteration: 1500, fdm_loss: 0.006223
+FDM train: iteration: 2000, fdm_loss: 0.004857
+FDM train: iteration: 2500, fdm_loss: 0.009146
+FDM train: iteration: 3000, fdm_loss: 0.008585
+FDM train: iteration: 3500, fdm_loss: 0.006788
+FDM train: iteration: 4000, fdm_loss: 0.003576
+FDM train: iteration: 4500, fdm_loss: 0.003697
+FDM train: iteration: 5000, fdm_loss: 0.009521
+
+Background Trial: 1, reward: -355.55828185811197
+Background Trial: 2, reward: -326.41264654653503
+Background Trial: 3, reward: 12.087246237242738
+Background Trial: 4, reward: -186.38503342471537
+Background Trial: 5, reward: -142.2144786268227
+Background Trial: 6, reward: -114.57654857104879
+Background Trial: 7, reward: -354.21551808880497
+Background Trial: 8, reward: -69.41401408638598
+Background Trial: 9, reward: -335.5846132115113
+Iteration: 4, average_reward: -208.03043201963257, policy_loss: 0.403388, fdm_loss: 0.002489
+
+
+episode_reward:  24.5
+Background Trial: 1, reward: -333.99423874492646
+Background Trial: 2, reward: 260.845492186864
+Background Trial: 3, reward: -395.3110747511031
+Background Trial: 4, reward: -179.42041426080237
+Background Trial: 5, reward: -257.2272783109093
+Background Trial: 6, reward: -91.89066323594452
+Background Trial: 7, reward: -341.79860023280673
+Background Trial: 8, reward: -474.5284027590997
+Background Trial: 9, reward: -140.6379383422271
+Iteration: 5, average_reward: -217.10701316121722, policy_loss: 0.508943, fdm_loss: 0.003271
+
+
+episode_reward: -253.1Collecting dynamics training data from exploration policy 1000
+FDM train: iteration: 500, fdm_loss: 0.005064
+FDM train: iteration: 1000, fdm_loss: 0.005136
+FDM train: iteration: 1500, fdm_loss: 0.003641
+FDM train: iteration: 2000, fdm_loss: 0.005076
+FDM train: iteration: 2500, fdm_loss: 0.004842
+FDM train: iteration: 3000, fdm_loss: 0.004002
+FDM train: iteration: 3500, fdm_loss: 0.004332
+FDM train: iteration: 4000, fdm_loss: 0.006279
+FDM train: iteration: 4500, fdm_loss: 0.003441
+FDM train: iteration: 5000, fdm_loss: 0.005341
+
+Background Trial: 1, reward: -53.58935515676953
+Background Trial: 2, reward: -398.78384052959706
+Background Trial: 3, reward: -102.21642528157754
+Background Trial: 4, reward: -70.18463422742298
+Background Trial: 5, reward: -77.92978565631259
+Background Trial: 6, reward: -430.25138667832374
+Background Trial: 7, reward: -98.41047594377625
+Background Trial: 8, reward: 0.9980418013216905
+Background Trial: 9, reward: -144.11933696958369
+Iteration: 6, average_reward: -152.7207998491157, policy_loss: 0.394002, fdm_loss: 0.006242
+
+
+episode_reward: -15.9
+Background Trial: 1, reward: -232.8122150213864
+Background Trial: 2, reward: -73.42374768840556
+Background Trial: 3, reward: -290.81752585909345
+Background Trial: 4, reward: -421.9500481733724
+Background Trial: 5, reward: -604.8336999706885
+Background Trial: 6, reward: -332.8583165989631
+Background Trial: 7, reward: -301.85484785539904
+Background Trial: 8, reward: -352.5217855372182
+Background Trial: 9, reward: -212.3535880923473
+Iteration: 7, average_reward: -313.71397497743044, policy_loss: 0.636816, fdm_loss: 0.006120
+

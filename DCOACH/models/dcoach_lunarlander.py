@@ -16,7 +16,7 @@ class DCOACH_lunarlander(DCOACH):
     self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 0.75 1
-    self.errorConst = 0.85
+    self.errorConst = 0.8
     # Render time delay for this environment (in s)
     self.render_delay = 0.07
     # Feedback training rate in the episode    

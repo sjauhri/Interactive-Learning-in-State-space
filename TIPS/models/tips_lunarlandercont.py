@@ -17,12 +17,12 @@ class TIPS_lunarlandercont(TIPS):
     self.human_feedback = Feedback_lunar(self.env)
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
-    self.errorConst = 0.5
+    self.errorConst = 0.35
     # Render time delay for this environment (in s)
-    self.render_delay = 0.065 # 0.05
-    # Feedback training rate in the episode    
+    self.render_delay = 0.065
+    # Feedback training rate in the episode
     self.feedback_training_rate  = 10
-    
+
     # Choose which feedback is valid with fb dictionary
     self.feedback_dict = {
       H_NULL: 0,
@@ -302,15 +302,17 @@ class TIPS_lunarlandercont(TIPS):
     total_reward = 0
     state = self.env.reset()
     state = np.reshape(state, [-1, self.state_dim])
+    prev_s = state    
+    a = np.random.uniform(-1,1,self.action_dim)
     t_counter = 0
     h_counter = 0
 
     # Iterate over the episode
-    while((not terminal) and (not self.human_feedback.ask_for_done()) ):              
+    while((not terminal) and (not self.human_feedback.ask_for_done()) ):
       self.env.render()  # Make the environment visible
       if (not args.fast):
         time.sleep(self.render_delay)    # Add delay to rendering if necessary
-      
+
       # Store previous_state
       prev_s = state
 
@@ -331,10 +333,10 @@ class TIPS_lunarlandercont(TIPS):
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
-        self.update_policy_feedback_immediate(state, a)
+        self.update_policy_feedback_immediate(prev_s, a)
 
         # Add state transition pair to demo buffer
-        self.DemoBuff.append((state[0], a[0]))
+        self.DemoBuff.append((prev_s[0], a[0]))
         # If Demo buffer full, remove oldest entry
         if (len(self.DemoBuff) > self.maxDemoBuffSize):
             self.DemoBuff.pop(0)
@@ -346,14 +348,6 @@ class TIPS_lunarlandercont(TIPS):
         a = np.reshape(a, [-1])
         # Continuous actions
         A = np.copy(a)
-        state, reward, terminal, _ = self.env.step(A)
-        total_reward += reward
-        state = np.reshape(state, [-1, self.state_dim])
-
-        # Add to ExpBuff
-        self.ExpBuff.append((prev_s[0], state[0], a))
-        if (len(self.ExpBuff) > self.maxExpBuffSize):
-          self.ExpBuff.pop(0)
       else:
         if (args.learnFDM):
           # Debug: equal timing
@@ -364,22 +358,25 @@ class TIPS_lunarlandercont(TIPS):
           time.sleep(0.04)
 
         # Use current policy
-
         # Map action from state
         a = np.reshape(self.eval_policy(state), [-1])
         # Continuous actions
         A = np.copy(a)
 
-        # Act
-        state, reward, terminal, _ = self.env.step(A)
-        total_reward += reward
-        state = np.reshape(state, [-1, self.state_dim])
-        # # Add to ExpBuff
-        # self.ExpBuff.append((prev_s[0], state[0], a))
-        # if (len(self.ExpBuff) > self.maxExpBuffSize):
-        #   self.ExpBuff.pop(0)
+      # Store previous state
+      prev_s = np.copy(state)
 
-        # Train every k time steps
+      # Act
+      state, reward, terminal, _ = self.env.step(A)
+      total_reward += reward
+      state = np.reshape(state, [-1, self.state_dim])
+
+      # Add to ExpBuff
+      # self.ExpBuff.append((prev_s[0], state[0], a))
+      # if (len(self.ExpBuff) > self.maxExpBuffSize):
+      #   self.ExpBuff.pop(0)
+
+      # Train every k time steps
       if t_counter % self.feedback_training_rate == 0:
         self.update_policy_feedback()
 
