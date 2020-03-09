@@ -26,7 +26,7 @@ class TELE_cartpole():
     self.render_delay = 0.08
 
     # Min reward for environment
-    self.min_reward = 50 # Cart held for atleast 50 timesteps to be considered demonstration
+    self.min_reward = 20 # Cart held for atleast 20 timesteps to be considered demonstration
 
     # Choose which feedback is valid with fb dictionary
     self.feedback_dict = {

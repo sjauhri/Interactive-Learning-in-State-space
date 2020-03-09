@@ -152,10 +152,10 @@ class TIPS_lunarlandercont(TIPS):
       state_corrected[5] -= self.errorConst   # Angular velocity
     elif (h_fb == H_UP):
       state_corrected[3] += self.errorConst   # Vertical velocity
-      state_corrected[5] = 0                  # Zero angular velocity
+      # state_corrected[5] = 0                  # Zero angular velocity
     elif (h_fb == H_DOWN):
       state_corrected[3] -= self.errorConst   # Vertical velocity
-      state_corrected[5] = 0                  # Zero angular velocity
+      # state_corrected[5] = 0                  # Zero angular velocity
     return state_corrected
 
   def get_corrected_action(self, h_fb, state, state_corrected):
@@ -187,7 +187,7 @@ class TIPS_lunarlandercont(TIPS):
       if (h_fb == H_LEFT or h_fb == H_RIGHT):
         cost = abs(state_corrected[5] - Nstates[:,5])
       else:
-        cost = abs(state_corrected[3] - Nstates[:,3]) + abs(state_corrected[5] - Nstates[:,5])
+        cost = abs(state_corrected[3] - Nstates[:,3])        
 
       # Check for min_cost
       min_cost_index = cost.argmin(axis=0)
@@ -217,7 +217,7 @@ class TIPS_lunarlandercont(TIPS):
         if (h_fb == H_LEFT or h_fb == H_RIGHT):
           cost = abs(state_corrected[5] - nstate[5])
         else:
-          cost = abs(state_corrected[3] - nstate[3]) + abs(state_corrected[5] - nstate[5])
+          cost = abs(state_corrected[3] - nstate[3])
 
         # Check for min_cost
         if(cost < min_cost):

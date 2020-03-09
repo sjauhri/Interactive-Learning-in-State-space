@@ -1,0 +1,78 @@
+
+episode_reward:  20.0
+Background Trial: 1, reward: 16.0
+Background Trial: 2, reward: 16.0
+Background Trial: 3, reward: 16.0
+Background Trial: 4, reward: 17.0
+Background Trial: 5, reward: 16.0
+Background Trial: 6, reward: 16.0
+Background Trial: 7, reward: 17.0
+Background Trial: 8, reward: 16.0
+Background Trial: 9, reward: 15.0
+Iteration: 1, average_reward: 16.11111111111111
+
+
+episode_reward:  26.0
+Background Trial: 1, reward: 17.0
+Background Trial: 2, reward: 17.0
+Background Trial: 3, reward: 17.0
+Background Trial: 4, reward: 16.0
+Background Trial: 5, reward: 16.0
+Background Trial: 6, reward: 15.0
+Background Trial: 7, reward: 15.0
+Background Trial: 8, reward: 15.0
+Background Trial: 9, reward: 16.0
+Iteration: 2, average_reward: 16.0
+
+
+episode_reward: 146.0
+Background Trial: 1, reward: 106.0
+Background Trial: 2, reward: 113.0
+Background Trial: 3, reward: 125.0
+Background Trial: 4, reward: 104.0
+Background Trial: 5, reward: 113.0
+Background Trial: 6, reward: 120.0
+Background Trial: 7, reward: 118.0
+Background Trial: 8, reward: 123.0
+Background Trial: 9, reward: 114.0
+Iteration: 3, average_reward: 115.11111111111111
+
+
+episode_reward: 200.0
+Background Trial: 1, reward: 200.0
+Background Trial: 2, reward: 200.0
+Background Trial: 3, reward: 200.0
+Background Trial: 4, reward: 200.0
+Background Trial: 5, reward: 200.0
+Background Trial: 6, reward: 200.0
+Background Trial: 7, reward: 200.0
+Background Trial: 8, reward: 200.0
+Background Trial: 9, reward: 200.0
+Iteration: 4, average_reward: 200.0
+
+
+episode_reward: 200.0
+Background Trial: 1, reward: 200.0
+Background Trial: 2, reward: 200.0
+Background Trial: 3, reward: 200.0
+Background Trial: 4, reward: 200.0
+Background Trial: 5, reward: 200.0
+Background Trial: 6, reward: 200.0
+Background Trial: 7, reward: 200.0
+Background Trial: 8, reward: 200.0
+Background Trial: 9, reward: 200.0
+Iteration: 5, average_reward: 200.0
+
+
+episode_reward: 200.0
+Background Trial: 1, reward: 200.0
+Background Trial: 2, reward: 200.0
+Background Trial: 3, reward: 200.0
+Background Trial: 4, reward: 200.0
+Background Trial: 5, reward: 200.0
+Background Trial: 6, reward: 200.0
+Background Trial: 7, reward: 200.0
+Background Trial: 8, reward: 200.0
+Background Trial: 9, reward: 200.0
+Iteration: 6, average_reward: 200.0
+
