@@ -1,0 +1,17 @@
+Collecting dynamics training data 1000
+FDM train: iteration: 500, fdm_loss: 0.548284
+FDM train: iteration: 1000, fdm_loss: 0.650304
+FDM train: iteration: 1500, fdm_loss: 0.250919
+FDM train: iteration: 2000, fdm_loss: 0.259996
+FDM train: iteration: 2500, fdm_loss: 0.070805
+FDM train: iteration: 3000, fdm_loss: 0.109399
+FDM train: iteration: 3500, fdm_loss: 0.516728
+FDM train: iteration: 4000, fdm_loss: 0.165939
+Policy train: iteration: 500, policy_loss: 0.003927
+Policy train: iteration: 1000, policy_loss: 0.002690
+Policy train: iteration: 1500, policy_loss: 0.003280
+Policy train: iteration: 2000, policy_loss: 0.005027
+Policy train: iteration: 2500, policy_loss: 0.003604
+Policy train: iteration: 3000, policy_loss: 0.004547
+Policy train: iteration: 3500, policy_loss: 0.003505
+Policy train: iteration: 4000, policy_loss: 0.003771
