@@ -1,6 +1,6 @@
 from utils import *
 from dcoach import DCOACH
-from feedback import *
+from feedback_lunar import *
 import gym
 
 class DCOACH_lunarlandercont(DCOACH):
@@ -13,7 +13,7 @@ class DCOACH_lunarlandercont(DCOACH):
     self.env.render()  # Make the environment visible
 
     # Initialise Human feedback (call render before this)
-    self.human_feedback = Feedback(self.env)
+    self.human_feedback = Feedback_lunar(self.env)
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 0.75 1
     self.errorConst = 0.85
@@ -30,7 +30,11 @@ class DCOACH_lunarlandercont(DCOACH):
       H_LEFT: 1,
       H_RIGHT: 1,
       H_HOLD: 0,
-      DO_NOTHING: 0
+      DO_NOTHING: 0,
+      H_UPLEFT: 1,
+      H_UPRIGHT: 1,
+      H_DOWNLEFT: 1,
+      H_DOWNRIGHT: 1
     }
 
   def build_policy_model(self):
@@ -84,9 +88,22 @@ class DCOACH_lunarlandercont(DCOACH):
           a[1] += self.errorConst   # Side engine (Left)
         elif (h_fb == H_UP):
           a[0] += self.errorConst   # Bottom engine
+        elif (h_fb == H_UPLEFT):
+          a[0] += self.errorConst   # Bottom engine
+          a[1] -= self.errorConst   # Side engine (Right)
+        elif (h_fb == H_UPRIGHT):
+          a[0] += self.errorConst   # Bottom engine
+          a[1] += self.errorConst   # Side engine (Left)
+          a = [1, 1]
         elif (h_fb == H_DOWN):
           a[0] -= self.errorConst   # Don't fire bottom engine
           a[1] = 0                  # Don't fire side engine
+        elif (h_fb == H_DOWNLEFT):
+          a[0] -= self.errorConst   # Don't fire bottom engine
+          a[1] -= self.errorConst   # Side engine (Right)
+        elif (h_fb == H_DOWNRIGHT):
+          a[0] -= self.errorConst   # Don't fire bottom engine
+          a[1] += self.errorConst   # Side engine (Left)
         # print("Computed Action: ", a)
         # Clip action to permissible values
         a = np.clip(a, -1, 1)

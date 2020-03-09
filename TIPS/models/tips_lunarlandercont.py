@@ -1,6 +1,6 @@
 from utils import *
 from tips import TIPS
-from feedback import *
+from feedback_lunar import *
 from fdm_lunarl import *
 import gym
 
@@ -14,7 +14,7 @@ class TIPS_lunarlandercont(TIPS):
     self.env.render()  # Make the environment visible
 
     # Initialise Human feedback (call render before this)
-    self.human_feedback = Feedback(self.env)
+    self.human_feedback = Feedback_lunar(self.env)
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
     self.errorConst = 0.2
@@ -31,7 +31,11 @@ class TIPS_lunarlandercont(TIPS):
       H_LEFT: 1,
       H_RIGHT: 1,
       H_HOLD: 0,
-      DO_NOTHING: 0
+      DO_NOTHING: 0,
+      H_UPLEFT: 1,
+      H_UPRIGHT: 1,
+      H_DOWNLEFT: 1,
+      H_DOWNRIGHT: 1
     }
 
     self.ifdm_queries = 250 # Two continous actions.
@@ -153,9 +157,22 @@ class TIPS_lunarlandercont(TIPS):
     elif (h_fb == H_UP):
       state_corrected[3] += self.errorConst   # Vertical velocity
       # state_corrected[5] = 0                  # Zero angular velocity
+    elif (h_fb == H_UPLEFT):
+      state_corrected[3] += self.errorConst   # Vertical velocity
+      state_corrected[5] += self.errorConst   # Angular velocity
+    elif (h_fb == H_UPRIGHT):
+      state_corrected[3] += self.errorConst   # Vertical velocity
+      state_corrected[5] -= self.errorConst   # Angular velocity
     elif (h_fb == H_DOWN):
       state_corrected[3] -= self.errorConst   # Vertical velocity
       # state_corrected[5] = 0                  # Zero angular velocity
+    elif (h_fb == H_DOWNLEFT):
+      state_corrected[3] -= self.errorConst   # Vertical velocity
+      state_corrected[5] += self.errorConst   # Angular velocity
+    elif (h_fb == H_DOWNRIGHT):
+      state_corrected[3] -= self.errorConst   # Vertical velocity
+      state_corrected[5] -= self.errorConst   # Angular velocity
+
     return state_corrected
 
   def get_corrected_action(self, h_fb, state, state_corrected):
@@ -183,11 +200,13 @@ class TIPS_lunarlandercont(TIPS):
       Nstates = self.eval_fdm(States, Actions)
 
       # Calculate cost
-      # cost = abs(state_corrected[3] - Nstates[:,3]) + abs(state_corrected[5] - Nstates[:,5])
       if (h_fb == H_LEFT or h_fb == H_RIGHT):
         cost = abs(state_corrected[5] - Nstates[:,5])
-      else:
-        cost = abs(state_corrected[3] - Nstates[:,3])        
+      elif (h_fb == H_UP or h_fb == H_DOWN):
+        cost = abs(state_corrected[3] - Nstates[:,3])
+      else:# (h_fb == H_UPLEFT or UPRIGHT or...):
+          cost = abs(state_corrected[3] - Nstates[:,3]) + abs(state_corrected[5] - Nstates[:,5])
+
 
       # Check for min_cost
       min_cost_index = cost.argmin(axis=0)
@@ -212,12 +231,13 @@ class TIPS_lunarlandercont(TIPS):
         # Query ifdm to get next state
         nstate = fdm_cont(state, curr_action)
 
-        # Check cost
-        # cost = abs(state_corrected[3] - nstate[3]) + abs(state_corrected[5] - nstate[5])
+        # Check cost        
         if (h_fb == H_LEFT or h_fb == H_RIGHT):
           cost = abs(state_corrected[5] - nstate[5])
-        else:
+        elif (h_fb == H_UP or h_fb == H_DOWN):
           cost = abs(state_corrected[3] - nstate[3])
+        else:
+          cost = abs(state_corrected[3] - nstate[3]) + abs(state_corrected[5] - nstate[5])
 
         # Check for min_cost
         if(cost < min_cost):
