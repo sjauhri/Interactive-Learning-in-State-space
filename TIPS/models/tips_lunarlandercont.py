@@ -313,9 +313,6 @@ class TIPS_lunarlandercont(TIPS):
       if (not args.fast):
         time.sleep(self.render_delay)    # Add delay to rendering if necessary
 
-      # Store previous_state
-      prev_s = state
-
       # Get feedback signal
       h_fb = self.human_feedback.get_h()
 
@@ -333,10 +330,10 @@ class TIPS_lunarlandercont(TIPS):
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
-        self.update_policy_feedback_immediate(prev_s, a)
+        self.update_policy_feedback_immediate(state, a)
 
         # Add state transition pair to demo buffer
-        self.DemoBuff.append((prev_s[0], a[0]))
+        self.DemoBuff.append((state[0], a[0]))
         # If Demo buffer full, remove oldest entry
         if (len(self.DemoBuff) > self.maxDemoBuffSize):
             self.DemoBuff.pop(0)
@@ -372,9 +369,9 @@ class TIPS_lunarlandercont(TIPS):
       state = np.reshape(state, [-1, self.state_dim])
 
       # Add to ExpBuff
-      # self.ExpBuff.append((prev_s[0], state[0], a))
-      # if (len(self.ExpBuff) > self.maxExpBuffSize):
-      #   self.ExpBuff.pop(0)
+      self.ExpBuff.append((prev_s[0], state[0], a))
+      if (len(self.ExpBuff) > self.maxExpBuffSize):
+        self.ExpBuff.pop(0)
 
       # Train every k time steps
       if t_counter % self.feedback_training_rate == 0:
