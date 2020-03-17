@@ -54,6 +54,18 @@ def fdm_cont(state, action):
 
     # valid actions are -1.0 to 1.0
     nstate, _, _, _ = fdm_env.step(action)
+
+    # # theta1 = -inf to +inf
+    # theta1 = np.arctan2(nstate[2], nstate[0])
+    # # theta2 = -pi to +pi
+    # theta2 = np.arctan2(nstate[3], nstate[1])
+
+    # l1 = 0.1  # Length of arm 1
+    # l2 = 0.11 # Length of arm 2
+
+    # xpos = l1*nstate[0] + l2*np.cos(theta1+theta2)
+    # ypos = l1*nstate[2] + l2*np.sin(theta1+theta2)
+
     return nstate
 
 # Test script
@@ -62,7 +74,13 @@ def fdm_cont(state, action):
 # import gym
 # env = gym.make('Reacher-v2')
 # st = env.reset()
-# st1 = fdm_cont(st, [-0.1,0.1])
-# st2 = env.step([-0.1,0.1])
+# st1 = fdm_cont(st, [-0.8,0.8])
+# st1 = fdm_cont(st1, [-0.8,0.8])
+# st1 = fdm_cont(st1, [-0.8,0.8])
+# st1 = fdm_cont(st1, [-0.8,0.8])
+# st2 = env.step([-0.8,0.8])
+# st2 = env.step([-0.8,0.8])
+# st2 = env.step([-0.8,0.8])
+# st2 = env.step([-0.8,0.8])
 # st1
 # st2

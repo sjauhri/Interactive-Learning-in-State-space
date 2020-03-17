@@ -167,11 +167,11 @@ class TIPS_cartpole(TIPS):
 
     if (args.learnFDM):
       # Learnt FDM:
-      
+
       # x position frame correction!
       state_corrected[0] -= state[0]
       state[0] = 0
-      
+
       # Make a vector of same states
       States = np.tile(state, (self.ifdm_queries,1))
       # Choose random actions
@@ -227,7 +227,7 @@ class TIPS_cartpole(TIPS):
 
     if (args.learnFDM):
       # Learnt FDM:
-      
+
       # x position frame correction!
       nstate_required[0] -= state[0]
       state[0] = 0
@@ -260,7 +260,7 @@ class TIPS_cartpole(TIPS):
         # Discrete Actions
         curr_action = np.random.randint(self.action_dim)
 
-        # Query ifdm to get next state      
+        # Query ifdm to get next state
         nstate = fdm(state, curr_action)
 
         # Check cost

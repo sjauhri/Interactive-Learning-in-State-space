@@ -82,7 +82,7 @@
             "request": "launch",
             "program": "/home/snehal/Desktop/Thesis/IfO/TIPS/models/tips_reacher.py",
             "console": "integratedTerminal",            
-            "args": ["--mode=train","--input_file=TIPS/demonstration/expert_obs/Reacher-v2.pkl","--result_dir=TIPS/results/tips/reacher/","--model_dir=TIPS/model/tips/reacher/","--maxEpochs=50","--numExperiments=1"]
+            "args": ["--mode=train","--input_file=TIPS/demonstration/expert_obs/Reacher-v2.pkl","--result_dir=TIPS/results/tips/reacher/","--session_dir=TIPS/model/tips/reacher/","--maxEpisodes=50","--numExperiments=1","--runAgent"]
         }        
     ]
 }

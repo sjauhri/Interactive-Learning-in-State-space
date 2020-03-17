@@ -281,23 +281,24 @@ class TIPS():
           avg_reward = policy_reward/numTrials
 
           # Check policy loss on another data set.................
-          S, nS = self.sample_demo(int(round(self.demo_examples/10))) # 10% of the demo data
-          A = []
-          for i in range(len(S)):
-            A.append(self.get_action(S[i],nS[i]))
-          A = np.reshape(A, [-1, self.action_dim])
-          policy_loss = self.get_policy_loss(S, A)
+          policy_loss = 0
+          # S, nS = self.sample_demo(int(round(self.demo_examples/10))) # 10% of the demo data
+          # A = []
+          # for i in range(len(S)):
+          #   A.append(self.get_action(S[i],nS[i]))
+          # A = np.reshape(A, [-1, self.action_dim])
+          # policy_loss = self.get_policy_loss(S, A)
           # ......................................................
 
           # Check fdm loss on another data set....................
           fdm_loss = 0
-          if (len(self.ExpBuff) > 0):
-            minibatch_ids = np.random.choice(len(self.ExpBuff), int(round( self.dynamicsSamples/10 )) ) # 10% of the dynamics data
-            batch_s = [self.ExpBuff[id][0] for id in minibatch_ids]
-            batch_ns = [self.ExpBuff[id][1] for id in minibatch_ids]
-            batch_a = [self.ExpBuff[id][2] for id in minibatch_ids]
+          # if (len(self.ExpBuff) > 0):
+            # minibatch_ids = np.random.choice(len(self.ExpBuff), int(round( self.dynamicsSamples/10 )) ) # 10% of the dynamics data
+            # batch_s = [self.ExpBuff[id][0] for id in minibatch_ids]
+            # batch_ns = [self.ExpBuff[id][1] for id in minibatch_ids]
+            # batch_a = [self.ExpBuff[id][2] for id in minibatch_ids]
 
-            fdm_loss = self.get_fdm_loss(batch_s, batch_ns, batch_a)
+            # fdm_loss = self.get_fdm_loss(batch_s, batch_ns, batch_a)
           # ......................................................          
           print('Iteration: %5d, average_reward: %5.1f' % ((it+1), avg_reward))
           self.result_writer.write( str(it+1) + " , " + format(avg_reward, '8.6f') + " , " + format(policy_loss, '8.6f') + " , " + format(fdm_loss, '8.6f') + "\n" )
