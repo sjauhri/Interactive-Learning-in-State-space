@@ -258,13 +258,13 @@ class TIPS():
 
         # Optional: Update FDM
         if (args.learnFDM):
-          if (should(2)):
-            S, nS, A = self.exploration_dynamics_sampling() # Sample policy with exploration and update forward dynamic model
-            # Add to Experience Buffer
-            for id in range(0, len(S)):
-              self.ExpBuff.append((S[id], nS[id], A[id]))
-              if (len(self.ExpBuff) > self.maxExpBuffSize):
-                self.ExpBuff.pop(0)
+          # if (should(2)):
+          #   S, nS, A = self.exploration_dynamics_sampling() # Sample policy with exploration and update forward dynamic model
+          #   # Add to Experience Buffer
+          #   for id in range(0, len(S)):
+          #     self.ExpBuff.append((S[id], nS[id], A[id]))
+          #     if (len(self.ExpBuff) > self.maxExpBuffSize):
+          #       self.ExpBuff.pop(0)
             # Update FDM
             self.update_fdm()
 

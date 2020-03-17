@@ -5,7 +5,7 @@ from fdm_cartpole import *
 import gym
 
 class TIPS_cartpole(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=30, epochTrainIts=5000, dynamicsSamples=500, batch_size=8):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=30, epochTrainIts=6000, dynamicsSamples=500, batch_size=16):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
@@ -30,7 +30,7 @@ class TIPS_cartpole(TIPS):
       H_DOWN: 0,
       H_LEFT: 1,
       H_RIGHT: 1,
-      H_HOLD: 1,
+      H_HOLD: 0,
       DO_NOTHING: 0
     }
 
@@ -42,9 +42,9 @@ class TIPS_cartpole(TIPS):
       with tf.variable_scope("input") as scope:
         policy_input = self.state
       with tf.variable_scope("model") as scope:
-        policy_h1 = tf.layers.dense(policy_input, 8, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
+        policy_h1 = tf.layers.dense(policy_input, 16, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
         policy_h1 = tf.nn.leaky_relu(policy_h1, 0.2, name="LeakyRelu_1")
-        policy_h2 = tf.layers.dense(policy_h1, 8, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
+        policy_h2 = tf.layers.dense(policy_h1, 16, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
         policy_h2 = tf.nn.leaky_relu(policy_h2, 0.2, name="LeakyRelu_2")
 
       with tf.variable_scope("output") as scope:
@@ -63,9 +63,9 @@ class TIPS_cartpole(TIPS):
       with tf.variable_scope("input") as scope:
         fdm_input = tf.concat([self.state, self.action], 1)
       with tf.variable_scope("model") as scope:
-        fdm_h1 = tf.layers.dense(fdm_input, 8, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
+        fdm_h1 = tf.layers.dense(fdm_input, 16, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
         fdm_h1 = tf.nn.leaky_relu(fdm_h1, 0.2, name="LeakyRelu_1")
-        fdm_h2 = tf.layers.dense(fdm_h1, 8, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
+        fdm_h2 = tf.layers.dense(fdm_h1, 16, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
         fdm_h2 = tf.nn.leaky_relu(fdm_h2, 0.2, name="LeakyRelu_2")
 
       with tf.variable_scope("output") as scope:                
@@ -94,6 +94,9 @@ class TIPS_cartpole(TIPS):
       a[A] = 1
 
       state, _, terminal, _ = self.env.step(A)
+      # x position frame correction!
+      state[0] -= prev_s[0]
+      prev_s[0] = 0
 
       States.append(prev_s)
       Nstates.append(state)
@@ -131,6 +134,9 @@ class TIPS_cartpole(TIPS):
         A = np.argmax(a)
 
       state, _, terminal, _ = self.env.step(A)
+      # x position frame correction!
+      state[0] -= prev_s[0]
+      prev_s[0] = 0
 
       States.append(prev_s)
       Nstates.append(state)
@@ -148,11 +154,11 @@ class TIPS_cartpole(TIPS):
 
     # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()    
     if (h_fb == H_LEFT):
-      state_corrected[1] -= self.errorConst # Correcting Velocity
+      state_corrected[2] -= self.errorConst # Correcting Velocity
     elif (h_fb == H_RIGHT):
-      state_corrected[1] += self.errorConst # Correcting Velocity
-    else: # (h_fb == H_HOLD)
-      state_corrected[3] = 0  # HOLD pole angular velocity zero
+      state_corrected[2] += self.errorConst # Correcting Velocity
+    # else: # (h_fb == H_HOLD)
+    #   state_corrected[3] = 0  # HOLD pole angular velocity zero
     
     return state_corrected
 
@@ -161,6 +167,10 @@ class TIPS_cartpole(TIPS):
 
     if (args.learnFDM):
       # Learnt FDM:
+      
+      # x position frame correction!
+      state_corrected[0] -= state[0]
+      state[0] = 0
       
       # Make a vector of same states
       States = np.tile(state, (self.ifdm_queries,1))
@@ -172,10 +182,10 @@ class TIPS_cartpole(TIPS):
       Nstates = self.eval_fdm(States, Actions)
 
       # Calculate cost
-      if (h_fb == H_HOLD):
-        cost = abs(state_corrected[3] - Nstates[:,3]) # Corrected Pole Angular Velocity (Zero)
-      else: # LEFT or RIGHT
-        cost = abs(state_corrected[1] - Nstates[:,1]) # Corrected Velocity
+      # if (h_fb == H_HOLD):
+      #   cost = abs(state_corrected[3] - Nstates[:,3]) # Corrected Pole Angular Velocity (Zero)
+      # else: # LEFT or RIGHT
+      cost = abs(state_corrected[2] - Nstates[:,2]) # Corrected Velocity
 
       # Check for min_cost
       min_cost_index = cost.argmin(axis=0)
@@ -196,10 +206,10 @@ class TIPS_cartpole(TIPS):
         nstate = fdm(state, curr_action)
 
         # Check cost
-        if (h_fb == H_HOLD):
-          cost = abs(state_corrected[3] - nstate[3]) # Corrected Pole Angular Velocity (Zero)
-        else: # LEFT or RIGHT
-          cost = abs(state_corrected[1] - nstate[1]) # Corrected Velocity
+        # if (h_fb == H_HOLD):
+        #   cost = abs(state_corrected[3] - nstate[3]) # Corrected Pole Angular Velocity (Zero)
+        # else: # LEFT or RIGHT
+        cost = abs(state_corrected[2] - nstate[2]) # Corrected Velocity
         
         # Check for min_cost
         if(cost < min_cost):
@@ -217,6 +227,10 @@ class TIPS_cartpole(TIPS):
 
     if (args.learnFDM):
       # Learnt FDM:
+      
+      # x position frame correction!
+      nstate_required[0] -= state[0]
+      state[0] = 0
       
       # Make a vector of same states
       States = np.tile(state, (self.ifdm_queries,1))
@@ -293,7 +307,7 @@ class TIPS_cartpole(TIPS):
 
         # Get action from ifdm
         a = self.get_corrected_action(h_fb, state[0], state_corrected)
-        # print("Computed Action: ", a)
+        print("Computed Action: ", a)
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
@@ -329,6 +343,10 @@ class TIPS_cartpole(TIPS):
       state = np.reshape(state, [-1, self.state_dim])
 
       # Add to ExpBuff
+      # x position frame correction!
+      state[0,0] -= prev_s[0,0]
+      prev_s[0,0] = 0
+
       self.ExpBuff.append((prev_s[0], state[0], a))
       if (len(self.ExpBuff) > self.maxExpBuffSize):
         self.ExpBuff.pop(0)
