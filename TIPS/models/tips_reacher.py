@@ -84,7 +84,7 @@ class TIPS_reacher(TIPS):
     Actions = []
 
     for i in range(self.dynamicsSamples):
-      if terminal:
+      if terminal or ((i%500)==0):
         state = self.env.reset()
 
       prev_s = state

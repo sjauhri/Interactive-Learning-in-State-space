@@ -58,7 +58,7 @@
             "request": "launch",
             "program": "/home/snehal/Desktop/Thesis/IfO/TIPS/models/tips_cartpole.py",
             "console": "integratedTerminal",            
-            "args": ["--mode=train","--input_file=TIPS/demonstration/expert_obs/CartPole-v0.pkl","--result_dir=TIPS/results/tips/cartpole/","--session_dir=TIPS/model/tips/cartpole/","--maxEpisodes=50","--numExperiments=1","--runAgent","--learnFDM"]            
+            "args": ["--mode=train","--input_file=TIPS/demonstration/expert_obs/CartPole-v0.pkl","--result_dir=TIPS/results/tips/cartpole/","--session_dir=TIPS/session/tips/cartpole/","--maxEpisodes=50","--numExperiments=1","--runAgent","--learnFDM"]            
         }
         {
             "name": "tips_lunarlander",
@@ -66,7 +66,7 @@
             "request": "launch",
             "program": "/home/snehal/Desktop/Thesis/IfO/TIPS/models/tips_lunarlander.py",
             "console": "integratedTerminal",            
-            "args": ["--mode=train","--input_file=TIPS/demonstration/expert_obs/LunarLander-v2.pkl","--result_dir=TIPS/results/tips/lunarlander/","--session_dir=TIPS/model/tips/lunarlander/","--maxEpisodes=50","--numExperiments=1","--learnFDM", "--runAgent"]
+            "args": ["--mode=train","--input_file=TIPS/demonstration/expert_obs/LunarLander-v2.pkl","--result_dir=TIPS/results/tips/lunarlander/","--session_dir=TIPS/session/tips/lunarlander/","--maxEpisodes=50","--numExperiments=1","--learnFDM", "--runAgent"]
         }
         {
             "name": "tips_lunarlandercont",
@@ -74,7 +74,7 @@
             "request": "launch",
             "program": "/home/snehal/Desktop/Thesis/IfO/TIPS/models/tips_lunarlandercont.py",
             "console": "integratedTerminal",            
-            "args": ["--mode=train","--input_file=TIPS/demonstration/expert_obs/LunarLanderContinuous-v2.pkl","--result_dir=TIPS/results/tips/lunarlandercont/","--session_dir=TIPS/model/tips/lunarlandercont/","--maxEpisodes=50","--numExperiments=1","--learnFDM","--runAgent"]
+            "args": ["--mode=train","--input_file=TIPS/demonstration/expert_obs/LunarLanderContinuous-v2.pkl","--result_dir=TIPS/results/tips/lunarlandercont/","--session_dir=TIPS/session/tips/lunarlandercont/","--maxEpisodes=50","--numExperiments=1","--learnFDM","--runAgent"]
         }
         {
             "name": "tips_reacher",
@@ -82,7 +82,7 @@
             "request": "launch",
             "program": "/home/snehal/Desktop/Thesis/IfO/TIPS/models/tips_reacher.py",
             "console": "integratedTerminal",            
-            "args": ["--mode=train","--input_file=TIPS/demonstration/expert_obs/Reacher-v2.pkl","--result_dir=TIPS/results/tips/reacher/","--session_dir=TIPS/model/tips/reacher/","--maxEpisodes=50","--numExperiments=1","--runAgent"]
+            "args": ["--mode=train","--input_file=TIPS/demonstration/expert_obs/Reacher-v2.pkl","--result_dir=TIPS/results/tips/reacher/","--session_dir=TIPS/session/tips/reacher/","--maxEpisodes=50","--numExperiments=1","--runAgent","--learnFDM"]
         }        
     ]
 }
