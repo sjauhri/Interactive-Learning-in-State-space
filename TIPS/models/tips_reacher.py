@@ -18,7 +18,7 @@ class TIPS_reacher(TIPS):
     self.human_feedback.viewer.render() # Render the additional feedback window
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
-    self.errorConst = 0.01#075#1
+    self.errorConst = 0.015#075#1
     # Render time delay for this environment (in s)
     self.render_delay = 0.05
     # Feedback training rate in the episode
@@ -227,8 +227,14 @@ class TIPS_reacher(TIPS):
       cost = abs(state_corrected[0] - Nstates_x) + abs(state_corrected[1] - Nstates_y)
 
       # Check for min_cost
-      min_cost_index = cost.argmin(axis=0)
-      min_action = Actions[min_cost_index]
+      # min_cost_index = cost.argmin(axis=0)
+      # min_action = Actions[min_cost_index]
+      # Optional: Get action that changes state the least
+      least_cost_inds = np.argpartition(cost, 10)[:10]
+      state_diffs = np.sum(abs(state-Nstates[:]), axis=1)
+      min_cost_index = (state_diffs[least_cost_inds]).argmin(axis=0)
+      min_action = Actions[least_cost_inds[min_cost_index]]
+
     else:
       # True FDM:
 
@@ -384,7 +390,8 @@ class TIPS_reacher(TIPS):
         # Use current policy
 
         # Map action from state
-        a = np.reshape(self.eval_policy(state), [-1])
+        # a = np.reshape(self.eval_policy(state), [-1])
+        a = [0,0]
         # Continuous actions
         A = np.copy(a)
 

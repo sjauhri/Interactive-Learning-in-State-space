@@ -215,9 +215,9 @@ class TIPS():
         # Add to Experience Buffer
         for id in range(0, len(S)):
           self.ExpBuff.append((S[id], nS[id], A[id]))
-        # for it in range(10):
-        #   print("\n[FDM epoch: %d]" % (it+1))
-        self.update_fdm()
+        for it in range(15):
+          print("\n[FDM epoch: %d]" % (it+1))
+          self.update_fdm()
 
       # Optional: Train initial policy from demonstrations
       if (args.initPolicy):      
