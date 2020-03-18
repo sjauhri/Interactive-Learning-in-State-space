@@ -5,7 +5,7 @@ from fdm_lunarl import *
 import gym
 
 class TIPS_lunarlandercont(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=50, epochTrainIts=5000,  dynamicsSamples=10000, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=50, epochTrainIts=9000,  dynamicsSamples=5000, batch_size=32):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play

@@ -25,7 +25,7 @@ parser.add_argument("--print_freq", type=int, default=1, help="print current rew
 args = parser.parse_args()
 
 def weight_initializer():
-  return tf.truncated_normal_initializer(stddev=0.1)
+  return tf.truncated_normal_initializer(stddev=0.0001)
 
 def bias_initializer():
-  return tf.truncated_normal_initializer(stddev=0.1)
+  return tf.truncated_normal_initializer(stddev=0.0001)

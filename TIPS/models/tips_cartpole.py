@@ -5,7 +5,7 @@ from fdm_cartpole import *
 import gym
 
 class TIPS_cartpole(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=30, epochTrainIts=6000, dynamicsSamples=500, batch_size=16):
+  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=30, epochTrainIts=8000, dynamicsSamples=500, batch_size=16):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
@@ -17,9 +17,9 @@ class TIPS_cartpole(TIPS):
     self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5
-    self.errorConst = 0.2
+    self.errorConst = 0.0005#0.2
     # Render time delay for this environment (in s)
-    self.render_delay = 0.08
+    self.render_delay = 0.075#0.08
     # Feedback training rate in the episode
     self.feedback_training_rate  = 10
 
@@ -150,13 +150,21 @@ class TIPS_cartpole(TIPS):
 
   def get_state_corrected(self, h_fb, state):
     """get corrected state label for this environment using feedback"""
-    state_corrected = np.copy(state)
+    # state_corrected = np.copy(state)
+    state_corrected = np.zeros(2)
+
+    # Get auxiliary state: pole tip position
+    angle = (state[3]*np.pi)/180    
+    state_corrected[0] = np.sin(angle) # x
+    state_corrected[1] = np.cos(angle) # y
 
     # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()    
     if (h_fb == H_LEFT):
-      state_corrected[2] -= self.errorConst # Correcting Velocity
+      # state_corrected[2] -= self.errorConst # Correcting Velocity
+      state_corrected[0] -= self.errorConst # Correcting Pole tip position
     elif (h_fb == H_RIGHT):
-      state_corrected[2] += self.errorConst # Correcting Velocity
+      # state_corrected[2] += self.errorConst # Correcting Velocity
+      state_corrected[0] += self.errorConst # Correcting Pole tip position
     # else: # (h_fb == H_HOLD)
     #   state_corrected[3] = 0  # HOLD pole angular velocity zero
     
@@ -169,7 +177,7 @@ class TIPS_cartpole(TIPS):
       # Learnt FDM:
 
       # x position frame correction!
-      state_corrected[0] -= state[0]
+      # state_corrected[0] -= state[0]
       state[0] = 0
 
       # Make a vector of same states
@@ -181,11 +189,17 @@ class TIPS_cartpole(TIPS):
       # Query ifdm to get next state
       Nstates = self.eval_fdm(States, Actions)
 
+      # Get auxiliary state: pole tip position
+      Nstates_ang = (Nstates[:,3]*np.pi)/180
+      Nstates_xpos = np.sin(Nstates_ang)
+      Nstates_ypos = np.cos(Nstates_ang)
+
       # Calculate cost
       # if (h_fb == H_HOLD):
       #   cost = abs(state_corrected[3] - Nstates[:,3]) # Corrected Pole Angular Velocity (Zero)
       # else: # LEFT or RIGHT
-      cost = abs(state_corrected[2] - Nstates[:,2]) # Corrected Velocity
+      # cost = abs(state_corrected[2] - Nstates[:,2]) # Corrected Velocity
+      cost = abs(state_corrected[0] - Nstates_xpos) + abs(state_corrected[1] - Nstates_ypos) # Corrected pole tip position
 
       # Check for min_cost
       min_cost_index = cost.argmin(axis=0)
@@ -205,11 +219,17 @@ class TIPS_cartpole(TIPS):
         # Query ifdm to get next state
         nstate = fdm(state, curr_action)
 
+        # Get auxiliary state: pole tip position
+        nstate_ang = (nstate[3]*np.pi)/180
+        nstate_xpos = np.sin(nstate_ang)
+        nstate_ypos = np.cos(nstate_ang)
+
         # Check cost
         # if (h_fb == H_HOLD):
         #   cost = abs(state_corrected[3] - nstate[3]) # Corrected Pole Angular Velocity (Zero)
         # else: # LEFT or RIGHT
-        cost = abs(state_corrected[2] - nstate[2]) # Corrected Velocity
+        # cost = abs(state_corrected[2] - nstate[2]) # Corrected Velocity
+        cost = abs(state_corrected[0] - nstate_xpos) + abs(state_corrected[1] - nstate_ypos) # Corrected pole tip position
         
         # Check for min_cost
         if(cost < min_cost):

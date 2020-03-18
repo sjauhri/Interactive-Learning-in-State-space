@@ -5,7 +5,7 @@ from fdm_reacher import *
 import gym
 
 class TIPS_reacher(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=20, epochTrainIts=6000,  dynamicsSamples=500, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=20, epochTrainIts=6000,  dynamicsSamples=5000, batch_size=32):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
@@ -18,7 +18,7 @@ class TIPS_reacher(TIPS):
     self.human_feedback.viewer.render() # Render the additional feedback window
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
-    self.errorConst = 0.0075#1
+    self.errorConst = 0.01#075#1
     # Render time delay for this environment (in s)
     self.render_delay = 0.05
     # Feedback training rate in the episode
@@ -215,7 +215,7 @@ class TIPS_reacher(TIPS):
       States = np.tile(state, (self.ifdm_queries,1))
       # Choose random actions
       # Continuous Actions
-      Actions = np.random.uniform(-1, 1, (self.ifdm_queries,self.action_dim) )
+      Actions = np.random.uniform(-0.2, 0.2, (self.ifdm_queries,self.action_dim) )
       # Query ifdm to get next state
       Nstates = self.eval_fdm(States, Actions)
 
@@ -241,7 +241,7 @@ class TIPS_reacher(TIPS):
       for _ in range(1, self.ifdm_queries+1):
         # Choose random action
         # Continous Actions
-        curr_action = np.random.uniform(-1, 1, self.action_dim)
+        curr_action = np.random.uniform(-0.2, 0.2, self.action_dim)
         # Discretization
         # val_set = [0.1*x for x in range(-5,6)]
         # curr_action = np.random.choice(val_set, self.action_dim)
@@ -361,7 +361,7 @@ class TIPS_reacher(TIPS):
 
         # Get action from ifdm
         a = self.get_corrected_action(h_fb, state[0], state_corrected)
-        # print("Computed Action: ", a)
+        print("Computed Action: ", a)
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
