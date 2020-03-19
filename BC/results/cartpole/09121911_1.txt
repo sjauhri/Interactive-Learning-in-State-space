@@ -1,0 +1,72 @@
+IDM train: iteration: 500, idm_loss: 0.029433422
+IDM train: iteration: 1000, idm_loss: 0.0028381424
+Policy train: iteration: 500, policy_loss: 0.16398586
+Policy train: iteration: 1000, policy_loss: 0.13494682
+IDM train: iteration: 500, idm_loss: 0.0014936693
+IDM train: iteration: 1000, idm_loss: 0.0006003612
+
+iteration: 1, total_reward: 200.0, policy_loss: 0.31013098, idm_loss: 0.0006396689
+
+Policy train: iteration: 500, policy_loss: 0.20707352
+Policy train: iteration: 1000, policy_loss: 0.21344274
+IDM train: iteration: 500, idm_loss: 0.00032901842
+IDM train: iteration: 1000, idm_loss: 0.00019040263
+
+iteration: 2, total_reward: 200.0, policy_loss: 0.31768575, idm_loss: 0.0002168528
+
+Policy train: iteration: 500, policy_loss: 0.117673576
+Policy train: iteration: 1000, policy_loss: 0.20575938
+IDM train: iteration: 500, idm_loss: 0.0001587119
+IDM train: iteration: 1000, idm_loss: 0.000101948215
+
+iteration: 3, total_reward: 200.0, policy_loss: 0.2852562, idm_loss: 9.46834e-05
+
+Policy train: iteration: 500, policy_loss: 0.2976499
+Policy train: iteration: 1000, policy_loss: 0.65376025
+IDM train: iteration: 500, idm_loss: 5.7859383e-05
+IDM train: iteration: 1000, idm_loss: 5.1958872e-05
+
+iteration: 4, total_reward: 200.0, policy_loss: 0.26758242, idm_loss: 4.570372e-05
+
+Policy train: iteration: 500, policy_loss: 0.21860336
+Policy train: iteration: 1000, policy_loss: 0.4244558
+IDM train: iteration: 500, idm_loss: 3.0382978e-05
+IDM train: iteration: 1000, idm_loss: 2.0280257e-05
+
+iteration: 5, total_reward: 200.0, policy_loss: 0.26232046, idm_loss: 2.3793878e-05
+
+Policy train: iteration: 500, policy_loss: 0.22844213
+Policy train: iteration: 1000, policy_loss: 0.05233437
+IDM train: iteration: 500, idm_loss: 1.619742e-05
+IDM train: iteration: 1000, idm_loss: 1.236788e-05
+
+iteration: 6, total_reward: 200.0, policy_loss: 0.21617375, idm_loss: 1.2719547e-05
+
+Policy train: iteration: 500, policy_loss: 0.70524955
+Policy train: iteration: 1000, policy_loss: 0.16513245
+IDM train: iteration: 500, idm_loss: 1.0564861e-05
+IDM train: iteration: 1000, idm_loss: 7.688968e-06
+
+iteration: 7, total_reward: 200.0, policy_loss: 0.18173642, idm_loss: 7.0213996e-06
+
+Policy train: iteration: 500, policy_loss: 0.032489005
+Policy train: iteration: 1000, policy_loss: 0.13605022
+IDM train: iteration: 500, idm_loss: 4.246821e-06
+IDM train: iteration: 1000, idm_loss: 3.2484477e-06
+
+iteration: 8, total_reward: 200.0, policy_loss: 0.1880918, idm_loss: 3.8385315e-06
+
+Policy train: iteration: 500, policy_loss: 0.10057615
+Policy train: iteration: 1000, policy_loss: 0.04098474
+IDM train: iteration: 500, idm_loss: 2.890821e-06
+IDM train: iteration: 1000, idm_loss: 2.548095e-06
+
+iteration: 9, total_reward: 200.0, policy_loss: 0.15700212, idm_loss: 2.1576857e-06
+
+Policy train: iteration: 500, policy_loss: 0.14226988
+Policy train: iteration: 1000, policy_loss: 0.052345335
+IDM train: iteration: 500, idm_loss: 1.9073466e-06
+IDM train: iteration: 1000, idm_loss: 1.1473887e-06
+
+iteration: 10, total_reward: 200.0, policy_loss: 0.14277947, idm_loss: 1.2040131e-06
+
