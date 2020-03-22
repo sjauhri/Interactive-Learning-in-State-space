@@ -50,7 +50,6 @@ class TELE_lunarlandercont():
     state = self.env.reset()
     observations = []
     actions = []
-    observations.append(state)
 
     # Iterate over the episode
     while((not terminal) and (not self.human_feedback.ask_for_done()) and (not self.human_feedback.ask_for_end()) ):
@@ -64,33 +63,33 @@ class TELE_lunarlandercont():
         # Get requested action
         # Continuous actions
         if (h_fb == H_LEFT):
-          a = [0, -1]
+          a = np.array([0, -1])
         elif (h_fb == H_RIGHT):
-          a = [0, 1]
+          a = np.array([0, 1])
         elif (h_fb == H_UP):
-          a = [1, 0]
+          a = np.array([1, 0])
         elif (h_fb == H_UPLEFT):
-          a = [1, -1]
+          a = np.array([1, -1])
         elif (h_fb == H_UPRIGHT):
-          a = [1, 1]
+          a = np.array([1, 1])
         elif (h_fb == H_DOWN):
-          a = [-1, 0]
+          a = np.array([-1, 0])
         elif (h_fb == H_DOWNLEFT):
-          a = [-1, -1]
+          a = np.array([-1, -1])
         elif (h_fb == H_DOWNRIGHT):
-          a = [-1, 1]
+          a = np.array([-1, 1])
         # print("Action: ", a)
       else:
         # Do nothing action
         # Continuous actions
-        a = [-1, 0]
+        a = np.array([-1, 0])
+
+      observations.append(state)
+      actions.append(a)
 
       # Act
       state, reward, terminal, _ = self.env.step(a)
       total_reward += reward
-
-      observations.append(state)
-      actions.append(a)
 
     return total_reward, observations, actions
 
@@ -111,7 +110,7 @@ class TELE_lunarlandercont():
     #             ob_next = expert_data['observations_next']
 
     ob.extend(self.observations[0:-1])
-    act.extend(self.actions[:])
+    act.extend(self.actions[0:-1])
     ob_next.extend(self.observations[1:])
     
     expert_obs_data = {'observations': ob,
@@ -165,7 +164,7 @@ if __name__ == "__main__":
       print("[SUCCESS]")
       success_count += 1
       tele.observations.extend(obs)
-      tele.actions.extend(obs)
+      tele.actions.extend(acts)
       
       # Average success rewards
       average_reward = average_reward*(success_count-1)

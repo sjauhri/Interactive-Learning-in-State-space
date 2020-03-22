@@ -40,8 +40,6 @@ class BC():
       expert_data = pickle.load(f)
       inputs = expert_data['observations']
       targets = expert_data['actions']
-
-    import pdb; pdb.set_trace()
     
     num_samples = len(inputs)
     if(num_samples > 15000):

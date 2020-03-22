@@ -1,9 +1,0 @@
-
-Iteration 0: episode_reward: 200.0
-Iteration 1: episode_reward:  93.0
-Iteration 2: episode_reward: 160.0
-Iteration 3: episode_reward: 200.0
-Iteration 4: episode_reward:  94.0
-Iteration 5: episode_reward: 200.0
-Iteration 6: episode_reward: 200.0
-Iteration 7: episode_reward:   1.0

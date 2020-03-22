@@ -40,7 +40,6 @@ class TELE_lunarlander():
     terminal = False
     total_reward = 0
     state = self.env.reset()
-    self.observations.append(state)
 
     # Iterate over the episode
     while((not terminal) and (not self.human_feedback.ask_for_done()) and (not self.human_feedback.ask_for_end()) ):
@@ -53,13 +52,13 @@ class TELE_lunarlander():
       if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero i.e. is valid
         # Get requested action
         if (h_fb == H_LEFT):
-          a = [0, 1, 0, 0]
+          a = np.array([0, 1, 0, 0])
         elif (h_fb == H_RIGHT):
-          a = [0, 0, 0, 1]
+          a = np.array([0, 0, 0, 1])
         elif (h_fb == H_UP):
-          a = [0, 0, 1, 0]
+          a = np.array([0, 0, 1, 0])
         elif (h_fb == H_DOWN):
-          a = [1, 0, 0, 0]
+          a = np.array([1, 0, 0, 0])
 
         # Discrete actions
         A = np.argmax(a)
@@ -67,18 +66,19 @@ class TELE_lunarlander():
         # Do nothing action
         # Discrete actions
         A = 0
-        a = [1, 0, 0, 0]
-
-      # Act
-      state, reward, terminal, _ = self.env.step(A)
-      total_reward += reward
-
+        a = np.array([1, 0, 0, 0])
+      
+      
       if (args.record):
         self.observations.append(state)
         self.actions.append(a)
         if (len(self.observations) > self.maxDemoSize):
           self.observations.pop(0)
           self.actions.pop(0)
+
+      # Act
+      state, reward, terminal, _ = self.env.step(A)
+      total_reward += reward
 
     return total_reward
 
@@ -99,7 +99,7 @@ class TELE_lunarlander():
     #             ob_next = expert_data['observations_next']
 
     ob.extend(self.observations[0:-1])
-    act.extend(self.actions[:])
+    act.extend(self.actions[0:-1])
     ob_next.extend(self.observations[1:])
     
     expert_obs_data = {'observations': ob,

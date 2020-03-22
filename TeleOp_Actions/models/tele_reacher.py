@@ -56,21 +56,17 @@ class TELE_reacher():
         # Get requested action
         # Continuous actions
         if (h_fb == H_LEFT):
-          a = [0.2, 0]
+          a = np.array([0.2, 0])
         elif (h_fb == H_RIGHT):
-          a = [-0.2, 0]
+          a = np.array([-0.2, 0])
         elif (h_fb == H_UP):
-          a = [0, 0.2]
+          a = np.array([0, 0.2])
         elif (h_fb == H_DOWN):
-          a = [0, -0.2]
+          a = np.array([0, -0.2])
       else:
         # Do nothing action
         # Continuous actions
-        a = [0, 0]
-
-      # Act
-      state, reward, terminal, _ = self.env.step(a)
-      total_reward += reward
+        a = np.array([0, 0])
 
       if (args.record):
         self.observations.append(state)
@@ -78,6 +74,10 @@ class TELE_reacher():
         if (len(self.observations) > self.maxDemoSize):
           self.observations.pop(0)
           self.actions.pop(0)
+
+      # Act
+      state, reward, terminal, _ = self.env.step(a)
+      total_reward += reward
 
     return total_reward
 

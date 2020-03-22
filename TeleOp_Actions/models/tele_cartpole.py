@@ -23,7 +23,7 @@ class TELE_cartpole():
     self.human_feedback = Feedback(self.env)
     
     # Render time delay for this environment (in s)
-    self.render_delay = 0.08
+    self.render_delay = 0.075
 
     # Min reward for environment
     self.min_reward = 20 # Cart held for atleast 20 timesteps to be considered demonstration
@@ -46,7 +46,6 @@ class TELE_cartpole():
     state = self.env.reset()
     observations = []
     actions = []
-    observations.append(state)
 
     # Iterate over the episode
     while((not terminal) and (not self.human_feedback.ask_for_done()) and (not self.human_feedback.ask_for_end()) ):
@@ -59,13 +58,18 @@ class TELE_cartpole():
       if (self.feedback_dict.get(h_fb) != 0):  # if feedback is not zero i.e. is valid
         # Get requested action
         if (h_fb == H_LEFT):
-          a = [1, 0]
+          a = np.array([1, 0])
         else:# (h_fb == H_RIGHT):
-          a = [0, 1]
+          a = np.array([0, 1])
         # print("Requested Action: ", a)
 
         # Discrete actions
         A = np.argmax(a)
+
+        # Store observation, action pair
+        observations.append(state)
+        actions.append(a)
+
       else:
         # Random action
         # Discrete actions
@@ -76,9 +80,6 @@ class TELE_cartpole():
       # Act
       state, reward, terminal, _ = self.env.step(A)
       total_reward += reward
-
-      observations.append(state)
-      actions.append(a)
 
     return total_reward, observations, actions
 
@@ -99,7 +100,7 @@ class TELE_cartpole():
     #             ob_next = expert_data['observations_next']
 
     ob.extend(self.observations[0:-1])
-    act.extend(self.actions[:])
+    act.extend(self.actions[0:-1])
     ob_next.extend(self.observations[1:])
     
     expert_obs_data = {'observations': ob,
@@ -153,7 +154,7 @@ if __name__ == "__main__":
       print("[SUCCESS]")
       success_count += 1
       tele.observations.extend(obs)
-      tele.actions.extend(obs)
+      tele.actions.extend(acts)
       
       # Average success rewards
       average_reward = average_reward*(success_count-1)

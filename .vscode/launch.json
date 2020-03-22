@@ -73,7 +73,7 @@
             "type": "python",
             "request": "launch",
             "program": "/home/snehal/Desktop/Thesis/IfO/TIPS/models/tips_lunarlandercont.py",
-            "console": "integratedTerminal",            
+            "console": "integratedTerminal",
             "args": ["--mode=train","--input_file=TIPS/demonstration/expert_obs/LunarLanderContinuous-v2.pkl","--result_dir=TIPS/results/tips/lunarlandercont/","--session_dir=TIPS/session/tips/lunarlandercont/","--maxEpisodes=50","--numExperiments=1","--learnFDM","--runAgent"]
         }
         {
@@ -83,6 +83,14 @@
             "program": "/home/snehal/Desktop/Thesis/IfO/TIPS/models/tips_reacher.py",
             "console": "integratedTerminal",            
             "args": ["--mode=train","--input_file=TIPS/demonstration/expert_obs/Reacher-v2.pkl","--result_dir=TIPS/results/tips/reacher/","--session_dir=TIPS/session/tips/reacher/","--maxEpisodes=50","--numExperiments=1","--runAgent","--learnFDM"]
-        }        
+        }
+        {
+            "name": "tele_cartpole",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/snehal/Desktop/Thesis/IfO/TeleOp_Actions/models/tele_cartpole.py",
+            "console": "integratedTerminal",
+            "args": ["--save_dir=demonstration/cartpole/","--maxEpisodes=50","--record"]
+        }
     ]
 }
