@@ -19,7 +19,7 @@ class TIPS_lunarlandercont(TIPS):
     # 0.01, 0.05, 0.1, 0.5, 1
     self.errorConst = 0.35
     # Render time delay for this environment (in s)
-    self.render_delay = 0.065
+    self.render_delay = 0.005#65
     # Feedback training rate in the episode
     self.feedback_training_rate  = 10
 
@@ -38,7 +38,7 @@ class TIPS_lunarlandercont(TIPS):
       H_DOWNRIGHT: 1
     }
 
-    self.ifdm_queries = 250 # Two continous actions.
+    self.ifdm_queries = 500 # Two continous actions.
 
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
@@ -152,28 +152,46 @@ class TIPS_lunarlandercont(TIPS):
     # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()
     if (h_fb == H_LEFT):
       # state_corrected[3] = 0                  # Zero vertical velocity
-      state_corrected[5] += self.errorConst   # Angular velocity
+      # state_corrected[5] += self.errorConst   # Angular velocity      
+      state_corrected[4] += self.errorConst   # Angular pos
+      # state_corrected[0] -= self.errorConst   # Horizontal pos
     elif (h_fb == H_RIGHT):
       # state_corrected[3] = 0                  # Zero vertical velocity
-      state_corrected[5] -= self.errorConst   # Angular velocity
+      # state_corrected[5] -= self.errorConst   # Angular velocity
+      state_corrected[4] -= self.errorConst   # Angular pos
+      # state_corrected[0] += self.errorConst   # Horizontal pos
     elif (h_fb == H_UP):
-      state_corrected[3] += self.errorConst   # Vertical velocity
+      # state_corrected[3] += self.errorConst   # Vertical velocity      
+      state_corrected[1] += self.errorConst   # Vertical pos
       # state_corrected[5] = 0                  # Zero angular velocity
     elif (h_fb == H_UPLEFT):
-      state_corrected[3] += self.errorConst   # Vertical velocity
-      state_corrected[5] += self.errorConst   # Angular velocity
+      # state_corrected[3] += self.errorConst   # Vertical velocity
+      # state_corrected[5] += self.errorConst   # Angular velocity
+      # state_corrected[0] -= self.errorConst   # Horizontal pos
+      state_corrected[4] += self.errorConst   # Angular pos
+      state_corrected[1] += self.errorConst   # Vertical pos
     elif (h_fb == H_UPRIGHT):
-      state_corrected[3] += self.errorConst   # Vertical velocity
-      state_corrected[5] -= self.errorConst   # Angular velocity
+      # state_corrected[3] += self.errorConst   # Vertical velocity
+      # state_corrected[5] -= self.errorConst   # Angular velocity
+      state_corrected[4] -= self.errorConst   # Angular pos
+      # state_corrected[0] += self.errorConst   # Horizontal pos
+      state_corrected[1] += self.errorConst   # Vertical pos
     elif (h_fb == H_DOWN):
-      state_corrected[3] -= self.errorConst   # Vertical velocity
+      # state_corrected[3] -= self.errorConst   # Vertical velocity
+      state_corrected[1] -= self.errorConst   # Vertical pos
       # state_corrected[5] = 0                  # Zero angular velocity
     elif (h_fb == H_DOWNLEFT):
-      state_corrected[3] -= self.errorConst   # Vertical velocity
-      state_corrected[5] += self.errorConst   # Angular velocity
+      # state_corrected[3] -= self.errorConst   # Vertical velocity
+      # state_corrected[5] += self.errorConst   # Angular velocity
+      # state_corrected[0] -= self.errorConst   # Horizontal pos
+      state_corrected[4] += self.errorConst   # Angular pos
+      state_corrected[1] -= self.errorConst   # Vertical pos
     elif (h_fb == H_DOWNRIGHT):
-      state_corrected[3] -= self.errorConst   # Vertical velocity
-      state_corrected[5] -= self.errorConst   # Angular velocity
+      # state_corrected[3] -= self.errorConst   # Vertical velocity
+      # state_corrected[5] -= self.errorConst   # Angular velocity
+      # state_corrected[0] += self.errorConst   # Horizontal pos
+      state_corrected[4] -= self.errorConst   # Angular pos
+      state_corrected[1] -= self.errorConst   # Vertical pos
 
     return state_corrected
 
@@ -181,7 +199,7 @@ class TIPS_lunarlandercont(TIPS):
     """get action to achieve next state close to state_corrected"""
 
     if (h_fb == H_DOWN):
-      min_action = np.array((-2,0)) # Dont fire any engine
+      min_action = np.array((-1,0)) # Dont fire any engine
       if (args.learnFDM):
         # Debug: equal timing
         # time.sleep(0.02)
@@ -202,13 +220,15 @@ class TIPS_lunarlandercont(TIPS):
       Nstates = self.eval_fdm(States, Actions)
 
       # Calculate cost
-      if (h_fb == H_LEFT or h_fb == H_RIGHT):
-        cost = abs(state_corrected[5] - Nstates[:,5])
-      elif (h_fb == H_UP or h_fb == H_DOWN):
-        cost = abs(state_corrected[3] - Nstates[:,3])
-      else:# (h_fb == H_UPLEFT or UPRIGHT or...):
-          cost = abs(state_corrected[3] - Nstates[:,3]) + abs(state_corrected[5] - Nstates[:,5])
-
+      # if (h_fb == H_LEFT or h_fb == H_RIGHT):
+      #   # cost = abs(state_corrected[5] - Nstates[:,5])
+      #   cost = abs(state_corrected[0] - Nstates[:,0])
+      # elif (h_fb == H_UP or h_fb == H_DOWN):
+      #   # cost = abs(state_corrected[3] - Nstates[:,3])
+      #   cost = abs(state_corrected[1] - Nstates[:,1])
+      # else:# (h_fb == H_UPLEFT or UPRIGHT or...):
+      #   # cost = abs(state_corrected[3] - Nstates[:,3]) + abs(state_corrected[5] - Nstates[:,5])
+      cost = abs(state_corrected[1] - Nstates[:,1]) + abs(state_corrected[4] - Nstates[:,4])
 
       # Check for min_cost
       min_cost_index = cost.argmin(axis=0)
@@ -234,12 +254,15 @@ class TIPS_lunarlandercont(TIPS):
         nstate = fdm_cont(state, curr_action)
 
         # Check cost        
-        if (h_fb == H_LEFT or h_fb == H_RIGHT):
-          cost = abs(state_corrected[5] - nstate[5])
-        elif (h_fb == H_UP or h_fb == H_DOWN):
-          cost = abs(state_corrected[3] - nstate[3])
-        else:
-          cost = abs(state_corrected[3] - nstate[3]) + abs(state_corrected[5] - nstate[5])
+        # if (h_fb == H_LEFT or h_fb == H_RIGHT):
+        #   # cost = abs(state_corrected[5] - nstate[5])
+        #   cost = abs(state_corrected[0] - nstate[0])
+        # elif (h_fb == H_UP or h_fb == H_DOWN):
+        #   # cost = abs(state_corrected[3] - nstate[3])
+        #   cost = abs(state_corrected[1] - nstate[1])
+        # else:
+        #   # cost = abs(state_corrected[3] - nstate[3]) + abs(state_corrected[5] - nstate[5])
+        cost = abs(state_corrected[1] - nstate[1]) + abs(state_corrected[4] - nstate[4])
 
         # Check for min_cost
         if(cost < min_cost):
@@ -328,10 +351,14 @@ class TIPS_lunarlandercont(TIPS):
 
         # Get action from ifdm
         a = self.get_corrected_action(h_fb, state[0], state_corrected)
-        # print("Computed Action: ", a)
+        print("Computed Action: ", a)
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
+        self.update_policy_feedback_immediate(state, a)
+        self.update_policy_feedback_immediate(state, a)
+        self.update_policy_feedback_immediate(state, a)
+        self.update_policy_feedback_immediate(state, a)
         self.update_policy_feedback_immediate(state, a)
 
         # Add state transition pair to demo buffer
@@ -341,6 +368,10 @@ class TIPS_lunarlandercont(TIPS):
             self.DemoBuff.pop(0)
 
         # Train with batch from Demo buffer (if enough entries exist)
+        self.update_policy_feedback()
+        self.update_policy_feedback()
+        self.update_policy_feedback()
+        self.update_policy_feedback()
         self.update_policy_feedback()
 
         # Act using action based on h_feedback
@@ -377,6 +408,10 @@ class TIPS_lunarlandercont(TIPS):
 
       # Train every k time steps
       if t_counter % self.feedback_training_rate == 0:
+        self.update_policy_feedback()
+        self.update_policy_feedback()
+        self.update_policy_feedback()
+        self.update_policy_feedback()
         self.update_policy_feedback()
 
       t_counter += 1 # Time counter

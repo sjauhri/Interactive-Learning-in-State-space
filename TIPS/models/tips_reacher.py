@@ -35,7 +35,7 @@ class TIPS_reacher(TIPS):
       DO_NOTHING: 0
     }
 
-    self.ifdm_queries = 250 # Two continous actions.
+    self.ifdm_queries = 500 # Two continous actions.
 
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""

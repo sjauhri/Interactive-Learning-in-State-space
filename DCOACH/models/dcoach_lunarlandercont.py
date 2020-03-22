@@ -4,7 +4,7 @@ from feedback_lunar import *
 import gym
 
 class DCOACH_lunarlandercont(DCOACH):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=50, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=50, batch_size=32):
     DCOACH.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, batch_size=batch_size)
 
     # set which game to play
@@ -18,7 +18,7 @@ class DCOACH_lunarlandercont(DCOACH):
     # 0.01, 0.05, 0.1, 0.5, 0.75 1
     self.errorConst = 1#0.75
     # Render time delay for this environment (in s)
-    self.render_delay = 0.08
+    self.render_delay = 0.07
     # Feedback training rate in the episode
     self.feedback_training_rate  = 10
 
@@ -114,6 +114,10 @@ class DCOACH_lunarlandercont(DCOACH):
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
         self.update_policy_feedback_immediate(prev_s, a)
+        self.update_policy_feedback_immediate(prev_s, a)
+        self.update_policy_feedback_immediate(prev_s, a)
+        self.update_policy_feedback_immediate(prev_s, a)
+        self.update_policy_feedback_immediate(prev_s, a)
 
         # Add state-action pair to demo buffer
         self.DemoBuff.append((prev_s[0], a[0]))
@@ -122,6 +126,10 @@ class DCOACH_lunarlandercont(DCOACH):
             self.DemoBuff.pop(0)
 
         # Train with batch from Demo buffer (if enough entries exist)
+        self.update_policy_feedback()
+        self.update_policy_feedback()
+        self.update_policy_feedback()
+        self.update_policy_feedback()
         self.update_policy_feedback()
 
         # Act using action based on h_feedback
@@ -145,6 +153,10 @@ class DCOACH_lunarlandercont(DCOACH):
 
       # Train every k time steps
       if t_counter % self.feedback_training_rate == 0:
+        self.update_policy_feedback()
+        self.update_policy_feedback()
+        self.update_policy_feedback()
+        self.update_policy_feedback()
         self.update_policy_feedback()
 
       t_counter += 1 # Time counter
