@@ -150,12 +150,12 @@ class TIPS():
       self.action: action
       })
 
-  def update_fdm(self):
+  def update_fdm(self, epochIts):
     """update forward dynamic model"""
 
     num = len(self.ExpBuff)
     if(num >= self.batch_size):
-      for it in range(1, self.epochTrainIts+1):
+      for it in range(1, epochIts+1):
         minibatch_ids = np.random.choice(len(self.ExpBuff), self.batch_size)
         batch_s = [self.ExpBuff[id][0] for id in minibatch_ids]
         batch_ns = [self.ExpBuff[id][1] for id in minibatch_ids]
@@ -215,9 +215,9 @@ class TIPS():
         # Add to Experience Buffer
         for id in range(0, len(S)):
           self.ExpBuff.append((S[id], nS[id], A[id]))
-        for it in range(15):
-          print("\n[FDM epoch: %d]" % (it+1))
-          self.update_fdm()
+        # for it in range(15):
+          # print("\n[FDM epoch: %d]" % (it+1))
+        self.update_fdm(self.epochTrainIts*3)
 
       # Optional: Train initial policy from demonstrations
       if (args.initPolicy):      
@@ -268,7 +268,7 @@ class TIPS():
           #     if (len(self.ExpBuff) > self.maxExpBuffSize):
           #       self.ExpBuff.pop(0)
             # Update FDM
-            self.update_fdm()
+            self.update_fdm(self.epochTrainIts)
 
 
         if should(args.print_freq):

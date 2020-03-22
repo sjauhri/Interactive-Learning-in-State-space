@@ -5,7 +5,7 @@ from fdm_lunarl import *
 import gym
 
 class TIPS_lunarlandercont(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=50, epochTrainIts=9000,  dynamicsSamples=5000, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=50, epochTrainIts=6000,  dynamicsSamples=5000, batch_size=32):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
@@ -97,6 +97,7 @@ class TIPS_lunarlandercont(TIPS):
       A = np.random.uniform(-1, 1, self.action_dim)
 
       state, _, terminal, _ = self.env.step(A)
+      self.env.render()
 
       States.append(prev_s)
       Nstates.append(state)
@@ -132,6 +133,7 @@ class TIPS_lunarlandercont(TIPS):
         A = np.reshape(self.eval_policy(state), [-1])
 
       state, _, terminal, _ = self.env.step(A)
+      self.env.render()
 
       States.append(prev_s)
       Nstates.append(state)

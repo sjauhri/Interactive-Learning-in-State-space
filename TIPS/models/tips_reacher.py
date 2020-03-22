@@ -94,6 +94,7 @@ class TIPS_reacher(TIPS):
       A = np.random.uniform(-1, 1, self.action_dim)
 
       state, _, terminal, _ = self.env.step(A)
+      self.env.render()
       # Zero redundant states
       z_index = [4,5,8,9,10]
       prev_s[z_index] = 0
@@ -133,6 +134,7 @@ class TIPS_reacher(TIPS):
         A = np.reshape(self.eval_policy(state), [-1])
 
       state, _, terminal, _ = self.env.step(A)
+      self.env.render()
       # Zero redundant states
       z_index = [4,5,8,9,10]
       prev_s[z_index] = 0

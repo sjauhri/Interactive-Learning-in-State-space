@@ -5,7 +5,7 @@ from fdm_cartpole import *
 import gym
 
 class TIPS_cartpole(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=30, epochTrainIts=8000, dynamicsSamples=500, batch_size=16):
+  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=30, epochTrainIts=5000, dynamicsSamples=500, batch_size=16):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
@@ -17,7 +17,7 @@ class TIPS_cartpole(TIPS):
     self.human_feedback = Feedback(self.env)
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5
-    self.errorConst = 0.05#0.2
+    self.errorConst = 0.1
     # Render time delay for this environment (in s)
     self.render_delay = 0.075#0.08
     # Feedback training rate in the episode
@@ -94,9 +94,7 @@ class TIPS_cartpole(TIPS):
       a[A] = 1
 
       state, _, terminal, _ = self.env.step(A)
-      # x position frame correction!
-      state[0] -= prev_s[0]
-      prev_s[0] = 0
+      self.env.render()
 
       States.append(prev_s)
       Nstates.append(state)
@@ -134,9 +132,7 @@ class TIPS_cartpole(TIPS):
         A = np.argmax(a)
 
       state, _, terminal, _ = self.env.step(A)
-      # x position frame correction!
-      state[0] -= prev_s[0]
-      prev_s[0] = 0
+      self.env.render()
 
       States.append(prev_s)
       Nstates.append(state)
@@ -175,10 +171,6 @@ class TIPS_cartpole(TIPS):
 
     if (args.learnFDM):
       # Learnt FDM:
-
-      # x position frame correction!
-      # state_corrected[0] -= state[0]
-      state[0] = 0
 
       # Make a vector of same states
       States = np.tile(state, (self.ifdm_queries,1))
@@ -247,10 +239,6 @@ class TIPS_cartpole(TIPS):
 
     if (args.learnFDM):
       # Learnt FDM:
-
-      # x position frame correction!
-      nstate_required[0] -= state[0]
-      state[0] = 0
       
       # Make a vector of same states
       States = np.tile(state, (self.ifdm_queries,1))
@@ -363,10 +351,6 @@ class TIPS_cartpole(TIPS):
       state = np.reshape(state, [-1, self.state_dim])
 
       # Add to ExpBuff
-      # x position frame correction!
-      state[0,0] -= prev_s[0,0]
-      prev_s[0,0] = 0
-
       self.ExpBuff.append((prev_s[0], state[0], a))
       if (len(self.ExpBuff) > self.maxExpBuffSize):
         self.ExpBuff.pop(0)
