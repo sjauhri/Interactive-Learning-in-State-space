@@ -219,7 +219,7 @@ class TIPS():
         # Add to Experience Buffer
         for id in range(0, len(S)):
           self.ExpBuff.append((S[id], nS[id], A[id]))
-        self.update_fdm(self.epochTrainIts*5)
+        self.update_fdm(self.epochTrainIts*8)
 
       # Optional: Train initial policy from demonstrations
       if (args.initPolicy):      
@@ -269,8 +269,8 @@ class TIPS():
           #   if (len(self.ExpBuff) > self.maxExpBuffSize):
           #     self.ExpBuff.pop(0)
           # Update FDM
-          # self.update_fdm(self.epochTrainIts)
-          pass
+          self.update_fdm(self.epochTrainIts)
+          # pass
 
 
         if should(args.print_freq):

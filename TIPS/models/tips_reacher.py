@@ -5,7 +5,7 @@ from fdm_reacher import *
 import gym
 
 class TIPS_reacher(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=20, epochTrainIts=6000,  dynamicsSamples=5000, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=20, epochTrainIts=6000,  dynamicsSamples=8000, batch_size=32):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
@@ -18,7 +18,7 @@ class TIPS_reacher(TIPS):
     self.human_feedback.viewer.render() # Render the additional feedback window
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
-    self.errorConst = 0.015#075
+    self.errorConst = 0.008#0.015
     # Render time delay for this environment (in s)
     self.render_delay = 0.05
     # Feedback training rate in the episode
@@ -82,19 +82,23 @@ class TIPS_reacher(TIPS):
     States = []
     Nstates = []
     Actions = []
+    A = np.random.uniform(-1, 1, self.action_dim)
 
     for i in range(self.dynamicsSamples):
-      if terminal or ((i%500)==0):
+      if terminal or ((i%300)==0):
         state = self.env.reset()
 
       prev_s = state
 
       # Continuos action space
       # Actions between -1 and 1
-      A = np.random.uniform(-1, 1, self.action_dim)
+      if (i%2 == 0):
+        A = np.random.uniform(-1, 1, self.action_dim)
+      else:
+        A = np.array([0,0])
 
       state, _, terminal, _ = self.env.step(A)
-      self.env.render()
+      # self.env.render()
       # Zero redundant states
       z_index = [4,5,8,9,10]
       prev_s[z_index] = 0
@@ -134,7 +138,7 @@ class TIPS_reacher(TIPS):
         A = np.reshape(self.eval_policy(state), [-1])
 
       state, _, terminal, _ = self.env.step(A)
-      self.env.render()
+      # self.env.render()
       # Zero redundant states
       z_index = [4,5,8,9,10]
       prev_s[z_index] = 0
@@ -207,6 +211,7 @@ class TIPS_reacher(TIPS):
     """get action to achieve next state close to state_corrected"""
 
     if (args.learnFDM):
+      # prev_time = time.time()
       # Learnt FDM:
 
       # Zero redundant states
@@ -217,7 +222,8 @@ class TIPS_reacher(TIPS):
       States = np.tile(state, (self.ifdm_queries,1))
       # Choose random actions
       # Continuous Actions
-      Actions = np.random.uniform(-0.2, 0.2, (self.ifdm_queries,self.action_dim) )
+      # Actions = np.random.uniform(-0.2, 0.2, (self.ifdm_queries,self.action_dim) )
+      Actions = np.random.uniform(-1.0, 1.0, (self.ifdm_queries,self.action_dim) )
       # Query ifdm to get next state
       Nstates = self.eval_fdm(States, Actions)
 
@@ -231,13 +237,17 @@ class TIPS_reacher(TIPS):
       # Check for min_cost
       # min_cost_index = cost.argmin(axis=0)
       # min_action = Actions[min_cost_index]
-      # Optional: Get action that changes state the least
-      least_cost_inds = np.argpartition(cost, 10)[:10]
+      
+      # Alternative: Get action that changes state the least
+      least_cost_inds = np.argpartition(cost, 20)[:20]
       state_diffs = np.sum(abs(state-Nstates[:]), axis=1)
       min_cost_index = (state_diffs[least_cost_inds]).argmin(axis=0)
       min_action = Actions[least_cost_inds[min_cost_index]]
 
+      # Debug: equal timing
+      # print(time.time() - prev_time)
     else:
+      # prev_time = time.time()
       # True FDM:
 
       # Continous Actions
@@ -249,7 +259,8 @@ class TIPS_reacher(TIPS):
       for _ in range(1, self.ifdm_queries+1):
         # Choose random action
         # Continous Actions
-        curr_action = np.random.uniform(-0.2, 0.2, self.action_dim)
+        # curr_action = np.random.uniform(-0.2, 0.2, self.action_dim)
+        curr_action = np.random.uniform(-1.0, 1.0, self.action_dim)
         # Discretization
         # val_set = [0.1*x for x in range(-5,6)]
         # curr_action = np.random.choice(val_set, self.action_dim)
@@ -281,6 +292,8 @@ class TIPS_reacher(TIPS):
         #     min_action = curr_action
         #     min_state_diff = np.linalg.norm(state-nstate)
 
+      # Debug: equal timing
+      # print(time.time() - prev_time)
     return min_action
 
   def get_action(self, state, nstate_required):
@@ -389,6 +402,14 @@ class TIPS_reacher(TIPS):
         # Continuous actions
         A = np.copy(a)
       else:
+        if (args.learnFDM):
+          # Debug: equal timing
+          time.sleep(0.002)
+          # pass
+        else:
+          # Debug: equal timing
+          time.sleep(0.085)
+
         # Use current policy
 
         # Map action from state
