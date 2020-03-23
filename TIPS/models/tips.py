@@ -204,6 +204,10 @@ class TIPS():
       print('[Loaded previous model and session]')
 
       # NOTE: Re-init policy here if you wish
+      # policy_variables =  tf.get_collection(tf.GraphKeys.VARIABLES, scope="policy_model")
+      # init_policy = tf.variables_initializer(policy_variables)
+      # self.sess.run(init_policy)
+
     else:
       # Start session
       self.sess.run(tf.global_variables_initializer())
@@ -215,9 +219,7 @@ class TIPS():
         # Add to Experience Buffer
         for id in range(0, len(S)):
           self.ExpBuff.append((S[id], nS[id], A[id]))
-        # for it in range(15):
-          # print("\n[FDM epoch: %d]" % (it+1))
-        self.update_fdm(self.epochTrainIts*3)
+        self.update_fdm(self.epochTrainIts*5)
 
       # Optional: Train initial policy from demonstrations
       if (args.initPolicy):      
@@ -260,15 +262,15 @@ class TIPS():
 
         # Optional: Update FDM
         if (args.learnFDM):
-          # if (should(2)):
-          #   S, nS, A = self.exploration_dynamics_sampling() # Sample policy with exploration and update forward dynamic model
-          #   # Add to Experience Buffer
-          #   for id in range(0, len(S)):
-          #     self.ExpBuff.append((S[id], nS[id], A[id]))
-          #     if (len(self.ExpBuff) > self.maxExpBuffSize):
-          #       self.ExpBuff.pop(0)
-            # Update FDM
-            self.update_fdm(self.epochTrainIts)
+          # S, nS, A = self.exploration_dynamics_sampling() # Sample policy with exploration and update forward dynamic model
+          # # Add to Experience Buffer
+          # for id in range(0, len(S)):
+          #   self.ExpBuff.append((S[id], nS[id], A[id]))
+          #   if (len(self.ExpBuff) > self.maxExpBuffSize):
+          #     self.ExpBuff.pop(0)
+          # Update FDM
+          self.update_fdm(self.epochTrainIts)
+          # pass
 
 
         if should(args.print_freq):
