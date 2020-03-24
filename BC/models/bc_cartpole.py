@@ -33,6 +33,7 @@ class BC_cartpole(BC):
       with tf.variable_scope("train_step") as scope:
         self.policy_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.policy_loss)
 
+
   def eval_rwd_policy(self):
     """getting the reward by current policy"""
     terminal = False
