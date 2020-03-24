@@ -5,7 +5,7 @@ from fdm_reacher import *
 import gym
 
 class TIPS_reacher(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.001, maxEpisodes=20, epochTrainIts=6000,  dynamicsSamples=8000, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=20, epochTrainIts=5000,  dynamicsSamples=8000, batch_size=32):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
@@ -63,9 +63,9 @@ class TIPS_reacher(TIPS):
       with tf.variable_scope("input") as scope:
         fdm_input = tf.concat([self.state, self.action], 1)
       with tf.variable_scope("model") as scope:
-        fdm_h1 = tf.layers.dense(fdm_input, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
+        fdm_h1 = tf.layers.dense(fdm_input, 64, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_1")
         fdm_h1 = tf.nn.leaky_relu(fdm_h1, 0.2, name="LeakyRelu_1")
-        fdm_h2 = tf.layers.dense(fdm_h1, 32, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
+        fdm_h2 = tf.layers.dense(fdm_h1, 64, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense_2")
         fdm_h2 = tf.nn.leaky_relu(fdm_h2, 0.2, name="LeakyRelu_2")
 
       with tf.variable_scope("output") as scope:                
@@ -92,7 +92,7 @@ class TIPS_reacher(TIPS):
 
       # Continuos action space
       # Actions between -1 and 1
-      if (i%2 == 0):
+      if (i%3 == 0):
         A = np.random.uniform(-1, 1, self.action_dim)
       else:
         A = np.array([0,0])
@@ -413,8 +413,8 @@ class TIPS_reacher(TIPS):
         # Use current policy
 
         # Map action from state
-        # a = np.reshape(self.eval_policy(state), [-1])
-        a = [0,0]
+        a = np.reshape(self.eval_policy(state), [-1])
+        # a = [0,0]
         # Continuous actions
         A = np.copy(a)
 
