@@ -45,7 +45,7 @@ class TIPS():
     with open(args.input_filename, 'rb') as f:
       expert_data = pickle.load(f)
       inputs = expert_data['observations']
-      targets = expert_data['observations_next']
+      targets = expert_data['actions']
     
     num_samples = len(inputs)
     if(num_samples > 15000):
@@ -60,8 +60,8 @@ class TIPS():
     """sample demonstration"""
     sample_ids = np.random.choice(self.demo_examples, num_samples)
     S = [ self.inputs[i] for i in sample_ids ]
-    nS = [ self.targets[i] for i in sample_ids ]
-    return S, nS
+    A = [ self.targets[i] for i in sample_ids ]
+    return S, A
 
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
@@ -88,9 +88,9 @@ class TIPS():
     """uniform sampling of actions to generate (s_t, s_t+1) and action pairs"""
     raise NotImplementedError
 
-  def exploration_dynamics_sampling(self):
-    """using epsilon-greedy version of current policy to generate (s_t, s_t+1, a_t) triplets"""
-    raise NotImplementedError
+  # def exploration_dynamics_sampling(self):
+  #   """using epsilon-greedy version of current policy to generate (s_t, s_t+1, a_t) triplets"""
+  #   raise NotImplementedError
 
   def feedback_run(self):
     """run and train using D-COACH framework incorporating human feedback"""
@@ -100,18 +100,18 @@ class TIPS():
     """getting the reward by current policy model"""
     raise NotImplementedError
 
-  def get_action(self, state, nstate_required):
-    """get action to achieve next state close to nstate_required"""
-    raise NotImplementedError
+  # def get_action(self, state, nstate_required):
+  #   """get action to achieve next state close to nstate_required"""
+  #   raise NotImplementedError
     
-  def update_policy(self):
+  def update_policy(self, epochIts):
     """update policy model"""
-    for it in range(1, self.epochTrainIts+1):
-      batch_s, batch_ns =  self.sample_demo(self.batch_size)
-      batch_a = []
-      for i in range(self.batch_size):
-        batch_a.append(self.get_action(batch_s[i],batch_ns[i]))
-      batch_a = np.reshape(batch_a, [-1, self.action_dim])
+    for it in range(1, epochIts+1):
+      batch_s, batch_a =  self.sample_demo(self.batch_size)
+      # batch_a = []
+      # for i in range(self.batch_size):
+      #   batch_a.append(self.get_action(batch_s[i],batch_ns[i]))
+      # batch_a = np.reshape(batch_a, [-1, self.action_dim])
       
       self.sess.run(self.policy_train_step, feed_dict={
       self.state : batch_s,
@@ -120,11 +120,11 @@ class TIPS():
       # Debug
       if it % 500 == 0:
         # Check policy loss on another data set.................
-        S, nS = self.sample_demo(int(round(self.demo_examples/100))) # 1% of the demo data
-        A = []
-        for i in range(len(S)):
-          A.append(self.get_action(S[i],nS[i]))
-        A = np.reshape(A, [-1, self.action_dim])
+        S, A = self.sample_demo(int(round(self.demo_examples/10))) # 10% of the demo data
+        # A = []
+        # for i in range(len(S)):
+        #   A.append(self.get_action(S[i],nS[i]))
+        # A = np.reshape(A, [-1, self.action_dim])
         policy_loss = self.get_policy_loss(S, A)
         print('Policy train: iteration: %5d, policy_loss: %8.6f' % (it, policy_loss))
         self.log_writer.write("Policy train: iteration: " + str(it) + ", policy_loss: " + format(policy_loss, '8.6f') + "\n")
@@ -224,7 +224,7 @@ class TIPS():
     # Optional: Train initial policy from demonstrations
     if (args.initPolicy):
       print("\n[Training initial policy]")
-      self.update_policy()
+      self.update_policy(self.epochTrainIts*6)
     
     # Init model saver
     saver = tf.train.Saver(max_to_keep=1)
@@ -251,10 +251,6 @@ class TIPS():
           print('1')
           time.sleep(1)
           print('Start')
-        # Optional: Update policy pi #######################
-        # if should(1):
-        #   self.update_policy()
-        ##########################################
         
         # Run with human feedback
         self.feedback_run()
@@ -286,7 +282,7 @@ class TIPS():
 
           # Check policy loss on another data set.................
           policy_loss = 0
-          # S, nS = self.sample_demo(int(round(self.demo_examples/10))) # 10% of the demo data
+          # S, A = self.sample_demo(int(round(self.demo_examples/10))) # 10% of the demo data
           # A = []
           # for i in range(len(S)):
           #   A.append(self.get_action(S[i],nS[i]))
