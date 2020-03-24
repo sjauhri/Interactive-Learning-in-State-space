@@ -26,7 +26,7 @@ class TELE_lunarlandercont():
     self.render_delay = 0.08
 
     # Min reward for environment
-    self.min_reward = 0 # Atleast land lunarlander to be considered demonstration
+    self.min_reward = -50 # Atleast land lunarlander to be considered demonstration
 
     # Choose which feedback is valid with fb dictionary
     self.feedback_dict = {
@@ -145,6 +145,7 @@ if __name__ == "__main__":
 
     # Optional: Countdown for trainer to be ready
     print("[Minimum reward for success is %5.1f]" % tele.min_reward)
+    print("[Press Enter to save and finish session]")
     print('[Running new episode in....]')
     time.sleep(1)
     print('3')

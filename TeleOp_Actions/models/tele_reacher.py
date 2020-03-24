@@ -41,7 +41,8 @@ class TELE_reacher():
     terminal = False
     total_reward = 0
     state = self.env.reset()
-    self.observations.append(state)
+    observations = []
+    actions = []
 
     # Iterate over the episode
     while((not terminal) and (not self.human_feedback.ask_for_done()) and (not self.human_feedback.ask_for_end()) ):
@@ -68,18 +69,15 @@ class TELE_reacher():
         # Continuous actions
         a = np.array([0, 0])
 
-      if (args.record):
-        self.observations.append(state)
-        self.actions.append(a)
-        if (len(self.observations) > self.maxDemoSize):
-          self.observations.pop(0)
-          self.actions.pop(0)
+      # Store observation, action pair
+      observations.append(state)
+      actions.append(a)
 
       # Act
       state, reward, terminal, _ = self.env.step(a)
       total_reward += reward
 
-    return total_reward
+    return total_reward, observations, actions
 
   def save(self):
     # Save demonstrations in pickle file
@@ -98,7 +96,7 @@ class TELE_reacher():
     #             ob_next = expert_data['observations_next']
 
     ob.extend(self.observations[0:-1])
-    act.extend(self.actions[:])
+    act.extend(self.actions[0:-1])
     ob_next.extend(self.observations[1:])
     
     expert_obs_data = {'observations': ob,
@@ -129,6 +127,7 @@ if __name__ == "__main__":
   for it in range(args.maxEpisodes):
 
     # Optional: Countdown for trainer to be ready
+    print("[Press Enter to save and finish session]")
     print('[Running new episode in....]')
     time.sleep(1)
     print('3')
@@ -139,11 +138,15 @@ if __name__ == "__main__":
     time.sleep(1)
     print('Start')
     
-    reward = tele.run()
+    reward, obs, acts = tele.run()
 
     if(tele.human_feedback.ask_for_end()):
       break
 
+    tele.observations.extend(obs)
+    tele.actions.extend(acts)
+
+    # Average rewards
     average_reward = average_reward*(it)
     average_reward = (average_reward + reward)/(it+1)
 

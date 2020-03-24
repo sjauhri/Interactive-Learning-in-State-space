@@ -61,7 +61,7 @@ class TELE_cartpole():
         fdm_h2 = tf.nn.leaky_relu(fdm_h2, 0.2, name="LeakyRelu_2")
 
       with tf.variable_scope("output") as scope:                
-        self.fdm_pred_state = tf.layers.dense(fdm_h2, self.state_dim, kernel_initializer=tf.truncated_normal_initializer(stddev=0.0001), bias_initializer=tf.truncated_normal_initializer(stddev=0.0001), name="dense")        
+        self.fdm_pred_state = tf.layers.dense(fdm_h2, self.state_dim, kernel_initializer=tf.truncated_normal_initializer(stddev=0.0001), bias_initializer=tf.truncated_normal_initializer(stddev=0.0001), name="dense")
 
       with tf.variable_scope("loss") as scope:
         self.fdm_loss = tf.reduce_mean(tf.squared_difference(self.fdm_pred_state, self.nstate))
@@ -144,7 +144,7 @@ class TELE_cartpole():
 
         # Check cost
         cost = abs(state_corrected[0] - nstate_xpos) + abs(state_corrected[1] - nstate_ypos) # Corrected pole tip position
-        
+
         # Check for min_cost
         if(cost < min_cost):
           min_cost = cost
@@ -180,7 +180,7 @@ class TELE_cartpole():
 
         # Get action from ifdm
         a = self.get_corrected_action(h_fb, state, state_corrected)
-        print("Requested Action: ", a)
+        # print("Requested Action: ", a)
 
         # Discrete actions
         A = np.argmax(a)
@@ -238,7 +238,7 @@ if __name__ == "__main__":
 
   if not os.path.exists(args.save_dir):
     os.makedirs(args.save_dir)
-  
+
   if (not args.trueFDM):
     # initial session
     config = tf.ConfigProto()

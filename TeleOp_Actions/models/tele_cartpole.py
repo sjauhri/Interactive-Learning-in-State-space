@@ -39,6 +39,7 @@ class TELE_cartpole():
       DO_NOTHING: 0
     }
 
+
   def run(self):
     """run and tele-operate agent"""
     terminal = False
@@ -83,6 +84,7 @@ class TELE_cartpole():
 
     return total_reward, observations, actions
 
+
   def save(self):
     # Save demonstrations in pickle file
 
@@ -112,6 +114,7 @@ class TELE_cartpole():
 
     print("Saved %d demonstration samples" % len(ob))
 
+
 if __name__ == "__main__":
   tele = TELE_cartpole()
 
@@ -135,6 +138,7 @@ if __name__ == "__main__":
 
     # Optional: Countdown for trainer to be ready
     print("[Minimum reward for success is %5.1f]" % tele.min_reward)
+    print("[Press Enter to save and finish session]")
     print('[Running new episode in....]')
     time.sleep(1)
     print('3')
