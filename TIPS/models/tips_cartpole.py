@@ -94,7 +94,7 @@ class TIPS_cartpole(TIPS):
       a[A] = 1
 
       state, _, terminal, _ = self.env.step(A)
-      self.env.render()
+      # self.env.render()
 
       States.append(prev_s)
       Nstates.append(state)

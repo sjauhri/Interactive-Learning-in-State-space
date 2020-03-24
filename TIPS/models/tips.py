@@ -224,7 +224,7 @@ class TIPS():
     # Optional: Train initial policy from demonstrations
     if (args.initPolicy):
       print("\n[Training initial policy]")
-      self.update_policy(self.epochTrainIts*6)
+      self.update_policy(self.epochTrainIts*8)
     
     # Init model saver
     saver = tf.train.Saver(max_to_keep=1)
