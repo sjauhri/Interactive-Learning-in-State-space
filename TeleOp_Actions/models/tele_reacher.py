@@ -146,6 +146,9 @@ if __name__ == "__main__":
     tele.observations.extend(obs)
     tele.actions.extend(acts)
 
+    if(args.record):
+      tele.save()
+
     # Average rewards
     average_reward = average_reward*(it)
     average_reward = (average_reward + reward)/(it+1)

@@ -130,7 +130,8 @@ class TELE_reacher():
       States = np.tile(state, (self.ifdm_queries,1))
       # Choose random actions
       # Continuous Actions
-      Actions = np.random.uniform(-1.0, 1.0, (self.ifdm_queries,self.action_dim) )
+      # Actions = np.random.uniform(-1.0, 1.0, (self.ifdm_queries,self.action_dim) )
+      Actions = np.random.uniform(-0.4, 0.4, (self.ifdm_queries,self.action_dim) )
       # Query ifdm to get next state
       Nstates = self.eval_fdm(States, Actions)
 
@@ -309,6 +310,9 @@ if __name__ == "__main__":
 
     tele.observations.extend(obs)
     tele.actions.extend(acts)
+
+    if(args.record):
+      tele.save()
 
     # Average rewards
     average_reward = average_reward*(it)

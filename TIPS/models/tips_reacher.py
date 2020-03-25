@@ -222,8 +222,8 @@ class TIPS_reacher(TIPS):
       States = np.tile(state, (self.ifdm_queries,1))
       # Choose random actions
       # Continuous Actions
-      # Actions = np.random.uniform(-0.2, 0.2, (self.ifdm_queries,self.action_dim) )
-      Actions = np.random.uniform(-1.0, 1.0, (self.ifdm_queries,self.action_dim) )
+      # Actions = np.random.uniform(-1.0, 1.0, (self.ifdm_queries,self.action_dim) )
+      Actions = np.random.uniform(-0.4, 0.4, (self.ifdm_queries,self.action_dim) )
       # Query ifdm to get next state
       Nstates = self.eval_fdm(States, Actions)
 
@@ -259,8 +259,8 @@ class TIPS_reacher(TIPS):
       for _ in range(1, self.ifdm_queries+1):
         # Choose random action
         # Continous Actions
-        # curr_action = np.random.uniform(-0.2, 0.2, self.action_dim)
-        curr_action = np.random.uniform(-1.0, 1.0, self.action_dim)
+        # curr_action = np.random.uniform(-1.0, 1.0, self.action_dim)
+        curr_action = np.random.uniform(-0.4, 0.4, self.action_dim)
         # Discretization
         # val_set = [0.1*x for x in range(-5,6)]
         # curr_action = np.random.choice(val_set, self.action_dim)
