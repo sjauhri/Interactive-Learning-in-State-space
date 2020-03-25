@@ -299,9 +299,9 @@ if __name__ == "__main__":
       tele.observations.extend(obs)
       tele.actions.extend(acts)
       
-      # Average success rewards
-      average_reward = average_reward*(success_count-1)
-      average_reward = (average_reward + reward)/(success_count)
+    # Average rewards
+    average_reward = average_reward*(it)
+    average_reward = (average_reward + reward)/(it+1)
 
     print('episode_reward: %5.1f' % reward)
     print('Iteration %d: average_reward: %5.1f' % (it, average_reward))

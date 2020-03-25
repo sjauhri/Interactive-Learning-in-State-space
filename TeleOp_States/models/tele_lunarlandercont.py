@@ -29,7 +29,7 @@ class TELE_lunarlandercont():
     self.render_delay = 0.075
 
     # Min reward for environment
-    self.min_reward = -50 # Atleast land lunarlander to be considered demonstration
+    self.min_reward = -70 # Atleast land lunarlander to be considered demonstration
 
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5
@@ -327,9 +327,9 @@ if __name__ == "__main__":
       tele.observations.extend(obs)
       tele.actions.extend(acts)
       
-      # Average success rewards
-      average_reward = average_reward*(success_count-1)
-      average_reward = (average_reward + reward)/(success_count)
+    # Average rewards
+    average_reward = average_reward*(it)
+    average_reward = (average_reward + reward)/(it+1)
 
     print('episode_reward: %5.1f' % reward)
     print('Iteration %d: average_reward: %5.1f' % (it, average_reward))

@@ -26,7 +26,7 @@ class TELE_lunarlandercont():
     self.render_delay = 0.08
 
     # Min reward for environment
-    self.min_reward = -50 # Atleast land lunarlander to be considered demonstration
+    self.min_reward = -70 # Atleast land lunarlander to be considered demonstration
 
     # Choose which feedback is valid with fb dictionary
     self.feedback_dict = {
@@ -167,9 +167,9 @@ if __name__ == "__main__":
       tele.observations.extend(obs)
       tele.actions.extend(acts)
       
-      # Average success rewards
-      average_reward = average_reward*(success_count-1)
-      average_reward = (average_reward + reward)/(success_count)
+    # Average rewards
+    average_reward = average_reward*(it)
+    average_reward = (average_reward + reward)/(it+1)
 
     print('episode_reward: %5.1f' % reward)
     print('Iteration %d: average_reward: %5.1f' % (it, average_reward))

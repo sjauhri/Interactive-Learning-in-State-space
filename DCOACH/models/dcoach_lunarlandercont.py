@@ -18,7 +18,7 @@ class DCOACH_lunarlandercont(DCOACH):
     # 0.01, 0.05, 0.1, 0.5, 0.75 1
     self.errorConst = 1#0.75
     # Render time delay for this environment (in s)
-    self.render_delay = 0.07
+    self.render_delay = 0.08
     # Feedback training rate in the episode
     self.feedback_training_rate  = 10
 
