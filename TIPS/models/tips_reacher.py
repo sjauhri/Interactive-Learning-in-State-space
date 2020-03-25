@@ -5,7 +5,7 @@ from fdm_reacher import *
 import gym
 
 class TIPS_reacher(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=20, epochTrainIts=5000,  dynamicsSamples=8000, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=20, epochTrainIts=4000,  dynamicsSamples=8000, batch_size=32):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
@@ -382,7 +382,7 @@ class TIPS_reacher(TIPS):
 
         # Get action from ifdm
         a = self.get_corrected_action(h_fb, state[0], state_corrected)
-        print("Computed Action: ", a)
+        # print("Computed Action: ", a)
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
