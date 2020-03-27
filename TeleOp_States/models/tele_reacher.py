@@ -142,11 +142,13 @@ class TELE_reacher():
       cost = abs(state_corrected[0] - Nstates_x) + abs(state_corrected[1] - Nstates_y)
 
       # Check for min_cost
+      min_cost_index = cost.argmin(axis=0)
+      min_action = Actions[min_cost_index]
       # Additionally: Get action that changes state the least
-      least_cost_inds = np.argpartition(cost, 20)[:20]
-      state_diffs = np.sum(abs(state-Nstates[:]), axis=1)
-      min_cost_index = (state_diffs[least_cost_inds]).argmin(axis=0)
-      min_action = Actions[least_cost_inds[min_cost_index]]
+      # least_cost_inds = np.argpartition(cost, 20)[:20]
+      # state_diffs = np.sum(abs(state-Nstates[:]), axis=1)
+      # min_cost_index = (state_diffs[least_cost_inds]).argmin(axis=0)
+      # min_action = Actions[least_cost_inds[min_cost_index]]
     else:
       # True FDM:
 
