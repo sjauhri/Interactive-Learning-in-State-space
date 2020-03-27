@@ -265,8 +265,8 @@ class TIPS():
           #   if (len(self.ExpBuff) > self.maxExpBuffSize):
           #     self.ExpBuff.pop(0)
           # Update FDM
-          self.update_fdm(self.epochTrainIts)
-          # pass
+          # self.update_fdm(self.epochTrainIts)
+          pass
 
 
         if should(args.print_freq):
