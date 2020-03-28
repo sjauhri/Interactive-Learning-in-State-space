@@ -67,8 +67,9 @@ class DCOACH_cartpole(DCOACH):
 
     # Iterate over the episode
     while((not terminal) and (not self.human_feedback.ask_for_done()) ):        
-      self.env.render()  # Make the environment visible
-      time.sleep(self.render_delay)    # Add delay to rendering if necessary
+      if (not args.fast):
+        self.env.render()  # Make the environment visible
+        time.sleep(self.render_delay)    # Add delay to rendering if necessary
 
       # Get feedback signal
       h_fb = self.human_feedback.get_h()

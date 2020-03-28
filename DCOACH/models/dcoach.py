@@ -88,15 +88,16 @@ class DCOACH():
         return freq > 0 and ((it+1) % freq==0 or it == self.maxEpisodes-1)
       
       # Optional: Countdown for trainer to be ready
-      print('[Running new episode in....]')
-      time.sleep(1)
-      print('3')
-      time.sleep(1)
-      print('2')
-      time.sleep(1)
-      print('1')
-      time.sleep(1)
-      print('Start')
+      if (not args.fast):
+        print('[Running new episode in....]')
+        time.sleep(1)
+        print('3')
+        time.sleep(1)
+        print('2')
+        time.sleep(1)
+        print('1')
+        time.sleep(1)
+        print('Start')
       
       # Run with human feedback, get feedback rate
       feedback_rate = self.feedback_run()
