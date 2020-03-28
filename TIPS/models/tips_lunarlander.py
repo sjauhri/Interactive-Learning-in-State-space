@@ -238,7 +238,7 @@ class TIPS_lunarlander(TIPS):
     total_reward = 0
     state = self.env.reset()
     state = np.reshape(state, [-1, self.state_dim])
-    t_counter = 0
+    t_counter = 1
     h_counter = 0
 
     # Iterate over the episode
@@ -317,6 +317,10 @@ class TIPS_lunarlander(TIPS):
 
     print('episode_reward: %5.1f' % (total_reward))
     self.log_writer.write("\n" + "episode_reward: " + format(total_reward, '5.1f'))
+    
+    # Capture and return feedback rate
+    feedback_rate = h_counter/t_counter
+    return feedback_rate
 
   def eval_rwd_policy(self):
     """getting the reward by current policy"""

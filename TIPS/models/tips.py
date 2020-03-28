@@ -252,8 +252,8 @@ class TIPS():
           time.sleep(1)
           print('Start')
         
-        # Run with human feedback
-        self.feedback_run()
+        # Run with human feedback, get feedback rate
+        feedback_rate = self.feedback_run()
         print('[Episode ended]')
 
         # Optional: Update FDM
@@ -300,9 +300,9 @@ class TIPS():
 
             # fdm_loss = self.get_fdm_loss(batch_s, batch_ns, batch_a)
           # ......................................................          
-          print('Iteration: %5d, average_reward: %5.1f' % ((it+1), avg_reward))
-          self.result_writer.write( str(it+1) + " , " + format(avg_reward, '8.6f') + " , " + format(policy_loss, '8.6f') + " , " + format(fdm_loss, '8.6f') + "\n" )
-          self.log_writer.write("\n" + "Iteration: " + str(it+1) + ", average_reward: " + str(avg_reward) + ", policy_loss: " + format(policy_loss, '8.6f') + ", fdm_loss: " + format(fdm_loss, '8.6f') + "\n" + "\n")
+          print('Iteration: %5d, average_reward: %5.1f, feedback_rate: %1.3f' % ((it+1), avg_reward, feedback_rate))
+          self.result_writer.write( str(it+1) + " , " + format(avg_reward, '8.6f') + " , " + format(feedback_rate, '8.6f') + "\n" )
+          self.log_writer.write("\n" + "Iteration: " + str(it+1) + ", average_reward: " + str(avg_reward) + ", feedback_rate: " + str(feedback_rate) + "\n" + "\n")
 
         # saving session
         if should(args.save_freq):
@@ -346,7 +346,7 @@ class TIPS():
         
         self.result_writer = open(args.result_dir + self.logTime + "_" + str(self.exp) + ".csv", "w") # csv episode result log
         self.reward_writer = open(args.result_dir + self.logTime + "_rwd_" + str(self.exp) + ".csv", "w") # csv all rewards log
-        self.result_writer.write("iteration,average_reward,policy_loss,fdm_loss\n")
+        self.result_writer.write("iteration,average_reward,feedback_rate\n")
         self.reward_writer.write("agent_rewards\n")
 
         self.log_writer = open(args.result_dir + self.logTime + "_" + str(self.exp) + ".txt", "w") # txt debug log with everything

@@ -62,7 +62,7 @@ class DCOACH_lunarlander(DCOACH):
     state = np.reshape(state, [-1, self.state_dim])
     prev_s = state    
     a = [1, 0, 0, 0]
-    t_counter = 0
+    t_counter = 1
     h_counter = 0
 
     # Iterate over the episode
@@ -131,6 +131,10 @@ class DCOACH_lunarlander(DCOACH):
 
     print('episode_reward: %5.1f' % (total_reward))
     self.log_writer.write("\n" + "episode_reward: " + format(total_reward, '5.1f'))
+    
+    # Capture and return feedback rate
+    feedback_rate = h_counter/t_counter
+    return feedback_rate
 
   def eval_rwd_policy(self):
     """getting the reward by current policy"""
