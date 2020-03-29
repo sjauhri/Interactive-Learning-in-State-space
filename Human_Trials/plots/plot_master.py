@@ -48,8 +48,34 @@ p1 = sns.catplot(x="day", y="total_bill", hue="smoker",
 
 #### Axes level functions ####
 # f, axes = plt.subplots(1, 2, sharey=True, figsize=(6, 4))
+
+# plt.subplots_adjust(
+    # left    =  left, 
+    # bottom  =  bottom, 
+    # right   =  right, 
+    # top     =  top, 
+    # wspace  =  wspace, 
+    # hspace  =  0.5
+# )
+
 # sns.boxplot(x="day", y="tip", data=tips, ax=axes[0])
 # sns.scatterplot(x="total_bill", y="tip", hue="day", data=tips, ax=axes[1])
+
+# Hatches (Patterns) in barplot
+# Define some hatches
+# hatches = ['-', '+', 'x', '\\', '*', 'o','-', '+', 'x', '\\', '*', 'o','-', '+', 'x', '\\', '*', 'o','-', '+', 'x', '\\', '*', 'o']
+
+# # Loop over the bars
+# for i,thisbar in enumerate(bar1.patches):
+#     # Set a different hatch for each bar
+#     thisbar.set_hatch(hatches[i])
+# for i,thisbar in enumerate(bar2.patches):
+#     # Set a different hatch for each bar
+#     thisbar.set_hatch(hatches[i])
+# for i,thisbar in enumerate(bar3.patches):
+#     # Set a different hatch for each bar
+#     thisbar.set_hatch(hatches[i])
+
 
 # plt.show(block=False)
 plt.show()
