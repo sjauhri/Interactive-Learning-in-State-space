@@ -10,7 +10,7 @@ from gym import spaces, logger
 from gym.utils import seeding
 import numpy as np
 
-class CartPoleEnv(gym.Env):
+class CartPoleZeroEnv(gym.Env):
     """
     Description:
         A pole is attached by an un-actuated joint to a cart, which moves along a frictionless track. The pendulum starts upright, and the goal is to prevent it from falling over by increasing and reducing the cart's velocity.
@@ -62,7 +62,7 @@ class CartPoleEnv(gym.Env):
         self.polemass_length = (self.masspole * self.length)
         self.force_mag = 10.0
         self.tau = 0.02  # seconds between state updates
-        self.kinematics_integrator = 'euler'
+        self.kinematics_integrator = 'eer'
 
         # Angle at which to fail the episode
         self.theta_threshold_radians = 40 * 2 * math.pi / 360
@@ -75,7 +75,7 @@ class CartPoleEnv(gym.Env):
             self.theta_threshold_radians * 2,
             np.finfo(np.float32).max])
 
-        self.action_space = spaces.Discrete(2)
+        self.action_space = spaces.Discrete(3)
         self.observation_space = spaces.Box(-high, high, dtype=np.float32)
 
         self.seed()
@@ -92,7 +92,11 @@ class CartPoleEnv(gym.Env):
         assert self.action_space.contains(action), "%r (%s) invalid"%(action, type(action))
         state = self.state
         x, x_dot, theta, theta_dot = state
-        force = self.force_mag if action==1 else -self.force_mag
+        force = 0
+        if action==1:
+            force = self.force_mag    
+        elif action==0:
+            force = -self.force_mag
         costheta = math.cos(theta)
         sintheta = math.sin(theta)
         temp = (force + self.polemass_length * theta_dot * theta_dot * sintheta) / self.total_mass

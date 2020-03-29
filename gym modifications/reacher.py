@@ -26,7 +26,7 @@ class ReacherEnv(mujoco_env.MujocoEnv, utils.EzPickle):
         #     self.goal = self.np_random.uniform(low=-.2, high=.2, size=2)
         #     if np.linalg.norm(self.goal) < 0.2:
         #         break
-        self.goal = [0.11977868 0.11620387]
+        self.goal = [-0.11977868, 0.11620387]
         qpos[-2:] = self.goal
         qvel = self.init_qvel + self.np_random.uniform(low=-.005, high=.005, size=self.model.nv)
         qvel[-2:] = 0
@@ -34,7 +34,7 @@ class ReacherEnv(mujoco_env.MujocoEnv, utils.EzPickle):
         return self._get_obs()
 
     def _get_obs(self):
-        theta = self.sim.data.qpos.flat[:2]
+        theta = self.sim.data.qpos.flat[:2]        
         return np.concatenate([
             np.cos(theta),
             np.sin(theta),
