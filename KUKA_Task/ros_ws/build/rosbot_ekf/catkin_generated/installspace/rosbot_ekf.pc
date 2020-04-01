@@ -1,8 +1,0 @@
-prefix=/home/snehal/Desktop/Thesis/IfO/KUKA_Task/ros_ws/install
-
-Name: rosbot_ekf
-Description: Description of rosbot_ekf
-Version: 1.0.0
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: roscpp rospy message_runtime

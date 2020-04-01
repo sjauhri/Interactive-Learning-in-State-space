@@ -1,8 +1,0 @@
-prefix=/home/snehal/Desktop/Thesis/IfO/KUKA_Task/ros_ws/devel
-
-Name: iiwa_moveit
-Description: Description of iiwa_moveit
-Version: 1.4.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

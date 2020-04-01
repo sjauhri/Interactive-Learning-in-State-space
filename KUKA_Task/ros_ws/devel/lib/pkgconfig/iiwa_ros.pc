@@ -1,8 +1,0 @@
-prefix=/home/snehal/Desktop/Thesis/IfO/KUKA_Task/ros_ws/devel
-
-Name: iiwa_ros
-Description: Description of iiwa_ros
-Version: 1.4.0
-Cflags: -I/home/snehal/Desktop/Thesis/IfO/KUKA_Task/ros_ws/src/iiwa_stack/iiwa_ros/include
-Libs: -L${prefix}/lib -liiwa_ros
-Requires: iiwa_msgs roscpp

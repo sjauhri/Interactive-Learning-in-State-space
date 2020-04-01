@@ -1,2 +1,0 @@
-iiwa_stack/iiwa_control:iiwa_stack/iiwa_description:iiwa_stack/iiwa_gazebo:iiwa_stack/iiwa_hw:iiwa_stack/iiwa_moveit:iiwa_stack/iiwa_msgs:iiwa_stack/iiwa_ros:rosbot_ekf
--DCATKIN_DEVEL_PREFIX=/home/snehal/Desktop/Thesis/IfO/KUKA_Task/ros_ws/devel -DCMAKE_INSTALL_PREFIX=/home/snehal/Desktop/Thesis/IfO/KUKA_Task/ros_ws/install -G Unix Makefiles
