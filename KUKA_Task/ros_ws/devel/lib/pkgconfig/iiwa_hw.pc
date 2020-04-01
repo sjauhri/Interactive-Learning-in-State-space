@@ -1,0 +1,8 @@
+prefix=/home/snehal/Desktop/Thesis/IfO/KUKA_Task/ros_ws/devel
+
+Name: iiwa_hw
+Description: Description of iiwa_hw
+Version: 1.4.0
+Cflags: -I/home/snehal/Desktop/Thesis/IfO/KUKA_Task/ros_ws/src/iiwa_stack/iiwa_hw/include
+Libs: -L${prefix}/lib -liiwa_hw
+Requires: iiwa_ros iiwa_msgs pluginlib controller_interface controller_manager hardware_interface control_toolbox

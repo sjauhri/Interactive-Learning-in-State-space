@@ -1,0 +1,8 @@
+prefix=/home/snehal/Desktop/Thesis/IfO/KUKA_Task/ros_ws/devel
+
+Name: iiwa_msgs
+Description: Description of iiwa_msgs
+Version: 2.3.1
+Cflags: -I/home/snehal/Desktop/Thesis/IfO/KUKA_Task/ros_ws/devel/include
+Libs: -L${prefix}/lib 
+Requires: message_runtime std_msgs geometry_msgs
