@@ -41,33 +41,40 @@ class Dset(object):
 
 class Mujoco_Dset(object):
     def __init__(self, expert_path, train_fraction=0.7, traj_limitation=-1, randomize=True):
-        traj_data = np.load(expert_path, allow_pickle=True)
-        if traj_limitation < 0:
-            traj_limitation = len(traj_data['obs'])
-        obs = traj_data['obs'][:traj_limitation]
-        acs = traj_data['acs'][:traj_limitation]
-
-        # obs, acs: shape (N, L, ) + S where N = # episodes, L = episode length
-        # and S is the environment observation/action space.
-        # Flatten to (N * L, prod(S))
-        if len(obs.shape) > 2:
-            self.obs = np.reshape(obs, [-1, np.prod(obs.shape[2:])])
-            self.acs = np.reshape(acs, [-1, np.prod(acs.shape[2:])])
-        else:
-            self.obs = np.vstack(obs)
-            self.acs = np.vstack(acs)
-        
-        ###### Modified to work with pickle
         # traj_data = np.load(expert_path, allow_pickle=True)
         # if traj_limitation < 0:
         #     traj_limitation = len(traj_data['obs'])
-
         # obs = traj_data['obs'][:traj_limitation]
         # acs = traj_data['acs'][:traj_limitation]
 
+        # # obs, acs: shape (N, L, ) + S where N = # episodes, L = episode length
+        # # and S is the environment observation/action space.
+        # # Flatten to (N * L, prod(S))
+        # if len(obs.shape) > 2:
+        #     self.obs = np.reshape(obs, [-1, np.prod(obs.shape[2:])])
+        #     self.acs = np.reshape(acs, [-1, np.prod(acs.shape[2:])])
+        # else:
+        #     self.obs = np.vstack(obs)
+        #     self.acs = np.vstack(acs)
+        
+        ######## Modified to work with pickle ###############
+        import pickle
+        with open(expert_path, 'rb') as f:
+            expert_data = pickle.load(f)
+            obs = expert_data['observations']
+            acs = expert_data['actions']
+
+        num_samples = len(obs)
+        if(num_samples > 15000):
+            obs = obs[0:15000]
+            acs = acs[0:15000]
+            num_samples = 15000
+        print("[[[Loaded %d demonstrations]]]" % num_samples)
+
         # import pdb; pdb.set_trace()
-        # self.obs = np.vstack(obs)
-        # self.acs = np.vstack(acs)
+        self.obs = np.vstack(obs)
+        self.acs = np.vstack(acs)
+        ######################################################
 
         # self.rets = traj_data['ep_rets'][:traj_limitation]
         # self.avg_ret = sum(self.rets)/len(self.rets)

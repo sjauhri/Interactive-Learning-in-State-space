@@ -49,6 +49,8 @@ def traj_segment_generator(pi, env, reward_giver, horizon, stochastic):
     while True:
         prevac = ac
         ac, vpred = pi.act(stochastic, ob)
+        # Clip ac between -1 and 1
+        # ac = np.clip(ac, -1, 1)
         # Slight weirdness here because we need value function at time T
         # before returning segment [0, T-1] so we get the correct
         # terminal value
@@ -78,6 +80,7 @@ def traj_segment_generator(pi, env, reward_giver, horizon, stochastic):
         cur_ep_true_ret += true_rew
         cur_ep_len += 1
         if new:
+            # import pdb; pdb.set_trace()
             ep_rets.append(cur_ep_ret)
             ep_true_rets.append(cur_ep_true_ret)
             ep_lens.append(cur_ep_len)
@@ -201,7 +204,7 @@ def learn(env, policy_func, reward_giver, expert_dataset, rank,
 
     # Prepare for rollouts
     # ----------------------------------------
-    seg_gen = traj_segment_generator(pi, env, reward_giver, timesteps_per_batch, stochastic=True)
+    seg_gen = traj_segment_generator(pi, env, reward_giver, timesteps_per_batch, stochastic=False)
 
     episodes_so_far = 0
     timesteps_so_far = 0

@@ -47,6 +47,7 @@ class MlpPolicy(object):
             mean = dense(last_out, pdtype.param_shape()[0]//2, "polfinal", U.normc_initializer(0.01))
             logstd = tf.get_variable(name="logstd", shape=[1, pdtype.param_shape()[0]//2], initializer=tf.zeros_initializer())
             pdparam = tf.concat([mean, mean * 0.0 + logstd], axis=1)
+            pdparam = tf.clip_by_value(pdparam, clip_value_min=-1, clip_value_max=1)
         else:
             pdparam = dense(last_out, pdtype.param_shape()[0], "polfinal", U.normc_initializer(0.01))
 

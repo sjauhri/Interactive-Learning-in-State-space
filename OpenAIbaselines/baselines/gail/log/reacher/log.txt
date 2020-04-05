@@ -1,0 +1,3862 @@
+Logging to ./baselines/gail/log/reacher/
+Total transitions: 3187
+********** Iteration 0 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.005
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: 0.003
+Stepsize OK!
+Expected: 0.009 Actual: 0.011
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.79297 |       0.78208 |       0.66919 |      -0.00067 |       0.49000 |       0.18000
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.84     |
+| EpisodesSoFar   | 1        |
+| EpLenMean       | 490      |
+| EpRewMean       | 490      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -136     |
+| ev_tdlam_before | -0.22    |
+| meankl          | 0.0063   |
+| optimgain       | 0.0115   |
+| surrgain        | 0.0115   |
+| TimeElapsed     | 1.7      |
+| TimestepsSoFar  | 490      |
+------------------------------
+********** Iteration 1 ************
+Optimizing Policy...
+Expected: 0.003 Actual: -0.003
+surrogate didn't improve. shrinking step.
+Expected: 0.003 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.003 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.004
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: 0.003
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.75964 |       0.76066 |       0.67587 |      -0.00068 |       0.49800 |       0.19600
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.84     |
+| EpisodesSoFar   | 2        |
+| EpLenMean       | 490      |
+| EpRewMean       | 430      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -142     |
+| ev_tdlam_before | -0.206   |
+| meankl          | 0.00724  |
+| optimgain       | 0.0032   |
+| surrgain        | 0.0032   |
+| TimeElapsed     | 3.61     |
+| TimestepsSoFar  | 980      |
+------------------------------
+********** Iteration 2 ************
+Optimizing Policy...
+Expected: 0.002 Actual: 0.001
+Stepsize OK!
+Expected: 0.002 Actual: -0.004
+surrogate didn't improve. shrinking step.
+Expected: 0.002 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.002 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.57207 |       0.70233 |       0.68116 |      -0.00068 |       0.91800 |       0.35800
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.84     |
+| EpisodesSoFar   | 3        |
+| EpLenMean       | 490      |
+| EpRewMean       | 374      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -139     |
+| ev_tdlam_before | -0.851   |
+| meankl          | 0.000142 |
+| optimgain       | 1.96e-05 |
+| surrgain        | 1.96e-05 |
+| TimeElapsed     | 5.89     |
+| TimestepsSoFar  | 1.47e+03 |
+------------------------------
+********** Iteration 3 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.003
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.004
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.61472 |       0.67233 |       0.68155 |      -0.00068 |       0.84000 |       0.54400
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.84     |
+| EpisodesSoFar   | 4        |
+| EpLenMean       | 490      |
+| EpRewMean       | 353      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -135     |
+| ev_tdlam_before | -0.649   |
+| meankl          | 7.6e-06  |
+| optimgain       | 2.03e-07 |
+| surrgain        | 2.03e-07 |
+| TimeElapsed     | 7.76     |
+| TimestepsSoFar  | 1.96e+03 |
+------------------------------
+********** Iteration 4 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.003
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.003
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.76070 |       0.66047 |       0.67968 |      -0.00068 |       0.50000 |       0.61800
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.84     |
+| EpisodesSoFar   | 5        |
+| EpLenMean       | 490      |
+| EpRewMean       | 359      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -141     |
+| ev_tdlam_before | 0.0102   |
+| meankl          | 2.08e-06 |
+| optimgain       | 4.04e-07 |
+| surrgain        | 4.04e-07 |
+| TimeElapsed     | 9.63     |
+| TimestepsSoFar  | 2.45e+03 |
+------------------------------
+********** Iteration 5 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.001
+Stepsize OK!
+Expected: 0.000 Actual: -0.006
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.007
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.57056 |       0.63071 |       0.67934 |      -0.00068 |       0.83800 |       0.82400
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.84     |
+| EpisodesSoFar   | 6        |
+| EpLenMean       | 490      |
+| EpRewMean       | 346      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -140     |
+| ev_tdlam_before | -0.0256  |
+| meankl          | 1e-07    |
+| optimgain       | 2.43e-08 |
+| surrgain        | 2.43e-08 |
+| TimeElapsed     | 11.5     |
+| TimestepsSoFar  | 2.94e+03 |
+------------------------------
+********** Iteration 6 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.007
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.008
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.009
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.55156 |       0.61043 |       0.67541 |      -0.00068 |       0.87000 |       0.85000
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.84     |
+| EpisodesSoFar   | 7        |
+| EpLenMean       | 490      |
+| EpRewMean       | 333      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -138     |
+| ev_tdlam_before | -0.0287  |
+| meankl          | 1.67e-07 |
+| optimgain       | 5.25e-09 |
+| surrgain        | 5.25e-09 |
+| TimeElapsed     | 13.4     |
+| TimestepsSoFar  | 3.43e+03 |
+------------------------------
+********** Iteration 7 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.006
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.009
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.54480 |       0.58518 |       0.67006 |      -0.00067 |       0.85400 |       0.89200
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.84     |
+| EpisodesSoFar   | 8        |
+| EpLenMean       | 490      |
+| EpRewMean       | 323      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -136     |
+| ev_tdlam_before | -0.0106  |
+| meankl          | 1.27e-07 |
+| optimgain       | 5.48e-08 |
+| surrgain        | 5.48e-08 |
+| TimeElapsed     | 15.2     |
+| TimestepsSoFar  | 3.92e+03 |
+------------------------------
+********** Iteration 8 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.008
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.007
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.008
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.51830 |       0.56383 |       0.66592 |      -0.00067 |       0.89000 |       0.91000
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.84     |
+| EpisodesSoFar   | 9        |
+| EpLenMean       | 490      |
+| EpRewMean       | 315      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -136     |
+| ev_tdlam_before | -0.00484 |
+| meankl          | 7.15e-10 |
+| optimgain       | -6.2e-09 |
+| surrgain        | -6.2e-09 |
+| TimeElapsed     | 17.1     |
+| TimestepsSoFar  | 4.41e+03 |
+------------------------------
+********** Iteration 9 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.010
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.009
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.50792 |       0.54327 |       0.66019 |      -0.00066 |       0.88600 |       0.92000
+-------------------------------
+| entloss         | 0         |
+| entropy         | 2.84      |
+| EpisodesSoFar   | 10        |
+| EpLenMean       | 490       |
+| EpRewMean       | 308       |
+| EpThisIter      | 1         |
+| EpTrueRewMean   | -135      |
+| ev_tdlam_before | -0.00147  |
+| meankl          | 7.03e-09  |
+| optimgain       | -1.41e-08 |
+| surrgain        | -1.41e-08 |
+| TimeElapsed     | 19        |
+| TimestepsSoFar  | 4.9e+03   |
+-------------------------------
+********** Iteration 10 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.009
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+couldn't compute a good step
+Expected: 0.000 Actual: -0.010
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.003
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.010
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.003
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.50325 |       0.51870 |       0.65283 |      -0.00065 |       0.86400 |       0.94000
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.84     |
+| EpisodesSoFar   | 11       |
+| EpLenMean       | 490      |
+| EpRewMean       | 303      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -134     |
+| ev_tdlam_before | 0.000796 |
+| meankl          | 3.6e-08  |
+| optimgain       | 3.7e-09  |
+| surrgain        | 3.7e-09  |
+| TimeElapsed     | 20.9     |
+| TimestepsSoFar  | 5.39e+03 |
+------------------------------
+********** Iteration 11 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.003
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.008
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.007
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+couldn't compute a good step
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.49662 |       0.49834 |       0.64834 |      -0.00065 |       0.86800 |       0.93800
+-------------------------------
+| entloss         | 0         |
+| entropy         | 2.84      |
+| EpisodesSoFar   | 12        |
+| EpLenMean       | 490       |
+| EpRewMean       | 296       |
+| EpThisIter      | 1         |
+| EpTrueRewMean   | -133      |
+| ev_tdlam_before | -0.0016   |
+| meankl          | 3.61e-08  |
+| optimgain       | -3.19e-08 |
+| surrgain        | -3.19e-08 |
+| TimeElapsed     | 22.9      |
+| TimestepsSoFar  | 5.88e+03  |
+-------------------------------
+********** Iteration 12 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.010
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.003
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+couldn't compute a good step
+Expected: 0.000 Actual: -0.009
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+couldn't compute a good step
+Expected: 0.000 Actual: 0.007
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.62756 |       0.48977 |       0.65336 |      -0.00065 |       0.64800 |       0.95000
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.84     |
+| EpisodesSoFar   | 13       |
+| EpLenMean       | 490      |
+| EpRewMean       | 290      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -133     |
+| ev_tdlam_before | 0.000932 |
+| meankl          | 0.00887  |
+| optimgain       | 0.00686  |
+| surrgain        | 0.00686  |
+| TimeElapsed     | 24.8     |
+| TimestepsSoFar  | 6.37e+03 |
+------------------------------
+********** Iteration 13 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.006
+Stepsize OK!
+Expected: 0.000 Actual: 0.003
+Stepsize OK!
+Expected: 0.000 Actual: 0.003
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.39727 |       0.47504 |       0.61323 |      -0.00061 |       0.88800 |       0.94000
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.84     |
+| EpisodesSoFar   | 14       |
+| EpLenMean       | 490      |
+| EpRewMean       | 282      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -135     |
+| ev_tdlam_before | 0.0399   |
+| meankl          | 0.00951  |
+| optimgain       | 0.00272  |
+| surrgain        | 0.00272  |
+| TimeElapsed     | 26.6     |
+| TimestepsSoFar  | 6.86e+03 |
+------------------------------
+********** Iteration 14 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: 0.001
+Stepsize OK!
+Expected: 0.000 Actual: 0.001
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.28718 |       0.45563 |       0.58527 |      -0.00059 |       0.95800 |       0.96000
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 15       |
+| EpLenMean       | 490      |
+| EpRewMean       | 272      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -141     |
+| ev_tdlam_before | 0.315    |
+| meankl          | 0.00511  |
+| optimgain       | 0.000793 |
+| surrgain        | 0.000793 |
+| TimeElapsed     | 28.5     |
+| TimestepsSoFar  | 7.35e+03 |
+------------------------------
+********** Iteration 15 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: 0.001
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.27757 |       0.43868 |       0.57715 |      -0.00058 |       0.96000 |       0.97000
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 16       |
+| EpLenMean       | 490      |
+| EpRewMean       | 263      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -150     |
+| ev_tdlam_before | 0.632    |
+| meankl          | 0.00819  |
+| optimgain       | 0.00117  |
+| surrgain        | 0.00117  |
+| TimeElapsed     | 30.3     |
+| TimestepsSoFar  | 7.84e+03 |
+------------------------------
+********** Iteration 16 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.001
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.47105 |       0.41813 |       0.61413 |      -0.00061 |       0.80400 |       0.96400
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 17       |
+| EpLenMean       | 490      |
+| EpRewMean       | 261      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -153     |
+| ev_tdlam_before | 0.165    |
+| meankl          | 2.08e-06 |
+| optimgain       | 3.19e-08 |
+| surrgain        | 3.19e-08 |
+| TimeElapsed     | 32.3     |
+| TimestepsSoFar  | 8.33e+03 |
+------------------------------
+********** Iteration 17 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.012
+Stepsize OK!
+Expected: 0.000 Actual: -0.003
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: 0.001
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.43560 |       0.41636 |       0.61021 |      -0.00061 |       0.88600 |       0.97000
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 18       |
+| EpLenMean       | 490      |
+| EpRewMean       | 258      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -155     |
+| ev_tdlam_before | 0.0635   |
+| meankl          | 0.00536  |
+| optimgain       | 0.00122  |
+| surrgain        | 0.00122  |
+| TimeElapsed     | 34.2     |
+| TimestepsSoFar  | 8.82e+03 |
+------------------------------
+********** Iteration 18 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.006
+Stepsize OK!
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: 0.004
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.53402 |       0.39324 |       0.61190 |      -0.00061 |       0.74800 |       0.97600
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 19       |
+| EpLenMean       | 490      |
+| EpRewMean       | 259      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -158     |
+| ev_tdlam_before | -0.0321  |
+| meankl          | 0.00701  |
+| optimgain       | 0.00434  |
+| surrgain        | 0.00434  |
+| TimeElapsed     | 36.1     |
+| TimestepsSoFar  | 9.31e+03 |
+------------------------------
+********** Iteration 19 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.007
+Stepsize OK!
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: 0.004
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.78607 |       0.39872 |       0.61767 |      -0.00062 |       0.48200 |       0.95800
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 20       |
+| EpLenMean       | 490      |
+| EpRewMean       | 265      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -163     |
+| ev_tdlam_before | 0.000114 |
+| meankl          | 0.00742  |
+| optimgain       | 0.00361  |
+| surrgain        | 0.00361  |
+| TimeElapsed     | 38       |
+| TimestepsSoFar  | 9.8e+03  |
+------------------------------
+********** Iteration 20 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.001
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.003
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.59637 |       0.38682 |       0.61472 |      -0.00061 |       0.63000 |       0.95200
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 21       |
+| EpLenMean       | 490      |
+| EpRewMean       | 267      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -179     |
+| ev_tdlam_before | 0.00605  |
+| meankl          | 5.77e-07 |
+| optimgain       | 3.5e-08  |
+| surrgain        | 3.5e-08  |
+| TimeElapsed     | 39.8     |
+| TimestepsSoFar  | 1.03e+04 |
+------------------------------
+********** Iteration 21 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.60203 |       0.39260 |       0.61346 |      -0.00061 |       0.62200 |       0.95600
+-------------------------------
+| entloss         | 0         |
+| entropy         | 2.83      |
+| EpisodesSoFar   | 22        |
+| EpLenMean       | 490       |
+| EpRewMean       | 268       |
+| EpThisIter      | 1         |
+| EpTrueRewMean   | -193      |
+| ev_tdlam_before | -0.000389 |
+| meankl          | 4.01e-07  |
+| optimgain       | 2.97e-08  |
+| surrgain        | 2.97e-08  |
+| TimeElapsed     | 41.8      |
+| TimestepsSoFar  | 1.08e+04  |
+-------------------------------
+********** Iteration 22 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.58736 |       0.38030 |       0.60488 |      -0.00060 |       0.64200 |       0.94800
+-------------------------------
+| entloss         | 0         |
+| entropy         | 2.83      |
+| EpisodesSoFar   | 23        |
+| EpLenMean       | 490       |
+| EpRewMean       | 269       |
+| EpThisIter      | 1         |
+| EpTrueRewMean   | -207      |
+| ev_tdlam_before | -6.93e-05 |
+| meankl          | 2.71e-05  |
+| optimgain       | 2.95e-07  |
+| surrgain        | 2.95e-07  |
+| TimeElapsed     | 43.7      |
+| TimestepsSoFar  | 1.13e+04  |
+-------------------------------
+********** Iteration 23 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.58331 |       0.37007 |       0.60007 |      -0.00060 |       0.63400 |       0.95600
+-------------------------------
+| entloss         | 0         |
+| entropy         | 2.83      |
+| EpisodesSoFar   | 24        |
+| EpLenMean       | 490       |
+| EpRewMean       | 269       |
+| EpThisIter      | 1         |
+| EpTrueRewMean   | -219      |
+| ev_tdlam_before | -0.000478 |
+| meankl          | 8.87e-08  |
+| optimgain       | 3.02e-08  |
+| surrgain        | 3.02e-08  |
+| TimeElapsed     | 45.7      |
+| TimestepsSoFar  | 1.18e+04  |
+-------------------------------
+********** Iteration 24 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.56769 |       0.36316 |       0.59430 |      -0.00059 |       0.65400 |       0.95000
+-------------------------------
+| entloss         | 0         |
+| entropy         | 2.83      |
+| EpisodesSoFar   | 25        |
+| EpLenMean       | 490       |
+| EpRewMean       | 270       |
+| EpThisIter      | 1         |
+| EpTrueRewMean   | -229      |
+| ev_tdlam_before | -0.000506 |
+| meankl          | 9.85e-08  |
+| optimgain       | -8.46e-09 |
+| surrgain        | -8.46e-09 |
+| TimeElapsed     | 47.6      |
+| TimestepsSoFar  | 1.22e+04  |
+-------------------------------
+********** Iteration 25 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.55314 |       0.36901 |       0.58996 |      -0.00059 |       0.66800 |       0.94000
+-------------------------------
+| entloss         | 0         |
+| entropy         | 2.83      |
+| EpisodesSoFar   | 26        |
+| EpLenMean       | 490       |
+| EpRewMean       | 270       |
+| EpThisIter      | 1         |
+| EpTrueRewMean   | -239      |
+| ev_tdlam_before | -0.000557 |
+| meankl          | 7.49e-08  |
+| optimgain       | 2.29e-08  |
+| surrgain        | 2.29e-08  |
+| TimeElapsed     | 49.5      |
+| TimestepsSoFar  | 1.27e+04  |
+-------------------------------
+********** Iteration 26 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.53705 |       0.35719 |       0.58433 |      -0.00058 |       0.67800 |       0.95200
+-------------------------------
+| entloss         | 0         |
+| entropy         | 2.83      |
+| EpisodesSoFar   | 27        |
+| EpLenMean       | 490       |
+| EpRewMean       | 270       |
+| EpThisIter      | 1         |
+| EpTrueRewMean   | -249      |
+| ev_tdlam_before | -0.000544 |
+| meankl          | 9.66e-08  |
+| optimgain       | -2.13e-09 |
+| surrgain        | -2.13e-09 |
+| TimeElapsed     | 52        |
+| TimestepsSoFar  | 1.32e+04  |
+-------------------------------
+********** Iteration 27 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.51963 |       0.34769 |       0.57722 |      -0.00058 |       0.70400 |       0.95000
+-------------------------------
+| entloss         | 0         |
+| entropy         | 2.83      |
+| EpisodesSoFar   | 28        |
+| EpLenMean       | 490       |
+| EpRewMean       | 269       |
+| EpThisIter      | 1         |
+| EpTrueRewMean   | -257      |
+| ev_tdlam_before | -0.000497 |
+| meankl          | 6.72e-08  |
+| optimgain       | 1.83e-08  |
+| surrgain        | 1.83e-08  |
+| TimeElapsed     | 55.1      |
+| TimestepsSoFar  | 1.37e+04  |
+-------------------------------
+********** Iteration 28 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+couldn't compute a good step
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+couldn't compute a good step
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.50225 |       0.34791 |       0.57101 |      -0.00057 |       0.71000 |       0.93400
+-------------------------------
+| entloss         | 0         |
+| entropy         | 2.83      |
+| EpisodesSoFar   | 29        |
+| EpLenMean       | 490       |
+| EpRewMean       | 268       |
+| EpThisIter      | 1         |
+| EpTrueRewMean   | -265      |
+| ev_tdlam_before | -0.000299 |
+| meankl          | 2.83e-08  |
+| optimgain       | 1e-08     |
+| surrgain        | 1e-08     |
+| TimeElapsed     | 57.3      |
+| TimestepsSoFar  | 1.42e+04  |
+-------------------------------
+********** Iteration 29 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+couldn't compute a good step
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.48723 |       0.34534 |       0.56673 |      -0.00057 |       0.72800 |       0.95200
+-------------------------------
+| entloss         | 0         |
+| entropy         | 2.83      |
+| EpisodesSoFar   | 30        |
+| EpLenMean       | 490       |
+| EpRewMean       | 267       |
+| EpThisIter      | 1         |
+| EpTrueRewMean   | -272      |
+| ev_tdlam_before | 3.71e-05  |
+| meankl          | -1.25e-09 |
+| optimgain       | 2.27e-08  |
+| surrgain        | 2.27e-08  |
+| TimeElapsed     | 61        |
+| TimestepsSoFar  | 1.47e+04  |
+-------------------------------
+********** Iteration 30 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.47272 |       0.32552 |       0.55530 |      -0.00056 |       0.71800 |       0.93200
+-------------------------------
+| entloss         | 0         |
+| entropy         | 2.83      |
+| EpisodesSoFar   | 31        |
+| EpLenMean       | 490       |
+| EpRewMean       | 266       |
+| EpThisIter      | 1         |
+| EpTrueRewMean   | -279      |
+| ev_tdlam_before | 0.00106   |
+| meankl          | -5.36e-10 |
+| optimgain       | 3.3e-08   |
+| surrgain        | 3.3e-08   |
+| TimeElapsed     | 63.4      |
+| TimestepsSoFar  | 1.52e+04  |
+-------------------------------
+********** Iteration 31 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+couldn't compute a good step
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.45450 |       0.33304 |       0.55385 |      -0.00055 |       0.71400 |       0.94200
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 32       |
+| EpLenMean       | 490      |
+| EpRewMean       | 265      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -285     |
+| ev_tdlam_before | 0.000398 |
+| meankl          | 1.03e-07 |
+| optimgain       | 5.78e-09 |
+| surrgain        | 5.78e-09 |
+| TimeElapsed     | 65.7     |
+| TimestepsSoFar  | 1.57e+04 |
+------------------------------
+********** Iteration 32 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.003
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.45151 |       0.33897 |       0.55134 |      -0.00055 |       0.76200 |       0.93200
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 33       |
+| EpLenMean       | 490      |
+| EpRewMean       | 263      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -291     |
+| ev_tdlam_before | 0.00635  |
+| meankl          | 2.79e-07 |
+| optimgain       | 1.2e-07  |
+| surrgain        | 1.2e-07  |
+| TimeElapsed     | 68.8     |
+| TimestepsSoFar  | 1.62e+04 |
+------------------------------
+********** Iteration 33 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.54016 |       0.31384 |       0.54967 |      -0.00055 |       0.66000 |       0.93600
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 34       |
+| EpLenMean       | 490      |
+| EpRewMean       | 263      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -295     |
+| ev_tdlam_before | 0.00609  |
+| meankl          | 8.53e-05 |
+| optimgain       | 1.65e-06 |
+| surrgain        | 1.65e-06 |
+| TimeElapsed     | 72.7     |
+| TimestepsSoFar  | 1.67e+04 |
+------------------------------
+********** Iteration 34 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.52648 |       0.31627 |       0.54701 |      -0.00055 |       0.67000 |       0.93400
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 35       |
+| EpLenMean       | 490      |
+| EpRewMean       | 263      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -299     |
+| ev_tdlam_before | 0.0044   |
+| meankl          | 1.16e-07 |
+| optimgain       | 6.85e-09 |
+| surrgain        | 6.85e-09 |
+| TimeElapsed     | 76.2     |
+| TimestepsSoFar  | 1.72e+04 |
+------------------------------
+********** Iteration 35 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+couldn't compute a good step
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+couldn't compute a good step
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+couldn't compute a good step
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.50468 |       0.34511 |       0.54713 |      -0.00055 |       0.68400 |       0.90200
+-------------------------------
+| entloss         | 0         |
+| entropy         | 2.83      |
+| EpisodesSoFar   | 36        |
+| EpLenMean       | 490       |
+| EpRewMean       | 263       |
+| EpThisIter      | 1         |
+| EpTrueRewMean   | -303      |
+| ev_tdlam_before | 0.00748   |
+| meankl          | 2.68e-09  |
+| optimgain       | -8.29e-09 |
+| surrgain        | -8.29e-09 |
+| TimeElapsed     | 79.9      |
+| TimestepsSoFar  | 1.76e+04  |
+-------------------------------
+********** Iteration 36 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+couldn't compute a good step
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.48051 |       0.32177 |       0.53827 |      -0.00054 |       0.70200 |       0.91800
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 37       |
+| EpLenMean       | 490      |
+| EpRewMean       | 262      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -306     |
+| ev_tdlam_before | 0.00945  |
+| meankl          | 1.13e-08 |
+| optimgain       | 2.41e-08 |
+| surrgain        | 2.41e-08 |
+| TimeElapsed     | 84.8     |
+| TimestepsSoFar  | 1.81e+04 |
+------------------------------
+********** Iteration 37 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+couldn't compute a good step
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.46640 |       0.32748 |       0.53516 |      -0.00054 |       0.72200 |       0.91600
+-------------------------------
+| entloss         | 0         |
+| entropy         | 2.83      |
+| EpisodesSoFar   | 38        |
+| EpLenMean       | 490       |
+| EpRewMean       | 261       |
+| EpThisIter      | 1         |
+| EpTrueRewMean   | -309      |
+| ev_tdlam_before | 0.011     |
+| meankl          | 1.82e-08  |
+| optimgain       | -5.16e-09 |
+| surrgain        | -5.16e-09 |
+| TimeElapsed     | 88        |
+| TimestepsSoFar  | 1.86e+04  |
+-------------------------------
+********** Iteration 38 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+couldn't compute a good step
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+couldn't compute a good step
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.44869 |       0.29542 |       0.52025 |      -0.00052 |       0.73200 |       0.93600
+-------------------------------
+| entloss         | 0         |
+| entropy         | 2.83      |
+| EpisodesSoFar   | 39        |
+| EpLenMean       | 490       |
+| EpRewMean       | 260       |
+| EpThisIter      | 1         |
+| EpTrueRewMean   | -312      |
+| ev_tdlam_before | 0.0139    |
+| meankl          | 5.76e-08  |
+| optimgain       | -1.67e-09 |
+| surrgain        | -1.67e-09 |
+| TimeElapsed     | 90.4      |
+| TimestepsSoFar  | 1.91e+04  |
+-------------------------------
+********** Iteration 39 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.43316 |       0.30458 |       0.52259 |      -0.00052 |       0.74600 |       0.94800
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 40       |
+| EpLenMean       | 490      |
+| EpRewMean       | 259      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -315     |
+| ev_tdlam_before | 0.014    |
+| meankl          | 5.09e-07 |
+| optimgain       | 2.22e-08 |
+| surrgain        | 2.22e-08 |
+| TimeElapsed     | 93       |
+| TimestepsSoFar  | 1.96e+04 |
+------------------------------
+********** Iteration 40 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.41710 |       0.31295 |       0.51460 |      -0.00051 |       0.75800 |       0.90800
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 41       |
+| EpLenMean       | 490      |
+| EpRewMean       | 252      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -321     |
+| ev_tdlam_before | 0.0272   |
+| meankl          | 1.98e-07 |
+| optimgain       | 9.54e-10 |
+| surrgain        | 9.54e-10 |
+| TimeElapsed     | 95.6     |
+| TimestepsSoFar  | 2.01e+04 |
+------------------------------
+********** Iteration 41 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.40379 |       0.31191 |       0.51507 |      -0.00052 |       0.80800 |       0.92200
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 42       |
+| EpLenMean       | 490      |
+| EpRewMean       | 248      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -328     |
+| ev_tdlam_before | 0.0598   |
+| meankl          | 1.05e-07 |
+| optimgain       | 4.21e-08 |
+| surrgain        | 4.21e-08 |
+| TimeElapsed     | 98.2     |
+| TimestepsSoFar  | 2.06e+04 |
+------------------------------
+********** Iteration 42 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.38674 |       0.29423 |       0.50347 |      -0.00050 |       0.78600 |       0.91200
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 43       |
+| EpLenMean       | 490      |
+| EpRewMean       | 246      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -335     |
+| ev_tdlam_before | 0.0951   |
+| meankl          | 0.00684  |
+| optimgain       | 3.94e-05 |
+| surrgain        | 3.94e-05 |
+| TimeElapsed     | 100      |
+| TimestepsSoFar  | 2.11e+04 |
+------------------------------
+********** Iteration 43 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.001
+Stepsize OK!
+Expected: 0.000 Actual: 0.005
+Stepsize OK!
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.37803 |       0.31112 |       0.50848 |      -0.00051 |       0.80600 |       0.93200
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 44       |
+| EpLenMean       | 490      |
+| EpRewMean       | 242      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -343     |
+| ev_tdlam_before | 0.101    |
+| meankl          | 0.00789  |
+| optimgain       | 0.000181 |
+| surrgain        | 0.000181 |
+| TimeElapsed     | 103      |
+| TimestepsSoFar  | 2.16e+04 |
+------------------------------
+********** Iteration 44 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.003
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.003
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.003
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.19389 |       0.27246 |       0.43101 |      -0.00043 |       0.95200 |       0.93600
+-------------------------------
+| entloss         | 0         |
+| entropy         | 2.83      |
+| EpisodesSoFar   | 45        |
+| EpLenMean       | 490       |
+| EpRewMean       | 235       |
+| EpThisIter      | 1         |
+| EpTrueRewMean   | -344      |
+| ev_tdlam_before | 0.519     |
+| meankl          | -4.73e-08 |
+| optimgain       | 3.29e-08  |
+| surrgain        | 3.29e-08  |
+| TimeElapsed     | 105       |
+| TimestepsSoFar  | 2.20e+04  |
+-------------------------------
+********** Iteration 45 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.18529 |       0.28096 |       0.42730 |      -0.00043 |       0.95000 |       0.94200
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 46       |
+| EpLenMean       | 490      |
+| EpRewMean       | 231      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -345     |
+| ev_tdlam_before | 0.717    |
+| meankl          | 7.72e-08 |
+| optimgain       | 2.53e-08 |
+| surrgain        | 2.53e-08 |
+| TimeElapsed     | 109      |
+| TimestepsSoFar  | 2.25e+04 |
+------------------------------
+********** Iteration 46 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.001
+Stepsize OK!
+Expected: 0.000 Actual: 0.007
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.36965 |       0.29358 |       0.52427 |      -0.00052 |       0.97600 |       0.92600
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 47       |
+| EpLenMean       | 490      |
+| EpRewMean       | 228      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -347     |
+| ev_tdlam_before | -0.0205  |
+| meankl          | 1.37e-07 |
+| optimgain       | 2.21e-08 |
+| surrgain        | 2.21e-08 |
+| TimeElapsed     | 111      |
+| TimestepsSoFar  | 2.3e+04  |
+------------------------------
+********** Iteration 47 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.36814 |       0.26194 |       0.51671 |      -0.00052 |       0.97000 |       0.96400
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 48       |
+| EpLenMean       | 490      |
+| EpRewMean       | 227      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -349     |
+| ev_tdlam_before | -0.00225 |
+| meankl          | 1.16e-07 |
+| optimgain       | -2.5e-08 |
+| surrgain        | -2.5e-08 |
+| TimeElapsed     | 113      |
+| TimestepsSoFar  | 2.35e+04 |
+------------------------------
+********** Iteration 48 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.36245 |       0.27365 |       0.51700 |      -0.00052 |       0.97800 |       0.94800
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 50       |
+| EpLenMean       | 490      |
+| EpRewMean       | 223      |
+| EpThisIter      | 2        |
+| EpTrueRewMean   | -354     |
+| ev_tdlam_before | -0.00491 |
+| meankl          | 6.95e-08 |
+| optimgain       | 2.29e-08 |
+| surrgain        | 2.29e-08 |
+| TimeElapsed     | 115      |
+| TimestepsSoFar  | 2.45e+04 |
+------------------------------
+********** Iteration 49 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.35103 |       0.26439 |       0.50859 |      -0.00051 |       0.97600 |       0.94800
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 51       |
+| EpLenMean       | 490      |
+| EpRewMean       | 221      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -356     |
+| ev_tdlam_before | 0.0105   |
+| meankl          | 3.78e-08 |
+| optimgain       | 2.93e-08 |
+| surrgain        | 2.93e-08 |
+| TimeElapsed     | 117      |
+| TimestepsSoFar  | 2.5e+04  |
+------------------------------
+********** Iteration 50 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.001
+Stepsize OK!
+Expected: 0.000 Actual: 0.002
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.48423 |       0.27893 |       0.52879 |      -0.00053 |       0.86600 |       0.93600
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 52       |
+| EpLenMean       | 490      |
+| EpRewMean       | 222      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -360     |
+| ev_tdlam_before | 0.0379   |
+| meankl          | 7.26e-05 |
+| optimgain       | 1.56e-05 |
+| surrgain        | 1.56e-05 |
+| TimeElapsed     | 119      |
+| TimestepsSoFar  | 2.55e+04 |
+------------------------------
+********** Iteration 51 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.005
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.003
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.008
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+couldn't compute a good step
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.27111 |       0.24150 |       0.40649 |      -0.00041 |       0.84400 |       0.96200
+-------------------------------
+| entloss         | 0         |
+| entropy         | 2.83      |
+| EpisodesSoFar   | 53        |
+| EpLenMean       | 490       |
+| EpRewMean       | 219       |
+| EpThisIter      | 1         |
+| EpTrueRewMean   | -363      |
+| ev_tdlam_before | 0.874     |
+| meankl          | -3.52e-08 |
+| optimgain       | -1.05e-08 |
+| surrgain        | -1.05e-08 |
+| TimeElapsed     | 121       |
+| TimestepsSoFar  | 2.6e+04   |
+-------------------------------
+********** Iteration 52 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.008
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.004
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.23790 |       0.25223 |       0.39830 |      -0.00040 |       0.87200 |       0.95200
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 54       |
+| EpLenMean       | 490      |
+| EpRewMean       | 218      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -366     |
+| ev_tdlam_before | 0.901    |
+| meankl          | 4.12e-07 |
+| optimgain       | 6.96e-08 |
+| surrgain        | 6.96e-08 |
+| TimeElapsed     | 123      |
+| TimestepsSoFar  | 2.65e+04 |
+------------------------------
+********** Iteration 53 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.002
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.005
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      1.67830 |       0.26329 |       0.42384 |      -0.00042 |       0.30400 |       0.94200
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 55       |
+| EpLenMean       | 490      |
+| EpRewMean       | 236      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -367     |
+| ev_tdlam_before | 0.343    |
+| meankl          | 9.94e-06 |
+| optimgain       | 2.32e-06 |
+| surrgain        | 2.32e-06 |
+| TimeElapsed     | 126      |
+| TimestepsSoFar  | 2.7e+04  |
+------------------------------
+********** Iteration 54 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.008
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      1.58017 |       0.27923 |       0.39127 |      -0.00039 |       0.40600 |       0.92200
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 56       |
+| EpLenMean       | 490      |
+| EpRewMean       | 256      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -367     |
+| ev_tdlam_before | 0.618    |
+| meankl          | 2.69e-06 |
+| optimgain       | 2.06e-06 |
+| surrgain        | 2.06e-06 |
+| TimeElapsed     | 128      |
+| TimestepsSoFar  | 2.74e+04 |
+------------------------------
+********** Iteration 55 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.010
+Stepsize OK!
+Expected: 0.000 Actual: 0.004
+Stepsize OK!
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.36749 |       0.26553 |       0.43372 |      -0.00043 |       0.69800 |       0.93600
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 57       |
+| EpLenMean       | 490      |
+| EpRewMean       | 257      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -366     |
+| ev_tdlam_before | 0.716    |
+| meankl          | 0.000705 |
+| optimgain       | 5.92e-06 |
+| surrgain        | 5.92e-06 |
+| TimeElapsed     | 130      |
+| TimestepsSoFar  | 2.79e+04 |
+------------------------------
+********** Iteration 56 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.007
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.005
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.52265 |       0.26435 |       0.48548 |      -0.00049 |       0.54400 |       0.93600
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 58       |
+| EpLenMean       | 490      |
+| EpRewMean       | 260      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -365     |
+| ev_tdlam_before | 0.901    |
+| meankl          | 4e-07    |
+| optimgain       | 3.28e-08 |
+| surrgain        | 3.28e-08 |
+| TimeElapsed     | 132      |
+| TimestepsSoFar  | 2.84e+04 |
+------------------------------
+********** Iteration 57 ************
+Optimizing Policy...
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: 0.005
+Stepsize OK!
+Expected: 0.000 Actual: 0.014
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.13425 |       0.25446 |       0.38643 |      -0.00039 |       0.97200 |       0.94600
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 59       |
+| EpLenMean       | 490      |
+| EpRewMean       | 255      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -363     |
+| ev_tdlam_before | -1.41    |
+| meankl          | 0.00837  |
+| optimgain       | 0.0138   |
+| surrgain        | 0.0138   |
+| TimeElapsed     | 134      |
+| TimestepsSoFar  | 2.89e+04 |
+------------------------------
+********** Iteration 58 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.015
+Stepsize OK!
+Expected: 0.000 Actual: 0.002
+Stepsize OK!
+Expected: 0.000 Actual: 0.005
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.12982 |       0.27159 |       0.32379 |      -0.00032 |       0.92600 |       0.92600
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 60       |
+| EpLenMean       | 490      |
+| EpRewMean       | 248      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -360     |
+| ev_tdlam_before | 0.755    |
+| meankl          | 0.00755  |
+| optimgain       | 0.00484  |
+| surrgain        | 0.00484  |
+| TimeElapsed     | 136      |
+| TimestepsSoFar  | 2.94e+04 |
+------------------------------
+********** Iteration 59 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.010
+Stepsize OK!
+Expected: 0.000 Actual: 0.005
+Stepsize OK!
+Expected: 0.000 Actual: 0.011
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.17781 |       0.26655 |       0.43388 |      -0.00043 |       1.00000 |       0.91400
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 61       |
+| EpLenMean       | 490      |
+| EpRewMean       | 244      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -351     |
+| ev_tdlam_before | -0.243   |
+| meankl          | 0.00765  |
+| optimgain       | 0.0112   |
+| surrgain        | 0.0112   |
+| TimeElapsed     | 138      |
+| TimestepsSoFar  | 2.99e+04 |
+------------------------------
+********** Iteration 60 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.005
+Stepsize OK!
+Expected: 0.000 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: 0.006
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.07571 |       0.26736 |       0.32693 |      -0.00033 |       0.99200 |       0.91200
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.84     |
+| EpisodesSoFar   | 62       |
+| EpLenMean       | 490      |
+| EpRewMean       | 238      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -343     |
+| ev_tdlam_before | 0.275    |
+| meankl          | 0.0029   |
+| optimgain       | 0.0055   |
+| surrgain        | 0.0055   |
+| TimeElapsed     | 140      |
+| TimestepsSoFar  | 3.04e+04 |
+------------------------------
+********** Iteration 61 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.021
+Stepsize OK!
+Expected: 0.000 Actual: 0.018
+Stepsize OK!
+Expected: 0.000 Actual: 0.012
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.51792 |       0.26762 |       0.49587 |      -0.00050 |       0.67200 |       0.90200
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 63       |
+| EpLenMean       | 490      |
+| EpRewMean       | 232      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -335     |
+| ev_tdlam_before | 0.359    |
+| meankl          | 0.00942  |
+| optimgain       | 0.0119   |
+| surrgain        | 0.0119   |
+| TimeElapsed     | 142      |
+| TimestepsSoFar  | 3.09e+04 |
+------------------------------
+********** Iteration 62 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.001
+Stepsize OK!
+Expected: 0.000 Actual: -0.010
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.003
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.07700 |       0.25966 |       0.27235 |      -0.00027 |       0.95400 |       0.92200
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.83     |
+| EpisodesSoFar   | 64       |
+| EpLenMean       | 490      |
+| EpRewMean       | 226      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -333     |
+| ev_tdlam_before | 0.897    |
+| meankl          | 0.000153 |
+| optimgain       | 5.07e-07 |
+| surrgain        | 5.07e-07 |
+| TimeElapsed     | 144      |
+| TimestepsSoFar  | 3.14e+04 |
+------------------------------
+********** Iteration 63 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.001
+Stepsize OK!
+Expected: 0.000 Actual: 0.003
+Stepsize OK!
+Expected: 0.001 Actual: -0.002
+surrogate didn't improve. shrinking step.
+Expected: 0.001 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.001 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.43653 |       0.28900 |       0.32720 |      -0.00033 |       0.86600 |       0.88200
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.84     |
+| EpisodesSoFar   | 65       |
+| EpLenMean       | 490      |
+| EpRewMean       | 247      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -330     |
+| ev_tdlam_before | 0.697    |
+| meankl          | 0.000485 |
+| optimgain       | 2.67e-05 |
+| surrgain        | 2.67e-05 |
+| TimeElapsed     | 147      |
+| TimestepsSoFar  | 3.18e+04 |
+------------------------------
+********** Iteration 64 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.012
+Stepsize OK!
+Expected: 0.000 Actual: 0.006
+Stepsize OK!
+Expected: 0.001 Actual: 0.016
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      2.97165 |       0.29524 |       0.34364 |      -0.00034 |       0.17000 |       0.90200
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.84     |
+| EpisodesSoFar   | 66       |
+| EpLenMean       | 490      |
+| EpRewMean       | 241      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -324     |
+| ev_tdlam_before | 0.528    |
+| meankl          | 0.0107   |
+| optimgain       | 0.0163   |
+| surrgain        | 0.0163   |
+| TimeElapsed     | 149      |
+| TimestepsSoFar  | 3.23e+04 |
+------------------------------
+********** Iteration 65 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.014
+Stepsize OK!
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: 0.015
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.08497 |       0.27360 |       0.29426 |      -0.00029 |       0.95800 |       0.91200
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.84     |
+| EpisodesSoFar   | 67       |
+| EpLenMean       | 490      |
+| EpRewMean       | 235      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -321     |
+| ev_tdlam_before | -0.553   |
+| meankl          | 0.00523  |
+| optimgain       | 0.015    |
+| surrgain        | 0.015    |
+| TimeElapsed     | 152      |
+| TimestepsSoFar  | 3.28e+04 |
+------------------------------
+********** Iteration 66 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.001
+Stepsize OK!
+Expected: 0.000 Actual: -0.007
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.003
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.001
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: -0.000
+surrogate didn't improve. shrinking step.
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Expected: 0.000 Actual: 0.009
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.05763 |       0.32751 |       0.29570 |      -0.00030 |       0.97200 |       0.86800
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.84     |
+| EpisodesSoFar   | 68       |
+| EpLenMean       | 490      |
+| EpRewMean       | 230      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -323     |
+| ev_tdlam_before | 0.458    |
+| meankl          | 0.00956  |
+| optimgain       | 0.00885  |
+| surrgain        | 0.00885  |
+| TimeElapsed     | 154      |
+| TimestepsSoFar  | 3.33e+04 |
+------------------------------
+********** Iteration 67 ************
+Optimizing Policy...
+Expected: 0.001 Actual: 0.004
+Stepsize OK!
+Expected: 0.000 Actual: 0.003
+Stepsize OK!
+Expected: 0.000 Actual: 0.000
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.04311 |       0.29176 |       0.26881 |      -0.00027 |       0.98200 |       0.88600
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.84     |
+| EpisodesSoFar   | 69       |
+| EpLenMean       | 490      |
+| EpRewMean       | 224      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -333     |
+| ev_tdlam_before | -0.313   |
+| meankl          | 0.0069   |
+| optimgain       | 0.000494 |
+| surrgain        | 0.000494 |
+| TimeElapsed     | 156      |
+| TimestepsSoFar  | 3.38e+04 |
+------------------------------
+********** Iteration 68 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.004
+Stepsize OK!
+Expected: 0.000 Actual: 0.023
+Stepsize OK!
+Expected: 0.000 Actual: 0.009
+Stepsize OK!
+Optimizing Discriminator...
+generator_loss |   expert_loss |       entropy |  entropy_loss | generator_acc |    expert_acc
+      0.05993 |       0.28625 |       0.27687 |      -0.00028 |       0.97000 |       0.90800
+------------------------------
+| entloss         | 0        |
+| entropy         | 2.84     |
+| EpisodesSoFar   | 70       |
+| EpLenMean       | 490      |
+| EpRewMean       | 219      |
+| EpThisIter      | 1        |
+| EpTrueRewMean   | -345     |
+| ev_tdlam_before | -0.0422  |
+| meankl          | 0.0099   |
+| optimgain       | 0.00863  |
+| surrgain        | 0.00863  |
+| TimeElapsed     | 158      |
+| TimestepsSoFar  | 3.43e+04 |
+------------------------------
+********** Iteration 69 ************
+Optimizing Policy...
+Expected: 0.000 Actual: 0.002
+Stepsize OK!
+Expected: 0.000 Actual: 0.024
+Stepsize OK!
