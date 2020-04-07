@@ -14,6 +14,27 @@
       <uri>model://sun</uri>
     </include>
 
+    <!-- Plastic Cup as a slot -->
+    <include>
+      <uri>model://plastic_cup</uri>
+      <static>true</static>
+      <pose> 0.746410 0 -0.078511 0 0 0 </pose>
+    </include>
+
+    <!-- Light centered at the cup -->
+    <light type="point" name="light_cup">
+      <pose> 0.746410 0 2 0 0 0</pose>
+      <diffuse>127 127 127 255</diffuse>
+      <specular>25 25 25 255</specular>
+      <attenuation>
+        <range>20</range>
+        <linear>0.01</linear>
+        <constant>0.5</constant>
+        <quadratic>0.0</quadratic>
+      </attenuation>
+      <cast_shadows>false</cast_shadows>
+    </light>
+
     <physics name="default_physics" default="0" type="ode">
       <max_step_size>0.01</max_step_size>
       <real_time_factor>1</real_time_factor>
@@ -31,8 +52,8 @@
     <!-- Focus camera -->
     <gui fullscreen='0'>
       <camera name='user_camera'>
-	<pose>4.927360 -4.376610 3.740080 0.000000 0.275643 2.356190</pose>
-	<view_controller>orbit</view_controller>
+	      <pose>2.532941 -2.270632 1.144254 0.000000 0.275643 2.164190</pose>
+	      <view_controller>orbit</view_controller>
       </camera>
     </gui>
     
