@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="tool_name" default="tool"/> <!-- Name of the tool we are going to use -->
+  
+  <!-- Parameters to pass to the ROS node -->
+  <arg name="move_group" default="manipulator"/>
+  <arg name="ee_link" default="tool_link_ee"/>
+  <arg name="ros_rate" default="0.1"/>
+  
+  <param name="/iiwa/toolName" type="string" value="$(arg tool_name)" /> <!--Sunrise tool-->
+  
+  <!--  This loads the robot description  -->
+  <include file="$(find iiwa_tool_moveit)/launch/moveit_planning_execution.launch">
+    <arg name="sim" value="false"/>
+  </include>
+    
+  <!-- Here we call the ROS node we have written, with the parameters on top   -->
+  <node ns="iiwa" name="CommandRobotMoveit" pkg="iiwa_tool_examples" type="command_robot_moveit" respawn="false" output="screen">
+    <param name="move_group" value="$(arg move_group)"/>
+    <param name="ee_link" value="$(arg ee_link)"/>
+    <param name="ros_rate" value="$(arg ros_rate)"/>
+  </node>
+  
+</launch>

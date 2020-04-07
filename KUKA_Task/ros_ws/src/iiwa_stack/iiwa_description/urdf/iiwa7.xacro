@@ -96,7 +96,7 @@
     <joint name="${robot_name}_joint_2" type="revolute">
       <parent link="${robot_name}_link_1"/>
       <child link="${robot_name}_link_2"/>
-      <origin xyz="0 0 0.19" rpy="${PI / 2}   0 ${PI}"/>
+      <origin xyz="0 0 0.19" rpy="${PI / 2}   ${-PI / 3} ${PI}"/>
       <axis xyz="0 0 1"/>
       <limit lower="${-120 * PI / 180}" upper="${120 * PI / 180}"
              effort="${max_effort}" velocity="${max_velocity}" />
@@ -172,7 +172,7 @@
     <joint name="${robot_name}_joint_4" type="revolute">
       <parent link="${robot_name}_link_3"/>
       <child link="${robot_name}_link_4"/>
-      <origin xyz="0 0 0.19" rpy="${PI / 2} 0 0"/>
+      <origin xyz="0 0 0.19" rpy="${PI / 2} ${PI / 6} 0"/>
       <axis xyz="0 0 1"/>
       <limit lower="${-120 * PI / 180}" upper="${120 * PI / 180}"
              effort="${max_effort}" velocity="${max_velocity}" />
@@ -248,7 +248,7 @@
     <joint name="${robot_name}_joint_6" type="revolute">
       <parent link="${robot_name}_link_5"/>
       <child link="${robot_name}_link_6"/>
-      <origin xyz="0 0.06070 0.19" rpy="${PI / 2} 0 0"/>
+      <origin xyz="0 0.06070 0.19" rpy="${PI / 2} ${-PI / 2} 0"/>
       <axis xyz="0 0 1"/>
       <limit lower="${-120 * PI / 180}" upper="${120 * PI / 180}"
              effort="${max_effort}" velocity="${max_velocity}" />

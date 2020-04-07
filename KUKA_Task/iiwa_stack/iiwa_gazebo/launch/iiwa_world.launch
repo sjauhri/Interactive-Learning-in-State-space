@@ -4,7 +4,7 @@
     <!-- Loads thee iiwa.world environment in Gazebo. -->
     
     <!-- These are the arguments you can pass this launch file, for example paused:=true -->
-    <arg name="paused" default="true"/>
+    <arg name="paused" default="false"/>
     <arg name="use_sim_time" default="true"/>
     <arg name="gui" default="true"/>
     <arg name="headless" default="false"/>
@@ -24,7 +24,7 @@
     </include>
     
     <!-- Load the URDF with the given hardware interface into the ROS Parameter Server -->
-    <include file="$(find iiwa_tool_description)/launch/$(arg model)_tool_upload.launch">
+    <include file="$(find iiwa_description)/launch/$(arg model)_upload.launch">
         <arg name="hardware_interface" value="$(arg hardware_interface)"/>
         <arg name="robot_name" value="$(arg robot_name)" />
     </include>

@@ -1,0 +1,21 @@
+<package>
+  <name>iiwa_tool_examples</name>
+  <version>0.0.0</version>
+  <description>The iiwa_tool_examples package</description>
+  <author email="salvo.virga@tum.de">Salvo Virga</author>
+  <maintainer email="salvo.virga@tum.de">Salvo Virga</maintainer>
+
+  <license>BSD</license>
+
+  <run_depend>iiwa_tool_description</run_depend>
+  <run_depend>iiwa_tool_moveit</run_depend>
+  <run_depend>moveit_core</run_depend>
+  <run_depend>moveit_ros_planning_interface</run_depend>
+  <run_depend>moveit_ros_planning</run_depend>
+  
+  <build_depend>iiwa_ros</build_depend>
+  <run_depend>iiwa_ros</run_depend>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+  
+</package>

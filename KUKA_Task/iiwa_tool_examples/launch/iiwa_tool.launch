@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="tool_name" default="tool"/>
+  
+  <param name="/iiwa/publishJointStates" type="boolean" value="true" /> <!--publish joint states (avoid joint_state_controller)-->
+  <param name="/iiwa/toolName" type="string" value="$(arg tool_name)" /> <!--Sunrise tool-->
+  
+    <include ns="iiwa" file="$(find iiwa_tool_moveit)/launch/planning_context.launch">
+        <arg name="load_robot_description" value="true"/>
+    </include>
+    
+    <node ns="iiwa" name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+          respawn="false" output="screen" />
+    
+    <node ns="iiwa" name="$(anon rviz)" pkg="rviz" type="rviz" respawn="true" 
+	  args="-d $(find iiwa_tool_examples)/launch/iiwa_tool.rviz" output="screen" />
+    
+</launch>

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<launch>
+    
+    <!-- ===================================================================================== -->
+    <!-- |    Lauch file to start Gazebo with an IIWA using various controllers.	         | -->
+    
+    <!-- |    It allows to customize the name of the robot, for each robot                   | -->
+    <!-- |	  its topics will be under a nameespace with the same name as the robot's.       | -->
+    
+    <!-- |	  One can choose to have a joint trajectory controller or                        | -->
+    <!-- |    controllers for the single joints, using the "trajectory" argument.            | -->
+    <!-- ===================================================================================== -->
+    
+    <arg name="hardware_interface" default="PositionJointInterface" />
+    <arg name="robot_name" default="iiwa" />
+	<arg name="robot_name2" default="iiwa2" />
+    <arg name="model" default="iiwa14"/>
+    <arg name="trajectory" default="true"/>
+    
+    <!-- Loads the Gazebo world with two iiwas -->
+    <include file="$(find two_iiwa_gazebo)/launch/two_iiwa_world.launch">
+        <arg name="hardware_interface" value="$(arg hardware_interface)" />
+        <arg name="model" value="$(arg model)" />
+    </include>
+    
+    <!-- Spawn controllers for iiwa - it uses a JointTrajectoryController -->
+    <group  ns="$(arg robot_name)" if="$(arg trajectory)">
+        <include file="$(find two_iiwa_control)/launch/two_iiwa_control.launch">
+            <arg name="hardware_interface" value="$(arg hardware_interface)" />
+            <arg name="controllers" value="joint_state_controller $(arg hardware_interface)_trajectory_controller" />
+            <arg name="robot_name" value="$(arg robot_name)" />
+            <arg name="model" value="$(arg model)" />
+        </include>
+    </group>
+	
+	    <!-- Spawn controllers for iiwa2 - it uses a JointTrajectoryController -->
+    <group  ns="$(arg robot_name2)" if="$(arg trajectory)">
+        <include file="$(find two_iiwa_control)/launch/two_iiwa_control.launch">
+            <arg name="hardware_interface" value="$(arg hardware_interface)" />
+            <arg name="controllers" value="joint_state_controller $(arg hardware_interface)_trajectory_controller" />
+            <arg name="robot_name" value="$(arg robot_name2)" />
+            <arg name="model" value="$(arg model)" />
+        </include>
+    </group>
+	
+</launch>

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package>
+  <name>two_iiwa_control</name>
+  <version>0.0.0</version>
+  <description>A package containing controllers used by two_iiwa_gazebo</description>
+  <author email="salvo.virga@tum.de">Salvo Virga</author>
+  <maintainer email="salvo.virga@tum.de">Salvo Virga</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>controller_manager</run_depend>
+
+</package>
