@@ -5,7 +5,7 @@
   <xacro:include filename="$(find iiwa_description)/urdf/utilities.xacro" />
   
   <!-- Tool properties -->
-  <xacro:property name="tool_mass" value="0.02" /> <!-- Mass of string -->
+  <xacro:property name="tool_mass" value="0.025" /> <!-- Mass of string -->
   <xacro:property name="tool_length" value="0.24" /> <!-- Length of string -->
   <xacro:property name="num_links" value="10" />
   <xacro:property name="link_mass" value="${(tool_mass/num_links)}" />
