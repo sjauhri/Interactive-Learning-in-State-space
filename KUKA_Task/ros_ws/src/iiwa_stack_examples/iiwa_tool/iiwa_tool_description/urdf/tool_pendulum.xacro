@@ -12,7 +12,7 @@
   <xacro:property name="link_length" value="${tool_length/num_links}" />
   <xacro:property name="link_offset" value="0 0 ${link_length}" />
   <xacro:property name="link_radius" value="0.0015" />
-  <xacro:property name="joint_damping" value="0.00001" />
+  <xacro:property name="joint_damping" value="0.0000001" />
   <xacro:property name="joint_friction" value="0" />
 
   <xacro:property name="ball_mass" value="0.2" />
