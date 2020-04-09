@@ -8,7 +8,7 @@
   <!--Import the iiwa7 macro -->
   <xacro:include filename="$(find iiwa_description)/urdf/iiwa7.xacro"/>
   <!--Import the tool macro -->
-  <xacro:include filename="$(find iiwa_tool_description)/urdf/tool.xacro"/>
+  <xacro:include filename="$(find iiwa_tool_description)/urdf/tool_pendulum.xacro"/>
   
   <!--  Arguments for the iiwa7 macro  -->
   <xacro:arg name="hardware_interface" default="PositionJointInterface"/>
@@ -47,8 +47,8 @@
   </xacro:iiwa7>
 
   <!-- Here we insert the tool attached to the robot end effector. -->
-  <xacro:tool parent="iiwa_link_ee">
+  <xacro:tool_pendulum parent="iiwa_link_ee">
     <origin xyz="0 0 0" rpy="0 0 0"/>
-  </xacro:tool>
+  </xacro:tool_pendulum>
   
 </robot> 
