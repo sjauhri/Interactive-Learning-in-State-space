@@ -5,17 +5,17 @@
   <xacro:include filename="$(find iiwa_description)/urdf/utilities.xacro" />
   
   <!-- Tool properties -->
-  <xacro:property name="tool_mass" value="1" /> <!-- Mass of string -->
+  <xacro:property name="tool_mass" value="0.02" /> <!-- Mass of string -->
   <xacro:property name="tool_length" value="0.24" /> <!-- Length of string -->
   <xacro:property name="num_links" value="10" />
   <xacro:property name="link_mass" value="${(tool_mass/num_links)}" />
   <xacro:property name="link_length" value="${tool_length/num_links}" />
   <xacro:property name="link_offset" value="0 0 ${link_length}" />
   <xacro:property name="link_radius" value="0.0015" />
-  <xacro:property name="joint_damping" value="0.0000001" />
-  <xacro:property name="joint_friction" value="0" />
+  <xacro:property name="joint_damping" value="0.0001" />
+  <xacro:property name="joint_friction" value="0.01" />
 
-  <xacro:property name="ball_mass" value="0.2" />
+  <xacro:property name="ball_mass" value="0.02" />
   <xacro:property name="ball_radius" value="${link_radius*10}" />
   
   <xacro:macro name="tool_pendulum" params="parent *origin">
@@ -61,7 +61,7 @@
       <axis xyz="0 1 0"/> <!-- Only rotate in the y axis i.e. in the x-z plane -->
       <limit lower="${-90 * PI / 180}" upper="${90 * PI / 180}"
              effort="0" velocity="0" />
-      <dynamics damping="${joint_damping}"/>
+      <dynamics damping="0.001"/>
       <dynamics friction="${joint_friction}"/>
     </joint>
 
