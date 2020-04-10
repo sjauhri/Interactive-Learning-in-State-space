@@ -15,7 +15,8 @@ class TELE_cartpole():
     self.maxDemoSize = 15000
     
     # Set which game to play
-    self.env = gym.make('CartPoleZero-v0')
+    # self.env = gym.make('CartPoleZero-v0')
+    self.env = gym.make('CartPole-v0')
     self.state_dim = 4       # state dimension
     self.action_dim = 2      # action dimension
 
@@ -192,12 +193,12 @@ class TELE_cartpole():
       else:
         # Zero action
         # Discrete actions
-        A = 2
+        # A = 2
         # # Random action
-        # # Discrete actions
-        # A = np.random.randint(self.action_dim)
-        # a = np.zeros([self.action_dim])
-        # a[A] = 1
+        # Discrete actions
+        A = np.random.randint(self.action_dim)
+        a = np.zeros([self.action_dim])
+        a[A] = 1
 
       # Act
       state, reward, terminal, _ = self.env.step(A)
