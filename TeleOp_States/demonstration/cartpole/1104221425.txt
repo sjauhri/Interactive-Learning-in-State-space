@@ -1,0 +1,15 @@
+
+Iteration 0: average_reward: 165.0
+Iteration 1: average_reward:  94.0
+Iteration 2: average_reward:  92.7
+Iteration 3: average_reward:  74.2
+Iteration 4: average_reward:  73.4
+Iteration 5: average_reward:  75.5
+Iteration 6: average_reward:  79.0
+Iteration 7: average_reward:  71.8
+Iteration 8: average_reward:  71.9
+Iteration 9: average_reward:  82.0
+Iteration 10: average_reward:  88.5
+Iteration 11: average_reward:  86.7
+Iteration 12: average_reward:  95.4
+Iteration 13: average_reward:  92.3

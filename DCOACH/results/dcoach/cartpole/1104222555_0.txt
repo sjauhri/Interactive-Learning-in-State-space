@@ -1,0 +1,78 @@
+
+episode_reward:  25.0
+Background Trial: 1, reward: 14.0
+Background Trial: 2, reward: 15.0
+Background Trial: 3, reward: 14.0
+Background Trial: 4, reward: 15.0
+Background Trial: 5, reward: 15.0
+Background Trial: 6, reward: 15.0
+Background Trial: 7, reward: 16.0
+Background Trial: 8, reward: 15.0
+Background Trial: 9, reward: 15.0
+Iteration: 1, average_reward: 14.88888888888889, feedback_rate: 0.6538461538461539
+
+
+episode_reward:  39.0
+Background Trial: 1, reward: 61.0
+Background Trial: 2, reward: 65.0
+Background Trial: 3, reward: 68.0
+Background Trial: 4, reward: 71.0
+Background Trial: 5, reward: 60.0
+Background Trial: 6, reward: 68.0
+Background Trial: 7, reward: 61.0
+Background Trial: 8, reward: 62.0
+Background Trial: 9, reward: 73.0
+Iteration: 2, average_reward: 65.44444444444444, feedback_rate: 0.625
+
+
+episode_reward: 162.0
+Background Trial: 1, reward: 200.0
+Background Trial: 2, reward: 200.0
+Background Trial: 3, reward: 159.0
+Background Trial: 4, reward: 200.0
+Background Trial: 5, reward: 146.0
+Background Trial: 6, reward: 176.0
+Background Trial: 7, reward: 200.0
+Background Trial: 8, reward: 200.0
+Background Trial: 9, reward: 155.0
+Iteration: 3, average_reward: 181.77777777777777, feedback_rate: 0.26993865030674846
+
+
+episode_reward: 200.0
+Background Trial: 1, reward: 200.0
+Background Trial: 2, reward: 200.0
+Background Trial: 3, reward: 200.0
+Background Trial: 4, reward: 200.0
+Background Trial: 5, reward: 200.0
+Background Trial: 6, reward: 200.0
+Background Trial: 7, reward: 176.0
+Background Trial: 8, reward: 200.0
+Background Trial: 9, reward: 200.0
+Iteration: 4, average_reward: 197.33333333333334, feedback_rate: 0.014925373134328358
+
+
+episode_reward: 200.0
+Background Trial: 1, reward: 200.0
+Background Trial: 2, reward: 200.0
+Background Trial: 3, reward: 200.0
+Background Trial: 4, reward: 200.0
+Background Trial: 5, reward: 200.0
+Background Trial: 6, reward: 200.0
+Background Trial: 7, reward: 200.0
+Background Trial: 8, reward: 200.0
+Background Trial: 9, reward: 200.0
+Iteration: 5, average_reward: 200.0, feedback_rate: 0.0
+
+
+episode_reward: 200.0
+Background Trial: 1, reward: 200.0
+Background Trial: 2, reward: 200.0
+Background Trial: 3, reward: 200.0
+Background Trial: 4, reward: 200.0
+Background Trial: 5, reward: 200.0
+Background Trial: 6, reward: 200.0
+Background Trial: 7, reward: 200.0
+Background Trial: 8, reward: 200.0
+Background Trial: 9, reward: 200.0
+Iteration: 6, average_reward: 200.0, feedback_rate: 0.014925373134328358
+
