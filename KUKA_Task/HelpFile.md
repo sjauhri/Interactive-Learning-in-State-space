@@ -10,3 +10,10 @@ rostopic pub -1 /iiwa/PositionJointInterface_J2_controller/command std_msgs/Floa
 rostopic pub -1 /iiwa/PositionJointInterface_J4_controller/command std_msgs/Float64 "data: -0.3"
 
 rostopic pub -1 /iiwa/PositionJointInterface_J6_controller/command std_msgs/Float64 "data: -1.047197551"
+
+# Packages for Control:
+controler_manager
+joint_state_controller
+robot_state_publisher
+
+velocity_controllers/JointVelocityController
