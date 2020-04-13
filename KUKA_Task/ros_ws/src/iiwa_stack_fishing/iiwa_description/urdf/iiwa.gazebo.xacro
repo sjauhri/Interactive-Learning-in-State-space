@@ -9,6 +9,16 @@
       <provideFeedback>true</provideFeedback>
     </gazebo>
 
+    <!-- Ball 3-D state ground truth -->
+    <gazebo>
+      <plugin name="Ball_3D_state" filename="libgazebo_ros_p3d.so">
+        <frameName>world</frameName>
+        <bodyName>tool_link_0</bodyName>
+        <topicName>odom/ball</topicName>
+        <updateRate>50.0</updateRate>
+      </plugin>
+    </gazebo>
+
     <!-- The ft_sensor plugin -->
     <gazebo>
       <plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">

@@ -52,7 +52,8 @@
     <!-- Focus camera -->
     <gui fullscreen='0'>
       <camera name='user_camera'>
-	      <pose>2.532941 -2.270632 1.144254 0.000000 0.275643 2.164190</pose>
+	      <!-- <pose>2.532941 -2.270632 1.144254 0.000000 0.275643 2.164190</pose> -->
+        <pose>0.75 -2.75 0.5 0 0 1.5707</pose>
 	      <view_controller>orbit</view_controller>
       </camera>
     </gui>
