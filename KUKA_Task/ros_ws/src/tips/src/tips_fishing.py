@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 from utils import *
 from tips import TIPS
-from fishing_env import *
+from fishing_sim_env import *
 from feedback_ext import *
 from fdm_kuka import *
 
@@ -409,5 +409,5 @@ class TIPS_fishing(TIPS):
     return total_reward
     
 if __name__ == "__main__":
-  tips = TIPS_fishing(11, 2, lr=args.lr, maxEpisodes=args.maxEpisodes)
+  tips = TIPS_fishing(8, 2, lr=args.lr, maxEpisodes=args.maxEpisodes)
   tips.run()
