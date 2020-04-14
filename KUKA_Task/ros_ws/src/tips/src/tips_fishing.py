@@ -1,19 +1,16 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 from utils import *
 from tips import TIPS
+from fishing_env import *
 from feedback_ext import *
 from fdm_kuka import *
-import gym
 
 class TIPS_fishing(TIPS):
   def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=20, epochTrainIts=4000,  dynamicsSamples=5000, batch_size=32):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
-    # TODO
-    self.env = gym.make('Reacher-v2')
-    self.env.reset()
-    self.env.render()  # Make the environment visible
+    self.env = Fishing_Env()
 
     # Initialise Human feedback in external window
     self.human_feedback = Feedback_ext()
@@ -154,7 +151,7 @@ class TIPS_fishing(TIPS):
     # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()
     if (h_fb == H_LEFT):
       state_corrected[0] = state_x - self.errorConst
-      state_corrected[1] = state_z      
+      state_corrected[1] = state_z
     elif (h_fb == H_RIGHT):
       state_corrected[0] = state_x + self.errorConst
       state_corrected[1] = state_z
@@ -306,7 +303,7 @@ class TIPS_fishing(TIPS):
     total_reward = 0
     state = self.env.reset() # TODO
     state = np.reshape(state, [-1, self.state_dim])
-    prev_s = state    
+    prev_s = state
     a = np.random.uniform(-1,1,self.action_dim)
     t_counter = 1
     h_counter = 0
@@ -314,9 +311,9 @@ class TIPS_fishing(TIPS):
     # Iterate over the episode
     while((not terminal) and (not self.human_feedback.ask_for_done()) ):
       if (not args.fast):
-        self.env.render()  # Make the environment visible
-        self.human_feedback.viewer.render() # Render the additional feedback window        
-        time.sleep(self.render_delay)    # Add delay to rendering if necessary
+        self.env.render()  # Make the environment visible # TODO
+        self.human_feedback.viewer.render() # Render the additional feedback window
+        time.sleep(self.render_delay)    # Add delay to rendering if necessary # TODO
 
       # Get feedback signal
       h_fb = self.human_feedback.get_h()
@@ -327,11 +324,11 @@ class TIPS_fishing(TIPS):
         h_counter += 1 # Feedback counter
 
         # Get new state transition label using feedback
-        state_corrected = self.get_state_corrected(h_fb, state[0])        
+        state_corrected = self.get_state_corrected(h_fb, state[0])
 
         # Get action from ifdm
         a = self.get_corrected_action(h_fb, state[0], state_corrected)
-        # print("Computed Action: ", a)
+        print("Computed Action: ", a)
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
@@ -351,13 +348,13 @@ class TIPS_fishing(TIPS):
         # Continuous actions
         A = np.copy(a)
       else:
-        if (args.learnFDM):
-          # Debug: equal timing
-          time.sleep(0.002)
-          # pass
-        else:
-          # Debug: equal timing
-          time.sleep(0.085)
+        # if (args.learnFDM):
+        #   # Debug: equal timing
+        #   time.sleep(0.002)
+        #   # pass
+        # else:
+        #   # Debug: equal timing
+        #   time.sleep(0.085)
 
         # Use current policy
 
@@ -376,11 +373,6 @@ class TIPS_fishing(TIPS):
       state = np.reshape(state, [-1, self.state_dim])
 
       # Add to ExpBuff
-      # Zero redundant states
-      z_index = [4,5,8,9,10]
-      state[0,z_index] = 0
-      prev_s[0,z_index] = 0
-
       self.ExpBuff.append((prev_s[0], state[0], a))
       if (len(self.ExpBuff) > self.maxExpBuffSize):
         self.ExpBuff.pop(0)
@@ -391,12 +383,12 @@ class TIPS_fishing(TIPS):
 
       t_counter += 1 # Time counter
 
-    print('episode_reward: %5.1f' % (total_reward))
-    self.log_writer.write("\n" + "episode_reward: " + format(total_reward, '5.1f'))
+    # print('episode_reward: %5.1f' % (total_reward))
+    # self.log_writer.write("\n" + "episode_reward: " + format(total_reward, '5.1f'))
     
     # Capture and return feedback rate
     feedback_rate = h_counter/t_counter
-    return feedback_rate
+    return total_reward, feedback_rate
 
   def eval_rwd_policy(self):
     """getting the reward by current policy"""
@@ -410,12 +402,12 @@ class TIPS_fishing(TIPS):
       A = np.reshape(self.eval_policy(state), [-1])
       state, reward, terminal, _ = self.env.step(A)
       total_reward += reward
-      if args.render:
-        self.env.render()
-        time.sleep(self.render_delay)
+      # if args.render:
+      #   self.env.render()
+      #   time.sleep(self.render_delay)
 
     return total_reward
     
 if __name__ == "__main__":
-  tips = TIPS_fishing(8, 2, lr=args.lr, maxEpisodes=args.maxEpisodes)
+  tips = TIPS_fishing(11, 2, lr=args.lr, maxEpisodes=args.maxEpisodes)
   tips.run()

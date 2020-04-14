@@ -253,7 +253,7 @@ class TIPS():
           print('Start')
         
         # Run with human feedback, get feedback rate
-        feedback_rate = self.feedback_run()
+        reward, feedback_rate = self.feedback_run()
         print('[Episode ended]')
 
         # Optional: Update FDM
@@ -270,15 +270,16 @@ class TIPS():
 
 
         if should(args.print_freq):
-          policy_reward = 0
-          numTrials = 9
-          for i in range(numTrials):
-            curr_reward = self.eval_rwd_policy()
-            policy_reward += curr_reward
-            print("Background Trial: %d, reward: %5.1f" % (i+1, curr_reward))
-            self.log_writer.write("\n" + "Background Trial: " + str(i+1) + ", reward: " + str(curr_reward))
-            self.reward_writer.write(format(curr_reward, '8.6f') + "\n" )
-          avg_reward = policy_reward/numTrials
+          # Get average reward with roll-outs:
+          # policy_reward = 0
+          # numTrials = 9
+          # for i in range(numTrials):
+          #   curr_reward = self.eval_rwd_policy()
+          #   policy_reward += curr_reward
+          #   print("Background Trial: %d, reward: %5.1f" % (i+1, curr_reward))
+          #   self.log_writer.write("\n" + "Background Trial: " + str(i+1) + ", reward: " + str(curr_reward))
+          #   self.reward_writer.write(format(curr_reward, '8.6f') + "\n" )
+          # avg_reward = policy_reward/numTrials
 
           # Check policy loss on another data set.................
           policy_loss = 0
@@ -300,9 +301,9 @@ class TIPS():
 
             # fdm_loss = self.get_fdm_loss(batch_s, batch_ns, batch_a)
           # ......................................................          
-          print('Iteration: %5d, average_reward: %5.1f, feedback_rate: %1.3f' % ((it+1), avg_reward, feedback_rate))
-          self.result_writer.write( str(it+1) + " , " + format(avg_reward, '8.6f') + " , " + format(feedback_rate, '8.6f') + "\n" )
-          self.log_writer.write("\n" + "Iteration: " + str(it+1) + ", average_reward: " + str(avg_reward) + ", feedback_rate: " + str(feedback_rate) + "\n" + "\n")
+          print('Iteration: %5d, reward: %5.1f, feedback_rate: %1.3f' % ((it+1), reward, feedback_rate))
+          self.result_writer.write( str(it+1) + " , " + format(reward, '8.6f') + " , " + format(feedback_rate, '8.6f') + "\n" )
+          self.log_writer.write("\n" + "Iteration: " + str(it+1) + ", reward: " + str(reward) + ", feedback_rate: " + str(feedback_rate) + "\n" + "\n")
 
         # saving session
         if should(args.save_freq):
@@ -345,14 +346,14 @@ class TIPS():
         np.random.seed(self.exp + 5)
         
         self.result_writer = open(args.result_dir + self.logTime + "_" + str(self.exp) + ".csv", "w") # csv episode result log
-        self.reward_writer = open(args.result_dir + self.logTime + "_rwd_" + str(self.exp) + ".csv", "w") # csv all rewards log
-        self.result_writer.write("iteration,average_reward,feedback_rate\n")
-        self.reward_writer.write("agent_rewards\n")
+        # self.reward_writer = open(args.result_dir + self.logTime + "_rwd_" + str(self.exp) + ".csv", "w") # csv all rewards log
+        self.result_writer.write("iteration,reward,feedback_rate\n")
+        # self.reward_writer.write("agent_rewards\n")
 
         self.log_writer = open(args.result_dir + self.logTime + "_" + str(self.exp) + ".txt", "w") # txt debug log with everything
         
         self.train() # Train epochs
         
         self.result_writer.close()
-        self.reward_writer.close()
+        # self.reward_writer.close()
         self.log_writer.close()

@@ -6,3 +6,4 @@ mujoco-py==1.50.1.56
 numpy
 pyglet==1.3.2
 pandas==0.22
+tensorflow==1.14.0
