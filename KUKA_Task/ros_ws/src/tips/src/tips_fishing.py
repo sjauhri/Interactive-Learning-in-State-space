@@ -13,8 +13,8 @@ class TIPS_fishing(TIPS):
     self.env = Fishing_Env()
 
     # Initialise Human feedback in external window
-    self.human_feedback = Feedback_ext()
-    self.human_feedback.viewer.render() # Render the additional feedback window
+    # self.human_feedback = Feedback_ext()
+    # self.human_feedback.viewer.render() # Render the additional feedback window
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
     self.errorConst = 0.02

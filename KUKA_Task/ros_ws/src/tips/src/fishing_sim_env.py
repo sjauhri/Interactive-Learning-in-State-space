@@ -6,8 +6,10 @@ https://github.com/IFL-CAMP/iiwa_stack
 """
 
 import rospy
+import actionlib
+from control_msgs.msg import FollowJointTrajectoryActionGoal
 from std_msgs.msg import String
-# sensor_msgs/JointState
+from sensor_msgs.msg import JointState
 from nav_msgs.msg import Odometry
 # trajectory_msgs/JointTrajectory
 # actionlib_msgs/GoalStatusArray
@@ -20,17 +22,24 @@ class Fishing_Env():
     def __init__(self):
         rospy.init_node('tips_fishing', anonymous=True)
 
-        # Subscriber for joint states
-        rospy.Subscriber('joint_states', String, callback, queue_size=1)
+        ### Joint States
+        self.joint_position = np.zeros(7) # Seven joints of the KUKA
+        self.joint_velocity = np.zeros(7) # Seven joints of the KUKA
+        self.joint_effort = np.zeros(7) # Seven joints of the KUKA
+        # Subscriber for joint states:
+        rospy.Subscriber('iiwa/joint_states', JointState, self.joint_states_callback, queue_size=1)
 
         # Subscriber for tfs, tf_static to compute end-effector position in x-z plane
-        rospy.Subscriber('end_eff_tf', String, callback, queue_size=1)
+        # rospy.Subscriber('end_eff_tf', String, callback, queue_size=1)
 
+        ### Ball state
+        self.ball_position = np.zeros(3) # x,y,z position
+        self.ball_velocity = np.zeros(3) # x,y,z velocity
         # Subscriber for ball pose, twist
-        rospy.Subscriber('ball_odom', Odometry, callback, queue_size=1)
+        rospy.Subscriber('odom/ball', Odometry, self.odom_ball_callback, queue_size=1)
 
-        # Publisher for actions
-        # Subscriber for action status
+        # Action Client
+        action_client = actionlib.SimpleActionClient('fibonacci', FollowJointTrajectoryActionGoal)
 
         # Service caller to pause/unpasue physics
 
@@ -66,5 +75,20 @@ class Fishing_Env():
 
         return state, reward, terminal, dict(reward_dist=reward_dist, reward_ctrl=reward_ctrl)
 
-def listener_callback(data):
-    rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.data)
+
+    ### Callbacks for subscribers
+
+    def joint_states_callback(self, joint_state_msg):
+        self.joint_position = np.array(joint_state_msg.position)
+        self.joint_velocity = np.array(joint_state_msg.velocity)
+        self.joint_effort = np.array(joint_state_msg.effort)
+
+        # Debug print:
+        # print("Positions: " + "\n" + str(self.joint_position) + "\n" + "Vels: " + "\n" + str(self.joint_velocity) + "\n" + "Efforts: " + "\n" + str(self.joint_effort))
+
+    def odom_ball_callback(self, odom_msg):
+        self.ball_position = np.array([odom_msg.pose.pose.position.x, odom_msg.pose.pose.position.y, odom_msg.pose.pose.position.z])
+        self.ball_velocity = np.array([odom_msg.twist.twist.linear.x,odom_msg.twist.twist.linear.y,odom_msg.twist.twist.linear.z])
+
+        # Debug print:
+        # print("Positions: " + "\n" + str(self.ball_position) + "\n" + "Vels: " + "\n" + str(self.ball_velocity))

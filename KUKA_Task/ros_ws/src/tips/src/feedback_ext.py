@@ -1,4 +1,4 @@
-from pyglet.window import key
+# from pyglet.window import key
 from gym.envs.classic_control import rendering
 
 H_NULL = 0 # Human feedback values
