@@ -13,8 +13,8 @@ class TIPS_fishing(TIPS):
     self.env = Fishing_Env()
 
     # Initialise Human feedback in external window
-    # self.human_feedback = Feedback_ext()
-    # self.human_feedback.viewer.render() # Render the additional feedback window
+    self.human_feedback = Feedback_ext()
+    self.human_feedback.viewer.render() # Render the additional feedback window
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
     self.errorConst = 0.02
@@ -301,7 +301,7 @@ class TIPS_fishing(TIPS):
     """run and train agent using D-COACH framework incorporating human feedback"""
     terminal = False
     total_reward = 0
-    state = self.env.reset() # TODO
+    state = self.env.reset()
     state = np.reshape(state, [-1, self.state_dim])
     prev_s = state
     a = np.random.uniform(-1,1,self.action_dim)
@@ -311,9 +311,7 @@ class TIPS_fishing(TIPS):
     # Iterate over the episode
     while((not terminal) and (not self.human_feedback.ask_for_done()) ):
       if (not args.fast):
-        self.env.render()  # Make the environment visible # TODO
         self.human_feedback.viewer.render() # Render the additional feedback window
-        time.sleep(self.render_delay)    # Add delay to rendering if necessary # TODO
 
       # Get feedback signal
       h_fb = self.human_feedback.get_h()
@@ -324,11 +322,19 @@ class TIPS_fishing(TIPS):
         h_counter += 1 # Feedback counter
 
         # Get new state transition label using feedback
-        state_corrected = self.get_state_corrected(h_fb, state[0])
+        # state_corrected = self.get_state_corrected(h_fb, state[0])
 
         # Get action from ifdm
-        a = self.get_corrected_action(h_fb, state[0], state_corrected)
-        print("Computed Action: ", a)
+        # a = self.get_corrected_action(h_fb, state[0], state_corrected)
+        if (h_fb == H_UP):
+          a = np.array([0, 0.2])
+        elif (h_fb == H_DOWN):
+          a = np.array([0, -0.2])
+        elif (h_fb == H_LEFT):
+          a = np.array([-0.1, 0.05])
+        elif (h_fb == H_RIGHT):
+          a = np.array([0.1, 0.05])
+        # print("Computed Action: ", a)
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
@@ -347,6 +353,11 @@ class TIPS_fishing(TIPS):
         a = np.reshape(a, [-1])
         # Continuous actions
         A = np.copy(a)
+
+        # state, reward, terminal, _ = self.env.step(A)
+
+        # Reset human feedback
+        self.human_feedback.h_fb = H_NULL
       else:
         # if (args.learnFDM):
         #   # Debug: equal timing
@@ -368,6 +379,7 @@ class TIPS_fishing(TIPS):
       prev_s = np.copy(state)
 
       # Act
+      # reward = 0
       state, reward, terminal, _ = self.env.step(A)
       total_reward += reward
       state = np.reshape(state, [-1, self.state_dim])

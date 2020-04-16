@@ -7,20 +7,26 @@ https://github.com/IFL-CAMP/iiwa_stack
 
 import rospy
 import actionlib
-from control_msgs.msg import FollowJointTrajectoryActionGoal
-from std_msgs.msg import String
 from sensor_msgs.msg import JointState
 from nav_msgs.msg import Odometry
-# trajectory_msgs/JointTrajectory
-# actionlib_msgs/GoalStatusArray
-# control_msgs/FollowJointTrajectoryActionGoal
+from control_msgs.msg import FollowJointTrajectoryAction
+from control_msgs.msg import FollowJointTrajectoryGoal
+from trajectory_msgs.msg import JointTrajectoryPoint
+from std_msgs.msg import String, Float32
+import std_srvs.srv
 # tf2_msgs/TFMessage
-# std_srvs/Empty
 import numpy as np
+import time
 
 class Fishing_Env():
+    
     def __init__(self):
         rospy.init_node('tips_fishing', anonymous=True)
+        self.episode_duration = 25 # in seconds
+        self.action_duration = 0.1 # in seconds
+        
+        self.start_time = time.time()
+        self.terminal = True # Need to call reset first to start the environment
 
         ### Joint States
         self.joint_position = np.zeros(7) # Seven joints of the KUKA
@@ -38,42 +44,116 @@ class Fishing_Env():
         # Subscriber for ball pose, twist
         rospy.Subscriber('odom/ball', Odometry, self.odom_ball_callback, queue_size=1)
 
-        # Action Client
-        action_client = actionlib.SimpleActionClient('fibonacci', FollowJointTrajectoryActionGoal)
+        ### Action Client
+        self.action_client = actionlib.SimpleActionClient('iiwa/PositionJointInterface_trajectory_controller/follow_joint_trajectory', FollowJointTrajectoryAction)
+        # Action Goal
+        self.goal = FollowJointTrajectoryGoal()
+        self.goal.trajectory.joint_names.append("iiwa_joint_1")
+        self.goal.trajectory.joint_names.append("iiwa_joint_2")
+        self.goal.trajectory.joint_names.append("iiwa_joint_3")
+        self.goal.trajectory.joint_names.append("iiwa_joint_4")
+        self.goal.trajectory.joint_names.append("iiwa_joint_5")
+        self.goal.trajectory.joint_names.append("iiwa_joint_6")
+        self.goal.trajectory.joint_names.append("iiwa_joint_7")
 
-        # Service caller to pause/unpasue physics
+        self.goal.trajectory.points.append(JointTrajectoryPoint())
+                                                       # joint 2      # joint 4
+        self.goal.trajectory.points[0].positions =  [0,    0      ,0,     0     ,0,0,0]
+        self.goal.trajectory.points[0].velocities = [0,    0      ,0,     0     ,0,0,0]
+        self.goal.trajectory.points[0].time_from_start = rospy.Duration.from_sec(self.action_duration)
+        # Optional: set joint tolerance
+        # self.goal.path_tolerance
+        # self.goal.goal_tolerance
+        # self.goal.goal_time_tolerance
+        
+        # Wait for gazebo simulation
+        print("Waiting for gazebo...")
+        rospy.wait_for_service('gazebo/reset_simulation')
+        
+        ### Service caller for the reset of Gazebo simulation
+        self.reset_sim = rospy.ServiceProxy('gazebo/reset_simulation', std_srvs.srv.Empty())
 
-        # Service caller for the reset of Gazebo sim (add randomization BEFORE reset with controller)
+        ### Service caller to pause/unpasue physics
+        self.pause = rospy.ServiceProxy('gazebo/pause_physics', std_srvs.srv.Empty())
+        self.unpause = rospy.ServiceProxy('gazebo/unpause_physics', std_srvs.srv.Empty())
+
+
+    def curr_state(self):
+        return np.array([
+            self.joint_position[1], # Joint 2
+            self.joint_position[3], # Joint 4
+            self.joint_velocity[1], # Joint 2
+            self.joint_velocity[3], # Joint 4
+            self.ball_position[0],  # Ball x position
+            self.ball_position[2],  # Ball z position
+            self.ball_velocity[0],  # Ball x velocity
+            self.ball_velocity[2]   # Ball z velocity
+        ])
+
 
     def reset(self):
-        # Service call to un-pause physics
-            # WAIT till unpaused (service response)
+        ### Service call to un-pause physics
+        self.unpause()
+        # try:
+        # except rospy.ServiceException:
+        #     print("Service call failed")
 
-        # Publish for actions with randomization
-            # WAIT till completion of action
+        ### Take action to reset to zero position (with randomization)
+        self.goal.trajectory.points[0].positions =  [0, np.random.uniform(-0.15, 0.15) ,0, np.random.uniform(-0.15, 0.15) ,0,0,0]
+        # Optional: Wait for server
+        # self.action_client.wait_for_server()
+        # Send Action command
+        self.action_client.send_goal(self.goal)
+        # Wait for action completion
+        self.action_client.wait_for_result()
 
-        # Service call to reset Gazebo sim
-            # WAIT (till a new joint state and ball odom is received)
+        ### Service call to reset Gazebo sim
+        self.reset_sim()
+        # Optional: WAIT (till a new joint state and ball odom is received)
+        # time.sleep(0.005)
         
-        # Set time for this file
+        # Set time for this episode
+        self.start_time = time.time()
 
-        return state
+        # Reset terminal state
+        self.terminal = False
+
+        return self.curr_state()
+
 
     def step(self, a):
         vec = 0 # TODO: distance vector between cup and ball
         reward_dist = - np.linalg.norm(vec)
-        reward_ctrl = - np.square(a).sum()
+        # reward_ctrl = - np.square(a).sum()
+        reward_ctrl = 0
         reward = reward_dist + reward_ctrl
         
-        # Take action: action command publish
-            # Wait for action completion
-            # Wait till a new state, ball_odom is received?
+        if (self.terminal):
+            print("[Environment terminated. reset() needs to be called before environment can be run]")
+        else:
+            ### Take action a
+            # Sanity check
+            if((a >= -1).all() and (a <= 1).all()):
+                # Set goal
+                self.goal.trajectory.points[0].positions =  [0, a[0] ,0, a[1] ,0,0,0]
+                # Send Action command
+                self.action_client.send_goal(self.goal)
+                # Wait for action completion
+                # print("Waiting for action completion...")
+                self.action_client.wait_for_result()
+                # Optional: WAIT (till a new joint state and ball odom is received)
+                time.sleep(0.005)
+            else:
+                print("[Invalid action provided]")
 
-        # Check if terminal based on total time elapsed since reset
-        # if terminal:
-            # Pause physics
+            # Check if terminal based on total time elapsed since reset
+            if ((time.time() - self.start_time) > self.episode_duration):
+                self.terminal = True
+                # Pause physics
+                self.pause()
 
-        return state, reward, terminal, dict(reward_dist=reward_dist, reward_ctrl=reward_ctrl)
+        return self.curr_state(), reward, self.terminal, dict(reward_dist=reward_dist, reward_ctrl=reward_ctrl)
+
 
 
     ### Callbacks for subscribers

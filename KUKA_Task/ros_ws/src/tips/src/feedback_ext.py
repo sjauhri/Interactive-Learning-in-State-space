@@ -1,4 +1,4 @@
-# from pyglet.window import key
+from pyglet.window import key
 from gym.envs.classic_control import rendering
 
 H_NULL = 0 # Human feedback values
@@ -16,7 +16,8 @@ class Feedback_ext:
         self.viewer = rendering.Viewer(screen_width, screen_height)          
 
         self.viewer.window.on_key_press = self.key_press
-        self.viewer.window.on_key_release = self.key_release        
+        # Temporarily diabling this. Will handle the reset ourselves in the main file
+        # self.viewer.window.on_key_release = self.key_release
 
         self.h_fb = H_NULL
         self.restart = False
@@ -37,9 +38,10 @@ class Feedback_ext:
         if k == key.X:
             self.h_fb = DO_NOTHING
 
-    def key_release(self, k, mod):
-        if k == key.LEFT or k == key.RIGHT or k == key.UP or k == key.DOWN or k==key.Z or k==key.X:
-            self.h_fb = H_NULL
+    # Temporarily diabling key_release. Will handle the reset ourselves in the main file
+    # def key_release(self, k, mod):
+    #     if k == key.LEFT or k == key.RIGHT or k == key.UP or k == key.DOWN or k==key.Z or k==key.X:
+    #         self.h_fb = H_NULL
 
     def get_h(self):
         return self.h_fb
