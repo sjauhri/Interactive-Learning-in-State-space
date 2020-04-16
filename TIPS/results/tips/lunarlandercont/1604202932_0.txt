@@ -1,0 +1,91 @@
+
+episode_reward: 228.9
+Background Trial: 1, reward: -369.0671878588618
+Background Trial: 2, reward: -278.6972189590741
+Background Trial: 3, reward: -161.3533926772592
+Background Trial: 4, reward: -198.9693083699844
+Background Trial: 5, reward: -63.88838675796682
+Background Trial: 6, reward: -45.5165998405203
+Background Trial: 7, reward: -351.6333388351363
+Background Trial: 8, reward: -13.620379834333363
+Background Trial: 9, reward: -268.52139441782464
+Iteration: 1, average_reward: -194.5852452834401, feedback_rate: 0.30357142857142855
+
+
+episode_reward: -264.9
+Background Trial: 1, reward: -1734.3226217289662
+Background Trial: 2, reward: -1098.1141853597067
+Background Trial: 3, reward: -303.3383948450597
+Background Trial: 4, reward: -739.2130996197479
+Background Trial: 5, reward: -1000.7550921260429
+Background Trial: 6, reward: -267.13003651752865
+Background Trial: 7, reward: -291.5178744643439
+Background Trial: 8, reward: -777.5889402569643
+Background Trial: 9, reward: -800.6910947148555
+Iteration: 2, average_reward: -779.1857044036906, feedback_rate: 0.4490566037735849
+
+
+episode_reward:  14.2
+Background Trial: 1, reward: -1337.8203225353568
+Background Trial: 2, reward: -961.8875056213723
+Background Trial: 3, reward: -193.24226632043593
+Background Trial: 4, reward: -258.07802802752235
+Background Trial: 5, reward: -434.77997302419277
+Background Trial: 6, reward: -216.6124000499591
+Background Trial: 7, reward: -318.76892732537993
+Background Trial: 8, reward: -234.10889560924053
+Background Trial: 9, reward: -152.75997290882145
+Iteration: 3, average_reward: -456.45092126914227, feedback_rate: 0.6234309623430963
+
+
+episode_reward: -216.8
+Background Trial: 1, reward: -239.9540882140614
+Background Trial: 2, reward: -201.54212557237526
+Background Trial: 3, reward: -272.6253240380062
+Background Trial: 4, reward: -369.9163660976773
+Background Trial: 5, reward: -289.4355193207266
+Background Trial: 6, reward: -247.41112536547274
+Background Trial: 7, reward: -401.9236294235152
+Background Trial: 8, reward: -790.3375535290994
+Background Trial: 9, reward: -376.14073270785525
+Iteration: 4, average_reward: -354.36516269653214, feedback_rate: 0.4713216957605985
+
+
+episode_reward: 257.8
+Background Trial: 1, reward: -308.9031584243113
+Background Trial: 2, reward: -365.20091417723273
+Background Trial: 3, reward: -278.7648004718934
+Background Trial: 4, reward: -404.2797238193888
+Background Trial: 5, reward: -347.6479011964093
+Background Trial: 6, reward: -367.201150187025
+Background Trial: 7, reward: -329.58572691112505
+Background Trial: 8, reward: -1181.7282992835833
+Background Trial: 9, reward: -227.32914254863522
+Iteration: 5, average_reward: -423.40453522440043, feedback_rate: 0.3294460641399417
+
+
+episode_reward: 265.5
+Background Trial: 1, reward: -389.0344925067529
+Background Trial: 2, reward: -376.0817596520093
+Background Trial: 3, reward: -178.14210785976397
+Background Trial: 4, reward: -343.1346437644838
+Background Trial: 5, reward: -308.5604607340338
+Background Trial: 6, reward: -336.3249100962406
+Background Trial: 7, reward: -384.30776492624807
+Background Trial: 8, reward: -345.38982711366
+Background Trial: 9, reward: -395.68460298049047
+Iteration: 6, average_reward: -339.6289521815204, feedback_rate: 0.296875
+
+
+episode_reward: 270.0
+Background Trial: 1, reward: -13.03569338362442
+Background Trial: 2, reward: -155.69774126984552
+Background Trial: 3, reward: -272.1217415582804
+Background Trial: 4, reward: -365.2736707231622
+Background Trial: 5, reward: 171.7158197457218
+Background Trial: 6, reward: -733.7424513200948
+Background Trial: 7, reward: -288.32179808854335
+Background Trial: 8, reward: -278.2832013490149
+Background Trial: 9, reward: -78.87748887527752
+Iteration: 7, average_reward: -223.7375518691246, feedback_rate: 0.29484029484029484
+
