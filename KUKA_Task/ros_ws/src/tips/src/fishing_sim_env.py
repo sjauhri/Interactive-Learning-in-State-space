@@ -18,12 +18,15 @@ import std_srvs.srv
 import numpy as np
 import time
 
+BALL_ORIGIN = np.array([0.746439, 0.000074, 0.173802])
+END_EFF_ORIGIN = np.array([0.746538, -0.000060, 0.458430]) # iiwa link 7
+EPISODE_DURATION = 25 # seconds
+ACTION_DURATION = 0.05 # seconds
+
 class Fishing_Env():
     
     def __init__(self):
-        rospy.init_node('tips_fishing', anonymous=True)
-        self.episode_duration = 25 # in seconds
-        self.action_duration = 0.1 # in seconds
+        rospy.init_node('tips_fishing', anonymous=True, disable_signals=True) # disable rospy handling of Ctrl+C
         
         self.start_time = time.time()
         self.terminal = True # Need to call reset first to start the environment
@@ -60,14 +63,14 @@ class Fishing_Env():
                                                        # joint 2      # joint 4
         self.goal.trajectory.points[0].positions =  [0,    0      ,0,     0     ,0,0,0]
         self.goal.trajectory.points[0].velocities = [0,    0      ,0,     0     ,0,0,0]
-        self.goal.trajectory.points[0].time_from_start = rospy.Duration.from_sec(self.action_duration)
+        self.goal.trajectory.points[0].time_from_start = rospy.Duration.from_sec(ACTION_DURATION)
         # Optional: set joint tolerance
         # self.goal.path_tolerance
         # self.goal.goal_tolerance
         # self.goal.goal_time_tolerance
         
         # Wait for gazebo simulation
-        print("Waiting for gazebo...")
+        print("[Waiting for gazebo...]")
         rospy.wait_for_service('gazebo/reset_simulation')
         
         ### Service caller for the reset of Gazebo simulation
@@ -97,6 +100,8 @@ class Fishing_Env():
         # try:
         # except rospy.ServiceException:
         #     print("Service call failed")
+        # Optional: WAIT for controller to be ready
+        time.sleep(0.1)
 
         ### Take action to reset to zero position (with randomization)
         self.goal.trajectory.points[0].positions =  [0, np.random.uniform(-0.15, 0.15) ,0, np.random.uniform(-0.15, 0.15) ,0,0,0]
@@ -107,10 +112,10 @@ class Fishing_Env():
         # Wait for action completion
         self.action_client.wait_for_result()
 
-        ### Service call to reset Gazebo sim
-        self.reset_sim()
+        ### Optional: Service call to reset Gazebo sim
+        # self.reset_sim()
         # Optional: WAIT (till a new joint state and ball odom is received)
-        # time.sleep(0.005)
+        # time.sleep(0.01)
         
         # Set time for this episode
         self.start_time = time.time()
@@ -133,9 +138,10 @@ class Fishing_Env():
         else:
             ### Take action a
             # Sanity check
-            if((a >= -1).all() and (a <= 1).all()):
-                # Set goal
-                self.goal.trajectory.points[0].positions =  [0, a[0] ,0, a[1] ,0,0,0]
+            if((a >= -0.5).all() and (a <= 0.5).all()):
+                # Set goal: Relative position change
+                self.goal.trajectory.points[0].positions[1] +=  a[0]
+                self.goal.trajectory.points[0].positions[3] +=  a[1]
                 # Send Action command
                 self.action_client.send_goal(self.goal)
                 # Wait for action completion
@@ -147,7 +153,7 @@ class Fishing_Env():
                 print("[Invalid action provided]")
 
             # Check if terminal based on total time elapsed since reset
-            if ((time.time() - self.start_time) > self.episode_duration):
+            if ((time.time() - self.start_time) > EPISODE_DURATION):
                 self.terminal = True
                 # Pause physics
                 self.pause()
@@ -167,7 +173,7 @@ class Fishing_Env():
         # print("Positions: " + "\n" + str(self.joint_position) + "\n" + "Vels: " + "\n" + str(self.joint_velocity) + "\n" + "Efforts: " + "\n" + str(self.joint_effort))
 
     def odom_ball_callback(self, odom_msg):
-        self.ball_position = np.array([odom_msg.pose.pose.position.x, odom_msg.pose.pose.position.y, odom_msg.pose.pose.position.z])
+        self.ball_position = np.array([odom_msg.pose.pose.position.x, odom_msg.pose.pose.position.y, odom_msg.pose.pose.position.z]) - BALL_ORIGIN
         self.ball_velocity = np.array([odom_msg.twist.twist.linear.x,odom_msg.twist.twist.linear.y,odom_msg.twist.twist.linear.z])
 
         # Debug print:

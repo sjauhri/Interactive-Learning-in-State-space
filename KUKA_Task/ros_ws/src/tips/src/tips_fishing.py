@@ -175,8 +175,7 @@ class TIPS_fishing(TIPS):
       States = np.tile(state, (self.ifdm_queries,1))
       # Choose random actions
       # Continuous Actions
-      # Actions = np.random.uniform(-1.0, 1.0, (self.ifdm_queries,self.action_dim) )
-      Actions = np.random.uniform(-0.4, 0.4, (self.ifdm_queries,self.action_dim) )
+      Actions = np.random.uniform(-0.5, 0.5, (self.ifdm_queries,self.action_dim) )
       # Query ifdm to get next state
       Nstates = self.eval_fdm(States, Actions)
 
@@ -203,16 +202,15 @@ class TIPS_fishing(TIPS):
       # True FDM:
 
       # Continous Actions
-      # min_action = np.random.uniform(-1, 1, self.action_dim)
-      min_action = [1,1] # Start with Max action
+      # min_action = np.random.uniform(-0.5, 0.5, self.action_dim)
+      min_action = [0.5,0.5] # Start with Max action
       # min_state_diff = np.Inf
       min_cost = np.Inf
 
       for _ in range(1, self.ifdm_queries+1):
         # Choose random action
         # Continous Actions
-        # curr_action = np.random.uniform(-1.0, 1.0, self.action_dim)
-        curr_action = np.random.uniform(-0.4, 0.4, self.action_dim)
+        curr_action = np.random.uniform(-0.5, 0.5, self.action_dim)
         # Discretization
         # val_set = [0.1*x for x in range(-5,6)]
         # curr_action = np.random.choice(val_set, self.action_dim)
@@ -304,7 +302,7 @@ class TIPS_fishing(TIPS):
     state = self.env.reset()
     state = np.reshape(state, [-1, self.state_dim])
     prev_s = state
-    a = np.random.uniform(-1,1,self.action_dim)
+    a = np.random.uniform(-0.5,0.5,self.action_dim)
     t_counter = 1
     h_counter = 0
 
@@ -327,13 +325,13 @@ class TIPS_fishing(TIPS):
         # Get action from ifdm
         # a = self.get_corrected_action(h_fb, state[0], state_corrected)
         if (h_fb == H_UP):
-          a = np.array([0, 0.2])
+          a = np.array([0, 0.1])
         elif (h_fb == H_DOWN):
-          a = np.array([0, -0.2])
+          a = np.array([0, -0.1])
         elif (h_fb == H_LEFT):
-          a = np.array([-0.1, 0.05])
+          a = np.array([-0.1, 0])
         elif (h_fb == H_RIGHT):
-          a = np.array([0.1, 0.05])
+          a = np.array([0.1, 0])
         # print("Computed Action: ", a)
 
         # Update policy (immediate)
