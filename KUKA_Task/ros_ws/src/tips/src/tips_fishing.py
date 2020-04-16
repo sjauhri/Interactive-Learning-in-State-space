@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 from utils import *
 from tips import TIPS
-from fishing_sim_env import *
+from fishing_sim_pos_pub import *
 from feedback_ext import *
 from fdm_kuka import *
 

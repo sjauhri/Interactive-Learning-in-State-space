@@ -9,9 +9,8 @@ import rospy
 import actionlib
 from sensor_msgs.msg import JointState
 from nav_msgs.msg import Odometry
-from control_msgs.msg import FollowJointTrajectoryAction
-from control_msgs.msg import FollowJointTrajectoryGoal
-from trajectory_msgs.msg import JointTrajectoryPoint
+from control_msgs.msg import FollowJointTrajectoryAction, FollowJointTrajectoryGoal
+from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from std_msgs.msg import String, Float32
 import std_srvs.srv
 # tf2_msgs/TFMessage
@@ -21,7 +20,7 @@ import time
 BALL_ORIGIN = np.array([0.746439, 0.000074, 0.173802])
 END_EFF_ORIGIN = np.array([0.746538, -0.000060, 0.458430]) # iiwa link 7
 EPISODE_DURATION = 25 # seconds
-ACTION_DURATION = 0.05 # seconds
+ACTION_DURATION = 0.1 # seconds
 
 class Fishing_Env():
     
@@ -47,27 +46,23 @@ class Fishing_Env():
         # Subscriber for ball pose, twist
         rospy.Subscriber('odom/ball', Odometry, self.odom_ball_callback, queue_size=1)
 
-        ### Action Client
-        self.action_client = actionlib.SimpleActionClient('iiwa/PositionJointInterface_trajectory_controller/follow_joint_trajectory', FollowJointTrajectoryAction)
-        # Action Goal
-        self.goal = FollowJointTrajectoryGoal()
-        self.goal.trajectory.joint_names.append("iiwa_joint_1")
-        self.goal.trajectory.joint_names.append("iiwa_joint_2")
-        self.goal.trajectory.joint_names.append("iiwa_joint_3")
-        self.goal.trajectory.joint_names.append("iiwa_joint_4")
-        self.goal.trajectory.joint_names.append("iiwa_joint_5")
-        self.goal.trajectory.joint_names.append("iiwa_joint_6")
-        self.goal.trajectory.joint_names.append("iiwa_joint_7")
+        ### Publisher for controller commands
+        self.action_pub = rospy.Publisher('/iiwa/PositionJointInterface_trajectory_controller/command', JointTrajectory, queue_size=1)
+        # Command Goal
+        self.goal = JointTrajectory()
+        self.goal.joint_names.append("iiwa_joint_1")
+        self.goal.joint_names.append("iiwa_joint_2")
+        self.goal.joint_names.append("iiwa_joint_3")
+        self.goal.joint_names.append("iiwa_joint_4")
+        self.goal.joint_names.append("iiwa_joint_5")
+        self.goal.joint_names.append("iiwa_joint_6")
+        self.goal.joint_names.append("iiwa_joint_7")
 
-        self.goal.trajectory.points.append(JointTrajectoryPoint())
-                                                       # joint 2      # joint 4
-        self.goal.trajectory.points[0].positions =  [0,    0      ,0,     0     ,0,0,0]
-        self.goal.trajectory.points[0].velocities = [0,    0      ,0,     0     ,0,0,0]
-        self.goal.trajectory.points[0].time_from_start = rospy.Duration.from_sec(ACTION_DURATION)
-        # Optional: set joint tolerance
-        # self.goal.path_tolerance
-        # self.goal.goal_tolerance
-        # self.goal.goal_time_tolerance
+        self.goal.points.append(JointTrajectoryPoint())
+                                            # joint 2      # joint 4
+        self.goal.points[0].positions =  [0,    0      ,0,     0     ,0,0,0]
+        self.goal.points[0].velocities = [0,    0      ,0,     0     ,0,0,0]
+        self.goal.points[0].time_from_start = rospy.Duration.from_sec(ACTION_DURATION)
         
         # Wait for gazebo simulation
         print("[Waiting for gazebo...]")
@@ -104,18 +99,16 @@ class Fishing_Env():
         time.sleep(0.1)
 
         ### Take action to reset to zero position (with randomization)
-        self.goal.trajectory.points[0].positions =  [0, np.random.uniform(-0.15, 0.15) ,0, np.random.uniform(-0.15, 0.15) ,0,0,0]
-        # Optional: Wait for server
-        # self.action_client.wait_for_server()
+        self.goal.points[0].positions =  [0, np.random.uniform(-0.15, 0.15) ,0, np.random.uniform(-0.15, 0.15) ,0,0,0]
         # Send Action command
-        self.action_client.send_goal(self.goal)
+        self.action_pub.publish(self.goal)
         # Wait for action completion
-        self.action_client.wait_for_result()
+        time.sleep(ACTION_DURATION)
 
         ### Optional: Service call to reset Gazebo sim
-        # self.reset_sim()
+        self.reset_sim()
         # Optional: WAIT (till a new joint state and ball odom is received)
-        # time.sleep(0.01)
+        time.sleep(0.01)
         
         # Set time for this episode
         self.start_time = time.time()
@@ -140,15 +133,13 @@ class Fishing_Env():
             # Sanity check
             if((a >= -0.5).all() and (a <= 0.5).all()):
                 # Set goal: Relative position change
-                self.goal.trajectory.points[0].positions[1] +=  a[0]
-                self.goal.trajectory.points[0].positions[3] +=  a[1]
+                self.goal.points[0].positions[1] +=  a[0]
+                self.goal.points[0].positions[3] +=  a[1]
                 # Send Action command
-                self.action_client.send_goal(self.goal)
+                self.action_pub.publish(self.goal)
                 # Wait for action completion
-                # print("Waiting for action completion...")
-                self.action_client.wait_for_result()
                 # Optional: WAIT (till a new joint state and ball odom is received)
-                time.sleep(0.005)
+                time.sleep(ACTION_DURATION)
             else:
                 print("[Invalid action provided]")
 
