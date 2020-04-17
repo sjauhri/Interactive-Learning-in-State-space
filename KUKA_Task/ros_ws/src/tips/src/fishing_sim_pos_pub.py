@@ -19,6 +19,12 @@ import time
 
 BALL_ORIGIN = np.array([0.746439, 0.000074, 0.173802])
 END_EFF_ORIGIN = np.array([0.746538, -0.000060, 0.458430]) # iiwa link 7
+J2_Z_ORIGIN = 0.34
+THETA1 = (50 * (np.pi /180)) # Joint 2 initial position
+THETA2 = (30 * (np.pi /180)) # Joint 4 initial position
+L1 = 0.4   # Length of arm 1
+L2 = 0.4   # Length of arm 2
+L3 = 0.126 # Length of arm 3
 EPISODE_DURATION = 25 # seconds
 ACTION_DURATION = 0.1 # seconds
 
@@ -133,8 +139,16 @@ class Fishing_Env():
             # Sanity check
             if((a >= -0.5).all() and (a <= 0.5).all()):
                 # Set goal: Relative position change
-                self.goal.points[0].positions[1] +=  a[0]
-                self.goal.points[0].positions[3] +=  a[1]
+                j2_goal = self.goal.points[0].positions[1] +  a[0]
+                j4_goal = self.goal.points[0].positions[3] +  a[1]
+
+                if (j2_goal > (THETA1 - np.pi/2) and j2_goal < THETA1):
+                    # Accepted (command within limits)
+                    self.goal.points[0].positions[1] +=  a[0]
+                if (j4_goal > (THETA2 - np.pi/2) and j2_goal < THETA2):
+                    # Accepted (command within limits)
+                    self.goal.points[0].positions[3] +=  a[1]
+
                 # Send Action command
                 self.action_pub.publish(self.goal)
                 # Wait for action completion
@@ -169,3 +183,15 @@ class Fishing_Env():
 
         # Debug print:
         # print("Positions: " + "\n" + str(self.ball_position) + "\n" + "Vels: " + "\n" + str(self.ball_velocity))
+
+    ## Transform for end-effector position
+    def get_end_eff_pos(self, state):
+        """get x-z cartesian position of the end effector"""
+
+        theta1 = THETA1 - state[:,0]
+        theta2 = THETA2 - state[:,1]
+
+        xpos = L1*np.cos(theta1) + L2*np.cos(theta1-theta2) + L3*np.sin(theta1-theta2)
+        zpos = J2_Z_ORIGIN + L1*np.sin(theta1) + L2*np.sin(theta1-theta2) - L3*np.cos(theta1-theta2)
+
+        return xpos, zpos

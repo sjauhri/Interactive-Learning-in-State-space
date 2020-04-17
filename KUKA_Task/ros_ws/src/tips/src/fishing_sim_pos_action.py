@@ -19,6 +19,13 @@ import time
 
 BALL_ORIGIN = np.array([0.746439, 0.000074, 0.173802])
 END_EFF_ORIGIN = np.array([0.746538, -0.000060, 0.458430]) # iiwa link 7
+J2_Z_ORIGIN = 0.34
+THETA1 = (50 * (np.pi /180)) # Joint 2 initial position
+THETA2 = (30 * (np.pi /180)) # Joint 4 initial position
+L1 = 0.4   # Length of arm 1
+L2 = 0.4   # Length of arm 2
+L3 = 0.126 # Length of arm 3
+
 EPISODE_DURATION = 25 # seconds
 ACTION_DURATION = 0.05 # seconds
 
@@ -160,7 +167,6 @@ class Fishing_Env():
         return self.curr_state(), reward, self.terminal, dict(reward_dist=reward_dist, reward_ctrl=reward_ctrl)
 
 
-
     ### Callbacks for subscribers
 
     def joint_states_callback(self, joint_state_msg):
@@ -177,3 +183,15 @@ class Fishing_Env():
 
         # Debug print:
         # print("Positions: " + "\n" + str(self.ball_position) + "\n" + "Vels: " + "\n" + str(self.ball_velocity))
+
+    ## Transform for end-effector position
+    def get_end_eff_pos(self, state):
+        """get x-z cartesian position of the end effector"""
+
+        theta1 = THETA1 - state[:,0]
+        theta2 = THETA2 - state[:,1]
+
+        xpos = L1*np.cos(theta1) + L2*np.cos(theta1-theta2) + L3*np.sin(theta1-theta2)
+        zpos = J2_Z_ORIGIN + L1*np.sin(theta1) + L2*np.sin(theta1-theta2) - L3*np.cos(theta1-theta2)
+
+        return xpos, zpos

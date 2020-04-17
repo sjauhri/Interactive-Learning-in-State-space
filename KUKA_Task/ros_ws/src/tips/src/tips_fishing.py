@@ -3,7 +3,6 @@ from utils import *
 from tips import TIPS
 from fishing_sim_pos_pub import *
 from feedback_ext import *
-from fdm_kuka import *
 
 class TIPS_fishing(TIPS):
   def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=20, epochTrainIts=4000,  dynamicsSamples=5000, batch_size=32):
@@ -33,7 +32,7 @@ class TIPS_fishing(TIPS):
       DO_NOTHING: 0
     }
 
-    self.ifdm_queries = 500 # Two continous actions.
+    self.ifdm_queries = 400 # Two continous actions.
 
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
@@ -146,7 +145,7 @@ class TIPS_fishing(TIPS):
     state_corrected = np.zeros(2)
 
     # Get x-z position
-    state_x, state_z = state[5], state[6] # TODO
+    state_x, state_z = self.env.get_end_eff_pos(np.reshape(state, [-1,self.state_dim]))
 
     # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()
     if (h_fb == H_LEFT):
@@ -157,7 +156,7 @@ class TIPS_fishing(TIPS):
       state_corrected[1] = state_z
     elif (h_fb == H_UP):
       state_corrected[0] = state_x
-      state_corrected[1] = state_z + self.errorConst      
+      state_corrected[1] = state_z + self.errorConst
     elif (h_fb == H_DOWN):
       state_corrected[0] = state_x
       state_corrected[1] = state_z - self.errorConst
@@ -167,82 +166,41 @@ class TIPS_fishing(TIPS):
   def get_corrected_action(self, h_fb, state, state_corrected):
     """get action to achieve next state close to state_corrected"""
 
+    # prev_time = time.time()
+
+    # Make a vector of same states
+    States = np.tile(state, (self.ifdm_queries,1))
+    # Choose random actions
+    # Continuous Actions
+    Actions = np.random.uniform(-0.3, 0.3, (self.ifdm_queries,self.action_dim) )
+    # Query ifdm to get next state
     if (args.learnFDM):
-      # prev_time = time.time()
       # Learnt FDM:
-
-      # Make a vector of same states
-      States = np.tile(state, (self.ifdm_queries,1))
-      # Choose random actions
-      # Continuous Actions
-      Actions = np.random.uniform(-0.5, 0.5, (self.ifdm_queries,self.action_dim) )
-      # Query ifdm to get next state
       Nstates = self.eval_fdm(States, Actions)
-
-      # Get x-z position
-      Nstates_x, Nstates_z = Nstates[:,5], Nstates[:,6]
-
-      # Calculate cost
-      cost = abs(state_corrected[0] - Nstates_x) + abs(state_corrected[1] - Nstates_z)
-
-      # Check for min_cost
-      min_cost_index = cost.argmin(axis=0)
-      min_action = Actions[min_cost_index]
-      
-      # Alternative: Get action that changes state the least
-      # least_cost_inds = np.argpartition(cost, 20)[:20]
-      # state_diffs = np.sum(abs(state-Nstates[:]), axis=1)
-      # min_cost_index = (state_diffs[least_cost_inds]).argmin(axis=0)
-      # min_action = Actions[least_cost_inds[min_cost_index]]
-
-      # Debug: equal timing
-      # print(time.time() - prev_time)
     else:
-      # prev_time = time.time()
       # True FDM:
+      States[:,0] += Actions[:,0]
+      States[:,1] += Actions[:,1]
+      Nstates = States
 
-      # Continous Actions
-      # min_action = np.random.uniform(-0.5, 0.5, self.action_dim)
-      min_action = [0.5,0.5] # Start with Max action
-      # min_state_diff = np.Inf
-      min_cost = np.Inf
+    # Get x-z position
+    Nstates_x, Nstates_z = self.env.get_end_eff_pos(Nstates)
 
-      for _ in range(1, self.ifdm_queries+1):
-        # Choose random action
-        # Continous Actions
-        curr_action = np.random.uniform(-0.5, 0.5, self.action_dim)
-        # Discretization
-        # val_set = [0.1*x for x in range(-5,6)]
-        # curr_action = np.random.choice(val_set, self.action_dim)
+    # Calculate cost
+    cost = abs(state_corrected[0] - Nstates_x) + abs(state_corrected[1] - Nstates_z)
 
-        # Query ifdm to get next state
-        nstate = fdm_cont(state, curr_action)
+    # Check for min_cost
+    min_cost_index = cost.argmin(axis=0)
+    min_action = Actions[min_cost_index]
+    
+    # Alternative: Get action that changes state the least
+    # least_cost_inds = np.argpartition(cost, 20)[:20]
+    # state_diffs = np.sum(abs(state-Nstates[:]), axis=1)
+    # min_cost_index = (state_diffs[least_cost_inds]).argmin(axis=0)
+    # min_action = Actions[least_cost_inds[min_cost_index]]
 
-        # Get x-y position
-        nstate = np.reshape(nstate, [-1,self.state_dim])
-        nstate_x, nstate_z = state[5], state[6]
-
-        # Check cost
-        cost = abs(state_corrected[0] - nstate_x) + abs(state_corrected[1] - nstate_z)
-
-        # Check for min_cost
-        if(cost < min_cost):
-          min_cost = cost
-          min_action = curr_action
-        # # Check for min_cost and non-uniqueness
-        # if((cost < min_cost) or (abs(min_cost-cost) < 0.1)): # If cost is lower or in neighborhood
-        #   # # Choose smaller action
-        #   # if(np.linalg.norm(curr_action) < np.linalg.norm(min_action)):
-        #   #   min_cost = cost
-        #   #   min_action = curr_action
-        #   # Choose smaller state_diff
-        #   if(np.linalg.norm(state-nstate) < min_state_diff):
-        #     min_cost = cost
-        #     min_action = curr_action
-        #     min_state_diff = np.linalg.norm(state-nstate)
-
-      # Debug: equal timing
-      # print(time.time() - prev_time)
+    # Debug: equal timing
+    # print(time.time() - prev_time)
     return min_action
 
   def get_action(self, state, nstate_required):
@@ -302,7 +260,7 @@ class TIPS_fishing(TIPS):
     state = self.env.reset()
     state = np.reshape(state, [-1, self.state_dim])
     prev_s = state
-    a = np.random.uniform(-0.5,0.5,self.action_dim)
+    a = np.random.uniform(-0.3,0.3,self.action_dim)
     t_counter = 1
     h_counter = 0
 
@@ -320,18 +278,19 @@ class TIPS_fishing(TIPS):
         h_counter += 1 # Feedback counter
 
         # Get new state transition label using feedback
-        # state_corrected = self.get_state_corrected(h_fb, state[0])
+        state_corrected = self.get_state_corrected(h_fb, state[0])
 
         # Get action from ifdm
-        # a = self.get_corrected_action(h_fb, state[0], state_corrected)
-        if (h_fb == H_UP):
-          a = np.array([0, 0.1])
-        elif (h_fb == H_DOWN):
-          a = np.array([0, -0.1])
-        elif (h_fb == H_LEFT):
-          a = np.array([-0.1, 0])
-        elif (h_fb == H_RIGHT):
-          a = np.array([0.1, 0])
+        a = self.get_corrected_action(h_fb, state[0], state_corrected)
+        # # Direct Actions
+        # if (h_fb == H_UP):
+        #   a = np.array([0, 0.1])
+        # elif (h_fb == H_DOWN):
+        #   a = np.array([0, -0.1])
+        # elif (h_fb == H_LEFT):
+        #   a = np.array([-0.1, 0])
+        # elif (h_fb == H_RIGHT):
+        #   a = np.array([0.1, 0])
         # print("Computed Action: ", a)
 
         # Update policy (immediate)
