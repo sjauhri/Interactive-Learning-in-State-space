@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 from utils import *
 from tips import TIPS
-from fishing_sim_pos_pub import *
+from fishing_sim_env import *
 from feedback_ext import *
 
 class TIPS_fishing(TIPS):
@@ -16,7 +16,7 @@ class TIPS_fishing(TIPS):
     self.human_feedback.viewer.render() # Render the additional feedback window
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
-    self.errorConst = 0.02
+    self.errorConst = 0.05
 
     # Feedback training rate in the episode
     self.feedback_training_rate  = 10
@@ -33,6 +33,7 @@ class TIPS_fishing(TIPS):
     }
 
     self.ifdm_queries = 400 # Two continous actions.
+
 
   def build_policy_model(self):
     """buliding the policy model as two fully connected layers with leaky relu"""
@@ -54,6 +55,7 @@ class TIPS_fishing(TIPS):
       with tf.variable_scope("train_step") as scope:
         self.policy_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.policy_loss)
 
+
   def build_fdm_model(self):
     """building the forward dynamics model as two fully connnected layers with leaky relu"""
     with tf.variable_scope("forward_dynamic_model") as scope:
@@ -72,6 +74,7 @@ class TIPS_fishing(TIPS):
         self.fdm_loss = tf.reduce_mean(tf.squared_difference(self.fdm_pred_state, self.nstate))
       with tf.variable_scope("train_step") as scope:
         self.fdm_train_step = tf.train.AdamOptimizer(self.lr).minimize(self.fdm_loss)
+
 
   def dynamics_sampling(self):
     """uniform sample action to generate (s_t, s_t+1, a_t) triplets"""
@@ -103,6 +106,7 @@ class TIPS_fishing(TIPS):
         self.log_writer.write("Collecting dynamics training data " + str(i+1) + "\n")
 
     return States, Nstates, Actions
+
 
   def exploration_dynamics_sampling(self):
     """using epsilon-greedy version of current policy to generate (s_t, s_t+1, a_t) triplets"""
@@ -139,6 +143,7 @@ class TIPS_fishing(TIPS):
 
     return States, Nstates, Actions
 
+
   def get_state_corrected(self, h_fb, state):
     """get corrected state label for this environment using feedback"""
     
@@ -146,6 +151,7 @@ class TIPS_fishing(TIPS):
 
     # Get x-z position
     state_x, state_z = self.env.get_end_eff_pos(np.reshape(state, [-1,self.state_dim]))
+    # print("state_x, state_z:", (state_x,state_z))
 
     # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()
     if (h_fb == H_LEFT):
@@ -192,6 +198,9 @@ class TIPS_fishing(TIPS):
     # Check for min_cost
     min_cost_index = cost.argmin(axis=0)
     min_action = Actions[min_cost_index]
+
+    # print("state_corrected:", state_corrected)
+    # print("Nstate : ", (Nstates_x[min_cost_index],Nstates_z[min_cost_index]))
     
     # Alternative: Get action that changes state the least
     # least_cost_inds = np.argpartition(cost, 20)[:20]
@@ -203,55 +212,6 @@ class TIPS_fishing(TIPS):
     # print(time.time() - prev_time)
     return min_action
 
-  def get_action(self, state, nstate_required):
-    """get action to achieve next state close to nstate_required"""
-
-    if (args.learnFDM):
-      # Learnt FDM:
-      
-      # Make a vector of same states
-      States = np.tile(state, (self.ifdm_queries,1))
-      # Choose random actions
-      # Continuous Actions
-      Actions = np.random.uniform(-1, 1, (self.ifdm_queries,self.action_dim) )
-      # Query ifdm to get next state
-      Nstates = self.eval_fdm(States, Actions)
-
-      # Calculate cost
-      # Automatic broadcasting
-      cost = np.sum(abs(nstate_required - Nstates[:]), axis=1)
-
-      # Check for min_cost
-      min_cost_index = cost.argmin(axis=0)
-      min_action = Actions[min_cost_index]
-
-    else:
-      # True FDM:
-
-      # Continous Actions
-      min_action = np.random.uniform(-1, 1, self.action_dim)
-      min_cost = np.Inf
-
-      for _ in range(1, self.ifdm_queries+1):
-        # Choose random action
-        # Continous Actions
-        curr_action = np.random.uniform(-1, 1, self.action_dim)
-        # Discretization
-        # val_set = [0.2*x for x in range(-5,6)]
-        # curr_action = np.random.choice(val_set, self.action_dim)
-
-        # Query ifdm to get next state
-        nstate = fdm_cont(state, curr_action)
-
-        # Check cost
-        cost = sum(abs(nstate_required - nstate))
-        
-        # Check for min_cost
-        if(cost < min_cost):
-          min_cost = cost
-          min_action = curr_action
-
-    return min_action    
 
   def feedback_run(self):
     """run and train agent using D-COACH framework incorporating human feedback"""
@@ -279,7 +239,6 @@ class TIPS_fishing(TIPS):
 
         # Get new state transition label using feedback
         state_corrected = self.get_state_corrected(h_fb, state[0])
-
         # Get action from ifdm
         a = self.get_corrected_action(h_fb, state[0], state_corrected)
         # # Direct Actions
@@ -296,6 +255,9 @@ class TIPS_fishing(TIPS):
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
         self.update_policy_feedback_immediate(state, a)
+        self.update_policy_feedback_immediate(state, a)
+        self.update_policy_feedback_immediate(state, a)
+        # print("Learning: ", (state, a))
 
         # Add state transition pair to demo buffer
         self.DemoBuff.append((state[0], a[0]))
@@ -352,12 +314,10 @@ class TIPS_fishing(TIPS):
 
       t_counter += 1 # Time counter
 
-    # print('episode_reward: %5.1f' % (total_reward))
-    # self.log_writer.write("\n" + "episode_reward: " + format(total_reward, '5.1f'))
-    
     # Capture and return feedback rate
-    feedback_rate = h_counter/t_counter
+    feedback_rate = h_counter/(time.time()- self.env.start_time) # h_counter/episode_duration
     return total_reward, feedback_rate
+
 
   def eval_rwd_policy(self):
     """getting the reward by current policy"""
@@ -376,7 +336,8 @@ class TIPS_fishing(TIPS):
       #   time.sleep(self.render_delay)
 
     return total_reward
-    
+
+
 if __name__ == "__main__":
-  tips = TIPS_fishing(8, 2, lr=args.lr, maxEpisodes=args.maxEpisodes)
+  tips = TIPS_fishing(6, 2, lr=args.lr, maxEpisodes=args.maxEpisodes)
   tips.run()

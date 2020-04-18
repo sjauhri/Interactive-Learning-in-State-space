@@ -301,9 +301,9 @@ class TIPS():
 
             # fdm_loss = self.get_fdm_loss(batch_s, batch_ns, batch_a)
           # ......................................................          
-          print('Iteration: %5d, reward: %5.1f, feedback_rate: %1.3f' % ((it+1), reward, feedback_rate))
+          print('Iteration: %5d, reward: %5.1f, feedback_rate(/sec): %1.3f' % ((it+1), reward, feedback_rate))
           self.result_writer.write( str(it+1) + " , " + format(reward, '8.6f') + " , " + format(feedback_rate, '8.6f') + "\n" )
-          self.log_writer.write("\n" + "Iteration: " + str(it+1) + ", reward: " + str(reward) + ", feedback_rate: " + str(feedback_rate) + "\n" + "\n")
+          self.log_writer.write("\n" + "Iteration: " + str(it+1) + ", reward: " + str(reward) + ", feedback_rate(/sec): " + str(feedback_rate) + "\n" + "\n")
 
         # saving session
         if should(args.save_freq):
@@ -347,7 +347,7 @@ class TIPS():
         
         self.result_writer = open(args.result_dir + self.logTime + "_" + str(self.exp) + ".csv", "w") # csv episode result log
         # self.reward_writer = open(args.result_dir + self.logTime + "_rwd_" + str(self.exp) + ".csv", "w") # csv all rewards log
-        self.result_writer.write("iteration,reward,feedback_rate\n")
+        self.result_writer.write("iteration,reward,feedback_rate(/sec)\n")
         # self.reward_writer.write("agent_rewards\n")
 
         self.log_writer = open(args.result_dir + self.logTime + "_" + str(self.exp) + ".txt", "w") # txt debug log with everything

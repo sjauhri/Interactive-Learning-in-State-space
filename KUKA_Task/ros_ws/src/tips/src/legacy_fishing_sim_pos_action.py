@@ -17,8 +17,8 @@ import std_srvs.srv
 import numpy as np
 import time
 
-BALL_ORIGIN = np.array([0.746439, 0.000074, 0.173802])
-END_EFF_ORIGIN = np.array([0.746538, -0.000060, 0.458430]) # iiwa link 7
+BALL_ORIGIN = np.array([0.676648, 0.000033, 0.424613])
+END_EFF_ORIGIN = np.array([0.676648, 0.000013, 0.664365]) # iiwa link 7
 J2_Z_ORIGIN = 0.34
 THETA1 = (50 * (np.pi /180)) # Joint 2 initial position
 THETA2 = (30 * (np.pi /180)) # Joint 4 initial position

@@ -17,8 +17,9 @@ import std_srvs.srv
 import numpy as np
 import time
 
-BALL_ORIGIN = np.array([0.746439, 0.000074, 0.173802])
-END_EFF_ORIGIN = np.array([0.746538, -0.000060, 0.458430]) # iiwa link 7
+BALL_ORIGIN = np.array([0.676648, 0.000033, 0.424613])
+END_EFF_ORIGIN = np.array([0.676648, 0.000013, 0.664365]) # iiwa link 7
+GLASS_ORIGIN = np.array([0.746410,0,0.06])
 J2_Z_ORIGIN = 0.34
 THETA1 = (50 * (np.pi /180)) # Joint 2 initial position
 THETA2 = (30 * (np.pi /180)) # Joint 4 initial position
@@ -26,6 +27,7 @@ L1 = 0.4   # Length of arm 1
 L2 = 0.4   # Length of arm 2
 L3 = 0.126 # Length of arm 3
 EPISODE_DURATION = 25 # seconds
+# ACTION_START_TIME = 0.01 # seconds
 ACTION_DURATION = 0.1 # seconds
 
 class Fishing_Env():
@@ -56,6 +58,7 @@ class Fishing_Env():
         self.action_pub = rospy.Publisher('/iiwa/PositionJointInterface_trajectory_controller/command', JointTrajectory, queue_size=1)
         # Command Goal
         self.goal = JointTrajectory()
+        # self.goal.header.stamp = rospy.get_rostime() + rospy.Duration.from_sec(ACTION_START_TIME)
         self.goal.joint_names.append("iiwa_joint_1")
         self.goal.joint_names.append("iiwa_joint_2")
         self.goal.joint_names.append("iiwa_joint_3")
@@ -89,32 +92,37 @@ class Fishing_Env():
             self.joint_velocity[1], # Joint 2
             self.joint_velocity[3], # Joint 4
             self.ball_position[0],  # Ball x position
-            self.ball_position[2],  # Ball z position
-            self.ball_velocity[0],  # Ball x velocity
-            self.ball_velocity[2]   # Ball z velocity
+            self.ball_position[2]  # Ball z position
+            # self.ball_velocity[0],  # Ball x velocity
+            # self.ball_velocity[2]   # Ball z velocity
         ])
 
 
     def reset(self):
         ### Service call to un-pause physics
         self.unpause()
-        # try:
-        # except rospy.ServiceException:
-        #     print("Service call failed")
         # Optional: WAIT for controller to be ready
         time.sleep(0.1)
 
         ### Take action to reset to zero position (with randomization)
-        self.goal.points[0].positions =  [0, np.random.uniform(-0.15, 0.15) ,0, np.random.uniform(-0.15, 0.15) ,0,0,0]
+        self.goal.points[0].positions =  [0, np.random.uniform(-0.2, 0.2) ,0, np.random.uniform(-0.2, 0.2) ,0,0,0]
+        # Optional : Move joint 6 to make ball move more aggresively
+        self.goal.points[0].positions[5] = np.random.uniform(-1.5707, 1.5707)
         # Send Action command
+        # self.goal.header.stamp = rospy.get_rostime() + rospy.Duration.from_sec(ACTION_START_TIME)
         self.action_pub.publish(self.goal)
         # Wait for action completion
         time.sleep(ACTION_DURATION)
+        # Optional : Move joint 6 to make ball move more aggresively
+        self.goal.points[0].positions[5] = 0
+        self.action_pub.publish(self.goal)
+        # Wait for action completion
+        time.sleep(ACTION_DURATION + 0.1)
 
-        ### Optional: Service call to reset Gazebo sim
-        self.reset_sim()
+        ### Optional: Service call to reset Gazebo sim: Messes with time though
+        # self.reset_sim()
         # Optional: WAIT (till a new joint state and ball odom is received)
-        time.sleep(0.01)
+        # time.sleep(0.01)
         
         # Set time for this episode
         self.start_time = time.time()
@@ -126,10 +134,9 @@ class Fishing_Env():
 
 
     def step(self, a):
-        vec = 0 # TODO: distance vector between cup and ball
+        vec = self.ball_position - GLASS_ORIGIN # distance vector between ball and cup
         reward_dist = - np.linalg.norm(vec)
-        # reward_ctrl = - np.square(a).sum()
-        reward_ctrl = 0
+        reward_ctrl = - np.square(a).sum()
         reward = reward_dist + reward_ctrl
         
         if (self.terminal):
@@ -142,20 +149,21 @@ class Fishing_Env():
                 j2_goal = self.goal.points[0].positions[1] +  a[0]
                 j4_goal = self.goal.points[0].positions[3] +  a[1]
 
-                if (j2_goal > (THETA1 - np.pi/2) and j2_goal < THETA1):
+                if (j2_goal > (THETA1 - (np.pi/2)) and j2_goal < THETA1) and (j4_goal > (THETA2 - (np.pi/2)) and j4_goal < THETA2):
                     # Accepted (command within limits)
                     self.goal.points[0].positions[1] +=  a[0]
-                if (j4_goal > (THETA2 - np.pi/2) and j2_goal < THETA2):
-                    # Accepted (command within limits)
                     self.goal.points[0].positions[3] +=  a[1]
+                else:
+                    print("[Action outside joint limits]")
 
                 # Send Action command
+                # self.goal.header.stamp = rospy.get_rostime() + rospy.Duration.from_sec(ACTION_START_TIME)
                 self.action_pub.publish(self.goal)
                 # Wait for action completion
-                # Optional: WAIT (till a new joint state and ball odom is received)
                 time.sleep(ACTION_DURATION)
+                # Optional: WAIT (till a new joint state and ball odom is received)
             else:
-                print("[Invalid action provided]")
+                print("[Action provided is too large]")
 
             # Check if terminal based on total time elapsed since reset
             if ((time.time() - self.start_time) > EPISODE_DURATION):
@@ -178,7 +186,7 @@ class Fishing_Env():
         # print("Positions: " + "\n" + str(self.joint_position) + "\n" + "Vels: " + "\n" + str(self.joint_velocity) + "\n" + "Efforts: " + "\n" + str(self.joint_effort))
 
     def odom_ball_callback(self, odom_msg):
-        self.ball_position = np.array([odom_msg.pose.pose.position.x, odom_msg.pose.pose.position.y, odom_msg.pose.pose.position.z]) - BALL_ORIGIN
+        self.ball_position = np.array([odom_msg.pose.pose.position.x, odom_msg.pose.pose.position.y, odom_msg.pose.pose.position.z])
         self.ball_velocity = np.array([odom_msg.twist.twist.linear.x,odom_msg.twist.twist.linear.y,odom_msg.twist.twist.linear.z])
 
         # Debug print:
