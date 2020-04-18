@@ -17,12 +17,11 @@ import std_srvs.srv
 import numpy as np
 import time
 
-BALL_ORIGIN = np.array([0.676648, 0.000033, 0.424613])
-END_EFF_ORIGIN = np.array([0.676648, 0.000013, 0.664365]) # iiwa link 7
+BALL_ORIGIN = np.array([0.682839, 0.000187, 0.256688])
 GLASS_ORIGIN = np.array([0.746410,0,0.06])
 J2_Z_ORIGIN = 0.34
-THETA1 = (50 * (np.pi /180)) # Joint 2 initial position
-THETA2 = (30 * (np.pi /180)) # Joint 4 initial position
+THETA1 = (45 * (np.pi /180)) # Joint 2 initial position
+THETA2 = (45 * (np.pi /180)) # Joint 4 initial position
 L1 = 0.4   # Length of arm 1
 L2 = 0.4   # Length of arm 2
 L3 = 0.126 # Length of arm 3
@@ -91,8 +90,8 @@ class Fishing_Env():
             self.joint_position[3], # Joint 4
             self.joint_velocity[1], # Joint 2
             self.joint_velocity[3], # Joint 4
-            self.ball_position[0],  # Ball x position
-            self.ball_position[2]  # Ball z position
+            self.ball_position[0] - GLASS_ORIGIN[0],  # Ball x position
+            self.ball_position[2] - GLASS_ORIGIN[2]  # Ball z position
             # self.ball_velocity[0],  # Ball x velocity
             # self.ball_velocity[2]   # Ball z velocity
         ])
@@ -105,14 +104,14 @@ class Fishing_Env():
         time.sleep(0.1)
 
         ### Take action to reset to zero position (with randomization)
-        self.goal.points[0].positions =  [0, np.random.uniform(-0.2, 0.2) ,0, np.random.uniform(-0.2, 0.2) ,0,0,0]
+        self.goal.points[0].positions =  [0, np.random.uniform(-0.1,0) ,0, np.random.uniform(0, 0.1) ,0,0,0]
         # Optional : Move joint 6 to make ball move more aggresively
         self.goal.points[0].positions[5] = np.random.uniform(-1.5707, 1.5707)
         # Send Action command
         # self.goal.header.stamp = rospy.get_rostime() + rospy.Duration.from_sec(ACTION_START_TIME)
         self.action_pub.publish(self.goal)
         # Wait for action completion
-        time.sleep(ACTION_DURATION)
+        time.sleep(2*ACTION_DURATION)
         # Optional : Move joint 6 to make ball move more aggresively
         self.goal.points[0].positions[5] = 0
         self.action_pub.publish(self.goal)

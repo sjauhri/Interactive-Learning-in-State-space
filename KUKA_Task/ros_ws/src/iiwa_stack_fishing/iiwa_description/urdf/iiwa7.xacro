@@ -96,11 +96,11 @@
     <joint name="${robot_name}_joint_2" type="revolute">
       <parent link="${robot_name}_link_1"/>
       <child link="${robot_name}_link_2"/>
-      <origin xyz="0 0 0.19" rpy="${PI / 2}   ${-40 * PI / 180} ${PI}"/>
+      <origin xyz="0 0 0.19" rpy="${PI / 2}   ${-45 * PI / 180} ${PI}"/>
       <axis xyz="0 0 1"/>
-      <!-- <limit lower="${-120 * PI / 180}" upper="${120 * PI / 180}" -->
-      <limit lower="${-40 * PI / 180}" upper="${50 * PI / 180}"
-             effort="${max_effort}" velocity="${max_velocity}" />
+      <limit lower="${-120 * PI / 180}" upper="${120 * PI / 180}"
+              effort="${max_effort}" velocity="${max_velocity}" />
+      <!-- <limit lower="${-40 * PI / 180}" upper="${50 * PI / 180}" -->
       <safety_controller soft_lower_limit="${-118 * PI / 180}"
                          soft_upper_limit="${118 * PI / 180}"
                          k_position="${safety_controller_k_pos}"
@@ -173,11 +173,11 @@
     <joint name="${robot_name}_joint_4" type="revolute">
       <parent link="${robot_name}_link_3"/>
       <child link="${robot_name}_link_4"/>
-      <origin xyz="0 0 0.19" rpy="${PI / 2} ${PI / 6} 0"/>
+      <origin xyz="0 0 0.19" rpy="${PI / 2} ${PI / 4} 0"/>
       <axis xyz="0 0 1"/>
-      <!-- <limit lower="${-120 * PI / 180}" upper="${120 * PI / 180}" -->
-      <limit lower="${-60 * PI / 180}" upper="${30 * PI / 180}"
-             effort="${max_effort}" velocity="${max_velocity}" />
+      <limit lower="${-120 * PI / 180}" upper="${120 * PI / 180}"
+              effort="${max_effort}" velocity="${max_velocity}" />
+      <!-- <limit lower="${-60 * PI / 180}" upper="${30 * PI / 180}" -->
       <safety_controller soft_lower_limit="${-118 * PI / 180}"
                          soft_upper_limit="${118 * PI / 180}"
                          k_position="${safety_controller_k_pos}"
