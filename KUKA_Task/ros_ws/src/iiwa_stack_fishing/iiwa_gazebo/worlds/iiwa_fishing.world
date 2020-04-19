@@ -14,11 +14,24 @@
       <uri>model://sun</uri>
     </include>
 
-    <!-- Plastic Cup as a slot -->
+    <!-- Plastic Cups as a slot -->
     <include>
+      <name>cup1</name>
       <uri>model://plastic_cup</uri>
       <static>true</static>
-      <pose> 0.746410 0 0 0 0 0 </pose>
+      <pose> 0.746410 0 0.006980 0 0 0 </pose>
+    </include>
+    <include>
+      <name>cup2</name>
+      <uri>model://plastic_cup</uri>
+      <static>true</static>
+      <pose> 0.811482 0 0.121890 0 3.14 0 </pose>
+    </include>
+    <include>
+      <name>cup3</name>
+      <uri>model://plastic_cup</uri>
+      <static>true</static>
+      <pose> 0.678615 0 0.121890 0 3.14 0 </pose>
     </include>
 
     <!-- Light centered at the cup -->
