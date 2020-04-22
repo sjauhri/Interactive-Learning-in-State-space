@@ -1,0 +1,1 @@
+/usr/bin/c++   -Wall -O2 -g -DNDEBUG  -rdynamic CMakeFiles/generate_resources_tool.dir/tools/generate_resources.cpp.o  -o bin/generate_resources_tool 
