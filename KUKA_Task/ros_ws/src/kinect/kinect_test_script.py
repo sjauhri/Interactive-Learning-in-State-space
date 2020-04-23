@@ -17,12 +17,15 @@ except:
 # BGR Value centered at [199, 86, 30]
 COLOR_FILTER_low = np.array([110, 20, 0])
 COLOR_FILTER_high = np.array([255, 120, 100])
-GLASS_POS = np.array([0,0])
+GLASS_POS = np.array([304,710])
 
 ## Setup:
 # Kinect
+# Optional: Logging
 # logger = createConsoleLogger(LoggerLevel.Debug)
-# setGlobalLogger(logger)
+logger = None
+print("[Logging surpressed]")
+setGlobalLogger(logger)
 fn = Freenect2()
 assert fn.enumerateDevices() > 0, "No kinect device found"
 device = fn.openDefaultDevice(pipeline=pipeline)
@@ -33,74 +36,83 @@ listener = SyncMultiFrameListener(FrameType.Color)
 device.setColorFrameListener(listener)
 device.start()
 
+## Blob detection:
+# Setup SimpleBlobDetector parameters.
+params = cv2.SimpleBlobDetector_Params()
+# Change thresholds
+params.minThreshold = 0
+params.maxThreshold = 200
+# # Filter by center of blob color
+params.filterByColor = False
+# params.blobColor = 0 # Dark center
+# # Filter by Area.
+# CHECK VALUE THRESHOLD!
+params.filterByArea = True
+params.minArea = 500
+params.maxArea = 30000
+# # Filter by Circularity
+params.filterByCircularity = False
+# params.minCircularity = 0.2
+# # Filter by Convexity
+params.filterByConvexity = False
+# params.minConvexity = 0.5
+# # Filter by Inertia
+params.filterByInertia = True
+params.minInertiaRatio = 0.15
+
+# Set up the detector
+detector = cv2.SimpleBlobDetector_create(params)
+
+# Flag to show kinect image stream
+show_img = True
+# Flag to show position of keypoints
+show_pos = True
+ball_pos = np.array([0,0])
+
 ## Play images:
+print("[Running...]")
 while (1):
     # Optional: Delay
     # time.sleep(0.2)
 
     frame = listener.waitForNewFrame()
-    color_im = frame["color"]
-    color_im = color_im.asarray()
-    # Throw away last column
-    color_im = color_im[:, :, :3]
+    color_img = frame["color"]
+    color_img = color_img.asarray()
     # Scale image:
-    # color_im = cv2.resize(color_im, (int(1920 / 2), int(1080 / 2)))
+    # color_img = cv2.resize(color_img, (int(1920 / 2), int(1080 / 2)))
     # Flip about y-axis
-    color_im = cv2.flip(color_im, 1)
+    color_img = cv2.flip(color_img, 1)
     # Save image:
     # cv2.imwrite('pendulum_images/image_%i.png' % self.i_image,  color_im)
     # Partial image:
-    color_im = color_im[200:, 450:-250, :]
-
-    ## Blob detection:
-    # color_im = cv2.imread("fishing.png")
-    color_img = color_im.copy()
-    # Setup SimpleBlobDetector parameters.
-    params = cv2.SimpleBlobDetector_Params()
-    # Change thresholds
-    params.minThreshold = 0
-    params.maxThreshold = 200
-    # # Filter by center of blob color
-    params.filterByColor = False
-    # params.blobColor = 0 # Dark center
-    # # Filter by Area.
-    # CHECK VALUE THRESHOLD!
-    params.filterByArea = True
-    params.minArea = 500
-    params.maxArea = 30000
-    # # Filter by Circularity
-    params.filterByCircularity = False
-    # params.minCircularity = 0.2
-    # # Filter by Convexity
-    params.filterByConvexity = False
-    # params.minConvexity = 0.5
-    # # Filter by Inertia
-    params.filterByInertia = True
-    params.minInertiaRatio = 0.25
+    color_img = color_img[200:, 450:-500, :3]
     
+    # Color mask: blue
     mask = cv2.inRange(color_img, COLOR_FILTER_low, COLOR_FILTER_high)
-    # Set up the detector
-    detector = cv2.SimpleBlobDetector_create(params)
     # Detect blobs.
     keypoints = detector.detect(mask)
-    # Draw detected blobs as red circles.
-    # cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS ensures the size of the circle corresponds to the size of blob
-    # im_with_keypoints = cv2.drawKeypoints(color_img, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
-    im_with_keypoints = mask.copy()
     num_keyps = len(keypoints)
     if(num_keyps == 1):
-        # Draw detected blobs as red circles.
-        # cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS ensures the size of the circle corresponds to the size of blob
-        im_with_keypoints = cv2.drawKeypoints(mask, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+        keyp = keypoints
+        ball_pos = np.array([keypoints[0].pt[0], keypoints[0].pt[1]])
     elif(num_keyps > 1):
         # Get largest size keypoint
         index = np.argmax(keyp.size for keyp in keypoints)
         keyp = [keypoints[index]]
-        im_with_keypoints = cv2.drawKeypoints(mask, keyp, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+        ball_pos = np.array([keypoints[index].pt[0], keypoints[index].pt[1]])
+    else:
+        im_with_keypoints = color_img
 
-    # Show keypoints
-    cv2.imshow("Keypoints", im_with_keypoints)
-    # cv2.imshow('current_frame', color_im)
-    cv2.waitKey(delay=1)
+    if(show_img):
+        # Draw keypoints
+        im_with_keypoints = cv2.drawKeypoints(color_img, keyp, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+        # Show keypoints
+        cv2.imshow("Keypoints", im_with_keypoints)
+        # cv2.imshow('current_frame', color_img)
+        cv2.waitKey(delay=1)
+    if(show_pos):
+        print("Ball_position (X,Y): ", str(ball_pos-GLASS_POS))
+        # print("Ball_X_position: ", str(ball_pos[0]-GLASS_POS[0]))
+
     listener.release(frame)
