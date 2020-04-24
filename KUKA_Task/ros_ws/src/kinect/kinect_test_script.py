@@ -1,5 +1,4 @@
 #!/usr/bin/env python2
-import sys
 import time
 import numpy as np
 import cv2
@@ -17,7 +16,7 @@ except:
 # BGR Value centered at [199, 86, 30]
 COLOR_FILTER_low = np.array([110, 20, 0])
 COLOR_FILTER_high = np.array([255, 120, 100])
-GLASS_POS = np.array([304,710])
+GLASS_POS = np.array([496,716])
 
 ## Setup:
 # Kinect
@@ -64,10 +63,11 @@ params.minInertiaRatio = 0.15
 detector = cv2.SimpleBlobDetector_create(params)
 
 # Flag to show kinect image stream
-show_img = True
+show_img = False
 # Flag to show position of keypoints
 show_pos = True
 ball_pos = np.array([0,0])
+ball_pos_x_sign = -1
 
 ## Play images:
 print("[Running...]")
@@ -76,8 +76,7 @@ while (1):
     # time.sleep(0.2)
 
     frame = listener.waitForNewFrame()
-    color_img = frame["color"]
-    color_img = color_img.asarray()
+    color_img = frame["color"].asarray()
     # Scale image:
     # color_img = cv2.resize(color_img, (int(1920 / 2), int(1080 / 2)))
     # Flip about y-axis
@@ -95,12 +94,12 @@ while (1):
     num_keyps = len(keypoints)
     if(num_keyps == 1):
         keyp = keypoints
-        ball_pos = np.array([keypoints[0].pt[0], keypoints[0].pt[1]])
+        ball_pos = np.array([keypoints[0].pt[0], keypoints[0].pt[1]]) - GLASS_POS
     elif(num_keyps > 1):
         # Get largest size keypoint
         index = np.argmax(keyp.size for keyp in keypoints)
         keyp = [keypoints[index]]
-        ball_pos = np.array([keypoints[index].pt[0], keypoints[index].pt[1]])
+        ball_pos = np.array([keypoints[index].pt[0], keypoints[index].pt[1]]) - GLASS_POS
     else:
         im_with_keypoints = color_img
 
@@ -112,7 +111,12 @@ while (1):
         # cv2.imshow('current_frame', color_img)
         cv2.waitKey(delay=1)
     if(show_pos):
-        print("Ball_position (X,Y): ", str(ball_pos-GLASS_POS))
-        # print("Ball_X_position: ", str(ball_pos[0]-GLASS_POS[0]))
+        # print("Ball_position (X,Y): ", str(ball_pos))
+        print("Ball_X_position: ", str(ball_pos[0]))
+        # Detect sign change for period
+        if(ball_pos_x_sign != np.sign(ball_pos[0])):
+            print("Zero crossing")
+            ball_pos_x_sign = np.sign(ball_pos[0])
+
 
     listener.release(frame)
