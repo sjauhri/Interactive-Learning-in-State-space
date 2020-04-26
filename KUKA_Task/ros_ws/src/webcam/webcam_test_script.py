@@ -32,20 +32,20 @@ params.filterByConvexity = False
 # params.minConvexity = 0.5
 # Filter by Inertia
 params.filterByInertia = True
-params.minInertiaRatio = 0.1
+params.minInertiaRatio = 0.05
 
 # Set up the detector
 detector = cv2.SimpleBlobDetector_create(params)
 
 # Color Filter: BGR Values centered at [199, 86, 30]
-COLOR_FILTER_low = np.array([150, 20, 0])
+COLOR_FILTER_low = np.array([110, 10, 0])
 COLOR_FILTER_high = np.array([255, 120, 100])
 
 # Flag to show kinect image stream
 show_img = True
 # Flag to show position of keypoints
 show_pos = False
-GLASS_POS = np.array([327,248])
+GLASS_POS = np.array([0,0])
 ball_pos = np.array([0,0])
 ball_pos_x_sign = -1
 
@@ -67,6 +67,7 @@ while(True):
     mask = cv2.inRange(color_img, COLOR_FILTER_low, COLOR_FILTER_high)
     # Detect blobs.
     keypoints = detector.detect(mask)
+    # color_img = mask
 
     num_keyps = len(keypoints)
     if(num_keyps == 1):
