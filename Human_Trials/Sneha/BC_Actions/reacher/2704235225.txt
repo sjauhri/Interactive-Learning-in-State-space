@@ -1,0 +1,412 @@
+Policy train: iteration: 500, policy_loss: 0.000759
+Policy train: iteration: 1000, policy_loss: 0.001115
+Policy train: iteration: 1500, policy_loss: 0.001261
+Policy train: iteration: 2000, policy_loss: 0.001236
+Policy train: iteration: 2500, policy_loss: 0.000649
+Policy train: iteration: 3000, policy_loss: 0.001059
+Policy train: iteration: 3500, policy_loss: 0.000815
+Policy train: iteration: 4000, policy_loss: 0.001395
+Policy train: iteration: 4500, policy_loss: 0.001151
+Policy train: iteration: 5000, policy_loss: 0.001028
+Policy train: iteration: 5500, policy_loss: 0.000958
+Policy train: iteration: 6000, policy_loss: 0.000989
+
+Background Trial: 1, reward: -42.992564629970964
+Background Trial: 2, reward: -101.39702612354105
+Background Trial: 3, reward: -101.30098572395076
+Background Trial: 4, reward: -49.550138082451674
+Background Trial: 5, reward: -100.76807252086057
+Background Trial: 6, reward: -47.49267082823188
+Background Trial: 7, reward: -52.57019928520135
+Background Trial: 8, reward: -100.91958395468505
+Background Trial: 9, reward: -101.84966262147383
+Iteration: 1, average_reward: -77.64898930781857
+
+Policy train: iteration: 500, policy_loss: 0.001297
+Policy train: iteration: 1000, policy_loss: 0.000817
+Policy train: iteration: 1500, policy_loss: 0.000843
+Policy train: iteration: 2000, policy_loss: 0.000981
+Policy train: iteration: 2500, policy_loss: 0.000642
+Policy train: iteration: 3000, policy_loss: 0.000977
+Policy train: iteration: 3500, policy_loss: 0.000777
+Policy train: iteration: 4000, policy_loss: 0.001088
+Policy train: iteration: 4500, policy_loss: 0.000806
+Policy train: iteration: 5000, policy_loss: 0.000999
+Policy train: iteration: 5500, policy_loss: 0.000743
+Policy train: iteration: 6000, policy_loss: 0.000701
+
+Background Trial: 1, reward: -40.090817340534315
+Background Trial: 2, reward: -34.03473555913403
+Background Trial: 3, reward: -31.683972638236536
+Background Trial: 4, reward: -31.48636549151905
+Background Trial: 5, reward: -33.392834881953405
+Background Trial: 6, reward: -29.10390974975422
+Background Trial: 7, reward: -50.95038300599828
+Background Trial: 8, reward: -29.212971364974795
+Background Trial: 9, reward: -50.07562740430756
+Iteration: 2, average_reward: -36.67017971515691
+
+Policy train: iteration: 500, policy_loss: 0.001168
+Policy train: iteration: 1000, policy_loss: 0.000997
+Policy train: iteration: 1500, policy_loss: 0.000948
+Policy train: iteration: 2000, policy_loss: 0.000766
+Policy train: iteration: 2500, policy_loss: 0.001069
+Policy train: iteration: 3000, policy_loss: 0.000503
+Policy train: iteration: 3500, policy_loss: 0.000627
+Policy train: iteration: 4000, policy_loss: 0.000800
+Policy train: iteration: 4500, policy_loss: 0.000787
+Policy train: iteration: 5000, policy_loss: 0.000930
+Policy train: iteration: 5500, policy_loss: 0.001171
+Policy train: iteration: 6000, policy_loss: 0.001093
+
+Background Trial: 1, reward: -536.8036512311348
+Background Trial: 2, reward: -671.7771618758678
+Background Trial: 3, reward: -448.90092881427285
+Background Trial: 4, reward: -666.5064248053072
+Background Trial: 5, reward: -30.97712236206607
+Background Trial: 6, reward: -606.1675580729441
+Background Trial: 7, reward: -52.690157110661
+Background Trial: 8, reward: -137.57795877605182
+Background Trial: 9, reward: -25.694696071590048
+Iteration: 3, average_reward: -353.01062879109946
+
+Policy train: iteration: 500, policy_loss: 0.001094
+Policy train: iteration: 1000, policy_loss: 0.001171
+Policy train: iteration: 1500, policy_loss: 0.000832
+Policy train: iteration: 2000, policy_loss: 0.001032
+Policy train: iteration: 2500, policy_loss: 0.000866
+Policy train: iteration: 3000, policy_loss: 0.000850
+Policy train: iteration: 3500, policy_loss: 0.001270
+Policy train: iteration: 4000, policy_loss: 0.000649
+Policy train: iteration: 4500, policy_loss: 0.000790
+Policy train: iteration: 5000, policy_loss: 0.001239
+Policy train: iteration: 5500, policy_loss: 0.000703
+Policy train: iteration: 6000, policy_loss: 0.000911
+
+Background Trial: 1, reward: -909.0961590260371
+Background Trial: 2, reward: -898.8301486745021
+Background Trial: 3, reward: -921.7944827878109
+Background Trial: 4, reward: -27.87560781544796
+Background Trial: 5, reward: -837.2193048601569
+Background Trial: 6, reward: -57.47156672757924
+Background Trial: 7, reward: -287.8757773323416
+Background Trial: 8, reward: -899.8935175481909
+Background Trial: 9, reward: -885.8652489821158
+Iteration: 4, average_reward: -636.2135348615759
+
+Policy train: iteration: 500, policy_loss: 0.000612
+Policy train: iteration: 1000, policy_loss: 0.000742
+Policy train: iteration: 1500, policy_loss: 0.000749
+Policy train: iteration: 2000, policy_loss: 0.000895
+Policy train: iteration: 2500, policy_loss: 0.000784
+Policy train: iteration: 3000, policy_loss: 0.000653
+Policy train: iteration: 3500, policy_loss: 0.001271
+Policy train: iteration: 4000, policy_loss: 0.001098
+Policy train: iteration: 4500, policy_loss: 0.000830
+Policy train: iteration: 5000, policy_loss: 0.000623
+Policy train: iteration: 5500, policy_loss: 0.000823
+Policy train: iteration: 6000, policy_loss: 0.000861
+
+Background Trial: 1, reward: -661.3052503654898
+Background Trial: 2, reward: -679.7737313155981
+Background Trial: 3, reward: -861.5818199006943
+Background Trial: 4, reward: -24.659545723759493
+Background Trial: 5, reward: -738.0649061526506
+Background Trial: 6, reward: -721.072553753746
+Background Trial: 7, reward: -738.6376114703412
+Background Trial: 8, reward: -23.19357486285634
+Background Trial: 9, reward: -693.3801165506435
+Iteration: 5, average_reward: -571.29656778842
+
+Policy train: iteration: 500, policy_loss: 0.000901
+Policy train: iteration: 1000, policy_loss: 0.000769
+Policy train: iteration: 1500, policy_loss: 0.000788
+Policy train: iteration: 2000, policy_loss: 0.000750
+Policy train: iteration: 2500, policy_loss: 0.000939
+Policy train: iteration: 3000, policy_loss: 0.000821
+Policy train: iteration: 3500, policy_loss: 0.000877
+Policy train: iteration: 4000, policy_loss: 0.000802
+Policy train: iteration: 4500, policy_loss: 0.000833
+Policy train: iteration: 5000, policy_loss: 0.000736
+Policy train: iteration: 5500, policy_loss: 0.000939
+Policy train: iteration: 6000, policy_loss: 0.000653
+
+Background Trial: 1, reward: -64.4257141663912
+Background Trial: 2, reward: -66.37568987109998
+Background Trial: 3, reward: -85.42722761503055
+Background Trial: 4, reward: -61.76986899278858
+Background Trial: 5, reward: -69.88813507744385
+Background Trial: 6, reward: -58.287082472435465
+Background Trial: 7, reward: -64.73667610424688
+Background Trial: 8, reward: -64.60654827939878
+Background Trial: 9, reward: -61.67099225447101
+Iteration: 6, average_reward: -66.35421498147848
+
+Policy train: iteration: 500, policy_loss: 0.000803
+Policy train: iteration: 1000, policy_loss: 0.000934
+Policy train: iteration: 1500, policy_loss: 0.000730
+Policy train: iteration: 2000, policy_loss: 0.000951
+Policy train: iteration: 2500, policy_loss: 0.000824
+Policy train: iteration: 3000, policy_loss: 0.000726
+Policy train: iteration: 3500, policy_loss: 0.000977
+Policy train: iteration: 4000, policy_loss: 0.000865
+Policy train: iteration: 4500, policy_loss: 0.001085
+Policy train: iteration: 5000, policy_loss: 0.000950
+Policy train: iteration: 5500, policy_loss: 0.001157
+Policy train: iteration: 6000, policy_loss: 0.000987
+
+Background Trial: 1, reward: -90.30007538963173
+Background Trial: 2, reward: -87.4265746773491
+Background Trial: 3, reward: -91.93836994398703
+Background Trial: 4, reward: -65.36237805079053
+Background Trial: 5, reward: -91.43944724550249
+Background Trial: 6, reward: -87.21483879041256
+Background Trial: 7, reward: -87.08649797440239
+Background Trial: 8, reward: -86.93785901170249
+Background Trial: 9, reward: -87.30131405600392
+Iteration: 7, average_reward: -86.1119283488647
+
+Policy train: iteration: 500, policy_loss: 0.000829
+Policy train: iteration: 1000, policy_loss: 0.001045
+Policy train: iteration: 1500, policy_loss: 0.001156
+Policy train: iteration: 2000, policy_loss: 0.000885
+Policy train: iteration: 2500, policy_loss: 0.000911
+Policy train: iteration: 3000, policy_loss: 0.000784
+Policy train: iteration: 3500, policy_loss: 0.001132
+Policy train: iteration: 4000, policy_loss: 0.000550
+Policy train: iteration: 4500, policy_loss: 0.001193
+Policy train: iteration: 5000, policy_loss: 0.000834
+Policy train: iteration: 5500, policy_loss: 0.000847
+Policy train: iteration: 6000, policy_loss: 0.000584
+
+Background Trial: 1, reward: -89.6110319080692
+Background Trial: 2, reward: -90.26940074647814
+Background Trial: 3, reward: -90.20479928457554
+Background Trial: 4, reward: -90.18578994709608
+Background Trial: 5, reward: -90.05561559709372
+Background Trial: 6, reward: -90.1017121453207
+Background Trial: 7, reward: -89.9216430530391
+Background Trial: 8, reward: -90.06936042374042
+Background Trial: 9, reward: -90.09655069761958
+Iteration: 8, average_reward: -90.0573226447814
+
+Policy train: iteration: 500, policy_loss: 0.000741
+Policy train: iteration: 1000, policy_loss: 0.000788
+Policy train: iteration: 1500, policy_loss: 0.000870
+Policy train: iteration: 2000, policy_loss: 0.000708
+Policy train: iteration: 2500, policy_loss: 0.001004
+Policy train: iteration: 3000, policy_loss: 0.001090
+Policy train: iteration: 3500, policy_loss: 0.000853
+Policy train: iteration: 4000, policy_loss: 0.000684
+Policy train: iteration: 4500, policy_loss: 0.000785
+Policy train: iteration: 5000, policy_loss: 0.000958
+Policy train: iteration: 5500, policy_loss: 0.001060
+Policy train: iteration: 6000, policy_loss: 0.000843
+
+Background Trial: 1, reward: -880.3288447545366
+Background Trial: 2, reward: -768.1077303783745
+Background Trial: 3, reward: -785.7460437136858
+Background Trial: 4, reward: -780.284186447487
+Background Trial: 5, reward: -45.674450861061565
+Background Trial: 6, reward: -43.788364916292586
+Background Trial: 7, reward: -806.2810988493526
+Background Trial: 8, reward: -779.4244749956958
+Background Trial: 9, reward: -860.3134519765711
+Iteration: 9, average_reward: -638.8831829881175
+
+Policy train: iteration: 500, policy_loss: 0.000440
+Policy train: iteration: 1000, policy_loss: 0.000694
+Policy train: iteration: 1500, policy_loss: 0.001002
+Policy train: iteration: 2000, policy_loss: 0.000883
+Policy train: iteration: 2500, policy_loss: 0.000788
+Policy train: iteration: 3000, policy_loss: 0.000917
+Policy train: iteration: 3500, policy_loss: 0.000708
+Policy train: iteration: 4000, policy_loss: 0.000874
+Policy train: iteration: 4500, policy_loss: 0.000954
+Policy train: iteration: 5000, policy_loss: 0.000874
+Policy train: iteration: 5500, policy_loss: 0.000825
+Policy train: iteration: 6000, policy_loss: 0.000992
+
+Background Trial: 1, reward: -72.79371595443706
+Background Trial: 2, reward: -74.45839098457812
+Background Trial: 3, reward: -74.96754351059806
+Background Trial: 4, reward: -72.83269245132531
+Background Trial: 5, reward: -77.26654857093482
+Background Trial: 6, reward: -76.36347658569034
+Background Trial: 7, reward: -76.06678200110417
+Background Trial: 8, reward: -72.45840345045701
+Background Trial: 9, reward: -76.71071107041952
+Iteration: 10, average_reward: -74.87980717550494
+
+Policy train: iteration: 500, policy_loss: 0.000794
+Policy train: iteration: 1000, policy_loss: 0.001162
+Policy train: iteration: 1500, policy_loss: 0.000741
+Policy train: iteration: 2000, policy_loss: 0.001090
+Policy train: iteration: 2500, policy_loss: 0.001062
+Policy train: iteration: 3000, policy_loss: 0.000815
+Policy train: iteration: 3500, policy_loss: 0.000989
+Policy train: iteration: 4000, policy_loss: 0.001001
+Policy train: iteration: 4500, policy_loss: 0.000878
+Policy train: iteration: 5000, policy_loss: 0.000982
+Policy train: iteration: 5500, policy_loss: 0.000892
+Policy train: iteration: 6000, policy_loss: 0.001070
+
+Background Trial: 1, reward: -167.51688822717642
+Background Trial: 2, reward: -90.3560752373702
+Background Trial: 3, reward: -89.12682647504329
+Background Trial: 4, reward: -29.841258411061844
+Background Trial: 5, reward: -30.274972668198995
+Background Trial: 6, reward: -91.15082123589636
+Background Trial: 7, reward: -80.20640667532423
+Background Trial: 8, reward: -214.61363069429405
+Background Trial: 9, reward: -91.26073085660988
+Iteration: 11, average_reward: -98.26084560899724
+
+Policy train: iteration: 500, policy_loss: 0.000653
+Policy train: iteration: 1000, policy_loss: 0.000684
+Policy train: iteration: 1500, policy_loss: 0.001054
+Policy train: iteration: 2000, policy_loss: 0.000623
+Policy train: iteration: 2500, policy_loss: 0.000966
+Policy train: iteration: 3000, policy_loss: 0.000840
+Policy train: iteration: 3500, policy_loss: 0.000615
+Policy train: iteration: 4000, policy_loss: 0.000723
+Policy train: iteration: 4500, policy_loss: 0.000732
+Policy train: iteration: 5000, policy_loss: 0.000854
+Policy train: iteration: 5500, policy_loss: 0.000648
+Policy train: iteration: 6000, policy_loss: 0.001130
+
+Background Trial: 1, reward: -46.73452944330484
+Background Trial: 2, reward: -46.801218920624514
+Background Trial: 3, reward: -47.23687157843372
+Background Trial: 4, reward: -27.36728295766363
+Background Trial: 5, reward: -43.96979781058929
+Background Trial: 6, reward: -54.26977968792834
+Background Trial: 7, reward: -45.06322020749063
+Background Trial: 8, reward: -46.37478217799525
+Background Trial: 9, reward: -48.48763583738016
+Iteration: 12, average_reward: -45.14501318015671
+
+Policy train: iteration: 500, policy_loss: 0.000871
+Policy train: iteration: 1000, policy_loss: 0.000648
+Policy train: iteration: 1500, policy_loss: 0.001184
+Policy train: iteration: 2000, policy_loss: 0.000638
+Policy train: iteration: 2500, policy_loss: 0.000758
+Policy train: iteration: 3000, policy_loss: 0.000754
+Policy train: iteration: 3500, policy_loss: 0.000749
+Policy train: iteration: 4000, policy_loss: 0.000974
+Policy train: iteration: 4500, policy_loss: 0.001017
+Policy train: iteration: 5000, policy_loss: 0.000693
+Policy train: iteration: 5500, policy_loss: 0.000663
+Policy train: iteration: 6000, policy_loss: 0.000750
+
+Background Trial: 1, reward: -15.61318358560875
+Background Trial: 2, reward: -180.48641700829884
+Background Trial: 3, reward: -17.650126494455094
+Background Trial: 4, reward: -93.18957921279538
+Background Trial: 5, reward: -95.91254021905937
+Background Trial: 6, reward: -74.69789534628327
+Background Trial: 7, reward: -62.90737295771968
+Background Trial: 8, reward: -66.4315865624248
+Background Trial: 9, reward: -97.01444918240814
+Iteration: 13, average_reward: -78.21146117433926
+
+Policy train: iteration: 500, policy_loss: 0.000743
+Policy train: iteration: 1000, policy_loss: 0.000982
+Policy train: iteration: 1500, policy_loss: 0.000979
+Policy train: iteration: 2000, policy_loss: 0.000792
+Policy train: iteration: 2500, policy_loss: 0.000626
+Policy train: iteration: 3000, policy_loss: 0.000729
+Policy train: iteration: 3500, policy_loss: 0.000905
+Policy train: iteration: 4000, policy_loss: 0.000803
+Policy train: iteration: 4500, policy_loss: 0.000725
+Policy train: iteration: 5000, policy_loss: 0.000892
+Policy train: iteration: 5500, policy_loss: 0.000548
+Policy train: iteration: 6000, policy_loss: 0.000809
+
+Background Trial: 1, reward: -178.1911743427217
+Background Trial: 2, reward: -224.88497161129712
+Background Trial: 3, reward: -196.68111039694801
+Background Trial: 4, reward: -21.604128925027453
+Background Trial: 5, reward: -224.25746577817281
+Background Trial: 6, reward: -178.9592390337002
+Background Trial: 7, reward: -261.70731304157624
+Background Trial: 8, reward: -215.6016880587587
+Background Trial: 9, reward: -23.97802762255305
+Iteration: 14, average_reward: -169.5405687567506
+
+Policy train: iteration: 500, policy_loss: 0.000665
+Policy train: iteration: 1000, policy_loss: 0.000784
+Policy train: iteration: 1500, policy_loss: 0.000553
+Policy train: iteration: 2000, policy_loss: 0.001361
+Policy train: iteration: 2500, policy_loss: 0.000921
+Policy train: iteration: 3000, policy_loss: 0.000699
+Policy train: iteration: 3500, policy_loss: 0.000830
+Policy train: iteration: 4000, policy_loss: 0.000721
+Policy train: iteration: 4500, policy_loss: 0.000760
+Policy train: iteration: 5000, policy_loss: 0.001043
+Policy train: iteration: 5500, policy_loss: 0.000900
+Policy train: iteration: 6000, policy_loss: 0.000761
+
+Background Trial: 1, reward: -46.00730361800662
+Background Trial: 2, reward: -32.91894373474739
+Background Trial: 3, reward: -45.699372419016505
+Background Trial: 4, reward: -46.10014988879566
+Background Trial: 5, reward: -45.718963247247224
+Background Trial: 6, reward: -45.63161851567815
+Background Trial: 7, reward: -45.70841265069459
+Background Trial: 8, reward: -46.794724955401776
+Background Trial: 9, reward: -46.26059322746226
+Iteration: 15, average_reward: -44.53778691745001
+
+Policy train: iteration: 500, policy_loss: 0.000574
+Policy train: iteration: 1000, policy_loss: 0.000781
+Policy train: iteration: 1500, policy_loss: 0.001311
+Policy train: iteration: 2000, policy_loss: 0.000442
+Policy train: iteration: 2500, policy_loss: 0.001023
+Policy train: iteration: 3000, policy_loss: 0.000771
+Policy train: iteration: 3500, policy_loss: 0.000807
+Policy train: iteration: 4000, policy_loss: 0.000523
+Policy train: iteration: 4500, policy_loss: 0.000681
+Policy train: iteration: 5000, policy_loss: 0.000948
+Policy train: iteration: 5500, policy_loss: 0.000737
+Policy train: iteration: 6000, policy_loss: 0.001098
+
+Background Trial: 1, reward: -46.314861355850624
+Background Trial: 2, reward: -87.51757958884147
+Background Trial: 3, reward: -44.51174808967452
+Background Trial: 4, reward: -43.05692027553684
+Background Trial: 5, reward: -93.70018985073058
+Background Trial: 6, reward: -80.90075630408774
+Background Trial: 7, reward: -49.319678280556204
+Background Trial: 8, reward: -31.74272620015003
+Background Trial: 9, reward: -40.68406409518289
+Iteration: 16, average_reward: -57.527613782290096
+
+Policy train: iteration: 500, policy_loss: 0.000820
+Policy train: iteration: 1000, policy_loss: 0.001047
+Policy train: iteration: 1500, policy_loss: 0.000774
+Policy train: iteration: 2000, policy_loss: 0.000921
+Policy train: iteration: 2500, policy_loss: 0.000846
+Policy train: iteration: 3000, policy_loss: 0.000962
+Policy train: iteration: 3500, policy_loss: 0.000780
+Policy train: iteration: 4000, policy_loss: 0.001043
+Policy train: iteration: 4500, policy_loss: 0.001139
+Policy train: iteration: 5000, policy_loss: 0.000729
+Policy train: iteration: 5500, policy_loss: 0.001013
+Policy train: iteration: 6000, policy_loss: 0.000857
+
+Background Trial: 1, reward: -163.75263856380434
+Background Trial: 2, reward: -26.04399269673603
+Background Trial: 3, reward: -35.59169100949297
+Background Trial: 4, reward: -165.8256120303093
+Background Trial: 5, reward: -166.56302491632883
+Background Trial: 6, reward: -24.531141648827635
+Background Trial: 7, reward: -165.58748168603887
+Background Trial: 8, reward: -30.107846678999937
+Background Trial: 9, reward: -165.0631467727239
+Iteration: 17, average_reward: -104.78517511147354
+
+Policy train: iteration: 500, policy_loss: 0.000785
+Policy train: iteration: 1000, policy_loss: 0.000942
+Policy train: iteration: 1500, policy_loss: 0.001143
+Policy train: iteration: 2000, policy_loss: 0.000657
