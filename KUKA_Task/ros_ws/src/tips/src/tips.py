@@ -219,12 +219,19 @@ class TIPS():
         # Add to Experience Buffer
         for id in range(0, len(S)):
           self.ExpBuff.append((S[id], nS[id], A[id]))
-        self.update_fdm(self.epochTrainIts*8)
+        self.update_fdm(self.epochTrainIts*15)
+        # Optional: Save current experience data
+        with open(os.path.join('learnt_fdms', 'Experience.pkl'), 'wb') as f:
+                experience_data = {'observations': S,
+                                   'observations_next': nS,
+                                   'actions': A
+                                  }
+                pickle.dump(experience_data,f)
 
     # Optional: Train initial policy from demonstrations
-    if (args.initPolicy):
-      print("\n[Training initial policy]")
-      self.update_policy(self.epochTrainIts*4)
+    # if (args.initPolicy):
+    #   print("\n[Training initial policy]")
+    #   self.update_policy(self.epochTrainIts*4)
     
     # Init model saver
     saver = tf.train.Saver(max_to_keep=1)

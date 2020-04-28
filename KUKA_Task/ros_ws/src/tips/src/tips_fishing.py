@@ -5,7 +5,7 @@ from fishing_sim_env import *
 from feedback_ext import *
 
 class TIPS_fishing(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=20, epochTrainIts=4000,  dynamicsSamples=5000, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=20, epochTrainIts=4000,  dynamicsSamples=7000, batch_size=32):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
@@ -82,7 +82,7 @@ class TIPS_fishing(TIPS):
     States = []
     Nstates = []
     Actions = []
-    A = np.random.uniform(-1, 1, self.action_dim)
+    A = np.random.uniform(-0.5, 0.5, self.action_dim)
 
     for i in range(self.dynamicsSamples):
       # if terminal or ((i%300)==0):
@@ -93,7 +93,7 @@ class TIPS_fishing(TIPS):
 
       # Continuos action space
       # Actions between -1 and 1
-      A = np.random.uniform(-1, 1, self.action_dim)      
+      A = np.random.uniform(-0.5, 0.5, self.action_dim)      
 
       state, _, terminal, _ = self.env.step(A)
 
@@ -101,7 +101,7 @@ class TIPS_fishing(TIPS):
       Nstates.append(state)
       Actions.append(A)
 
-      if i and (i+1) % 1000 == 0:
+      if i and (i+1) % 500 == 0:
         print("Collecting dynamics training data ", i+1)
         self.log_writer.write("Collecting dynamics training data " + str(i+1) + "\n")
 
@@ -250,7 +250,7 @@ class TIPS_fishing(TIPS):
         #   a = np.array([-0.1, 0])
         # elif (h_fb == H_RIGHT):
         #   a = np.array([0.1, 0])
-        # print("Computed Action: ", a)
+        print("Computed Action: ", a)
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
