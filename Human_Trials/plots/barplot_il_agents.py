@@ -132,7 +132,7 @@ cart['Return'] = cart['Return'].div(200) # normalize return
 # Reacher
 reach['Return'] = (reach['Return'].div(100)+1) # normalize return
 # LunarLander
-lunar['Return'] = (lunar['Return']+300).div(600) # normalize return
+lunar['Return'] = (lunar['Return']+300).div(550) # normalize return
 
 # Plot using subplots
 figure, axes = plt.subplots(3, 1, sharey=True, figsize=(6.5, 9))
