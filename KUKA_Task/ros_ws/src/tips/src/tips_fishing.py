@@ -17,7 +17,9 @@ class TIPS_fishing(TIPS):
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
     self.errorConst = 0.05
-
+    # # Feedback in ball pos
+    # self.errorConst = 0.03
+    
     # Feedback training rate in the episode
     self.feedback_training_rate  = 10
 
@@ -151,6 +153,9 @@ class TIPS_fishing(TIPS):
 
     # Get x-z position
     state_x, state_z = self.env.get_end_eff_pos(np.reshape(state, [-1,self.state_dim]))
+    # # Feedback in ball pos
+    # state_x = state[4]
+    # state_z = state[5]
     # print("state_x, state_z:", (state_x,state_z))
 
     # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()
@@ -194,6 +199,14 @@ class TIPS_fishing(TIPS):
 
     # Calculate cost
     cost = abs(state_corrected[0] - Nstates_x) + abs(state_corrected[1] - Nstates_z)
+
+    # Feedback in ball pos
+    # if (h_fb == H_LEFT or h_fb == H_RIGHT):
+    #   cost = abs(state_corrected[0] - Nstates[:,4])
+    # elif (h_fb == H_UP or h_fb == H_DOWN):
+    #   cost = abs(state_corrected[1] - Nstates[:,5])
+    # cost = abs(state_corrected[0] - Nstates[:,4]) + abs(state_corrected[1] - Nstates[:,5])
+    
 
     # Check for min_cost
     min_cost_index = cost.argmin(axis=0)
@@ -250,7 +263,7 @@ class TIPS_fishing(TIPS):
         #   a = np.array([-0.1, 0])
         # elif (h_fb == H_RIGHT):
         #   a = np.array([0.1, 0])
-        print("Computed Action: ", a)
+        # print("Computed Action: ", a)
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
