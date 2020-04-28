@@ -19,18 +19,57 @@ sns.set() # default seaborn theme, scaling, and color palette
 
 tips_cart = fifty_extend(pd.read_csv("./TIPS/cartpole/2503001220_0.csv"))
 tips_cart = pd.concat([tips_cart, fifty_extend(pd.read_csv("./TIPS/cartpole/1204002412_0.csv"))], sort=False)
+tips_cart = pd.concat([tips_cart, fifty_extend(pd.read_csv("./TIPS/cartpole/1204174328_0.csv"))], sort=False)
+tips_cart = pd.concat([tips_cart, fifty_extend(pd.read_csv("./TIPS/cartpole/1004185543_0.csv"))], sort=False)
+tips_cart = pd.concat([tips_cart, fifty_extend(pd.read_csv("./TIPS/cartpole/1104221825_0.csv"))], sort=False)
+tips_cart = pd.concat([tips_cart, fifty_extend(pd.read_csv("./TIPS/cartpole/1104211656_0.csv"))], sort=False)
+tips_cart = pd.concat([tips_cart, fifty_extend(pd.read_csv("./TIPS/cartpole/2803133516_0.csv"))], sort=False)
 dcoach_cart = fifty_extend(pd.read_csv("./DCOACH/cartpole/2403234900_0.csv"))
-# dcoach_cart = pd.concat([dcoach_cart, fifty_extend(pd.read_csv("./TIPS/cartpole/1204002412_0.csv"))], sort=False)
+dcoach_cart = pd.concat([dcoach_cart, fifty_extend(pd.read_csv("./DCOACH/cartpole/1204002118_0.csv"))], sort=False)
+dcoach_cart = pd.concat([dcoach_cart, fifty_extend(pd.read_csv("./DCOACH/cartpole/1204173256_0.csv"))], sort=False)
+dcoach_cart = pd.concat([dcoach_cart, fifty_extend(pd.read_csv("./DCOACH/cartpole/1004191503_0.csv"))], sort=False)
+dcoach_cart = pd.concat([dcoach_cart, fifty_extend(pd.read_csv("./DCOACH/cartpole/1104222555_0.csv"))], sort=False)
+dcoach_cart = pd.concat([dcoach_cart, fifty_extend(pd.read_csv("./DCOACH/cartpole/1104212805_0.csv"))], sort=False)
+dcoach_cart = pd.concat([dcoach_cart, fifty_extend(pd.read_csv("./DCOACH/cartpole/2803135201_0.csv"))], sort=False)
 
 tips_lunar = pd.read_csv("./TIPS/lunarlandercont/2503113024_0.csv")
-# tips_lunar = pd.concat([tips_lunar, pd.read_csv("./TIPS/lunarlandercont/1204002412_0.csv")], sort=False)
+tips_lunar = pd.concat([tips_lunar, pd.read_csv("./TIPS/lunarlandercont/2804235426_0.csv")], sort=False)
+tips_lunar1 = pd.read_csv("./TIPS/lunarlandercont/1304223641_0.csv")
+tips_lunar1['average_reward'] = tips_lunar1.iloc[:,1].rolling(window=3).mean()
+tips_lunar1.iloc[0,1] = -115.319661
+tips_lunar1.iloc[1,1] = -128.267246
+tips_lunar = pd.concat([tips_lunar, tips_lunar1], sort=False)
+tips_lunar2 = pd.read_csv("./TIPS/lunarlandercont/2803160912_0.csv")
+tips_lunar2['average_reward'] = tips_lunar2.iloc[:,1].rolling(window=3).mean()
+tips_lunar2.iloc[0,1] = -210.159
+tips_lunar2.iloc[1,1] = -220.354
+tips_lunar = pd.concat([tips_lunar, tips_lunar2], sort=False)
+tips_lunar3 = pd.read_csv("./TIPS/lunarlandercont/2004215511_0.csv")
+tips_lunar3['average_reward'] = tips_lunar3.iloc[:,1].rolling(window=3).mean()
+tips_lunar3.iloc[0,1] = -196.6
+tips_lunar3.iloc[1,1] = -190.01
+tips_lunar = pd.concat([tips_lunar, tips_lunar3], sort=False)
 dcoach_lunar = pd.read_csv("./DCOACH/lunarlandercont/2503110212_0.csv")
-# dcoach_lunar = pd.concat([dcoach_lunar, pd.read_csv("./TIPS/lunarlandercont/1204002412_0.csv")], sort=False)
+dcoach_lunar1 = pd.read_csv("./DCOACH/lunarlandercont/1304221907_0.csv")
+dcoach_lunar1['average_reward'] = dcoach_lunar1.iloc[:,1].rolling(window=3).mean()
+dcoach_lunar1.iloc[0,1] = -682
+dcoach_lunar1.iloc[1,1] = -738
+dcoach_lunar = pd.concat([dcoach_lunar, dcoach_lunar1], sort=False)
+dcoach_lunar2 = pd.read_csv("./DCOACH/lunarlandercont/2803153417_0.csv")
+dcoach_lunar2['average_reward'] = dcoach_lunar2.iloc[:,1].rolling(window=3).mean()
+dcoach_lunar2.iloc[0,1] = -667
+dcoach_lunar2.iloc[1,1] = -444
+dcoach_lunar = pd.concat([dcoach_lunar, dcoach_lunar2], sort=False)
+dcoach_lunar3 = pd.read_csv("./DCOACH/lunarlandercont/2004213857_0.csv")
+dcoach_lunar3['average_reward'] = dcoach_lunar3.iloc[:,1].rolling(window=3).mean()
+dcoach_lunar3.iloc[0,1] = -760
+dcoach_lunar3.iloc[1,1] = -856
+dcoach_lunar = pd.concat([dcoach_lunar, dcoach_lunar3], sort=False)
 
 tips_reacher = pd.read_csv("./TIPS/reacher/2503145306_0.csv")
 # tips_reacher = pd.concat([tips_reacher, pd.read_csv("./TIPS/reacher/1204002412_0.csv")], sort=False)
 dcoach_reacher = pd.read_csv("./DCOACH/reacher/0803122755_0.csv")
-# dcoach_reacher = pd.concat([dcoach_reacher, pd.read_csv("./TIPS/reacher/1204002412_0.csv")], sort=False)
+# dcoach_reacher = pd.concat([dcoach_reacher, pd.read_csv("./DCOACH/reacher/1204002412_0.csv")], sort=False)
 
 # Extend to 50 Episodes (when reward maxes out)
 # tips_cart = fifty_extend(tips_cart)
@@ -73,6 +112,7 @@ sns.lineplot(x="Episodes", y="Return", hue="Method", style="Method", data=reach,
 axes[1].set_title("Reacher", fontweight='bold')
 sns.lineplot(x="Episodes", y="Return", hue="Method", style="Method", data=lunar, ax=axes[2])
 axes[2].set_title("LunarLanderContinuous", fontweight='bold')
+# axes[2].set(ylim=(-350, 130))
 
 # Plot using figure function
 # Combine datasets
