@@ -67,9 +67,19 @@ dcoach_lunar3.iloc[1,1] = -856
 dcoach_lunar = pd.concat([dcoach_lunar, dcoach_lunar3], sort=False)
 
 tips_reacher = pd.read_csv("./TIPS/reacher/2503145306_0.csv")
-# tips_reacher = pd.concat([tips_reacher, pd.read_csv("./TIPS/reacher/1204002412_0.csv")], sort=False)
+tips_reacher = pd.concat([tips_reacher, pd.read_csv("./TIPS/reacher/2104154440_0.csv")], sort=False)
+tips_reacher = pd.concat([tips_reacher, pd.read_csv("./TIPS/reacher/2703195229_0.csv")], sort=False)
+tips_reacher = pd.concat([tips_reacher, pd.read_csv("./TIPS/reacher/1004112340_0.csv")], sort=False)
+# tips_reacher = pd.concat([tips_reacher, pd.read_csv("./TIPS/reacher/1404014918_0.csv")], sort=False)
+tips_reacher = pd.concat([tips_reacher, pd.read_csv("./TIPS/reacher/1404200429_0.csv")], sort=False)
+tips_reacher = pd.concat([tips_reacher, pd.read_csv("./TIPS/reacher/1504215052_0.csv")], sort=False)
 dcoach_reacher = pd.read_csv("./DCOACH/reacher/0803122755_0.csv")
-# dcoach_reacher = pd.concat([dcoach_reacher, pd.read_csv("./DCOACH/reacher/1204002412_0.csv")], sort=False)
+dcoach_reacher = pd.concat([dcoach_reacher, pd.read_csv("./DCOACH/reacher/2104155102_0.csv")], sort=False)
+dcoach_reacher = pd.concat([dcoach_reacher, pd.read_csv("./DCOACH/reacher/2703193310_0.csv")], sort=False)
+dcoach_reacher = pd.concat([dcoach_reacher, pd.read_csv("./DCOACH/reacher/1004114249_0.csv")], sort=False)
+# dcoach_reacher = pd.concat([dcoach_reacher, pd.read_csv("./DCOACH/reacher/1404013652_0.csv")], sort=False)
+dcoach_reacher = pd.concat([dcoach_reacher, pd.read_csv("./DCOACH/reacher/1404202223_0.csv")], sort=False)
+dcoach_reacher = pd.concat([dcoach_reacher, pd.read_csv("./DCOACH/reacher/1504214051_0.csv")], sort=False)
 
 # Extend to 50 Episodes (when reward maxes out)
 # tips_cart = fifty_extend(tips_cart)
@@ -110,9 +120,10 @@ sns.lineplot(x="Episodes", y="Return", hue="Method", style="Method", data=cart, 
 axes[0].set_title("CartPole", fontweight='bold')
 sns.lineplot(x="Episodes", y="Return", hue="Method", style="Method", data=reach, ax=axes[1])
 axes[1].set_title("Reacher", fontweight='bold')
+axes[1].set(ylim=(-110, 0))
 sns.lineplot(x="Episodes", y="Return", hue="Method", style="Method", data=lunar, ax=axes[2])
 axes[2].set_title("LunarLanderContinuous", fontweight='bold')
-# axes[2].set(ylim=(-350, 130))
+axes[2].set(ylim=(-600, 200))
 
 # Plot using figure function
 # Combine datasets
