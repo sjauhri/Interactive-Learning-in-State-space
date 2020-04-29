@@ -23,7 +23,7 @@ params.filterByColor = False
 # Filter by Area.
 params.filterByArea = True
 params.minArea = 75
-params.maxArea = 4500
+params.maxArea = 1000
 # Filter by Circularity
 params.filterByCircularity = False
 # params.minCircularity = 0.2
@@ -32,13 +32,14 @@ params.filterByConvexity = False
 # params.minConvexity = 0.5
 # Filter by Inertia
 params.filterByInertia = True
-params.minInertiaRatio = 0.05
+params.minInertiaRatio = 0.1
+# params.maxInertiaRatio = 0.4
 
 # Set up the detector
 detector = cv2.SimpleBlobDetector_create(params)
 
 # Color Filter: BGR Values centered at [199, 86, 30]
-COLOR_FILTER_low = np.array([110, 10, 0])
+COLOR_FILTER_low = np.array([70, 20, 10])
 COLOR_FILTER_high = np.array([255, 120, 100])
 
 # Flag to show kinect image stream
@@ -62,12 +63,13 @@ while(True):
     # Flip Image:
     # color_img = cv2.flip(color_img, 1)
     # Partial image:
-    color_img = color_img[40:, 45:-50, :] # color_img.shape[0]
+    color_img = color_img[:427, :590, :] # color_img.shape[0]
     # Color mask: blue
     mask = cv2.inRange(color_img, COLOR_FILTER_low, COLOR_FILTER_high)
     # Detect blobs.
     keypoints = detector.detect(mask)
-    # color_img = mask
+    # Debug: Uncomment to see mask:
+    color_img = mask
 
     num_keyps = len(keypoints)
     if(num_keyps == 1):
