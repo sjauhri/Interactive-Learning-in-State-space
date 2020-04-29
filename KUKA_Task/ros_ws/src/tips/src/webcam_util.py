@@ -46,10 +46,11 @@ COLOR_FILTER_high = np.array([255, 120, 100])
 show_img = True
 # Flag to show position of keypoints
 show_pos = False
-GLASS_POS = np.array([300,375])
 ball_pos = np.array([0,0])
 ball_pos_x_sign = -1
-
+GLASS_ORIGIN = np.array([300,375])
+X_RANGE = 590
+Z_RANGE = 427
 
 ## Play images:
 print("[Running...]")
@@ -63,13 +64,13 @@ while(True):
     # Flip Image:
     # color_img = cv2.flip(color_img, 1)
     # Partial image:
-    color_img = color_img[:427, :590, :] # color_img.shape[0]
+    color_img = color_img[:Z_RANGE, :X_RANGE, :] # color_img.shape[0]
     # Color mask: blue
     mask = cv2.inRange(color_img, COLOR_FILTER_low, COLOR_FILTER_high)
     # Detect blobs.
     keypoints = detector.detect(mask)
     # Debug: Uncomment to see mask:
-    # color_img = mask
+    color_img = mask
 
     num_keyps = len(keypoints)
     if(num_keyps == 1):
@@ -77,7 +78,7 @@ while(True):
         # Draw keypoints
         im_with_keypoints = cv2.drawKeypoints(color_img, keyp, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
-        ball_pos = np.array([keypoints[0].pt[0], keypoints[0].pt[1]]) - GLASS_POS
+        ball_pos = np.array([keypoints[0].pt[0], keypoints[0].pt[1]])
     elif(num_keyps > 1):
         # Get largest size keypoint
         index = np.argmax(keyp.size for keyp in keypoints)
@@ -85,7 +86,7 @@ while(True):
         # Draw keypoints
         im_with_keypoints = cv2.drawKeypoints(color_img, keyp, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
-        ball_pos = np.array([keypoints[index].pt[0], keypoints[index].pt[1]]) - GLASS_POS
+        ball_pos = np.array([keypoints[index].pt[0], keypoints[index].pt[1]])
     else:
         im_with_keypoints = color_img
 

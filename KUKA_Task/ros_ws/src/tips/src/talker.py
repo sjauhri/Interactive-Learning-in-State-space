@@ -39,7 +39,7 @@
 import rospy
 import numpy as np
 from std_msgs.msg import String
-from iiwa_msgs.msg import JointPosition
+from iiwa_msgs.msg import JointPosition, JointPositionVelocity, CartesianPose
 A7_CONST = 0.22
 
 def talker():
@@ -56,17 +56,37 @@ def talker():
     goal.position.a5 = 0.0
     goal.position.a6 = 45 * (np.pi/180)
     goal.position.a7 = 0.22
-    
-    # goal.header.stamp = rospy.Duration.from_sec(0.1)
 
-    # goal.header.frame_id = 'world'
+    # action_pub.publish(goal)
+
+    rospy.Subscriber('iiwa/state/JointPosition', JointPosition, joint_pos_callback, queue_size=1)
+    rospy.Subscriber('iiwa/state/JointPositionVelocity', JointPositionVelocity, joint_vel_callback, queue_size=1)
+    rospy.Subscriber('iiwa/state/CartesianPose', CartesianPose, endeff_pos_callback, queue_size=1)
 
     while not rospy.is_shutdown():
         hello_str = "hello world %s" % rospy.get_time()
         rospy.loginfo(hello_str)
         # pub.publish(hello_str)
-        action_pub.publish(goal)
+        # action_pub.publish(goal)
         rate.sleep()
+
+def joint_pos_callback(joint_pos_msg):
+    joint_position = joint_pos_msg.position
+
+    # Debug print:
+    # print("Positions: " + "\n" + str(joint_position) + "\n")
+
+def joint_vel_callback(joint_vel_msg):
+    joint_velocity = joint_vel_msg.velocity
+
+    # Debug print:
+    # print("Velocities: " + "\n" + str(joint_velocity) + "\n")
+
+def endeff_pos_callback(endeff_pos_msg):
+    endeff_position = endeff_pos_msg.poseStamped.pose.position
+
+    # Debug print:
+    # print("End Eff Position: " + "\n" + str(endeff_position) + "\n")
 
 if __name__ == '__main__':
     try:

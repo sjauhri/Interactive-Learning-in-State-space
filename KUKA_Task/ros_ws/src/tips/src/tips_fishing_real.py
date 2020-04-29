@@ -1,10 +1,10 @@
 #!/usr/bin/env python2
 from utils import *
 from tips import TIPS
-from fishing_sim_env import *
+from fishing_real_env import *
 from feedback_ext import *
 
-class TIPS_fishing(TIPS):
+class TIPS_fishing_real(TIPS):
   def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=20, epochTrainIts=4000,  dynamicsSamples=4000, batch_size=32):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
@@ -251,26 +251,26 @@ class TIPS_fishing(TIPS):
         h_counter += 1 # Feedback counter
 
         # Get new state transition label using feedback
-        state_corrected = self.get_state_corrected(h_fb, state[0])
+        # state_corrected = self.get_state_corrected(h_fb, state[0])
         # Get action from ifdm
-        a = self.get_corrected_action(h_fb, state[0], state_corrected)
-        # # Direct Actions
-        # if (h_fb == H_UP):
-        #   a = np.array([0, 0.1])
-        # elif (h_fb == H_DOWN):
-        #   a = np.array([0, -0.1])
-        # elif (h_fb == H_LEFT):
-        #   a = np.array([-0.1, 0])
-        # elif (h_fb == H_RIGHT):
-        #   a = np.array([0.1, 0])
-        # print("Computed Action: ", a)
+        # a = self.get_corrected_action(h_fb, state[0], state_corrected)
+        # Direct Actions
+        if (h_fb == H_UP):
+          a = np.array([0, 0.1])
+        elif (h_fb == H_DOWN):
+          a = np.array([0, -0.1])
+        elif (h_fb == H_LEFT):
+          a = np.array([-0.1, 0])
+        elif (h_fb == H_RIGHT):
+          a = np.array([0.1, 0])
+        print("Computed Action: ", a)
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
-        self.update_policy_feedback_immediate(state, a)
-        self.update_policy_feedback_immediate(state, a)
-        self.update_policy_feedback_immediate(state, a)
-        # print("Learning: ", (state, a))
+        # self.update_policy_feedback_immediate(state, a)
+        # self.update_policy_feedback_immediate(state, a)
+        # self.update_policy_feedback_immediate(state, a)
+        print("Learning: ", (state, a))
 
         # Add state transition pair to demo buffer
         self.DemoBuff.append((state[0], a[0]))
@@ -279,14 +279,14 @@ class TIPS_fishing(TIPS):
             self.DemoBuff.pop(0)
 
         # Train with batch from Demo buffer (if enough entries exist)
-        self.update_policy_feedback()
+        # self.update_policy_feedback()
 
         # Act using action based on h_feedback
         a = np.reshape(a, [-1])
         # Continuous actions
         A = np.copy(a)
 
-        # state, reward, terminal, _ = self.env.step(A)
+        state, reward, terminal, _ = self.env.step(A)
 
         # Reset human feedback
         self.human_feedback.h_fb = H_NULL
@@ -311,8 +311,8 @@ class TIPS_fishing(TIPS):
       prev_s = np.copy(state)
 
       # Act
-      # reward = 0
-      state, reward, terminal, _ = self.env.step(A)
+      reward = 0
+      # state, reward, terminal, _ = self.env.step(A)
       total_reward += reward
       state = np.reshape(state, [-1, self.state_dim])
 
@@ -352,5 +352,5 @@ class TIPS_fishing(TIPS):
 
 
 if __name__ == "__main__":
-  tips = TIPS_fishing(6, 2, lr=args.lr, maxEpisodes=args.maxEpisodes)
+  tips = TIPS_fishing_real(6, 2, lr=args.lr, maxEpisodes=args.maxEpisodes)
   tips.run()
