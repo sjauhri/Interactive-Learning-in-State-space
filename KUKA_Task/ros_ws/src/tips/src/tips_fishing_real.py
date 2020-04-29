@@ -95,7 +95,7 @@ class TIPS_fishing_real(TIPS):
 
       # Continuos action space
       # Actions between -1 and 1
-      A = np.random.uniform(-0.5, 0.5, self.action_dim)      
+      A = np.random.uniform(-0.5, 0.5, self.action_dim)
 
       state, _, terminal, _ = self.env.step(A)
 
@@ -103,7 +103,7 @@ class TIPS_fishing_real(TIPS):
       Nstates.append(state)
       Actions.append(A)
 
-      if i and (i+1) % 500 == 0:
+      if i and (i+1) % 100 == 0:
         print("Collecting dynamics training data ", i+1)
         self.log_writer.write("Collecting dynamics training data " + str(i+1) + "\n")
 

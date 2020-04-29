@@ -6,17 +6,15 @@ https://github.com/IFL-CAMP/iiwa_stack
 """
 
 import rospy
-# from webcam_util import GLASS_ORIGIN
+from webcam_util import *
 from std_msgs.msg import String, Float32
-# import std_srvs.srv
 from iiwa_msgs.msg import JointPosition, JointPositionVelocity, CartesianPose
-# tf2_msgs/TFMessage
 import numpy as np
 import time
 
 J2_Z_ORIGIN = 0.34
 END_EFF_Z_MIN = 0.45
-THETA1 = 0#(45 * (np.pi /180)) # Joint 2 initial position
+THETA1 = (90 * (np.pi /180)) # Joint 2 initial position
 THETA2 = 0#(45 * (np.pi /180)) # Joint 4 initial position
 L1 = 0.4   # Length of arm 1
 L2 = 0.4   # Length of arm 2
@@ -28,10 +26,10 @@ A2_SETPOINT = 40 * (np.pi/180)
 A4_SETPOINT = -50 * (np.pi/180)
 A6_SETPOINT = 45 * (np.pi/180)
 
-# Webcam
-GLASS_ORIGIN = np.array([300,375])
-X_RANGE = 590
-Z_RANGE = 427
+# # Webcam
+# GLASS_ORIGIN = np.array([300,375])
+# X_RANGE = 590
+# Z_RANGE = 427
 
 class Fishing_Env():
     
@@ -53,7 +51,9 @@ class Fishing_Env():
         rospy.Subscriber('iiwa/state/CartesianPose', CartesianPose, self.endeff_pos_callback, queue_size=1)
 
         ### Ball state
-        self.ball_position = GLASS_ORIGIN # x,z position
+        # Setup webcam ball tracking:
+        self.Webcam = Webcam_capture()
+        self.ball_position = np.zeros(2) # x,z position
         self.ball_velocity = np.zeros(2) # x,z velocity
         
         ### Publisher for controller commands
@@ -69,13 +69,15 @@ class Fishing_Env():
         self.goal.position.a7 = 0.22
 
     def curr_state(self):
+        self.ball_position, self.ball_velocity = self.Webcam.get_ball_state() # Causes a delay of about 100ms
+
         return np.array([
             self.joint_position.a2, # Joint 2
             self.joint_position.a4, # Joint 4
             self.joint_velocity.a2, # Joint 2
             self.joint_velocity.a4, # Joint 4
-            (self.ball_position[0] - GLASS_ORIGIN[0])/X_RANGE,  # Ball x position
-            (GLASS_ORIGIN[1] - self.ball_position[1])/Z_RANGE  # Ball z position
+            self.ball_position[0],  # Ball x position
+            self.ball_position[1]  # Ball z position
             # self.ball_velocity[0],  # Ball x velocity
             # self.ball_velocity[1],   # Ball z velocity
             # self.endeff_position.x,
@@ -113,7 +115,7 @@ class Fishing_Env():
 
     def step(self, a):
         # vec: distance vector between ball and cup
-        vec = [(self.ball_position[0] - GLASS_ORIGIN[0])/X_RANGE, (GLASS_ORIGIN[1] - self.ball_position[1])/Z_RANGE]
+        vec = self.ball_position # Already normalized such
         reward_dist = - np.linalg.norm(vec)
         reward_ctrl = - np.square(a).sum()
         reward = reward_dist + reward_ctrl
