@@ -13,7 +13,7 @@ COLOR_FILTER_low = np.array([80, 20, 10])
 COLOR_FILTER_high = np.array([255, 120, 100])
 
 # Ball position tracking
-GLASS_ORIGIN = np.array([300,375])
+GLASS_ORIGIN = np.array([300.0,375.0])
 X_RANGE = 590
 Z_RANGE = 427
 
@@ -57,46 +57,60 @@ class Webcam_capture():
         self.show_pos = False
         
         self.ball_pos = GLASS_ORIGIN
-        self.ball_vel = np.array([0,0])
+        self.ball_vel = np.array([0.0,0.0])
 
         # Init webcam and let it adjust exposure for 4 seconds
+        self.prev_time = time.time()
         start = time.time()
         elapsed = time.time() - start
         while (elapsed < 4):
-            self.get_ball_state()
+            pos, vel = self.get_ball_state()
+            print("Ball_position (X,Z): ", pos)
+            # print("Ball_X_position: ", self.ball_pos[0])
+            print("Ball_velocity (X,Z): ", vel)
             elapsed = time.time() - start
 
 
     def get_ball_state(self):
         # Capture frame        
         self.cap.grab() # Throw previous frame in buffer
-        ret, color_img = self.cap.read()
+        ret, frame = self.cap.read()
         if(not ret):
             print("No image stream from webcam")
             return
         
         # Cut image:
-        color_img = color_img[:Z_RANGE, :X_RANGE, :]
+        color_img = frame[:Z_RANGE, :X_RANGE, :]
         # Color mask: blue
         mask = cv2.inRange(color_img, COLOR_FILTER_low, COLOR_FILTER_high)
         # Detect blobs
         keypoints = self.detector.detect(mask)
+        color_img = frame
         # Debug: Uncomment to see mask:
         # color_img = mask
 
         num_keyps = len(keypoints)
         im_with_keypoints = color_img
-        if(num_keyps == 1):
-            keyp = keypoints
-            self.ball_pos = np.array([keypoints[0].pt[0], keypoints[0].pt[1]])            
-            if(self.show_img):
-                # Draw keypoints
-                im_with_keypoints = cv2.drawKeypoints(color_img, keyp, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)            
-        elif(num_keyps > 1):
+        # if(num_keyps == 1):
+        #     keyp = keypoints
+        #     self.ball_pos = np.array([keypoints[0].pt[0], keypoints[0].pt[1]])
+        #     if(self.show_img):
+        #         # Draw keypoints
+        #         im_with_keypoints = cv2.drawKeypoints(color_img, keyp, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)            
+        if(num_keyps >= 1):
             # Get largest size keypoint
             index = np.argmax(keyp.size for keyp in keypoints)
-            keyp = [keypoints[index]]            
+            keyp = [keypoints[index]]
+            
+            # Time interval (for velocity calculation)
+            dt = time.time()- self.prev_time
+            # print("Time interval:", dt)
+            self.prev_time = time.time()
+            
+            ## KF:
+
             self.ball_pos = np.array([keypoints[index].pt[0], keypoints[index].pt[1]])
+            
             if(self.show_img):
                 # Draw keypoints
                 im_with_keypoints = cv2.drawKeypoints(color_img, keyp, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
@@ -108,17 +122,18 @@ class Webcam_capture():
         if(self.show_pos):
             print("Ball_position (X,Z): ", str(self.ball_pos))
             # print("Ball_X_position: ", str(self.ball_pos[0]))
+            print("Ball_velocity (X,Z): ", str(self.ball_vel))
         if cv2.waitKey(1) & 0xFF == ord('q'):
             self.show_img = False
             self.show_pos = False
             cv2.destroyAllWindows()
 
         # Normalize and return:
-        ball_pos = np.array([0,0])        
-        ball_pos[0] = (self.ball_pos[0] - GLASS_ORIGIN[0])/X_RANGE  # Ball x position
-        ball_pos[1] = (GLASS_ORIGIN[1] - self.ball_pos[1])/Z_RANGE  # Ball z position
-        ball_vel = np.array([0,0])
-        ball_vel[0] = 0  # Ball x velocity
-        ball_vel[1] = 0  # Ball z velocity
-        
-        return ball_pos, ball_vel
+        ball_p = np.array([0.0,0.0])
+        ball_p[0] = (self.ball_pos[0] - GLASS_ORIGIN[0])/X_RANGE  # Ball x position
+        ball_p[1] = (GLASS_ORIGIN[1] - self.ball_pos[1])/Z_RANGE  # Ball z position
+        ball_v = np.array([0.0,0.0])
+        ball_v[0] = self.ball_vel[0]/X_RANGE  # Ball x velocity
+        ball_v[1] = -self.ball_vel[1]/Z_RANGE  # Ball z velocity
+
+        return ball_p, ball_v

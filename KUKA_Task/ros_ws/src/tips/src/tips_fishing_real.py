@@ -17,8 +17,9 @@ class TIPS_fishing_real(TIPS):
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
     self.errorConst = 0.05
-    # # Feedback in ball pos
-    # self.errorConst = 0.03
+
+    # Control time period
+    self.control_T = 0.1 # seconds
     
     # Feedback training rate in the episode
     self.feedback_training_rate  = 10
@@ -85,6 +86,7 @@ class TIPS_fishing_real(TIPS):
     Nstates = []
     Actions = []
     A = np.random.uniform(-0.5, 0.5, self.action_dim)
+    prev_time = time.time()
 
     for i in range(self.dynamicsSamples):
       # if terminal or ((i%300)==0):
@@ -97,11 +99,18 @@ class TIPS_fishing_real(TIPS):
       # Actions between -1 and 1
       A = np.random.uniform(-0.5, 0.5, self.action_dim)
 
-      state, _, terminal, _ = self.env.step(A)
+      state, _, terminal, valid_act = self.env.step(A)
 
-      States.append(prev_s)
-      Nstates.append(state)
-      Actions.append(A)
+      time_int = time.time() - prev_time
+      if(time_int < self.control_T):
+        time.sleep(self.control_T - time_int)
+      
+      prev_time = time.time()
+
+      if(valid_act):
+        States.append(prev_s)
+        Nstates.append(state)
+        Actions.append(A)
 
       if i and (i+1) % 100 == 0:
         print("Collecting dynamics training data ", i+1)
@@ -236,6 +245,7 @@ class TIPS_fishing_real(TIPS):
     a = np.random.uniform(-0.3,0.3,self.action_dim)
     t_counter = 1
     h_counter = 0
+    prev_time = time.time()
 
     # Iterate over the episode
     while((not terminal) and (not self.human_feedback.ask_for_done()) ):
@@ -287,7 +297,7 @@ class TIPS_fishing_real(TIPS):
         A = np.copy(a)
 
         state, reward, terminal, _ = self.env.step(A)
-        # print("Transition: ", (prev_s, a, state))
+        print("Transition: ", (prev_s, a, state))
 
         # Reset human feedback
         self.human_feedback.h_fb = H_NULL
@@ -303,8 +313,8 @@ class TIPS_fishing_real(TIPS):
         # Use current policy
 
         # Map action from state
-        a = np.reshape(self.eval_policy(state), [-1])
-        # a = [0,0]
+        # a = np.reshape(self.eval_policy(state), [-1])
+        a = [0.0,0.0]
         # Continuous actions
         A = np.copy(a)
 
@@ -312,10 +322,16 @@ class TIPS_fishing_real(TIPS):
       prev_s = np.copy(state)
 
       # Act
-      reward = 0
-      # state, reward, terminal, _ = self.env.step(A)
+      # reward = 0
+      state, reward, terminal, _ = self.env.step(A)
       total_reward += reward
       state = np.reshape(state, [-1, self.state_dim])
+
+      # Control period handling
+      time_int = time.time() - prev_time
+      if(time_int < self.control_T):
+        time.sleep(self.control_T - time_int)      
+      prev_time = time.time()
 
       # Add to ExpBuff
       self.ExpBuff.append((prev_s[0], state[0], a))

@@ -19,8 +19,8 @@ THETA3 = (45 * (np.pi /180)) # Joint 6 initial position
 L1 = 0.4   # Length of arm 1
 L2 = 0.4   # Length of arm 2
 L3 = 0.186 # Length of arm 3 # 6cm tool
-EPISODE_DURATION = 35 # seconds
-ACTION_DURATION = 0.1 # seconds
+EPISODE_DURATION = 30 # seconds
+ACTION_DURATION = 0 # seconds
 ACTION_RESET_DURATION = 0.5 # seconds
 A2_SETPOINT = 40 * (np.pi/180)
 A4_SETPOINT = -50 * (np.pi/180)
@@ -137,6 +137,7 @@ class Fishing_Env():
         reward_dist = - np.linalg.norm(vec)
         reward_ctrl = - np.square(a).sum()
         reward = reward_dist + reward_ctrl
+        valid_act = True
         
         if (self.terminal):
             print("[Episode ended. reset() needs to be called before new episode can be run]")
@@ -151,9 +152,11 @@ class Fishing_Env():
                 if not (j2_goal >= (THETA1 - (np.pi/2)) and j2_goal <= THETA1):
                     j2_goal = self.goal.position.a2 # Unchanged
                     print("[Action outside joint limits]")
+                    valid_act = False
                 if not (j4_goal >= (THETA2 - (np.pi/2)) and j4_goal <= THETA2):
                     j4_goal = self.goal.position.a4 # Unchanged
                     print("[Action outside joint limits]")
+                    valid_act = False
                 
                 # Check for end-effector collision:
                 _, z_goal = self.get_end_eff_pos(np.array([[j2_goal, j4_goal]]))
@@ -162,7 +165,8 @@ class Fishing_Env():
                     self.goal.position.a2 =  j2_goal
                     self.goal.position.a4 =  j4_goal
                 else:
-                    print("[End Effector: minimum height reached]")
+                    print("[End Effector: limit reached]")
+                    valid_act = False
 
                 # Send Action command
                 self.action_pub.publish(self.goal)
@@ -170,12 +174,13 @@ class Fishing_Env():
                 time.sleep(ACTION_DURATION)
             else:
                 print("[Action provided is too large]")
+                valid_act = False
 
             # Check if terminal based on total time elapsed since reset
             if ((time.time() - self.start_time) > EPISODE_DURATION):
                 self.terminal = True
 
-        return self.curr_state(), reward, self.terminal, dict(reward_dist=reward_dist, reward_ctrl=reward_ctrl)
+        return self.curr_state(), reward, self.terminal, valid_act
 
 
     ### Callbacks for subscribers
