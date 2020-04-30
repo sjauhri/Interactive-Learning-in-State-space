@@ -13,23 +13,23 @@ import numpy as np
 import time
 
 J2_Z_ORIGIN = 0.34
-END_EFF_Z_MIN = 0.45
 THETA1 = (90 * (np.pi /180)) # Joint 2 initial position
 THETA2 = 0#(45 * (np.pi /180)) # Joint 4 initial position
+THETA3 = (45 * (np.pi /180)) # Joint 6 initial position
 L1 = 0.4   # Length of arm 1
 L2 = 0.4   # Length of arm 2
-L3 = 0.126 # Length of arm 3
-EPISODE_DURATION = 25 # seconds
+L3 = 0.186 # Length of arm 3 # 6cm tool
+EPISODE_DURATION = 35 # seconds
 ACTION_DURATION = 0.1 # seconds
-ACTION_RESET_DURATION = 0.4 # seconds
+ACTION_RESET_DURATION = 0.5 # seconds
 A2_SETPOINT = 40 * (np.pi/180)
 A4_SETPOINT = -50 * (np.pi/180)
 A6_SETPOINT = 45 * (np.pi/180)
-
-# # Webcam
-# GLASS_ORIGIN = np.array([300,375])
-# X_RANGE = 590
-# Z_RANGE = 427
+A6_NOISE = 45 * (np.pi/180)
+END_EFF_Z_MIN = 0.45
+END_EFF_Z_MAX = 1.0
+END_EFF_X_ORIGIN = 0.74
+END_EFF_Z_ORIGIN = 0.5516
 
 class Fishing_Env():
     
@@ -77,22 +77,40 @@ class Fishing_Env():
             self.joint_velocity.a2, # Joint 2
             self.joint_velocity.a4, # Joint 4
             self.ball_position[0],  # Ball x position
-            self.ball_position[1]  # Ball z position
-            # self.ball_velocity[0],  # Ball x velocity
-            # self.ball_velocity[1],   # Ball z velocity
-            # self.endeff_position.x,
-            # self.endeff_position.z,
+            self.ball_position[1],  # Ball z position
+            self.ball_velocity[0],  # Ball x velocity
+            self.ball_velocity[1],   # Ball z velocity
+            self.endeff_position.x - END_EFF_X_ORIGIN,
+            self.endeff_position.z - END_EFF_Z_ORIGIN
         ])
 
 
     def reset(self):
         ### Take action to reset to zero position (with randomization)
-        # self.goal.points[0].positions =  [0, np.random.uniform(-0.1,0) ,0, np.random.uniform(0, 0.1) ,0,0,0]
-        self.goal.position.a2 = A2_SETPOINT + np.random.uniform(-0.25,0.25)
-        self.goal.position.a4 = A4_SETPOINT + np.random.uniform(-0.25,0.25)
+        j2_goal = A2_SETPOINT + np.random.uniform(-0.25,0.25)
+        j4_goal = A4_SETPOINT + np.random.uniform(-0.25,0.25)
+
+        if not (j2_goal >= (THETA1 - (np.pi/2)) and j2_goal <= THETA1):
+            j2_goal = A2_SETPOINT # Setpoint
+            print("[Action outside joint limits]")
+        if not (j4_goal >= (THETA2 - (np.pi/2)) and j4_goal <= THETA2):
+            j4_goal = A4_SETPOINT # Setpoint
+            print("[Action outside joint limits]")
         
+        # Check for end-effector collision:
+        _, z_goal = self.get_end_eff_pos(np.array([[j2_goal, j4_goal]]))
+        if((z_goal >= END_EFF_Z_MIN) and (z_goal <= END_EFF_Z_MAX)):
+            # Accepted (command within limits)
+            self.goal.position.a2 =  j2_goal
+            self.goal.position.a4 =  j4_goal
+        else:
+            j2_goal = A2_SETPOINT # Setpoint
+            j4_goal = A4_SETPOINT # Setpoint
+            print("[End Effector: minimum height reached]")
+
         # Optional : Move joint 6 to make ball move more aggresively
-        self.goal.position.a6 = A6_SETPOINT + np.random.uniform(-0.5,0.5)
+        i = np.random.choice([-1,1])
+        self.goal.position.a6 = A6_SETPOINT + (i*A6_NOISE)
 
         # Send Action command
         self.action_pub.publish(self.goal)
@@ -139,7 +157,7 @@ class Fishing_Env():
                 
                 # Check for end-effector collision:
                 _, z_goal = self.get_end_eff_pos(np.array([[j2_goal, j4_goal]]))
-                if(z_goal >= END_EFF_Z_MIN):
+                if((z_goal >= END_EFF_Z_MIN) and (z_goal <= END_EFF_Z_MAX)):
                     # Accepted (command within limits)
                     self.goal.position.a2 =  j2_goal
                     self.goal.position.a4 =  j4_goal
@@ -187,7 +205,7 @@ class Fishing_Env():
         theta1 = THETA1 - state[:,0]
         theta2 = THETA2 - state[:,1]
 
-        xpos = L1*np.cos(theta1) + L2*np.cos(theta1-theta2) + L3*np.sin(theta1-theta2)
-        zpos = J2_Z_ORIGIN + L1*np.sin(theta1) + L2*np.sin(theta1-theta2) - L3*np.cos(theta1-theta2)
+        xpos = L1*np.cos(theta1) + L2*np.cos(theta1-theta2) + L3*np.sin(theta1-theta2-THETA3+(np.pi/2))
+        zpos = J2_Z_ORIGIN + L1*np.sin(theta1) + L2*np.sin(theta1-theta2) - L3*np.cos(theta1-theta2-THETA3+(np.pi/2))
 
         return xpos, zpos

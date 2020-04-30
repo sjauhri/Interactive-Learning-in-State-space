@@ -42,10 +42,13 @@ detector = cv2.SimpleBlobDetector_create(params)
 COLOR_FILTER_low = np.array([80, 20, 10])
 COLOR_FILTER_high = np.array([255, 120, 100])
 
+## KF Setup:
+
+
 # Flag to show kinect image stream
 show_img = True
 # Flag to show position of keypoints
-show_pos = False
+show_pos = True
 GLASS_POS = np.array([300,375])
 ball_pos = np.array([0,0])
 ball_pos_x_sign = -1
@@ -55,21 +58,25 @@ ball_pos_x_sign = -1
 print("[Running...]")
 while(True):
     # Capture frame-by-frame
-    ret, color_img = cap.read()
+    ret, frame = cap.read()
     if(not ret):
         print("No image stream")
         break
     ## Our operations on the frame come here
     # Flip Image:
-    # color_img = cv2.flip(color_img, 1)
+    # frame = cv2.flip(frame, 1)
     # Partial image:
-    color_img = color_img[:427, :590, :] # color_img.shape[0]
+    color_img = frame[:427, :590, :]
+    # Color mask: reject grey
+    grey_mask = ((color_img[:, :, 1] - color_img[:, :, 0]) > 60).astype('uint8', copy=True)
+    color_img = cv2.bitwise_and(color_img,color_img, mask=grey_mask) # AND with main image
     # Color mask: blue
-    mask = cv2.inRange(color_img, COLOR_FILTER_low, COLOR_FILTER_high)
+    mask = cv2.inRange(color_img, COLOR_FILTER_low, COLOR_FILTER_high)    
+    color_img = cv2.bitwise_and(color_img,color_img, mask=mask) # AND with main image
     # Detect blobs.
-    keypoints = detector.detect(mask)
+    keypoints = detector.detect(color_img)
     # Debug: Uncomment to see mask:
-    # color_img = mask
+    # color_img = frame
 
     num_keyps = len(keypoints)
     if(num_keyps == 1):
@@ -115,14 +122,14 @@ cv2.destroyAllWindows()
 # # Initial:
 # import cv2
 # import time
-# C920_CAM = 0
+# C920_CAM = 2
 # # Setup capture
 # cap = cv2.VideoCapture(C920_CAM)
 # cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
 
 # # Speed test:
 # curr_time = time.time()
-# ret, color_img = cap.read()
+# cap.grab()
 # ret, color_img = cap.read()
 # cv2.imshow("Keypoints", color_img)
 # cv2.waitKey(1)

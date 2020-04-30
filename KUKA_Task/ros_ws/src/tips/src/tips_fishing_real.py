@@ -259,18 +259,18 @@ class TIPS_fishing_real(TIPS):
           a = np.array([0, 0.1])
         elif (h_fb == H_DOWN):
           a = np.array([0, -0.1])
-        elif (h_fb == H_LEFT):
-          a = np.array([-0.1, 0])
         elif (h_fb == H_RIGHT):
-          a = np.array([0.1, 0])
-        print("Computed Action: ", a)
+          a = np.array([-0.05, 0])
+        elif (h_fb == H_LEFT):
+          a = np.array([0.05, 0])
+        # print("Computed Action: ", a)
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
         # self.update_policy_feedback_immediate(state, a)
         # self.update_policy_feedback_immediate(state, a)
         # self.update_policy_feedback_immediate(state, a)
-        print("Learning: ", (state, a))
+        # print("Learning: ", (state, a))
 
         # Add state transition pair to demo buffer
         self.DemoBuff.append((state[0], a[0]))
@@ -287,6 +287,7 @@ class TIPS_fishing_real(TIPS):
         A = np.copy(a)
 
         state, reward, terminal, _ = self.env.step(A)
+        # print("Transition: ", (prev_s, a, state))
 
         # Reset human feedback
         self.human_feedback.h_fb = H_NULL
@@ -352,5 +353,5 @@ class TIPS_fishing_real(TIPS):
 
 
 if __name__ == "__main__":
-  tips = TIPS_fishing_real(6, 2, lr=args.lr, maxEpisodes=args.maxEpisodes)
+  tips = TIPS_fishing_real(10, 2, lr=args.lr, maxEpisodes=args.maxEpisodes)
   tips.run()

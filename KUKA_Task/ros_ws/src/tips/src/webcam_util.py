@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 import numpy as np
 import cv2
+import time
 import pdb
 
 # Webcam types:
@@ -51,12 +52,19 @@ class Webcam_capture():
         self.detector = cv2.SimpleBlobDetector_create(params)
 
         # Flag to show kinect image stream
-        self.show_img = False
+        self.show_img = True
         # Flag to show position of keypoints
         self.show_pos = False
         
         self.ball_pos = GLASS_ORIGIN
         self.ball_vel = np.array([0,0])
+
+        # Init webcam and let it adjust exposure for 4 seconds
+        start = time.time()
+        elapsed = time.time() - start
+        while (elapsed < 4):
+            self.get_ball_state()
+            elapsed = time.time() - start
 
 
     def get_ball_state(self):
@@ -74,7 +82,7 @@ class Webcam_capture():
         # Detect blobs
         keypoints = self.detector.detect(mask)
         # Debug: Uncomment to see mask:
-        color_img = mask
+        # color_img = mask
 
         num_keyps = len(keypoints)
         im_with_keypoints = color_img
