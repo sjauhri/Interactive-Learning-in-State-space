@@ -162,18 +162,18 @@ class TIPS_fishing_real(TIPS):
     state_corrected = np.zeros(2)
 
     # Get x-z position
-    state_x, state_z = self.env.get_end_eff_pos(np.reshape(state, [-1,self.state_dim]))
-    # # Feedback in ball pos
-    # state_x = state[4]
-    # state_z = state[5]
-    # print("state_x, state_z:", (state_x,state_z))
+    # state_x, state_z = self.env.get_end_eff_pos(np.reshape(state, [-1,self.state_dim]))
+    state_x = state[8]
+    state_z = state[9]
 
     # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()
     if (h_fb == H_LEFT):
-      state_corrected[0] = state_x - self.errorConst
+      # state_corrected[0] = state_x - self.errorConst
+      state_corrected[0] = state_x + self.errorConst
       state_corrected[1] = state_z
     elif (h_fb == H_RIGHT):
-      state_corrected[0] = state_x + self.errorConst
+      # state_corrected[0] = state_x + self.errorConst
+      state_corrected[0] = state_x - self.errorConst
       state_corrected[1] = state_z
     elif (h_fb == H_UP):
       state_corrected[0] = state_x
@@ -205,7 +205,8 @@ class TIPS_fishing_real(TIPS):
       Nstates = States
 
     # Get x-z position
-    Nstates_x, Nstates_z = self.env.get_end_eff_pos(Nstates)
+    # Nstates_x, Nstates_z = self.env.get_end_eff_pos(Nstates)
+    Nstates_x, Nstates_z = Nstates[:,8], Nstates[:,9]
 
     # Calculate cost
     cost = abs(state_corrected[0] - Nstates_x) + abs(state_corrected[1] - Nstates_z)
@@ -274,7 +275,7 @@ class TIPS_fishing_real(TIPS):
         #   a = np.array([-0.05, 0])
         # elif (h_fb == H_LEFT):
         #   a = np.array([0.05, 0])
-        print("Computed Action: ", a)
+        # print("Computed Action: ", a)
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
@@ -314,8 +315,8 @@ class TIPS_fishing_real(TIPS):
         # Use current policy
 
         # Map action from state
-        # a = np.reshape(self.eval_policy(state), [-1])
-        a = [0.0,0.0]
+        a = np.reshape(self.eval_policy(state), [-1])
+        # a = [0.0,0.0]
         # Continuous actions
         A = np.copy(a)
 

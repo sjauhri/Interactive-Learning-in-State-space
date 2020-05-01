@@ -106,6 +106,8 @@ class Fishing_Env():
         else:
             j2_goal = A2_SETPOINT # Setpoint
             j4_goal = A4_SETPOINT # Setpoint
+            self.goal.position.a2 =  j2_goal
+            self.goal.position.a4 =  j4_goal
             print("[End Effector: minimum height reached]")
 
         # Optional : Move joint 6 to make ball move more aggresively
@@ -211,7 +213,7 @@ class Fishing_Env():
         theta1 = THETA1 - state[:,0]
         theta2 = THETA2 - state[:,1]
 
-        xpos = -(L1*np.cos(theta1) + L2*np.cos(theta1-theta2) + L3*np.sin(theta1-theta2-THETA3+(np.pi/2)))
+        xpos = L1*np.cos(theta1) + L2*np.cos(theta1-theta2) + L3*np.sin(theta1-theta2-THETA3+(np.pi/2))
         zpos = J2_Z_ORIGIN + L1*np.sin(theta1) + L2*np.sin(theta1-theta2) - L3*np.cos(theta1-theta2-THETA3+(np.pi/2))
 
         return xpos, zpos
