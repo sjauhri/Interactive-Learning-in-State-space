@@ -21,7 +21,7 @@ L2 = 0.4   # Length of arm 2
 L3 = 0.186 # Length of arm 3 # 6cm tool
 EPISODE_DURATION = 30 # seconds
 ACTION_DURATION = 0 # seconds
-ACTION_RESET_DURATION = 0.5 # seconds
+ACTION_RESET_DURATION = 1 # seconds
 A2_SETPOINT = 40 * (np.pi/180)
 A4_SETPOINT = -50 * (np.pi/180)
 A6_SETPOINT = 45 * (np.pi/180)
@@ -69,7 +69,7 @@ class Fishing_Env():
         self.goal.position.a7 = 0.22
 
     def curr_state(self):
-        self.ball_position, self.ball_velocity = self.Webcam.get_ball_state() # Causes a delay of about 100ms
+        self.ball_position, self.ball_velocity = self.Webcam.get_ball_state() # Causes a delay of about 100ms        
 
         return np.array([
             self.joint_position.a2, # Joint 2
@@ -121,13 +121,12 @@ class Fishing_Env():
         self.action_pub.publish(self.goal)
         # Wait for action completion
         time.sleep(ACTION_RESET_DURATION)
-        
+
         # Set time for this episode
         self.start_time = time.time()
 
         # Reset terminal state
-        self.terminal = False
-
+        self.terminal = False        
         return self.curr_state()
 
 
@@ -197,7 +196,7 @@ class Fishing_Env():
         self.joint_velocity = joint_vel_msg.velocity
 
         # Debug print:
-        # print("Positions: " + "\n" + str(joint_position) + "\n")
+        # print("Velocities: " + "\n" + str(self.joint_velocity) + "\n")
 
     def endeff_pos_callback(self, endeff_pos_msg):
         self.endeff_position = endeff_pos_msg.poseStamped.pose.position
@@ -212,7 +211,7 @@ class Fishing_Env():
         theta1 = THETA1 - state[:,0]
         theta2 = THETA2 - state[:,1]
 
-        xpos = L1*np.cos(theta1) + L2*np.cos(theta1-theta2) + L3*np.sin(theta1-theta2-THETA3+(np.pi/2))
+        xpos = -(L1*np.cos(theta1) + L2*np.cos(theta1-theta2) + L3*np.sin(theta1-theta2-THETA3+(np.pi/2)))
         zpos = J2_Z_ORIGIN + L1*np.sin(theta1) + L2*np.sin(theta1-theta2) - L3*np.cos(theta1-theta2-THETA3+(np.pi/2))
 
         return xpos, zpos

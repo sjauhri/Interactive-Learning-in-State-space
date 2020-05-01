@@ -5,7 +5,7 @@ from fishing_real_env import *
 from feedback_ext import *
 
 class TIPS_fishing_real(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=20, epochTrainIts=4000,  dynamicsSamples=10000, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=20, epochTrainIts=4000,  dynamicsSamples=3600, batch_size=32):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
@@ -16,7 +16,7 @@ class TIPS_fishing_real(TIPS):
     self.human_feedback.viewer.render() # Render the additional feedback window
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
-    self.errorConst = 0.05
+    self.errorConst = 0.03
 
     # Control time period
     self.control_T = 0.1 # seconds
@@ -35,7 +35,7 @@ class TIPS_fishing_real(TIPS):
       DO_NOTHING: 0
     }
 
-    self.ifdm_queries = 400 # Two continous actions.
+    self.ifdm_queries = 1000 # Two continous actions.
 
 
   def build_policy_model(self):
@@ -85,27 +85,28 @@ class TIPS_fishing_real(TIPS):
     States = []
     Nstates = []
     Actions = []
-    A = np.random.uniform(-0.5, 0.5, self.action_dim)
+    A = np.random.uniform(-0.3, 0.3, self.action_dim)
     prev_time = time.time()
 
     for i in range(self.dynamicsSamples):
       # if terminal or ((i%300)==0):
       if terminal:
         state = self.env.reset()
-
+      
       prev_s = state
 
       # Continuos action space
       # Actions between -1 and 1
-      A = np.random.uniform(-0.5, 0.5, self.action_dim)
+      A = np.random.uniform(-0.3, 0.3, self.action_dim)
 
       state, _, terminal, act_taken = self.env.step(A)
       A = act_taken # Actual action taken
 
-      time_int = time.time() - prev_time
-      if(time_int < self.control_T):
-        time.sleep(self.control_T - time_int)
-      prev_time = time.time()
+      # time_int = time.time() - prev_time
+      # print("Time_int: ", time_int)
+      # if(time_int < 0.3):#self.control_T):
+      #   time.sleep(0.3 - time_int)
+      # prev_time = time.time()
       
       # print("Experience sample:", (prev_s, state, A))
       States.append(prev_s)
@@ -261,25 +262,25 @@ class TIPS_fishing_real(TIPS):
         h_counter += 1 # Feedback counter
 
         # Get new state transition label using feedback
-        # state_corrected = self.get_state_corrected(h_fb, state[0])
+        state_corrected = self.get_state_corrected(h_fb, state[0])
         # Get action from ifdm
-        # a = self.get_corrected_action(h_fb, state[0], state_corrected)
+        a = self.get_corrected_action(h_fb, state[0], state_corrected)
         # Direct Actions
-        if (h_fb == H_UP):
-          a = np.array([0, 0.1])
-        elif (h_fb == H_DOWN):
-          a = np.array([0, -0.1])
-        elif (h_fb == H_RIGHT):
-          a = np.array([-0.05, 0])
-        elif (h_fb == H_LEFT):
-          a = np.array([0.05, 0])
-        # print("Computed Action: ", a)
+        # if (h_fb == H_UP):
+        #   a = np.array([0, 0.1])
+        # elif (h_fb == H_DOWN):
+        #   a = np.array([0, -0.1])
+        # elif (h_fb == H_RIGHT):
+        #   a = np.array([-0.05, 0])
+        # elif (h_fb == H_LEFT):
+        #   a = np.array([0.05, 0])
+        print("Computed Action: ", a)
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
-        # self.update_policy_feedback_immediate(state, a)
-        # self.update_policy_feedback_immediate(state, a)
-        # self.update_policy_feedback_immediate(state, a)
+        self.update_policy_feedback_immediate(state, a)
+        self.update_policy_feedback_immediate(state, a)
+        self.update_policy_feedback_immediate(state, a)
         # print("Learning: ", (state, a))
 
         # Add state transition pair to demo buffer
@@ -289,15 +290,15 @@ class TIPS_fishing_real(TIPS):
             self.DemoBuff.pop(0)
 
         # Train with batch from Demo buffer (if enough entries exist)
-        # self.update_policy_feedback()
+        self.update_policy_feedback()
 
         # Act using action based on h_feedback
         a = np.reshape(a, [-1])
         # Continuous actions
         A = np.copy(a)
 
-        state, reward, terminal, _ = self.env.step(A)
-        print("Transition: ", (prev_s, a, state))
+        state, reward, terminal, act_taken = self.env.step(A)
+        # print("Transition: ", (prev_s, act_taken, state))
 
         # Reset human feedback
         self.human_feedback.h_fb = H_NULL

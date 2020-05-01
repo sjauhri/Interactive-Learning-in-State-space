@@ -59,11 +59,11 @@ class Webcam_capture():
         self.ball_pos = GLASS_ORIGIN
         self.ball_vel = np.array([0.0,0.0])
 
-        # Init webcam and let it adjust exposure for 4 seconds
+        # Init webcam and let it adjust exposure for 2 seconds
         self.prev_time = time.time()
         start = time.time()
         elapsed = time.time() - start
-        while (elapsed < 4):
+        while (elapsed < 2):
             pos, vel = self.get_ball_state()
             print("Ball_position (X,Z): ", pos)
             # print("Ball_X_position: ", self.ball_pos[0])
