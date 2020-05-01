@@ -16,7 +16,7 @@ class TIPS_fishing_real(TIPS):
     self.human_feedback.viewer.render() # Render the additional feedback window
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
-    self.errorConst = 0.03
+    self.errorConst = 0.02
 
     # Control time period
     self.control_T = 0.1 # seconds
@@ -298,7 +298,7 @@ class TIPS_fishing_real(TIPS):
         # Continuous actions
         A = np.copy(a)
 
-        state, reward, terminal, act_taken = self.env.step(A)
+        # state, reward, terminal, act_taken = self.env.step(A)
         # print("Transition: ", (prev_s, act_taken, state))
 
         # Reset human feedback
@@ -333,6 +333,7 @@ class TIPS_fishing_real(TIPS):
       time_int = time.time() - prev_time
       if(time_int < self.control_T):
         time.sleep(self.control_T - time_int)      
+      # print("Time interval: ", time.time() - prev_time)
       prev_time = time.time()
 
       # Add to ExpBuff

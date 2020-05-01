@@ -22,7 +22,7 @@ L3 = 0.186 # Length of arm 3 # 6cm tool
 EPISODE_DURATION = 30 # seconds
 ACTION_DURATION = 0 # seconds
 ACTION_RESET_DURATION = 1 # seconds
-A2_SETPOINT = 40 * (np.pi/180)
+A2_SETPOINT = 30 * (np.pi/180)
 A4_SETPOINT = -50 * (np.pi/180)
 A6_SETPOINT = 45 * (np.pi/180)
 A6_NOISE = 45 * (np.pi/180)
@@ -116,11 +116,13 @@ class Fishing_Env():
 
         # Send Action command
         self.action_pub.publish(self.goal)
+        # print("Goal: ",self.goal)
         # Wait for action completion
         time.sleep(ACTION_RESET_DURATION)
         # Optional : Move joint 6 to make ball move more aggresively
         self.goal.position.a6 = A6_SETPOINT
         self.action_pub.publish(self.goal)
+        # print("Goal: ",self.goal)
         # Wait for action completion
         time.sleep(ACTION_RESET_DURATION)
 
@@ -167,6 +169,7 @@ class Fishing_Env():
 
                 # Send Action command
                 self.action_pub.publish(self.goal)
+                # print("Goal: ",self.goal)
                 # Wait for action completion
                 time.sleep(ACTION_DURATION)
             else:
