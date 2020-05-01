@@ -10,6 +10,7 @@ C920_CAM = 2
 
 # Setup capture
 cap = cv2.VideoCapture(C920_CAM)
+cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
 
 ## Blob detection:
 # Setup SimpleBlobDetector parameters
@@ -32,15 +33,15 @@ params.filterByConvexity = False
 # params.minConvexity = 0.5
 # Filter by Inertia
 params.filterByInertia = True
-params.minInertiaRatio = 0.1
+params.minInertiaRatio = 0.4#0.1
 # params.maxInertiaRatio = 0.4
 
 # Set up the detector
 detector = cv2.SimpleBlobDetector_create(params)
 
 # Color Filter: BGR Values centered at [199, 86, 30]
-COLOR_FILTER_low = np.array([80, 20, 10])
-COLOR_FILTER_high = np.array([255, 120, 100])
+COLOR_FILTER_low = np.array([0, 20, 15])
+COLOR_FILTER_high = np.array([255, 200, 200])
 
 # Flag to show kinect image stream
 show_img = True
@@ -56,7 +57,7 @@ kalman = cv2.KalmanFilter(4, 2, 0)
 kalman.transitionMatrix = np.array([[1., 0., 0.1, 0.], [0., 1., 0., 0.1], [0., 0., 1., 0.], [0., 0., 0., 1.]])
 kalman.measurementMatrix = np.array([[1., 0., 0., 0.], [0., 1., 0., 0.]])
 kalman.processNoiseCov = np.array([[1e-2, 0., 0., 0.], [0., 1e-2, 0., 0.], [0., 0, 1e-2, 0.], [0., 0, 0., 1e-2]])#1e-2 * np.eye(4) # TUNE
-kalman.measurementNoiseCov = 1e-2 * np.eye(2) # TUNE
+kalman.measurementNoiseCov = 1e-1 * np.eye(2) # TUNE
 kalman.errorCovPost = 1. * np.eye(4)
 kalman.statePost = 0. *np.zeros((4,1))
 kalman.statePost[0] = ball_pos[0]
@@ -71,7 +72,7 @@ pred_state = kalman.predict()
 ## Play images:
 print("[Running...]")
 prev_time = time.time()
-im_with_keypoints = cap.read()
+ret, im_with_keypoints = cap.read()
 while(True):
     # Capture frame-by-frame
     cap.grab()
@@ -86,15 +87,15 @@ while(True):
     # Partial image:
     color_img = frame[:427, :590, :]
     # Color mask: reject grey
-    grey_mask = ((color_img[:, :, 1] - color_img[:, :, 0]) > 50).astype('uint8', copy=True)
-    color_img = cv2.bitwise_and(color_img,color_img, mask=grey_mask) # AND with main image
+    # grey_mask = ((color_img[:, :, 1] - color_img[:, :, 0]) > 50).astype('uint8', copy=True)
+    # color_img = cv2.bitwise_and(color_img,color_img, mask=grey_mask) # AND with main image
     # Color mask: blue
     mask = cv2.inRange(color_img, COLOR_FILTER_low, COLOR_FILTER_high)    
     color_img = cv2.bitwise_and(color_img,color_img, mask=mask) # AND with main image
     # Detect blobs.
     keypoints = detector.detect(color_img)
     # Debug: Uncomment to see mask:
-    color_img = frame
+    # color_img = frame
 
     num_keyps = len(keypoints)
     if(num_keyps >= 1):
@@ -106,7 +107,7 @@ while(True):
         dt = time.time() - prev_time
         if (dt < 0.1):
             time.sleep(0.1-dt)
-        # print("Time interval:", time.time()- prev_time)# 0.06 to 0.11
+        print("Time interval:", time.time()- prev_time)# 0.06 to 0.11
         prev_time = time.time()
 
         # ball_pos_prev = ball_pos
@@ -114,26 +115,28 @@ while(True):
         ball_pos_now = np.array([keypoints[index].pt[0], keypoints[index].pt[1]])
         # ball_vel = (ball_pos - ball_pos_prev)/dt
 
-        #KF:
-        meas = np.array([[ball_pos_now[0]],[ball_pos_now[1]]])
-        est_state = kalman.correct(meas)
-        ball_pos[0] = est_state[0]
-        ball_pos[1] = est_state[1]
-        ball_vel[0] = est_state[2]
-        ball_vel[1] = est_state[3]
-        kalman.predict() # predict next
+        #KF: Curently removed
+        ball_vel = (ball_pos_now - ball_pos)/dt
+        ball_pos = ball_pos_now
+        # meas = np.array([[ball_pos_now[0]],[ball_pos_now[1]]])
+        # est_state = kalman.correct(meas)
+        # ball_pos[0] = est_state[0]
+        # ball_pos[1] = est_state[1]
+        # ball_vel[0] = est_state[2]
+        # ball_vel[1] = est_state[3]
+        # kalman.predict() # predict next
 
-        # Draw keypoints
-        radius = 5
-        thickness = -1
-        color = (0, 255, 255)        
+        # Draw keypoints      
         im_with_keypoints = cv2.drawKeypoints(color_img, keyp, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     # else:
     #     im_with_keypoints = color_img
 
     if(show_img):
         # Show keypoints
-        im_with_keypoints = cv2.circle(im_with_keypoints, (int(ball_pos[0]),int(ball_pos[1])), radius, color, thickness)
+        # radius = 5
+        # thickness = -1
+        # color = (0, 255, 255)  
+        # im_with_keypoints = cv2.circle(im_with_keypoints, (int(ball_pos[0]),int(ball_pos[1])), radius, color, thickness)
         cv2.imshow("Keypoints", im_with_keypoints)
     if(show_pos):
         print("Ball_position (X,Y): ", str(ball_pos))

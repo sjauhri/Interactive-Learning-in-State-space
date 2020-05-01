@@ -132,15 +132,11 @@ class Fishing_Env():
 
 
     def step(self, a):
-        # vec: distance vector between ball and cup
-        vec = self.ball_position # Already normalized such
-        reward_dist = - np.linalg.norm(vec)
-        reward_ctrl = - np.square(a).sum()
-        reward = reward_dist + reward_ctrl
-        valid_act = True
+        act_taken = np.copy(a)
         
         if (self.terminal):
             print("[Episode ended. reset() needs to be called before new episode can be run]")
+            act_taken = np.array([0.0 , 0.0])
         else:
             ### Take action a
             # Sanity check
@@ -152,11 +148,11 @@ class Fishing_Env():
                 if not (j2_goal >= (THETA1 - (np.pi/2)) and j2_goal <= THETA1):
                     j2_goal = self.goal.position.a2 # Unchanged
                     print("[Action outside joint limits]")
-                    valid_act = False
+                    act_taken[0] = 0.0
                 if not (j4_goal >= (THETA2 - (np.pi/2)) and j4_goal <= THETA2):
                     j4_goal = self.goal.position.a4 # Unchanged
                     print("[Action outside joint limits]")
-                    valid_act = False
+                    act_taken[1] = 0.0
                 
                 # Check for end-effector collision:
                 _, z_goal = self.get_end_eff_pos(np.array([[j2_goal, j4_goal]]))
@@ -166,7 +162,7 @@ class Fishing_Env():
                     self.goal.position.a4 =  j4_goal
                 else:
                     print("[End Effector: limit reached]")
-                    valid_act = False
+                    act_taken = np.array([0.0 , 0.0])
 
                 # Send Action command
                 self.action_pub.publish(self.goal)
@@ -174,13 +170,19 @@ class Fishing_Env():
                 time.sleep(ACTION_DURATION)
             else:
                 print("[Action provided is too large]")
-                valid_act = False
+                act_taken = np.array([0.0 , 0.0])
 
             # Check if terminal based on total time elapsed since reset
             if ((time.time() - self.start_time) > EPISODE_DURATION):
                 self.terminal = True
 
-        return self.curr_state(), reward, self.terminal, valid_act
+        # vec: distance vector between ball and cup
+        vec = self.ball_position # Already normalized such
+        reward_dist = - np.linalg.norm(vec)
+        reward_ctrl = - np.square(act_taken).sum()
+        reward = reward_dist + reward_ctrl
+
+        return self.curr_state(), reward, self.terminal, act_taken
 
 
     ### Callbacks for subscribers

@@ -9,8 +9,8 @@ IN_BUILT_CAM = 0
 C920_CAM = 2
 
 # Color Filter: BGR Values centered at [199, 86, 30]
-COLOR_FILTER_low = np.array([80, 20, 10])
-COLOR_FILTER_high = np.array([255, 120, 100])
+COLOR_FILTER_low = np.array([0, 20, 15])#np.array([80, 20, 10])
+COLOR_FILTER_high = np.array([255, 200, 200])#np.array([255, 120, 100])
 
 # Ball position tracking
 GLASS_ORIGIN = np.array([300.0,375.0])
@@ -45,7 +45,7 @@ class Webcam_capture():
         # params.minConvexity = 0.5
         # Filter by Inertia
         params.filterByInertia = True
-        params.minInertiaRatio = 0.1
+        params.minInertiaRatio = 0.4#0.1
         # params.maxInertiaRatio = 0.4
 
         # Set up the detector
@@ -107,9 +107,19 @@ class Webcam_capture():
             # print("Time interval:", dt)
             self.prev_time = time.time()
             
-            ## KF:
+            ball_pos_now = np.array([keypoints[index].pt[0], keypoints[index].pt[1]])
 
-            self.ball_pos = np.array([keypoints[index].pt[0], keypoints[index].pt[1]])
+            #KF: Curently removed
+            self.ball_vel = (ball_pos_now - self.ball_pos)/dt
+            self.ball_pos = ball_pos_now
+            # meas = np.array([[ball_pos_now[0]],[ball_pos_now[1]]])
+            # est_state = kalman.correct(meas)
+            # self.ball_pos[0] = est_state[0]
+            # self.ball_pos[1] = est_state[1]
+            # self.ball_pos[0] = est_state[2]
+            # self.ball_pos[1] = est_state[3]
+            # kalman.predict() # predict next
+
             
             if(self.show_img):
                 # Draw keypoints

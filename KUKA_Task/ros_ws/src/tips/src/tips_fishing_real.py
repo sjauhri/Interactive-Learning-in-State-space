@@ -5,7 +5,7 @@ from fishing_real_env import *
 from feedback_ext import *
 
 class TIPS_fishing_real(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=20, epochTrainIts=4000,  dynamicsSamples=4000, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=20, epochTrainIts=4000,  dynamicsSamples=10000, batch_size=32):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
@@ -99,18 +99,18 @@ class TIPS_fishing_real(TIPS):
       # Actions between -1 and 1
       A = np.random.uniform(-0.5, 0.5, self.action_dim)
 
-      state, _, terminal, valid_act = self.env.step(A)
+      state, _, terminal, act_taken = self.env.step(A)
+      A = act_taken # Actual action taken
 
       time_int = time.time() - prev_time
       if(time_int < self.control_T):
         time.sleep(self.control_T - time_int)
-      
       prev_time = time.time()
-
-      if(valid_act):
-        States.append(prev_s)
-        Nstates.append(state)
-        Actions.append(A)
+      
+      # print("Experience sample:", (prev_s, state, A))
+      States.append(prev_s)
+      Nstates.append(state)
+      Actions.append(A)
 
       if i and (i+1) % 100 == 0:
         print("Collecting dynamics training data ", i+1)
