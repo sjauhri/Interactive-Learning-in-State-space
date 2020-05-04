@@ -19,7 +19,7 @@ class TIPS_fishing_real(TIPS):
     self.errorConst = 0.05
 
     # Control time period
-    self.control_T = 0.08 # seconds
+    self.control_T = 0.1 # seconds
     
     # Feedback training rate in the episode
     self.feedback_training_rate  = 10
@@ -162,9 +162,11 @@ class TIPS_fishing_real(TIPS):
     state_corrected = np.zeros(2)
 
     # Get x-z position
-    # state_x, state_z = self.env.get_end_eff_pos(np.reshape(state, [-1,self.state_dim]))
-    state_x = state[8]
-    state_z = state[9]
+    if (args.learnFDM):    
+      state_x = state[8]
+      state_z = state[9]
+    else:
+      state_x, state_z = self.env.get_end_eff_pos(np.reshape(state, [-1,self.state_dim]))
 
     # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()
     if (h_fb == H_LEFT):
@@ -198,15 +200,15 @@ class TIPS_fishing_real(TIPS):
     if (args.learnFDM):
       # Learnt FDM:
       Nstates = self.eval_fdm(States, Actions)
+      # Get x-z position
+      Nstates_x, Nstates_z = Nstates[:,8], Nstates[:,9]      
     else:
       # True FDM:
       States[:,0] += Actions[:,0]
       States[:,1] += Actions[:,1]
       Nstates = States
-
-    # Get x-z position
-    # Nstates_x, Nstates_z = self.env.get_end_eff_pos(Nstates)
-    Nstates_x, Nstates_z = Nstates[:,8], Nstates[:,9]
+      # Get x-z position
+      Nstates_x, Nstates_z = self.env.get_end_eff_pos(Nstates)      
 
     # Calculate cost
     cost = abs(state_corrected[0] - Nstates_x) + abs(state_corrected[1] - Nstates_z)

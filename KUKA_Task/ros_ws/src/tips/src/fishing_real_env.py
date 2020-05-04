@@ -13,20 +13,23 @@ import numpy as np
 import time
 
 J2_Z_ORIGIN = 0.34
-THETA1 = (90 * (np.pi /180)) # Joint 2 initial position
-THETA2 = 0#(45 * (np.pi /180)) # Joint 4 initial position
-THETA3 = (45 * (np.pi /180)) # Joint 6 initial position
+THETA1 = (90 * (np.pi /180)) # Joint 2 origin
+THETA2 = 0#(45 * (np.pi /180)) # Joint 4 origin
+THETA3 = (45 * (np.pi /180)) # setpoint Joint 6
 L1 = 0.4   # Length of arm 1
 L2 = 0.4   # Length of arm 2
 L3 = 0.186 # Length of arm 3 # 6cm tool
 EPISODE_DURATION = 30 # seconds
 ACTION_DURATION = 0 # seconds
 ACTION_RESET_DURATION = 1 # seconds
-A2_SETPOINT = 30 * (np.pi/180)
-A4_SETPOINT = -50 * (np.pi/180)
-A6_SETPOINT = 45 * (np.pi/180)
+A2_SETPOINT = 25 * (np.pi/180) # Joint 2 initial position
+A4_SETPOINT = -50 * (np.pi/180) # Joint 4 initial position
+A6_SETPOINT = 45 * (np.pi/180) # Joint 6 initial position
+A2_NOISE = 15 * (np.pi/180)
+A4_NOISE = 35 * (np.pi/180)
 A6_NOISE = 45 * (np.pi/180)
-END_EFF_Z_MIN = 0.45
+NOISE_DURATION = 0.3 # seconds
+END_EFF_Z_MIN = 0.45#0.45
 END_EFF_Z_MAX = 1.0
 END_EFF_X_ORIGIN = 0.74
 END_EFF_Z_ORIGIN = 0.5516
@@ -70,8 +73,9 @@ class Fishing_Env():
 
     def curr_state(self):
         self.ball_position, self.ball_velocity = self.Webcam.get_ball_state() # Causes a delay of about 100ms
-        self.ball_velocity[0] = 0.0
-        self.ball_velocity[1] = 0.0
+        # Debug: No velocity used in policy
+        # self.ball_velocity[0] = 0.0
+        # self.ball_velocity[1] = 0.0
 
         return np.array([
             self.joint_position.a2, # Joint 2
@@ -89,8 +93,8 @@ class Fishing_Env():
 
     def reset(self):
         ### Take action to reset to zero position (with randomization)
-        j2_goal = A2_SETPOINT + np.random.uniform(-0.25,0.25)
-        j4_goal = A4_SETPOINT + np.random.uniform(-0.25,0.25)
+        j2_goal = A2_SETPOINT + np.random.uniform(-0.35,-0.1)#0.25)
+        j4_goal = A4_SETPOINT + np.random.uniform(-0.35,-0.1)#0.25)
 
         if not (j2_goal >= (THETA1 - (np.pi/2)) and j2_goal <= THETA1):
             j2_goal = A2_SETPOINT # Setpoint
@@ -112,19 +116,26 @@ class Fishing_Env():
             self.goal.position.a4 =  j4_goal
             print("[End Effector: minimum height reached]")
 
-        # Optional : Move joint 6 to make ball move more aggresively
-        i = np.random.choice([-1,1])
-        self.goal.position.a6 = A6_SETPOINT + (i*A6_NOISE)
-
         # Send Action command
         self.action_pub.publish(self.goal)
         # print("Goal: ",self.goal)
         # Wait for action completion
         time.sleep(ACTION_RESET_DURATION)
-        # Optional : Move joint 6 to make ball move more aggresively
+        # Optional : Move joints to make ball move more aggresively
+        i = np.random.choice([-1,1])
+        j = np.random.choice([-1,1])
+        k = np.random.choice([-1,1])
+        self.goal.position.a2 += (i*A2_NOISE)
+        self.goal.position.a4 += (-i*A4_NOISE)
+        self.goal.position.a6 = A6_SETPOINT + (-i*A6_NOISE)
+        self.action_pub.publish(self.goal)
+        # Wait for noise completion
+        time.sleep(NOISE_DURATION)
+        # Move joints back
+        self.goal.position.a2 -= (i*A2_NOISE)
+        self.goal.position.a4 -= (-i*A4_NOISE)
         self.goal.position.a6 = A6_SETPOINT
         self.action_pub.publish(self.goal)
-        # print("Goal: ",self.goal)
         # Wait for action completion
         time.sleep(ACTION_RESET_DURATION)
 
