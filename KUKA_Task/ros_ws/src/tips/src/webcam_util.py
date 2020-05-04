@@ -9,8 +9,8 @@ IN_BUILT_CAM = 0
 C920_CAM = 2
 
 # Color Filter: BGR Values centered at [199, 86, 30]
-COLOR_FILTER_low = np.array([0, 20, 15])#np.array([80, 20, 10])
-COLOR_FILTER_high = np.array([255, 200, 200])#np.array([255, 120, 100])
+COLOR_FILTER_low = np.array([0, 20, 25])#np.array([80, 20, 10])
+COLOR_FILTER_high = np.array([255, 255, 255])#np.array([255, 120, 100])
 
 # Ball position tracking
 GLASS_ORIGIN = np.array([300.0,375.0])

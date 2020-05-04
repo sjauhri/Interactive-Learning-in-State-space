@@ -40,8 +40,8 @@ params.minInertiaRatio = 0.4#0.1
 detector = cv2.SimpleBlobDetector_create(params)
 
 # Color Filter: BGR Values centered at [199, 86, 30]
-COLOR_FILTER_low = np.array([0, 20, 15])
-COLOR_FILTER_high = np.array([255, 200, 200])
+COLOR_FILTER_low = np.array([0, 20, 25])
+COLOR_FILTER_high = np.array([255, 255, 255])
 
 # Flag to show kinect image stream
 show_img = True
@@ -94,7 +94,7 @@ while(True):
     color_img = cv2.bitwise_and(color_img,color_img, mask=mask) # AND with main image
     # Detect blobs.
     keypoints = detector.detect(color_img)
-    # Debug: Uncomment to see mask:
+    # Debug: Uncomment to see full image:
     # color_img = frame
 
     num_keyps = len(keypoints)

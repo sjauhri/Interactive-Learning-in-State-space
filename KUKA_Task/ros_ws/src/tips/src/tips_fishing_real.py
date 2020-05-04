@@ -16,10 +16,10 @@ class TIPS_fishing_real(TIPS):
     self.human_feedback.viewer.render() # Render the additional feedback window
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
-    self.errorConst = 0.02
+    self.errorConst = 0.05
 
     # Control time period
-    self.control_T = 0.1 # seconds
+    self.control_T = 0.08 # seconds
     
     # Feedback training rate in the episode
     self.feedback_training_rate  = 10
@@ -51,7 +51,7 @@ class TIPS_fishing_real(TIPS):
 
       with tf.variable_scope("output") as scope:
         self.tmp_policy_pred_action = tf.layers.dense(policy_h2, self.action_dim, kernel_initializer=weight_initializer(), bias_initializer=bias_initializer(), name="dense")
-        self.policy_pred_action = tf.clip_by_value(self.tmp_policy_pred_action, clip_value_min=-1, clip_value_max=1)
+        self.policy_pred_action = tf.clip_by_value(self.tmp_policy_pred_action, clip_value_min=-0.3, clip_value_max=0.3)
 
       with tf.variable_scope("loss") as scope:
         self.policy_loss = tf.reduce_mean(tf.squared_difference(self.policy_pred_action, self.action))

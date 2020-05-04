@@ -69,7 +69,9 @@ class Fishing_Env():
         self.goal.position.a7 = 0.22
 
     def curr_state(self):
-        self.ball_position, self.ball_velocity = self.Webcam.get_ball_state() # Causes a delay of about 100ms        
+        self.ball_position, self.ball_velocity = self.Webcam.get_ball_state() # Causes a delay of about 100ms
+        self.ball_velocity[0] = 0.0
+        self.ball_velocity[1] = 0.0
 
         return np.array([
             self.joint_position.a2, # Joint 2
@@ -143,7 +145,7 @@ class Fishing_Env():
         else:
             ### Take action a
             # Sanity check
-            if((a >= -0.5).all() and (a <= 0.5).all()):
+            if((a >= -0.3).all() and (a <= 0.3).all()):
                 # Set goal: Relative position change
                 j2_goal = self.goal.position.a2 +  a[0]
                 j4_goal = self.goal.position.a4 +  a[1]
