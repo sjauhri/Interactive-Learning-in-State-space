@@ -190,9 +190,11 @@ class TIPS_fishing_real(TIPS):
     """get action to achieve next state close to state_corrected"""
 
     # prev_time = time.time()
-
+    state_copy = np.copy(state)
+    # Zero redundant ball states
+    state_copy[4:8] = 0
     # Make a vector of same states
-    States = np.tile(state, (self.ifdm_queries,1))
+    States = np.tile(state_copy, (self.ifdm_queries,1))
     # Choose random actions
     # Continuous Actions
     Actions = np.random.uniform(-0.3, 0.3, (self.ifdm_queries,self.action_dim) )

@@ -214,12 +214,25 @@ class TIPS():
     
       # Optional: Learn FDM using random sampling
       if (args.learnFDM):
+      #   with open(os.path.join('learnt_fdms/fishing_real_fdm_slow2', 'Experience.pkl'), 'rb') as f:
+      #           experience_data = pickle.load(f)
+      #   S = experience_data['observations']
+      #   nS = experience_data['observations_next']
+      #   A = experience_data['actions']
+      #   for id in range(0, len(S)):
+      #     S[id][4:8] = 0
+      #     nS[id][4:8] = 0
+      #     # import pdb; pdb.set_trace()
+      #     self.ExpBuff.append((S[id], nS[id], A[id]))
+      #   self.update_fdm(self.epochTrainIts*5)
         print("\n[Random sampling to learn FDM]")
         S, nS, A = self.dynamics_sampling()
         # Add to Experience Buffer
         for id in range(0, len(S)):
+          S[id][4:8] = 0 # zero redundant states
+          nS[id][4:8] = 0 # zero redundant states
           self.ExpBuff.append((S[id], nS[id], A[id]))
-        self.update_fdm(self.epochTrainIts*15)
+        self.update_fdm(self.epochTrainIts*10)
         # Optional: Save current experience data
         with open(os.path.join('learnt_fdms', 'Experience.pkl'), 'wb') as f:
                 experience_data = {'observations': S,

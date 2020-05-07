@@ -123,8 +123,8 @@ class Fishing_Env():
         time.sleep(ACTION_RESET_DURATION)
         # Optional : Move joints to make ball move more aggresively
         i = np.random.choice([-1,1])
-        j = np.random.choice([-1,1])
-        k = np.random.choice([-1,1])
+        # j = np.random.choice([-1,1])
+        # k = np.random.choice([-1,1])
         self.goal.position.a2 += (i*A2_NOISE)
         self.goal.position.a4 += (-i*A4_NOISE)
         self.goal.position.a6 = A6_SETPOINT + (-i*A6_NOISE)
@@ -161,14 +161,16 @@ class Fishing_Env():
                 j2_goal = self.goal.position.a2 +  a[0]
                 j4_goal = self.goal.position.a4 +  a[1]
 
-                if not (j2_goal >= (THETA1 - (np.pi/2)) and j2_goal <= THETA1):
+                if (not (j2_goal >= (THETA1 - (np.pi/2)) and j2_goal <= THETA1)) or (not (j4_goal >= (THETA2 - (np.pi/2)) and j4_goal <= THETA2)):
                     j2_goal = self.goal.position.a2 # Unchanged
-                    print("[Action outside joint limits]")
-                    act_taken[0] = 0.0
-                if not (j4_goal >= (THETA2 - (np.pi/2)) and j4_goal <= THETA2):
                     j4_goal = self.goal.position.a4 # Unchanged
                     print("[Action outside joint limits]")
+                    act_taken[0] = 0.0
                     act_taken[1] = 0.0
+                # if not (j4_goal >= (THETA2 - (np.pi/2)) and j4_goal <= THETA2):
+                #     j4_goal = self.goal.position.a4 # Unchanged
+                #     print("[Action outside joint limits]")
+                #     act_taken[1] = 0.0
                 
                 # Check for end-effector collision:
                 _, z_goal = self.get_end_eff_pos(np.array([[j2_goal, j4_goal]]))
