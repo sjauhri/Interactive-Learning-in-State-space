@@ -13,7 +13,7 @@ COLOR_FILTER_low = np.array([0, 20, 25])#np.array([80, 20, 10])
 COLOR_FILTER_high = np.array([255, 255, 255])#np.array([255, 120, 100])
 
 # Ball position tracking
-GLASS_ORIGIN = np.array([300.0,375.0])
+GLASS_ORIGIN = np.array([338.0,379.0])
 X_RANGE = 590
 Z_RANGE = 427
 

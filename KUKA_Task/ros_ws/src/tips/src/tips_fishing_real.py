@@ -16,7 +16,7 @@ class TIPS_fishing_real(TIPS):
     self.human_feedback.viewer.render() # Render the additional feedback window
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
-    self.errorConst = 0.05
+    self.errorConst = 0.04#0.03
 
     # Control time period
     self.control_T = 0.1 # seconds
@@ -31,7 +31,7 @@ class TIPS_fishing_real(TIPS):
       H_DOWN: 1,
       H_LEFT: 1,
       H_RIGHT: 1,
-      H_HOLD: 0,
+      H_HOLD: 1,
       DO_NOTHING: 0
     }
 
@@ -183,6 +183,9 @@ class TIPS_fishing_real(TIPS):
     elif (h_fb == H_DOWN):
       state_corrected[0] = state_x
       state_corrected[1] = state_z - self.errorConst
+    elif (h_fb == H_HOLD):
+      state_corrected[0] = state_x
+      state_corrected[1] = state_z
 
     return state_corrected
 
@@ -266,20 +269,23 @@ class TIPS_fishing_real(TIPS):
         # print("Feedback", h_fb)
         h_counter += 1 # Feedback counter
 
-        # Get new state transition label using feedback
-        state_corrected = self.get_state_corrected(h_fb, state[0])
-        # Get action from ifdm
-        a = self.get_corrected_action(h_fb, state[0], state_corrected)
-        # Direct Actions
-        # if (h_fb == H_UP):
-        #   a = np.array([0, 0.1])
-        # elif (h_fb == H_DOWN):
-        #   a = np.array([0, -0.1])
-        # elif (h_fb == H_RIGHT):
-        #   a = np.array([-0.05, 0])
-        # elif (h_fb == H_LEFT):
-        #   a = np.array([0.05, 0])
-        # print("Computed Action: ", a)
+        if (h_fb == H_HOLD):
+          a = np.array([0.0, 0.0])
+        else:
+          # Get new state transition label using feedback
+          state_corrected = self.get_state_corrected(h_fb, state[0])
+          # Get action from ifdm
+          a = self.get_corrected_action(h_fb, state[0], state_corrected)
+          # Direct Actions
+          # if (h_fb == H_UP):
+          #   a = np.array([0, 0.1])
+          # elif (h_fb == H_DOWN):
+          #   a = np.array([0, -0.1])
+          # elif (h_fb == H_RIGHT):
+          #   a = np.array([-0.05, 0])
+          # elif (h_fb == H_LEFT):
+          #   a = np.array([0.05, 0])
+          # print("Computed Action: ", a)
 
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])

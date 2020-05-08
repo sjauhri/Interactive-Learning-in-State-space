@@ -47,7 +47,7 @@ COLOR_FILTER_high = np.array([255, 255, 255])
 show_img = True
 # Flag to show position of keypoints
 show_pos = True
-GLASS_POS = np.array([300,375])
+GLASS_POS = np.array([338,379])
 ball_pos = GLASS_POS
 ball_pos_x_sign = -1
 ball_vel = np.array([0.0,0.0])

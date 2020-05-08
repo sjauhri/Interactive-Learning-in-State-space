@@ -19,7 +19,7 @@ THETA3 = (45 * (np.pi /180)) # setpoint Joint 6
 L1 = 0.4   # Length of arm 1
 L2 = 0.4   # Length of arm 2
 L3 = 0.186 # Length of arm 3 # 6cm tool
-EPISODE_DURATION = 30 # seconds
+EPISODE_DURATION = 3000 # seconds
 ACTION_DURATION = 0 # seconds
 ACTION_RESET_DURATION = 1 # seconds
 A2_SETPOINT = 25 * (np.pi/180) # Joint 2 initial position
@@ -28,8 +28,8 @@ A6_SETPOINT = 45 * (np.pi/180) # Joint 6 initial position
 A2_NOISE = 15 * (np.pi/180)
 A4_NOISE = 35 * (np.pi/180)
 A6_NOISE = 45 * (np.pi/180)
-NOISE_DURATION = 0.3 # seconds
-END_EFF_Z_MIN = 0.45#0.45
+NOISE_DURATION = 0.5 # seconds
+END_EFF_Z_MIN = 0.4#0.45
 END_EFF_Z_MAX = 1.0
 END_EFF_X_ORIGIN = 0.74
 END_EFF_Z_ORIGIN = 0.5516
@@ -92,9 +92,77 @@ class Fishing_Env():
 
 
     def reset(self):
-        ### Take action to reset to zero position (with randomization)
-        j2_goal = A2_SETPOINT + np.random.uniform(-0.35,-0.1)#0.25)
-        j4_goal = A4_SETPOINT + np.random.uniform(-0.35,-0.1)#0.25)
+        ### Take action to reset to zero position
+        self.goal.position.a2 = A2_SETPOINT
+        self.goal.position.a4 = A4_SETPOINT
+        # Send Action command
+        self.action_pub.publish(self.goal)
+        # print("Goal: ",self.goal)
+        # Wait for action completion
+        time.sleep(ACTION_RESET_DURATION)
+
+        # Optional : Move joints to make ball move more aggresively
+        # Left [0.20552207, 0.27967111] Right [-0.24567686, -0.29790941]
+        # Up [-0.10706143,  0.28972497] Down [ 0.22979076, -0.29666608]
+        # Move up
+        self.goal.position.a2 = A2_SETPOINT - 0.10706143
+        self.goal.position.a4 = A4_SETPOINT + 0.28972497
+        # Send Action command
+        self.action_pub.publish(self.goal)
+        # Wait for noise completion
+        time.sleep(NOISE_DURATION)
+        # Move down
+        self.goal.position.a2 += 0.22979076
+        self.goal.position.a4 += -0.29666608
+        # self.goal.position.a6 = A6_SETPOINT
+        # Send Action command
+        self.action_pub.publish(self.goal)
+        # Wait for noise completion
+        time.sleep(NOISE_DURATION)
+        # Move up
+        self.goal.position.a2 = A2_SETPOINT - 0.10706143
+        self.goal.position.a4 = A4_SETPOINT + 0.28972497
+        # Send Action command
+        self.action_pub.publish(self.goal)
+        # Wait for noise completion
+        time.sleep(NOISE_DURATION)
+        # Move down
+        self.goal.position.a2 += 0.22979076
+        self.goal.position.a4 += -0.29666608
+        # self.goal.position.a6 = A6_SETPOINT
+        # Send Action command
+        self.action_pub.publish(self.goal)
+        # Wait for noise completion
+        time.sleep(NOISE_DURATION)
+        # # Move left/right and back
+        # i = np.random.choice([-1,1])
+        # j = np.random.choice([-1,1])
+        # self.goal.position.a2 += (i*0.21)
+        # self.goal.position.a4 += (i*0.279)
+        # # self.goal.position.a6 = A6_SETPOINT + (j*A6_NOISE)
+        # # Send Action command
+        # self.action_pub.publish(self.goal)
+        # # Wait for noise completion
+        # time.sleep(NOISE_DURATION)
+        # self.goal.position.a2 += (-i*0.21)
+        # self.goal.position.a4 += (-i*0.279)
+        # # self.goal.position.a6 = A6_SETPOINT + (-j*A6_NOISE)
+        # # Send Action command
+        # self.action_pub.publish(self.goal)
+        # # Wait for noise completion
+        # time.sleep(NOISE_DURATION)
+        # # Move down
+        # self.goal.position.a2 += 0.22979076
+        # self.goal.position.a4 += -0.29666608
+        # # self.goal.position.a6 = A6_SETPOINT
+        # # Send Action command
+        # self.action_pub.publish(self.goal)
+        # # Wait for noise completion
+        # time.sleep(NOISE_DURATION)
+
+        # Reset to zero position with randomization
+        j2_goal = A2_SETPOINT + np.random.uniform(-0.35,-0.1)
+        j4_goal = A4_SETPOINT + np.random.uniform(-0.35,-0.1)
 
         if not (j2_goal >= (THETA1 - (np.pi/2)) and j2_goal <= THETA1):
             j2_goal = A2_SETPOINT # Setpoint
@@ -114,29 +182,9 @@ class Fishing_Env():
             j4_goal = A4_SETPOINT # Setpoint
             self.goal.position.a2 =  j2_goal
             self.goal.position.a4 =  j4_goal
-            print("[End Effector: minimum height reached]")
-
+            print("[End Effector: limit reached]")
         # Send Action command
         self.action_pub.publish(self.goal)
-        # print("Goal: ",self.goal)
-        # Wait for action completion
-        time.sleep(ACTION_RESET_DURATION)
-        # Optional : Move joints to make ball move more aggresively
-        i = np.random.choice([-1,1])
-        # j = np.random.choice([-1,1])
-        # k = np.random.choice([-1,1])
-        self.goal.position.a2 += (i*A2_NOISE)
-        self.goal.position.a4 += (-i*A4_NOISE)
-        self.goal.position.a6 = A6_SETPOINT + (-i*A6_NOISE)
-        self.action_pub.publish(self.goal)
-        # Wait for noise completion
-        time.sleep(NOISE_DURATION)
-        # Move joints back
-        self.goal.position.a2 -= (i*A2_NOISE)
-        self.goal.position.a4 -= (-i*A4_NOISE)
-        self.goal.position.a6 = A6_SETPOINT
-        self.action_pub.publish(self.goal)
-        # Wait for action completion
         time.sleep(ACTION_RESET_DURATION)
 
         # Set time for this episode
@@ -179,7 +227,7 @@ class Fishing_Env():
                     self.goal.position.a2 =  j2_goal
                     self.goal.position.a4 =  j4_goal
                 else:
-                    print("[End Effector: limit reached]")
+                    print("[End Effector: limit reached]\n")
                     act_taken = np.array([0.0 , 0.0])
 
                 # Send Action command
