@@ -5,7 +5,7 @@ from fishing_real_env import *
 from feedback_ext import *
 
 class TIPS_fishing_real(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.0005, maxEpisodes=20, epochTrainIts=4000,  dynamicsSamples=3600, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.00025, maxEpisodes=20, epochTrainIts=4000,  dynamicsSamples=3600, batch_size=32):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
