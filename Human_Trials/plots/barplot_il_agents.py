@@ -6,6 +6,7 @@ import numpy as np
 
 sns.set() # default seaborn theme, scaling, and color palette
 # sns.set(style="ticks", palette="muted")
+sns.set_context("paper", rc={"font.size":18,"axes.titlesize":18,"axes.labelsize":15})
 
 # CartPole
 cart_dict = [{'Method': 'Tele-Op (A)', 'Return': 100.7},
@@ -135,7 +136,7 @@ reach['Return'] = (reach['Return'].div(100)+1) # normalize return
 lunar['Return'] = (lunar['Return']+300).div(550) # normalize return
 
 # Plot using subplots
-figure, axes = plt.subplots(3, 1, sharey=True, figsize=(6.5, 9))
+figure, axes = plt.subplots(3, 1, sharey=True, figsize=(10, 9))
 plt.subplots_adjust(
     # left    =  0.19,
     # bottom  =  bottom, 
@@ -145,18 +146,21 @@ plt.subplots_adjust(
     hspace  =  0.5
 )
 
-axes[0].set_title("CartPole", fontweight='bold')
+axes[0].set_title("CartPole", fontweight='bold', fontsize=18)
 bar1 = sns.barplot(x="Method", y="Return", hue="Method", data=cart, ax=axes[0], dodge = False)
+bar1.tick_params(labelsize=15)
 axes[0].get_legend().remove()
-axes[0].set_xlabel('')
+axes[0].set_xlabel('', fontsize=18)
 
 axes[1].set_title("Reacher", fontweight='bold')
 bar2 = sns.barplot(x="Method", y="Return", hue="Method", data=reach, ax=axes[1], dodge = False)
+bar2.tick_params(labelsize=15)
 axes[1].get_legend().remove()
 axes[1].set_xlabel('')
 
 axes[2].set_title("LunarLanderContinuous", fontweight='bold')
 bar3 = sns.barplot(x="Method", y="Return", hue="Method", data=lunar, ax=axes[2], dodge = False)
+bar3.tick_params(labelsize=15)
 axes[2].get_legend().remove()
 
 # Plot using figure function

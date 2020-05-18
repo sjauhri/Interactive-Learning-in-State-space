@@ -16,6 +16,7 @@ def fifty_extend(df):
 
 sns.set() # default seaborn theme, scaling, and color palette
 # sns.set(style="ticks", palette="muted")
+sns.set_context("paper", rc={"font.size":18,"axes.titlesize":18,"axes.labelsize":15})
 
 tips_cart = fifty_extend(pd.read_csv("./TIPS/cartpole/2503001220_0.csv"))
 tips_cart = pd.concat([tips_cart, fifty_extend(pd.read_csv("./TIPS/cartpole/1204002412_0.csv"))], sort=False)
@@ -115,15 +116,21 @@ lunar = pd.concat([tips_lunar, dcoach_lunar], sort=False)
 # lunar['Return'] = (lunar['Return']+250).div(500) # normalize return
 
 # Plot using subplots
-f, axes = plt.subplots(3, 1, sharex=True, figsize=(8, 8))
-sns.lineplot(x="Episodes", y="Return", hue="Method", style="Method", data=cart, ax=axes[0])
+f, axes = plt.subplots(3, 1, sharex=True, figsize=(10, 9))
+line1 = sns.lineplot(x="Episodes", y="Return", hue="Method", style="Method", data=cart, ax=axes[0])
+line1.tick_params(labelsize=15)
 axes[0].set_title("CartPole", fontweight='bold')
-sns.lineplot(x="Episodes", y="Return", hue="Method", style="Method", data=reach, ax=axes[1])
+line1.legend(fontsize='14', title_fontsize='14')
+line2 = sns.lineplot(x="Episodes", y="Return", hue="Method", style="Method", data=reach, ax=axes[1])
+line2.tick_params(labelsize=15)
 axes[1].set_title("Reacher", fontweight='bold')
 axes[1].set(ylim=(-110, 0))
-sns.lineplot(x="Episodes", y="Return", hue="Method", style="Method", data=lunar, ax=axes[2])
+line2.legend(fontsize='14', title_fontsize='14')
+line3 = sns.lineplot(x="Episodes", y="Return", hue="Method", style="Method", data=lunar, ax=axes[2])
+line3.tick_params(labelsize=15)
 axes[2].set_title("LunarLanderContinuous", fontweight='bold')
 axes[2].set(ylim=(-600, 200))
+line3.legend(fontsize='14', title_fontsize='14')
 
 # Plot using figure function
 # Combine datasets

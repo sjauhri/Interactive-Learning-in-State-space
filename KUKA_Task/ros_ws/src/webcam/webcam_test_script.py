@@ -95,7 +95,7 @@ while(True):
     # Detect blobs.
     keypoints = detector.detect(color_img)
     # Debug: Uncomment to see full image:
-    # color_img = frame
+    color_img = frame
 
     num_keyps = len(keypoints)
     if(num_keyps >= 1):
