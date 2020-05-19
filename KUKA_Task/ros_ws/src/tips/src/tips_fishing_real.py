@@ -120,42 +120,6 @@ class TIPS_fishing_real(TIPS):
     return States, Nstates, Actions
 
 
-  def exploration_dynamics_sampling(self):
-    """using epsilon-greedy version of current policy to generate (s_t, s_t+1, a_t) triplets"""
-    terminal = True
-    States = []
-    Nstates = []
-    Actions = []
-
-    for i in range(int(round(self.dynamicsSamples/10))): # Using 10% of the initial dynamics samples
-      if terminal:
-        state = self.env.reset()
-
-      prev_s = state
-      state = np.reshape(state, [-1,self.state_dim])
-
-      # Using an epsilon-greedy policy for exploration of new actions
-      if (np.random.uniform(0,1) < 0.1):
-        # Continuos action space
-        # Actions between -1 and 1
-        A = np.random.uniform(-1, 1, self.action_dim)
-      else:
-        # Continuos action space
-        A = np.reshape(self.eval_policy(state), [-1])
-
-      state, _, terminal, _ = self.env.step(A)
-
-      States.append(prev_s)
-      Nstates.append(state)
-      Actions.append(A)
-
-      if i and (i+1) % 1000 == 0:
-        print("Collecting dynamics training data from exploration policy ", i+1)
-        self.log_writer.write("Collecting dynamics training data from exploration policy " + str(i+1) + "\n")
-
-    return States, Nstates, Actions
-
-
   def get_state_corrected(self, h_fb, state):
     """get corrected state label for this environment using feedback"""
     
@@ -335,7 +299,7 @@ class TIPS_fishing_real(TIPS):
 
       # Act
       # reward = 0
-      state, reward, terminal, _ = self.env.step(A)
+      state, reward, terminal, _ = self.env.step(A, h_fb)
       total_reward += reward
       state = np.reshape(state, [-1, self.state_dim])
 

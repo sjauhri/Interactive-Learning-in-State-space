@@ -128,6 +128,9 @@ while(True):
 
         # Draw keypoints      
         im_with_keypoints = cv2.drawKeypoints(color_img, keyp, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+        # pt1 = (int(keypoints[index].pt[0]),int(keypoints[index].pt[1]))
+        # pt2 = (int(keypoints[index].pt[0]),int(keypoints[index].pt[1]+50))
+        # im_with_keypoints = cv2.arrowedLine(color_img, pt1, pt2, (0,0,200), 8)
     # else:
     #     im_with_keypoints = color_img
 

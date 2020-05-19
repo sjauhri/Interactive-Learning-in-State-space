@@ -71,8 +71,10 @@ class Fishing_Env():
         self.goal.position.a6 = A6_SETPOINT
         self.goal.position.a7 = 0.22
 
+        self.h_fb = 0
+
     def curr_state(self):
-        self.ball_position, self.ball_velocity = self.Webcam.get_ball_state() # Causes a delay of about 100ms
+        self.ball_position, self.ball_velocity = self.Webcam.get_ball_state(self.h_fb) # Causes a delay of about 100ms
         # Debug: No velocity used in policy
         # self.ball_velocity[0] = 0.0
         # self.ball_velocity[1] = 0.0
@@ -195,7 +197,7 @@ class Fishing_Env():
         return self.curr_state()
 
 
-    def step(self, a):
+    def step(self, a, h_fb=0):
         act_taken = np.copy(a)
         
         if (self.terminal):
@@ -226,6 +228,7 @@ class Fishing_Env():
                     # Accepted (command within limits)
                     self.goal.position.a2 =  j2_goal
                     self.goal.position.a4 =  j4_goal
+                    self.h_fb = h_fb
                 else:
                     print("[End Effector: limit reached]\n")
                     act_taken = np.array([0.0 , 0.0])

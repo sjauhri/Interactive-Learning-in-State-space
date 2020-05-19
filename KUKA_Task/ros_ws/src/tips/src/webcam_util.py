@@ -3,12 +3,14 @@ import numpy as np
 import cv2
 import time
 import pdb
+from feedback_ext import *
 
 # Webcam types:
 IN_BUILT_CAM = 0
 C920_CAM = 2
 
 # Color Filter: BGR Values centered at [199, 86, 30]
+# THESE VALUES ARE ALLOWED
 COLOR_FILTER_low = np.array([0, 20, 25])#np.array([80, 20, 10])
 COLOR_FILTER_high = np.array([255, 255, 255])#np.array([255, 120, 100])
 
@@ -23,6 +25,7 @@ class Webcam_capture():
         # Setup capture
         self.cap = cv2.VideoCapture(C920_CAM)
         self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1) # Buffer of 1 to throw away old frames
+        # self.vid = cv2.VideoWriter('Feedback_Video.mp4', 0x7634706d, 10, (640, 480)) # mp4
 
         ## Blob detection:
         # Setup SimpleBlobDetector parameters
@@ -63,7 +66,7 @@ class Webcam_capture():
         self.prev_time = time.time()
         start = time.time()
         elapsed = time.time() - start
-        while (elapsed < 2):
+        while (elapsed < 1):
             pos, vel = self.get_ball_state()
             print("Ball_position (X,Z): ", pos)
             # print("Ball_X_position: ", self.ball_pos[0])
@@ -71,7 +74,7 @@ class Webcam_capture():
             elapsed = time.time() - start
 
 
-    def get_ball_state(self):
+    def get_ball_state(self, h_feedback=0):
         # Capture frame        
         self.cap.grab() # Throw previous frame in buffer
         ret, frame = self.cap.read()
@@ -124,11 +127,23 @@ class Webcam_capture():
             if(self.show_img):
                 # Draw keypoints
                 im_with_keypoints = cv2.drawKeypoints(color_img, keyp, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+                # pt1 = (int(keypoints[index].pt[0]),int(keypoints[index].pt[1]))
+                # if (h_feedback < 5 and h_feedback > 0):
+                #     if (h_feedback == H_UP):
+                #         pt2 = (int(keypoints[index].pt[0]),int(keypoints[index].pt[1]-50))
+                #     elif (h_feedback == H_DOWN):
+                #         pt2 = (int(keypoints[index].pt[0]),int(keypoints[index].pt[1]+50))
+                #     elif (h_feedback == H_LEFT):
+                #         pt2 = (int(keypoints[index].pt[0]-50),int(keypoints[index].pt[1]))
+                #     elif (h_feedback == H_RIGHT):
+                #         pt2 = (int(keypoints[index].pt[0]+50),int(keypoints[index].pt[1]))
+                #     im_with_keypoints = cv2.arrowedLine(color_img, pt1, pt2, (0,0,200), 8)
 
         # Optional: Display stuff
         if(self.show_img):
             # Show keypoints
             cv2.imshow("Keypoints", im_with_keypoints)
+            # self.vid.write(im_with_keypoints)
         if(self.show_pos):
             print("Ball_position (X,Z): ", str(self.ball_pos))
             # print("Ball_X_position: ", str(self.ball_pos[0]))
@@ -136,6 +151,7 @@ class Webcam_capture():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             self.show_img = False
             self.show_pos = False
+            # self.vid.release()
             cv2.destroyAllWindows()
 
         # Normalize and return:
