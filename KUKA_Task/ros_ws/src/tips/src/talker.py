@@ -49,15 +49,49 @@ def talker():
     action_pub = rospy.Publisher('iiwa/command/JointPosition', JointPosition, queue_size=10)
 
     goal = JointPosition()
-    goal.position.a1 = 0.0
-    goal.position.a2 = 40 * (np.pi/180)
-    goal.position.a3 = 0.0
-    goal.position.a4 = -50 * (np.pi/180)
-    goal.position.a5 = 0.0
-    goal.position.a6 = 45 * (np.pi/180)
-    goal.position.a7 = 0.22
+    goal.position.a1 = 20.0 * (np.pi/180)
+    goal.position.a2 = 5 * (np.pi/180)
+    goal.position.a3 = 6.5 * (np.pi/180)
+    goal.position.a4 = -85 * (np.pi/180)
+    goal.position.a5 = -34 * (np.pi/180)
+    goal.position.a6 = 0
+    goal.position.a7 = 30.0 * (np.pi/180)
+    
+    # Limit top left
+    # goal.position.a1 = 20.0 * (np.pi/180)
+    # goal.position.a2 = 5 * (np.pi/180)
+    # goal.position.a3 = 6.5 * (np.pi/180)
+    # goal.position.a4 = -85 * (np.pi/180)
+    # goal.position.a5 = -34 * (np.pi/180)
+    # goal.position.a6 = 0
+    # goal.position.a7 = 30.0 * (np.pi/180)
 
-    # action_pub.publish(goal)
+    # Limit bottom left
+    # goal.position.a1 = 20.0 * (np.pi/180)
+    # goal.position.a2 = 5 * (np.pi/180)
+    # goal.position.a3 = 6.5 * (np.pi/180)
+    # goal.position.a4 = -85 * (np.pi/180)
+    # goal.position.a5 = 0.0
+    # goal.position.a6 = 0
+    # goal.position.a7 = 30.0 * (np.pi/180)
+
+    # Limit top right
+    # goal.position.a1 = 20.0 * (np.pi/180)
+    # goal.position.a2 = 5 * (np.pi/180)
+    # goal.position.a3 = -48 * (np.pi/180)
+    # goal.position.a4 = -85 * (np.pi/180)
+    # goal.position.a5 = -34 * (np.pi/180)
+    # goal.position.a6 = 0
+    # goal.position.a7 = 30.0 * (np.pi/180)
+
+    # Limit bottom right
+    # goal.position.a1 = 20.0 * (np.pi/180)
+    # goal.position.a2 = 5 * (np.pi/180)
+    # goal.position.a3 = -48 * (np.pi/180)
+    # goal.position.a4 = -85 * (np.pi/180)
+    # goal.position.a5 = 26 * (np.pi/180)
+    # goal.position.a6 = 0
+    # goal.position.a7 = 30.0 * (np.pi/180)
 
     rospy.Subscriber('iiwa/state/JointPosition', JointPosition, joint_pos_callback, queue_size=1)
     rospy.Subscriber('iiwa/state/JointPositionVelocity', JointPositionVelocity, joint_vel_callback, queue_size=1)
@@ -67,7 +101,7 @@ def talker():
         hello_str = "hello world %s" % rospy.get_time()
         rospy.loginfo(hello_str)
         # pub.publish(hello_str)
-        # action_pub.publish(goal)
+        action_pub.publish(goal)
         rate.sleep()
 
 def joint_pos_callback(joint_pos_msg):

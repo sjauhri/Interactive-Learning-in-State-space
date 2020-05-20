@@ -5,8 +5,8 @@ import cv2
 import pdb
 
 # Webcam types:
-IN_BUILT_CAM = 0
-C920_CAM = 2
+IN_BUILT_CAM = 2
+C920_CAM = 0
 
 # Setup capture
 cap = cv2.VideoCapture(C920_CAM)
