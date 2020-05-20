@@ -13,20 +13,20 @@ import numpy as np
 import time
 
 EPISODE_DURATION = 30 # seconds
-ACTION_DURATION = 0 # seconds
+ACTION_DURATION = 0.8 # seconds
 ACTION_RESET_DURATION = 1 # seconds
 
 A1_SETPOINT = 20.0 * (np.pi/180) # Joint 1 initial position
 A2_SETPOINT = 5.0 * (np.pi/180) # Joint 2 initial position
 A3_SETPOINT = -14.0 * (np.pi/180) # Joint 3 initial position
 A4_SETPOINT = -85.0 * (np.pi/180) # Joint 4 initial position
-A5_SETPOINT = -8.0 * (np.pi/180) # Joint 5 initial position
+A5_SETPOINT = -24.0 * (np.pi/180) # Joint 5 initial position
 A6_SETPOINT = 0.0 # Joint 6 initial position
 A7_SETPOINT = 30.0 * (np.pi/180) # Joint 7 initial position
 
 A3_LIMIT_HIGH = 6.5 * (np.pi/180)
 A3_LIMIT_LOW  = -48.0 * (np.pi/180)
-A5_LIMIT_HIGH = 26.0 * (np.pi/180)
+A5_LIMIT_HIGH = 0 #26.0 * (np.pi/180)
 A5_LIMIT_LOW  = -34.0 * (np.pi/180)
 
 ACTION_LIMIT = 0.2
@@ -68,6 +68,9 @@ class Laser_Env():
 
     def curr_state(self):
         self.laser_position = self.Webcam.get_laser_state(self.h_fb) # Causes a delay of about 100ms
+        # Debug: No position
+        self.laser_position[0] = 0
+        self.laser_position[1] = 0
 
         return np.array([
             self.joint_position.a3, # Joint 3
@@ -80,9 +83,15 @@ class Laser_Env():
 
 
     def reset(self):
-        ### Take action to reset to zero position with randomization
-        self.goal.position.a3 = A3_SETPOINT + np.random.uniform(A3_LIMIT_LOW,A3_LIMIT_HIGH)
-        self.goal.position.a5 = A5_SETPOINT + np.random.uniform(A5_LIMIT_LOW,A5_LIMIT_HIGH)
+        ### Take action to reset to zero position with randomization        
+        j3_goal = A3_SETPOINT + np.random.uniform(-0.1,0.1)
+        j5_goal = A5_SETPOINT + np.random.uniform(-0.1,0.1)
+        if (not (j3_goal >= A3_LIMIT_LOW and j3_goal <= A3_LIMIT_HIGH)) or (not (j5_goal >= A5_LIMIT_LOW and j5_goal <= A5_LIMIT_HIGH)):
+            j3_goal = self.goal.position.a3 # Unchanged
+            j5_goal = self.goal.position.a5 # Unchanged
+            print("[Action outside joint limits]")
+        self.goal.position.a3 =  j3_goal
+        self.goal.position.a5 =  j5_goal
         
         # Send Action command
         self.action_pub.publish(self.goal)

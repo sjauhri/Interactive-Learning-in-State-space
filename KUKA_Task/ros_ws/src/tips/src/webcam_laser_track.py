@@ -6,8 +6,8 @@ import pdb
 from feedback_ext import *
 
 # Webcam types:
-IN_BUILT_CAM = 0
-C920_CAM = 2
+IN_BUILT_CAM = 2
+C920_CAM = 0
 
 # Color Filter: BGR Values centered at [199, 86, 30]
 # THESE VALUES ARE ALLOWED
@@ -25,7 +25,7 @@ class Webcam_capture():
         # Setup capture
         self.cap = cv2.VideoCapture(C920_CAM)
         self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1) # Buffer of 1 to throw away old frames
-        # self.vid = cv2.VideoWriter('Feedback_Video.mp4', 0x7634706d, 10, (640, 480)) # mp4
+        # self.vid = cv2.VideoWriter('Laser_Test_Video.mp4', 0x7634706d, 2, (640, 480)) # mp4
 
         ## Blob detection:
         # Setup SimpleBlobDetector parameters
@@ -162,4 +162,4 @@ class Webcam_capture():
         ball_v[0] = self.ball_vel[0]/X_RANGE  # Ball x velocity
         ball_v[1] = -self.ball_vel[1]/Z_RANGE  # Ball z velocity
 
-        return ball_p, ball_v
+        return ball_p
