@@ -226,19 +226,19 @@ class TIPS():
       #     self.ExpBuff.append((S[id], nS[id], A[id]))
       #   self.update_fdm(self.epochTrainIts*5)
         print("\n[Random sampling to learn FDM]")
-        # S, nS, A = self.dynamics_sampling()
-        # # Add to Experience Buffer
-        # for id in range(0, len(S)):
-        #   S[id][2:4] = 0 # zero redundant states
-        #   nS[id][2:4] = 0 # zero redundant states
-        #   self.ExpBuff.append((S[id], nS[id], A[id]))
-        # # Optional: Save current experience data
-        # with open(os.path.join('learnt_fdms', 'Experience.pkl'), 'wb') as f:
-        #         experience_data = {'observations': S,
-        #                            'observations_next': nS,
-        #                            'actions': A
-        #                           }
-        #         pickle.dump(experience_data,f)
+        S, nS, A = self.dynamics_sampling()
+        # Add to Experience Buffer
+        for id in range(0, len(S)):
+          S[id][2:4] = 0 # zero redundant states
+          nS[id][2:4] = 0 # zero redundant states
+          self.ExpBuff.append((S[id], nS[id], A[id]))
+        # Optional: Save current experience data
+        with open(os.path.join('learnt_fdms', 'Experience.pkl'), 'wb') as f:
+                experience_data = {'observations': S,
+                                   'observations_next': nS,
+                                   'actions': A
+                                  }
+                pickle.dump(experience_data,f)
 
         self.update_fdm(self.epochTrainIts*10)
 
@@ -295,7 +295,7 @@ class TIPS():
           # policy_reward = 0
           # numTrials = 9
           # for i in range(numTrials):
-          reward = self.eval_rwd_policy()
+          # reward = self.eval_rwd_policy()
           #   policy_reward += curr_reward
           #   print("Background Trial: %d, reward: %5.1f" % (i+1, curr_reward))
           #   self.log_writer.write("\n" + "Background Trial: " + str(i+1) + ", reward: " + str(curr_reward))

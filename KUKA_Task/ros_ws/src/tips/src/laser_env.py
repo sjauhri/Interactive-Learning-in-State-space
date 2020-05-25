@@ -13,7 +13,7 @@ import numpy as np
 import time
 
 EPISODE_DURATION = 30 # seconds
-ACTION_DURATION = 0.8 # seconds
+ACTION_DURATION = 0#0.8 # seconds
 ACTION_RESET_DURATION = 1 # seconds
 
 A1_SETPOINT = 20.0 * (np.pi/180) # Joint 1 initial position
@@ -69,8 +69,11 @@ class Laser_Env():
     def curr_state(self):
         self.laser_position = self.Webcam.get_laser_state(self.h_fb) # Causes a delay of about 100ms
         # Debug: No position
-        self.laser_position[0] = 0
-        self.laser_position[1] = 0
+        # self.laser_position[0] = 0
+        # self.laser_position[1] = 0
+        # No velocity
+        self.joint_velocity.a3 = 0 # Joint 3
+        self.joint_velocity.a5 = 0 # Joint 5
 
         return np.array([
             self.joint_position.a3, # Joint 3

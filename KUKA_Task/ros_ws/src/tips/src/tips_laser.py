@@ -5,7 +5,7 @@ from laser_env import *
 from feedback_ext import *
 
 class TIPS_laser(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.00025, maxEpisodes=20, epochTrainIts=4000,  dynamicsSamples=4500, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.00025, maxEpisodes=20, epochTrainIts=4000,  dynamicsSamples=3000, batch_size=32):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
@@ -16,7 +16,7 @@ class TIPS_laser(TIPS):
     self.human_feedback.viewer.render() # Render the additional feedback window
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
-    self.errorConst = 0.01
+    self.errorConst = 0.03
 
     # Control time period
     self.control_T = 0.1 # seconds
@@ -264,8 +264,8 @@ class TIPS_laser(TIPS):
         # Use current policy
 
         # Map action from state
-        a = np.reshape(self.eval_policy(state), [-1])
-        # a = [0.0,0.0]
+        # a = np.reshape(self.eval_policy(state), [-1])
+        a = [0.0,0.0]
         # Continuous actions
         A = np.copy(a)
 

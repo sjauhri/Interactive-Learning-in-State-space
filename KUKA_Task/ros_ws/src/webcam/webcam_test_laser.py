@@ -5,8 +5,8 @@ import cv2
 import pdb
 
 # Webcam types:
-IN_BUILT_CAM = 2
-C920_CAM = 0
+IN_BUILT_CAM = 0
+C920_CAM = 2
 
 # Setup capture
 cap = cv2.VideoCapture(C920_CAM)
@@ -23,8 +23,8 @@ params.filterByColor = False
 # params.blobColor = 0 # Dark center
 # Filter by Area.
 params.filterByArea = True
-params.minArea = 75
-params.maxArea = 750
+params.minArea = 1
+params.maxArea = 30
 # Filter by Circularity
 params.filterByCircularity = False
 # params.minCircularity = 0.2
@@ -32,25 +32,24 @@ params.filterByCircularity = False
 params.filterByConvexity = False
 # params.minConvexity = 0.5
 # Filter by Inertia
-params.filterByInertia = True
-params.minInertiaRatio = 0.4#0.1
+params.filterByInertia = False
+# params.minInertiaRatio = 0.4
 # params.maxInertiaRatio = 0.4
 
 # Set up the detector
 detector = cv2.SimpleBlobDetector_create(params)
 
-# Color Filter: BGR Values centered at [199, 86, 30]
-COLOR_FILTER_low = np.array([0, 20, 25])
-COLOR_FILTER_high = np.array([255, 255, 255])
+# Color Filter: BGR Values
+COLOR_FILTER_low = np.array([0, 0, 0])
+COLOR_FILTER_high = np.array([255, 255, 180])
 
 # Flag to show kinect image stream
 show_img = True
 # Flag to show position of keypoints
 show_pos = True
-GLASS_POS = np.array([338,379])
-ball_pos = GLASS_POS
-ball_pos_x_sign = -1
-ball_vel = np.array([0.0,0.0])
+ORIG_POS = np.array([270,90])
+laser_pos = ORIG_POS
+laser_vel = np.array([0.0,0.0])
 
 ## KF Setup:
 kalman = cv2.KalmanFilter(4, 2, 0)
@@ -60,10 +59,10 @@ kalman.processNoiseCov = np.array([[1e-2, 0., 0., 0.], [0., 1e-2, 0., 0.], [0., 
 kalman.measurementNoiseCov = 1e-1 * np.eye(2) # TUNE
 kalman.errorCovPost = 1. * np.eye(4)
 kalman.statePost = 0. *np.zeros((4,1))
-kalman.statePost[0] = ball_pos[0]
-kalman.statePost[1] = ball_pos[1]
-kalman.statePost[2] = ball_vel[0]
-kalman.statePost[3] = ball_vel[1]
+kalman.statePost[0] = laser_pos[0]
+kalman.statePost[1] = laser_pos[1]
+kalman.statePost[2] = laser_vel[0]
+kalman.statePost[3] = laser_vel[1]
 
 pred_state = kalman.predict()
 # meas = np.array([[375.0],[400.0]])
@@ -85,45 +84,45 @@ while(True):
     # Flip Image:
     # frame = cv2.flip(frame, 1)
     # Partial image:
-    color_img = frame[:427, :590, :]
+    color_img = frame[17:, 88:612, :]
     # Color mask: reject grey
     # grey_mask = ((color_img[:, :, 1] - color_img[:, :, 0]) > 50).astype('uint8', copy=True)
     # color_img = cv2.bitwise_and(color_img,color_img, mask=grey_mask) # AND with main image
     # Color mask: blue
-    mask = cv2.inRange(color_img, COLOR_FILTER_low, COLOR_FILTER_high)    
+    mask = cv2.inRange(color_img, COLOR_FILTER_low, COLOR_FILTER_high)
     color_img = cv2.bitwise_and(color_img,color_img, mask=mask) # AND with main image
     # Detect blobs.
     keypoints = detector.detect(color_img)
-    # Debug: Uncomment to see full image:
-    color_img = frame
+    # Debug: Uncomment to see mask:
+    # color_img = mask
 
     num_keyps = len(keypoints)
     if(num_keyps >= 1):
-        # Get largest size keypoint
-        index = np.argmax(keyp.size for keyp in keypoints)
+        # Get smallest size keypoint
+        index = np.argmin(keyp.size for keyp in keypoints)
         keyp = [keypoints[index]]
 
         # Time interval (for velocity calculation)
         dt = time.time() - prev_time
         if (dt < 0.1):
             time.sleep(0.1-dt)
-        print("Time interval:", time.time()- prev_time)# 0.06 to 0.11
+        # print("Time interval:", time.time()- prev_time)# 0.06 to 0.11
         prev_time = time.time()
 
-        # ball_pos_prev = ball_pos
-        # ball_vel_prev = ball_vel
-        ball_pos_now = np.array([keypoints[index].pt[0], keypoints[index].pt[1]])
-        # ball_vel = (ball_pos - ball_pos_prev)/dt
+        # laser_pos_prev = laser_pos
+        # laser_vel_prev = laser_vel
+        laser_pos_now = np.array([keypoints[index].pt[0], keypoints[index].pt[1]])
+        # laser_vel = (laser_pos - laser_pos_prev)/dt
 
         #KF: Curently removed
-        ball_vel = (ball_pos_now - ball_pos)/dt
-        ball_pos = ball_pos_now
-        # meas = np.array([[ball_pos_now[0]],[ball_pos_now[1]]])
+        laser_vel = (laser_pos_now - laser_pos)/dt
+        laser_pos = laser_pos_now
+        # meas = np.array([[laser_pos_now[0]],[laser_pos_now[1]]])
         # est_state = kalman.correct(meas)
-        # ball_pos[0] = est_state[0]
-        # ball_pos[1] = est_state[1]
-        # ball_vel[0] = est_state[2]
-        # ball_vel[1] = est_state[3]
+        # laser_pos[0] = est_state[0]
+        # laser_pos[1] = est_state[1]
+        # laser_vel[0] = est_state[2]
+        # laser_vel[1] = est_state[3]
         # kalman.predict() # predict next
 
         # Draw keypoints      
@@ -139,16 +138,10 @@ while(True):
         # radius = 5
         # thickness = -1
         # color = (0, 255, 255)  
-        # im_with_keypoints = cv2.circle(im_with_keypoints, (int(ball_pos[0]),int(ball_pos[1])), radius, color, thickness)
+        # im_with_keypoints = cv2.circle(im_with_keypoints, (int(laser_pos[0]),int(laser_pos[1])), radius, color, thickness)
         cv2.imshow("Keypoints", im_with_keypoints)
     if(show_pos):
-        print("Ball_position (X,Y): ", str(ball_pos))
-        # print("Ball_X_position: ", str(ball_pos[0]))
-        # Detect sign change for period
-        if(ball_pos_x_sign != np.sign(ball_pos[0])):
-            print("Zero crossing")
-            ball_pos_x_sign = np.sign(ball_pos[0])
-        print("Ball_velocity (X,Y): ", str(ball_vel))
+        print("Laser_position (X,Y): ", str(laser_pos))
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
