@@ -19,7 +19,7 @@ class TIPS_laser(TIPS):
     self.errorConst = 0.03
 
     # Control time period
-    self.control_T = 0.1 # seconds
+    self.control_T = 0.08 # seconds
     
     # Feedback training rate in the episode
     self.feedback_training_rate  = 10
@@ -258,8 +258,8 @@ class TIPS_laser(TIPS):
         # state, reward, terminal, act_taken = self.env.step(A)
         # print("Transition: ", (prev_s, act_taken, state))
 
-        # Reset human feedback
-        self.human_feedback.h_fb = H_NULL
+        # Optional: Reset human feedback
+        # self.human_feedback.h_fb = H_NULL
       else:
         # Use current policy
 

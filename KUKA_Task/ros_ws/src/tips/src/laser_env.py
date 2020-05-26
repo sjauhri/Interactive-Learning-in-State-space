@@ -86,16 +86,19 @@ class Laser_Env():
 
 
     def reset(self):
-        ### Take action to reset to zero position with randomization        
-        j3_goal = A3_SETPOINT + np.random.uniform(-0.1,0.1)
-        j5_goal = A5_SETPOINT + np.random.uniform(-0.1,0.1)
-        if (not (j3_goal >= A3_LIMIT_LOW and j3_goal <= A3_LIMIT_HIGH)) or (not (j5_goal >= A5_LIMIT_LOW and j5_goal <= A5_LIMIT_HIGH)):
-            j3_goal = self.goal.position.a3 # Unchanged
-            j5_goal = self.goal.position.a5 # Unchanged
-            print("[Action outside joint limits]")
-        self.goal.position.a3 =  j3_goal
-        self.goal.position.a5 =  j5_goal
+        # ### Take action to reset to zero position with randomization        
+        # j3_goal = A3_SETPOINT + np.random.uniform(-0.1,0.1)
+        # j5_goal = A5_SETPOINT + np.random.uniform(-0.1,0.1)
+        # if (not (j3_goal >= A3_LIMIT_LOW and j3_goal <= A3_LIMIT_HIGH)) or (not (j5_goal >= A5_LIMIT_LOW and j5_goal <= A5_LIMIT_HIGH)):
+        #     j3_goal = self.goal.position.a3 # Unchanged
+        #     j5_goal = self.goal.position.a5 # Unchanged
+        #     print("[Action outside joint limits]")
+        # self.goal.position.a3 =  j3_goal
+        # self.goal.position.a5 =  j5_goal
         
+        ### Take action to reset to fixed top left position
+        self.goal.position.a3 =  0
+        self.goal.position.a5 =  -32 * (np.pi/180)
         # Send Action command
         self.action_pub.publish(self.goal)
         time.sleep(ACTION_RESET_DURATION)
