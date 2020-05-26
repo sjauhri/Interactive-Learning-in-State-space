@@ -15,9 +15,9 @@ COLOR_FILTER_low = np.array([0, 0, 0])
 COLOR_FILTER_high = np.array([255, 255, 180])
 
 # Ball position tracking
-ORIGIN = np.array([270,90])
-X_RANGE = 524
-Z_RANGE = 463
+ORIGIN = np.array([270.0,90.0])
+X_RANGE = 520
+Z_RANGE = 460
 
 class Webcam_capture():
     
@@ -81,7 +81,7 @@ class Webcam_capture():
             return
         
         # Cut image:
-        color_img = frame[17:, 88:612, :]
+        color_img = frame[21:, 92:608, :]
         # Color mask: blue
         mask = cv2.inRange(color_img, COLOR_FILTER_low, COLOR_FILTER_high)
         color_img = cv2.bitwise_and(color_img,color_img, mask=mask) # AND with main image

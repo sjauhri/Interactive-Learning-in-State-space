@@ -5,7 +5,7 @@ from laser_env import *
 from feedback_ext import *
 
 class TIPS_laser(TIPS):
-  def __init__(self, state_shape, action_shape, lr=0.00025, maxEpisodes=20, epochTrainIts=4000,  dynamicsSamples=3000, batch_size=32):
+  def __init__(self, state_shape, action_shape, lr=0.00025, maxEpisodes=20, epochTrainIts=4000,  dynamicsSamples=4000, batch_size=32):
     TIPS.__init__(self, state_shape, action_shape, lr=lr, maxEpisodes=maxEpisodes, epochTrainIts=epochTrainIts, dynamicsSamples=dynamicsSamples, batch_size=batch_size)
 
     # set which game to play
@@ -35,7 +35,7 @@ class TIPS_laser(TIPS):
       DO_NOTHING: 0
     }
 
-    self.ifdm_queries = 1000 # Two continous actions.
+    self.ifdm_queries = 2000 # Two continous actions.
 
 
   def build_policy_model(self):
@@ -158,7 +158,7 @@ class TIPS_laser(TIPS):
     States = np.tile(state_copy, (self.ifdm_queries,1))
     # Choose random actions
     # Continuous Actions
-    Actions = np.random.uniform(-ACTION_LIMIT, ACTION_LIMIT, (self.ifdm_queries,self.action_dim) )
+    Actions = np.random.uniform(-0.1, 0.1, (self.ifdm_queries,self.action_dim) )
     # Query ifdm to get next state
     if (args.learnFDM):
       # Learnt FDM:
@@ -264,8 +264,8 @@ class TIPS_laser(TIPS):
         # Use current policy
 
         # Map action from state
-        # a = np.reshape(self.eval_policy(state), [-1])
-        a = [0.0,0.0]
+        a = np.reshape(self.eval_policy(state), [-1])
+        # a = [0.0,0.0]
         # Continuous actions
         A = np.copy(a)
 

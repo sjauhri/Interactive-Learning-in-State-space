@@ -84,7 +84,7 @@ while(True):
     # Flip Image:
     # frame = cv2.flip(frame, 1)
     # Partial image:
-    color_img = frame[17:, 88:612, :]
+    color_img = frame[21:, 92:608, :]
     # Color mask: reject grey
     # grey_mask = ((color_img[:, :, 1] - color_img[:, :, 0]) > 50).astype('uint8', copy=True)
     # color_img = cv2.bitwise_and(color_img,color_img, mask=grey_mask) # AND with main image

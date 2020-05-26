@@ -12,7 +12,7 @@ from iiwa_msgs.msg import JointPosition, JointPositionVelocity, CartesianPose
 import numpy as np
 import time
 
-EPISODE_DURATION = 30 # seconds
+EPISODE_DURATION = 35 # seconds
 ACTION_DURATION = 0#0.8 # seconds
 ACTION_RESET_DURATION = 1 # seconds
 
@@ -29,7 +29,7 @@ A3_LIMIT_LOW  = -48.0 * (np.pi/180)
 A5_LIMIT_HIGH = 0 #26.0 * (np.pi/180)
 A5_LIMIT_LOW  = -34.0 * (np.pi/180)
 
-ACTION_LIMIT = 0.2
+ACTION_LIMIT = 0.1
 
 class Laser_Env():
     
