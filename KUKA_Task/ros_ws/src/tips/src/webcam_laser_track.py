@@ -16,8 +16,8 @@ COLOR_FILTER_high = np.array([255, 255, 180])
 
 # Ball position tracking
 ORIGIN = np.array([270.0,90.0])
-X_RANGE = 520
-Z_RANGE = 460
+X_RANGE = 420
+Z_RANGE = 407
 
 class Webcam_capture():
     
@@ -81,7 +81,7 @@ class Webcam_capture():
             return
         
         # Cut image:
-        color_img = frame[21:, 92:608, :]
+        color_img = frame[21:428, 92:510, :]
         # Color mask: blue
         mask = cv2.inRange(color_img, COLOR_FILTER_low, COLOR_FILTER_high)
         color_img = cv2.bitwise_and(color_img,color_img, mask=mask) # AND with main image
@@ -100,7 +100,7 @@ class Webcam_capture():
         #         # Draw keypoints
         #         im_with_keypoints = cv2.drawKeypoints(color_img, keyp, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)            
         if(num_keyps >= 1):
-            # Get smallest size keypoint
+            # Get largest size keypoint
             index = np.argmax(keyp.size for keyp in keypoints)
             keyp = [keypoints[index]]
             

@@ -24,9 +24,9 @@ A5_SETPOINT = -24.0 * (np.pi/180) # Joint 5 initial position
 A6_SETPOINT = 0.0 # Joint 6 initial position
 A7_SETPOINT = 30.0 * (np.pi/180) # Joint 7 initial position
 
-A3_LIMIT_HIGH = 6.5 * (np.pi/180)
-A3_LIMIT_LOW  = -48.0 * (np.pi/180)
-A5_LIMIT_HIGH = 0 #26.0 * (np.pi/180)
+A3_LIMIT_HIGH = 6 * (np.pi/180)
+A3_LIMIT_LOW  = -35.0 * (np.pi/180)
+A5_LIMIT_HIGH = -5.0 * (np.pi/180)
 A5_LIMIT_LOW  = -34.0 * (np.pi/180)
 
 ACTION_LIMIT = 0.1
@@ -97,8 +97,15 @@ class Laser_Env():
         # self.goal.position.a5 =  j5_goal
         
         ### Take action to reset to fixed top left position
-        self.goal.position.a3 =  0
-        self.goal.position.a5 =  -32 * (np.pi/180)
+        # "C"
+        # self.goal.position.a3 =  3 * (np.pi/180)
+        # self.goal.position.a5 =  -30 * (np.pi/180)
+        # "O"
+        # self.goal.position.a3 =  0
+        # self.goal.position.a5 =  -30 * (np.pi/180)
+        # "R"
+        self.goal.position.a3 =  -5 * (np.pi/180)
+        self.goal.position.a5 =  -22 * (np.pi/180)
         # Send Action command
         self.action_pub.publish(self.goal)
         time.sleep(ACTION_RESET_DURATION)
