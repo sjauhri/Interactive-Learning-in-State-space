@@ -12,7 +12,7 @@ from iiwa_msgs.msg import JointPosition, JointPositionVelocity, CartesianPose
 import numpy as np
 import time
 
-EPISODE_DURATION = 35 # seconds
+EPISODE_DURATION = 10 # seconds
 ACTION_DURATION = 0#0.8 # seconds
 ACTION_RESET_DURATION = 1 # seconds
 
@@ -98,14 +98,18 @@ class Laser_Env():
         
         ### Take action to reset to fixed top left position
         # "C"
-        # self.goal.position.a3 =  3 * (np.pi/180)
-        # self.goal.position.a5 =  -30 * (np.pi/180)
+        self.goal.position.a3 =  3 * (np.pi/180)
+        self.goal.position.a5 =  -30 * (np.pi/180)
         # "O"
         # self.goal.position.a3 =  0
         # self.goal.position.a5 =  -30 * (np.pi/180)
         # "R"
-        self.goal.position.a3 =  -5 * (np.pi/180)
-        self.goal.position.a5 =  -22 * (np.pi/180)
+        # self.goal.position.a3 =  -5 * (np.pi/180)
+        # self.goal.position.a5 =  -22 * (np.pi/180)
+        # "L"
+        # self.goal.position.a3 =  -13 * (np.pi/180)
+        # self.goal.position.a5 =  -30.2 * (np.pi/180)
+
         # Send Action command
         self.action_pub.publish(self.goal)
         time.sleep(ACTION_RESET_DURATION)
@@ -114,7 +118,7 @@ class Laser_Env():
         self.start_time = time.time()
 
         # Reset terminal state
-        self.terminal = False        
+        self.terminal = False
         return self.curr_state()
 
 
