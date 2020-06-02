@@ -25,6 +25,12 @@ class Webcam_capture():
         # Setup capture
         self.cap = cv2.VideoCapture(C920_CAM)
         self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1) # Buffer of 1 to throw away old frames
+        # Capture a frame
+        self.cap.grab() # Throw previous frame in buffer
+        ret, frame = self.cap.read()
+        if(not ret):
+            print("Warning: No image stream from webcam")
+        self.im_with_keypoints = frame
         # self.vid = cv2.VideoWriter('Laser_Test_Video.mp4', 0x7634706d, 10, (640, 480)) # mp4
 
         ## Blob detection:
@@ -77,7 +83,7 @@ class Webcam_capture():
         self.cap.grab() # Throw previous frame in buffer
         ret, frame = self.cap.read()
         if(not ret):
-            print("No image stream from webcam")
+            print("Warning: No image stream from webcam")
             return
         
         # Cut image:
@@ -92,7 +98,6 @@ class Webcam_capture():
         # color_img = mask
 
         num_keyps = len(keypoints)
-        im_with_keypoints = color_img
         if(num_keyps >= 1):
             # Get largest size keypoint
             index = np.argmax(keyp.size for keyp in keypoints)
@@ -104,6 +109,23 @@ class Webcam_capture():
             self.prev_time = time.time()
             
             laser_pos_now = np.array([keypoints[index].pt[0], keypoints[index].pt[1]])
+            
+            if(self.show_img):
+                # Draw keypoints
+                # self.im_with_keypoints = cv2.drawKeypoints(self.im_with_keypoints, keyp, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+                # self.im_with_keypoints = cv2.circle(self.im_with_keypoints, (int(laser_pos_now[0]+92),int(laser_pos_now[1]+21)), 4, (0,0,255), -1)
+                self.im_with_keypoints = cv2.line(self.im_with_keypoints,(int(self.laser_pos[0]+92),int(self.laser_pos[1]+21)),(int(laser_pos_now[0]+92),int(laser_pos_now[1]+21)),(0,0,255),4)
+                # pt1 = (int(keypoints[index].pt[0]+92),int(keypoints[index].pt[1]+21))
+                # if (h_feedback < 5 and h_feedback > 0):
+                #     if (h_feedback == H_UP):
+                #         pt2 = (int(keypoints[index].pt[0]+92),int(keypoints[index].pt[1]+21-30))
+                #     elif (h_feedback == H_DOWN):
+                #         pt2 = (int(keypoints[index].pt[0]+92),int(keypoints[index].pt[1]+21+30))
+                #     elif (h_feedback == H_LEFT):
+                #         pt2 = (int(keypoints[index].pt[0]+92-30),int(keypoints[index].pt[1]+21))
+                #     elif (h_feedback == H_RIGHT):
+                #         pt2 = (int(keypoints[index].pt[0]+92+30),int(keypoints[index].pt[1]+21))
+                #     self.im_with_keypoints = cv2.arrowedLine(color_img, pt1, pt2, (0,0,255), 8)
 
             #KF: Curently removed
             self.laser_vel = (laser_pos_now - self.laser_pos)/dt
@@ -116,28 +138,11 @@ class Webcam_capture():
             # self.laser_pos[1] = est_state[3]
             # kalman.predict() # predict next
 
-            
-            if(self.show_img):
-                # Draw keypoints
-                # im_with_keypoints = cv2.drawKeypoints(color_img, keyp, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-                im_with_keypoints = cv2.circle(color_img, (int(keypoints[index].pt[0]+92),int(keypoints[index].pt[1]+21)), 3, (0,0,255), -1)
-                # pt1 = (int(keypoints[index].pt[0]+92),int(keypoints[index].pt[1]+21))
-                # if (h_feedback < 5 and h_feedback > 0):
-                #     if (h_feedback == H_UP):
-                #         pt2 = (int(keypoints[index].pt[0]+92),int(keypoints[index].pt[1]+21-30))
-                #     elif (h_feedback == H_DOWN):
-                #         pt2 = (int(keypoints[index].pt[0]+92),int(keypoints[index].pt[1]+21+30))
-                #     elif (h_feedback == H_LEFT):
-                #         pt2 = (int(keypoints[index].pt[0]+92-30),int(keypoints[index].pt[1]+21))
-                #     elif (h_feedback == H_RIGHT):
-                #         pt2 = (int(keypoints[index].pt[0]+92+30),int(keypoints[index].pt[1]+21))
-                #     im_with_keypoints = cv2.arrowedLine(color_img, pt1, pt2, (0,0,255), 8)
-
         # Optional: Display stuff
         if(self.show_img):
             # Show keypoints
-            cv2.imshow("Keypoints", im_with_keypoints)
-            # self.vid.write(im_with_keypoints)
+            cv2.imshow("Keypoints", self.im_with_keypoints)
+            # self.vid.write(self.im_with_keypoints)
         if(self.show_pos):
             print("laser_position (X,Z): ", str(self.laser_pos))
         if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -155,3 +160,16 @@ class Webcam_capture():
         # laser_v[1] = -self.laser_vel[1]/Z_RANGE  # Laser z velocity
 
         return laser_p
+
+    def reset_laser_img(self):
+        self.get_laser_state()
+
+        # Capture another frame
+        self.cap.grab() # Throw previous frame in buffer
+        ret, frame = self.cap.read()
+        if(not ret):
+            print("Warning: No image stream from webcam")
+            return
+        self.im_with_keypoints = frame
+        
+        return

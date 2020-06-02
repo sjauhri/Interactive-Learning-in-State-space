@@ -119,6 +119,9 @@ class Laser_Env():
 
         # Reset terminal state
         self.terminal = False
+        # Reset laser image
+        self.Webcam.reset_laser_img()
+        
         return self.curr_state()
 
 
