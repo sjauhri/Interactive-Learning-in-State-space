@@ -72,14 +72,14 @@ class Laser_Env():
         # self.laser_position[0] = 0
         # self.laser_position[1] = 0
         # No velocity
-        self.joint_velocity.a3 = 0 # Joint 3
-        self.joint_velocity.a5 = 0 # Joint 5
+        # self.joint_velocity.a3 = 0 # Joint 3
+        # self.joint_velocity.a5 = 0 # Joint 5
 
         return np.array([
-            self.joint_position.a3, # Joint 3
-            self.joint_position.a5, # Joint 5
-            self.joint_velocity.a3, # Joint 3
-            self.joint_velocity.a5, # Joint 5
+            # self.joint_position.a3, # Joint 3
+            # self.joint_position.a5, # Joint 5
+            # self.joint_velocity.a3, # Joint 3
+            # self.joint_velocity.a5, # Joint 5
             self.laser_position[0],  # laser x position
             self.laser_position[1]  # laser z position
         ])
@@ -101,8 +101,8 @@ class Laser_Env():
         self.goal.position.a3 =  3 * (np.pi/180)
         self.goal.position.a5 =  -30 * (np.pi/180)
         # "O"
-        # self.goal.position.a3 =  0
-        # self.goal.position.a5 =  -30 * (np.pi/180)
+        self.goal.position.a3 =  0
+        self.goal.position.a5 =  -30 * (np.pi/180)
         # "R"
         # self.goal.position.a3 =  -5 * (np.pi/180)
         # self.goal.position.a5 =  -22 * (np.pi/180)

@@ -230,8 +230,8 @@ class TIPS():
         S, nS, A = self.dynamics_sampling()
         # Add to Experience Buffer
         for id in range(0, len(S)):
-          S[id][2:4] = 0 # zero redundant states
-          nS[id][2:4] = 0 # zero redundant states
+          # S[id][2:4] = 0 # zero redundant states
+          # nS[id][2:4] = 0 # zero redundant states
           self.ExpBuff.append((S[id], nS[id], A[id]))
         # Optional: Save current experience data
         with open(os.path.join('learnt_fdms', 'Experience.pkl'), 'wb') as f:

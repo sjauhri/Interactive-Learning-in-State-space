@@ -16,7 +16,7 @@ class TIPS_laser(TIPS):
     self.human_feedback.viewer.render() # Render the additional feedback window
     # Set error constant multiplier for this environment
     # 0.01, 0.05, 0.1, 0.5, 1
-    self.errorConst = 0.03
+    self.errorConst = 0.02
 
     # Control time period
     self.control_T = 0.08 # seconds
@@ -126,8 +126,8 @@ class TIPS_laser(TIPS):
 
     if (args.learnFDM):
       # Get x-z position  
-      state_x = state[4]
-      state_z = state[5]
+      state_x = state[0]
+      state_z = state[1]
 
     # IF CHANGING TYPE OF STATE FEEDBACK, ALSO CHANGE get_corrected_action()
     if (h_fb == H_LEFT):
@@ -153,7 +153,7 @@ class TIPS_laser(TIPS):
 
     state_copy = np.copy(state)
     # Zero redundant states
-    state_copy[2:4] = 0
+    # state_copy[2:4] = 0
     # Make a vector of same states
     States = np.tile(state_copy, (self.ifdm_queries,1))
     # Choose random actions
@@ -164,7 +164,7 @@ class TIPS_laser(TIPS):
       # Learnt FDM:
       Nstates = self.eval_fdm(States, Actions)
       # Get x-z position
-      Nstates_x, Nstates_z = Nstates[:,4], Nstates[:,5]
+      Nstates_x, Nstates_z = Nstates[:,0], Nstates[:,1]
     # else:
     #   # True FDM:
     #   States[:,0] += Actions[:,0]
@@ -318,5 +318,5 @@ class TIPS_laser(TIPS):
 
 
 if __name__ == "__main__":
-  tips = TIPS_laser(6, 2, lr=args.lr, maxEpisodes=args.maxEpisodes)
+  tips = TIPS_laser(2, 2, lr=args.lr, maxEpisodes=args.maxEpisodes)
   tips.run()
