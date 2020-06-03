@@ -176,32 +176,30 @@ class Webcam_capture():
 
     def img_compare(self, char):
         ref_img = cv2.imread("results/tips/laser/" + char + "_ref.png")
-        
+        ref_img = cv2.cvtColor(ref_img, cv2.COLOR_BGR2GRAY)
+
         # Segment current image
         RED_FILTER_low = np.array([0, 0, 0])
         RED_FILTER_high = np.array([255, 255, 254])
         comp_img = cv2.inRange(self.im_with_keypoints[21:428, 92:510, :], RED_FILTER_low, RED_FILTER_high)
+        comp_img = cv2.cvtColor(comp_img, cv2.COLOR_BGR2GRAY)
         import pdb; pdb.set_trace()
 
         # Get contours
-        ref_img_cont, ref_contours, ref_hierarchy = cv2.findContours(cv2.bitwise_not(ref_img), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        comp_img_cont, comp_contours, comp_hierarchy = cv2.findContours(cv2.bitwise_not(comp_img), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        ref_contours, _ = cv2.findContours(cv2.bitwise_not(ref_img), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        comp_contours, _ = cv2.findContours(cv2.bitwise_not(comp_img), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-        cv2.imshow(".", ref_img_cont)
-        cv2.writeKey(1)
-        cv2.imshow(".", comp_img_cont)
-        cv2.writeKey(1)
+        # Debug: imshow
+        # ref_img_cont = cv2.drawContours(cv2.bitwise_not(ref_img), ref_contours, 1, (255,255,255), 1)
+        # comp_img_cont = cv2.drawContours(cv2.bitwise_not(comp_img), comp_contours, 1, (255,255,255), 1)
 
-        ref_img_cont = cv.drawContours(ref_img_cont, ref_contours, -1, (0,255,0), 3)
-        comp_img_cont = cv.drawContours(comp_img_cont, comp_contours, -1, (0,255,0), 3)
-
-        cv2.imshow(".", ref_img_cont)
-        cv2.writeKey(1)
-        cv2.imshow(".", comp_img_cont)
-        cv2.writeKey(1)
+        # cv2.imshow(".", ref_img_cont)
+        # cv2.waitKey(1)
+        # cv2.imshow(".", comp_img_cont)
+        # cv2.waitKey(1)
 
         # Compare haussdorf distance
-        hd = cv2.createHausdorffDistanceExtractor()
+        hd = cv2.HausdorffDistanceExtractor()
         dist = hd.computeDistance(ref_contours,comp_contours)
 
         return dist

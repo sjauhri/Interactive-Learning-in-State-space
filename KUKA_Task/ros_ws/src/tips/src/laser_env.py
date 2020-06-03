@@ -12,7 +12,7 @@ from iiwa_msgs.msg import JointPosition, JointPositionVelocity, CartesianPose
 import numpy as np
 import time
 
-EPISODE_DURATION = 10 # seconds
+EPISODE_DURATION = 8 # seconds
 ACTION_DURATION = 0#0.8 # seconds
 ACTION_RESET_DURATION = 1 # seconds
 
