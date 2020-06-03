@@ -145,6 +145,8 @@ while(True):
         print("Laser_position (X,Y): ", str(laser_pos))
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
+        # import pdb; pdb.set_trace()
+        # cv2.imwrite("O_ref.png", color_img)
         break
 
 # When everything done, release the capture

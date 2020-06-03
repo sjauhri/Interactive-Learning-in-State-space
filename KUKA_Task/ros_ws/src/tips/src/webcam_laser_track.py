@@ -113,8 +113,8 @@ class Webcam_capture():
             if(self.show_img):
                 # Draw keypoints
                 # self.im_with_keypoints = cv2.drawKeypoints(self.im_with_keypoints, keyp, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-                # self.im_with_keypoints = cv2.circle(self.im_with_keypoints, (int(laser_pos_now[0]+92),int(laser_pos_now[1]+21)), 4, (0,0,255), -1)
-                self.im_with_keypoints = cv2.line(self.im_with_keypoints,(int(self.laser_pos[0]+92),int(self.laser_pos[1]+21)),(int(laser_pos_now[0]+92),int(laser_pos_now[1]+21)),(0,0,255),4)
+                # self.im_with_keypoints = cv2.circle(self.im_with_keypoints, (int(laser_pos_now[0]+92),int(laser_pos_now[1]+21)), 2, (0,0,255), -1)
+                self.im_with_keypoints = cv2.line(self.im_with_keypoints,(int(self.laser_pos[0]+92),int(self.laser_pos[1]+21)),(int(laser_pos_now[0]+92),int(laser_pos_now[1]+21)),(0,0,255),2)
                 # pt1 = (int(keypoints[index].pt[0]+92),int(keypoints[index].pt[1]+21))
                 # if (h_feedback < 5 and h_feedback > 0):
                 #     if (h_feedback == H_UP):
@@ -173,3 +173,35 @@ class Webcam_capture():
         self.im_with_keypoints = frame
         
         return
+
+    def img_compare(self, char):
+        ref_img = cv2.imread("results/tips/laser/" + char + "_ref.png")
+        
+        # Segment current image
+        RED_FILTER_low = np.array([0, 0, 0])
+        RED_FILTER_high = np.array([255, 255, 254])
+        comp_img = cv2.inRange(self.im_with_keypoints[21:428, 92:510, :], RED_FILTER_low, RED_FILTER_high)
+        import pdb; pdb.set_trace()
+
+        # Get contours
+        ref_img_cont, ref_contours, ref_hierarchy = cv2.findContours(cv2.bitwise_not(ref_img), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        comp_img_cont, comp_contours, comp_hierarchy = cv2.findContours(cv2.bitwise_not(comp_img), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+        cv2.imshow(".", ref_img_cont)
+        cv2.writeKey(1)
+        cv2.imshow(".", comp_img_cont)
+        cv2.writeKey(1)
+
+        ref_img_cont = cv.drawContours(ref_img_cont, ref_contours, -1, (0,255,0), 3)
+        comp_img_cont = cv.drawContours(comp_img_cont, comp_contours, -1, (0,255,0), 3)
+
+        cv2.imshow(".", ref_img_cont)
+        cv2.writeKey(1)
+        cv2.imshow(".", comp_img_cont)
+        cv2.writeKey(1)
+
+        # Compare haussdorf distance
+        hd = cv2.createHausdorffDistanceExtractor()
+        dist = hd.computeDistance(ref_contours,comp_contours)
+
+        return dist

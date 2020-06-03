@@ -30,6 +30,7 @@ A5_LIMIT_HIGH = -5.0 * (np.pi/180)
 A5_LIMIT_LOW  = -34.0 * (np.pi/180)
 
 ACTION_LIMIT = 0.1
+CHAR_DRAW = "O" # C,O,R,L
 
 class Laser_Env():
     
@@ -97,18 +98,22 @@ class Laser_Env():
         # self.goal.position.a5 =  j5_goal
         
         ### Take action to reset to fixed top left position
-        # "C"
-        self.goal.position.a3 =  3 * (np.pi/180)
-        self.goal.position.a5 =  -30 * (np.pi/180)
-        # "O"
-        self.goal.position.a3 =  0
-        self.goal.position.a5 =  -30 * (np.pi/180)
-        # "R"
-        # self.goal.position.a3 =  -5 * (np.pi/180)
-        # self.goal.position.a5 =  -22 * (np.pi/180)
-        # "L"
-        # self.goal.position.a3 =  -13 * (np.pi/180)
-        # self.goal.position.a5 =  -30.2 * (np.pi/180)
+        if (CHAR_DRAW == "C"):
+            # "C"
+            self.goal.position.a3 =  3 * (np.pi/180)
+            self.goal.position.a5 =  -30 * (np.pi/180)
+        elif (CHAR_DRAW == "O"):
+            # "O"
+            self.goal.position.a3 =  0
+            self.goal.position.a5 =  -30 * (np.pi/180)
+        elif (CHAR_DRAW == "R"):
+            # "R"
+            self.goal.position.a3 =  -5 * (np.pi/180)
+            self.goal.position.a5 =  -22 * (np.pi/180)
+        elif (CHAR_DRAW == "L"):
+            # "L"
+            self.goal.position.a3 =  -13 * (np.pi/180)
+            self.goal.position.a5 =  -30.2 * (np.pi/180)
 
         # Send Action command
         self.action_pub.publish(self.goal)
@@ -162,13 +167,9 @@ class Laser_Env():
             # Check if terminal based on total time elapsed since reset
             if ((time.time() - self.start_time) > EPISODE_DURATION):
                 self.terminal = True
-
-        # vec: distance vector between laser point and reference
-        # vec = self.laser_position # Already normalized such
-        # reward_dist = - np.linalg.norm(vec)
-        # reward_ctrl = - np.square(act_taken).sum()
-        # reward = reward_dist + reward_ctrl
-        reward = 0
+                reward = self.Webcam.img_compare(CHAR_DRAW)
+            else:
+                reward = 0 # No reward yet
 
         return self.curr_state(), reward, self.terminal, act_taken
 
