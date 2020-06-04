@@ -175,6 +175,13 @@ class Webcam_capture():
         return
 
     def img_compare(self, char):
+        # import cv2
+        # import numpy as np
+        # char = "O"
+        # comp_img = cv2.imread("results/tips/laser/" + char + "_draw.png")
+        # comp_img = cv2.cvtColor(comp_img, cv2.COLOR_BGR2GRAY)
+        # null_img1 = np.zeros(ref_img.shape)
+        # null_img2 = np.zeros(ref_img.shape)
         ref_img = cv2.imread("results/tips/laser/" + char + "_ref.png")
         ref_img = cv2.cvtColor(ref_img, cv2.COLOR_BGR2GRAY)
 
@@ -183,23 +190,35 @@ class Webcam_capture():
         RED_FILTER_high = np.array([255, 255, 254])
         comp_img = cv2.inRange(self.im_with_keypoints[21:428, 92:510, :], RED_FILTER_low, RED_FILTER_high)
         comp_img = cv2.cvtColor(comp_img, cv2.COLOR_BGR2GRAY)
-        import pdb; pdb.set_trace()
 
         # Get contours
-        ref_contours, _ = cv2.findContours(cv2.bitwise_not(ref_img), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        comp_contours, _ = cv2.findContours(cv2.bitwise_not(comp_img), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        ref_contours, _ = cv2.findContours(cv2.bitwise_not(ref_img), cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+        comp_contours, _ = cv2.findContours(cv2.bitwise_not(comp_img), cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
-        # Debug: imshow
-        # ref_img_cont = cv2.drawContours(cv2.bitwise_not(ref_img), ref_contours, 1, (255,255,255), 1)
-        # comp_img_cont = cv2.drawContours(cv2.bitwise_not(comp_img), comp_contours, 1, (255,255,255), 1)
+        # Debug: draw contours
+        # ref_cnt = ref_contours[1]
+        # ref_img_cont = cv2.drawContours(null_img1, [ref_cnt], 0, (255,255,255), 1)
+        # comp_cnt = comp_contours[0]
+        # comp_img_cont = cv2.drawContours(null_img2, [comp_cnt], 0, (255,255,255), 1)
+
+        # Debug: draw contour points
+        # ref_points = np.squeeze(ref_contours[0])
+        # comp_points = np.squeeze(comp_contours[0])
+        # for point in ref_points:
+        #     ref_img_cont = cv2.circle(null_img1,tuple(point),1,(255,255,255))
+
+        # for point in comp_points:
+        #     comp_img_cont = cv2.circle(null_img2,tuple(point),1,(255,255,255))
+
 
         # cv2.imshow(".", ref_img_cont)
         # cv2.waitKey(1)
-        # cv2.imshow(".", comp_img_cont)
+        # cv2.imshow("..", comp_img_cont)
         # cv2.waitKey(1)
 
         # Compare haussdorf distance
-        hd = cv2.HausdorffDistanceExtractor()
-        dist = hd.computeDistance(ref_contours,comp_contours)
+        hd = cv2.createHausdorffDistanceExtractor(cv2.NORM_L2, 1) # 1 for full proportion of points
+        dist = hd.computeDistance(ref_contours[0],comp_contours[0])
+        reward = -dist
 
-        return dist
+        return reward
