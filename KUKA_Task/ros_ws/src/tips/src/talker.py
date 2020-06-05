@@ -80,7 +80,7 @@ def talker():
     # goal.position.a2 = 5 * (np.pi/180)
     # goal.position.a3 = 6 * (np.pi/180)
     # goal.position.a4 = -85 * (np.pi/180)
-    # goal.position.a5 = -5.0  * (np.pi/180)
+    # goal.position.a5 = -6.0  * (np.pi/180)
     # goal.position.a6 = 0
     # goal.position.a7 = 30.0 * (np.pi/180)
 
@@ -98,7 +98,7 @@ def talker():
     # goal.position.a2 = 5 * (np.pi/180)
     # goal.position.a3 = -35 * (np.pi/180)
     # goal.position.a4 = -85 * (np.pi/180)
-    # goal.position.a5 = -5 * (np.pi/180)
+    # goal.position.a5 = -6 * (np.pi/180)
     # goal.position.a6 = 0
     # goal.position.a7 = 30.0 * (np.pi/180)
 

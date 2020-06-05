@@ -12,7 +12,7 @@ C920_CAM = 2
 # Color Filter: BGR Values
 # THESE VALUES ARE ALLOWED
 COLOR_FILTER_low = np.array([0, 0, 0])
-COLOR_FILTER_high = np.array([255, 255, 180])
+COLOR_FILTER_high = np.array([255, 255, 210])
 
 # Ball position tracking
 ORIGIN = np.array([270.0,90.0])
@@ -112,10 +112,9 @@ class Webcam_capture():
             
             if(self.show_img):
                 # Draw keypoints
-                # self.im_with_keypoints = cv2.drawKeypoints(self.im_with_keypoints, keyp, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-                # self.im_with_keypoints = cv2.circle(self.im_with_keypoints, (int(laser_pos_now[0]+92),int(laser_pos_now[1]+21)), 2, (0,0,255), -1)
+                # self.im_with_keypoints = cv2.drawKeypoints(color_img[21:428, 92:510, :], keyp, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
                 self.im_with_keypoints = cv2.line(self.im_with_keypoints,(int(self.laser_pos[0]+92),int(self.laser_pos[1]+21)),(int(laser_pos_now[0]+92),int(laser_pos_now[1]+21)),(0,0,255),2)
-                # pt1 = (int(keypoints[index].pt[0]+92),int(keypoints[index].pt[1]+21))
+                # pt1 = (int(laser_pos_now[0]+92),int(laser_pos_now[1]+21))
                 # if (h_feedback < 5 and h_feedback > 0):
                 #     if (h_feedback == H_UP):
                 #         pt2 = (int(keypoints[index].pt[0]+92),int(keypoints[index].pt[1]+21-30))
@@ -164,7 +163,13 @@ class Webcam_capture():
     def reset_laser_img(self):
         self.get_laser_state()
 
-        # Capture another frame
+        # Capture new frames
+        self.cap.grab() # Throw previous frame in buffer
+        ret, frame = self.cap.read()
+        self.cap.grab() # Throw previous frame in buffer
+        ret, frame = self.cap.read()
+        self.cap.grab() # Throw previous frame in buffer
+        ret, frame = self.cap.read()
         self.cap.grab() # Throw previous frame in buffer
         ret, frame = self.cap.read()
         if(not ret):
@@ -189,7 +194,6 @@ class Webcam_capture():
         RED_FILTER_low = np.array([0, 0, 0])
         RED_FILTER_high = np.array([255, 255, 254])
         comp_img = cv2.inRange(self.im_with_keypoints[21:428, 92:510, :], RED_FILTER_low, RED_FILTER_high)
-        comp_img = cv2.cvtColor(comp_img, cv2.COLOR_BGR2GRAY)
 
         # Get contours
         ref_contours, _ = cv2.findContours(cv2.bitwise_not(ref_img), cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)

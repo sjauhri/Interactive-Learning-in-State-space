@@ -146,7 +146,7 @@ while(True):
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         # import pdb; pdb.set_trace()
-        # cv2.imwrite("O_ref.png", color_img)
+        # cv2.imwrite("O_ref.png", mask)
         break
 
 # When everything done, release the capture

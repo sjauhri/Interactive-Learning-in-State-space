@@ -26,11 +26,11 @@ A7_SETPOINT = 30.0 * (np.pi/180) # Joint 7 initial position
 
 A3_LIMIT_HIGH = 6 * (np.pi/180)
 A3_LIMIT_LOW  = -35.0 * (np.pi/180)
-A5_LIMIT_HIGH = -5.0 * (np.pi/180)
+A5_LIMIT_HIGH = -6.0 * (np.pi/180)
 A5_LIMIT_LOW  = -34.0 * (np.pi/180)
 
 ACTION_LIMIT = 0.1
-CHAR_DRAW = "O" # C,O,R,L
+CHAR_DRAW = "C" # C,O,R,L
 
 class Laser_Env():
     
