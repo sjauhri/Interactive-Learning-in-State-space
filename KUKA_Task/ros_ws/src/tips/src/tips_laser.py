@@ -249,6 +249,8 @@ class TIPS_laser(TIPS):
 
         # Train with batch from Demo buffer (if enough entries exist)
         self.update_policy_feedback()
+        self.update_policy_feedback()
+        self.update_policy_feedback()
 
         # Act using action based on h_feedback
         a = np.reshape(a, [-1])
@@ -293,6 +295,8 @@ class TIPS_laser(TIPS):
       # Train every k time steps
       if t_counter % self.feedback_training_rate == 0:
         self.update_policy_feedback()
+        self.update_policy_feedback()
+        self.update_policy_feedback()
 
       t_counter += 1 # Time counter
 
@@ -302,6 +306,7 @@ class TIPS_laser(TIPS):
 
 
   def eval_rwd_policy(self):
+    EPISODE_DURATION = 8
     """getting the reward by current policy"""
     terminal = False
     total_reward = 0
@@ -314,6 +319,7 @@ class TIPS_laser(TIPS):
       state, reward, terminal, _ = self.env.step(A)
       total_reward += reward
 
+    EPISODE_DURATION = 1000
     return total_reward
 
 

@@ -295,7 +295,7 @@ class TIPS():
           # policy_reward = 0
           # numTrials = 9
           # for i in range(numTrials):
-          reward = self.eval_rwd_policy()
+          # reward = self.eval_rwd_policy()
           #   policy_reward += curr_reward
           #   print("Background Trial: %d, reward: %5.1f" % (i+1, curr_reward))
           #   self.log_writer.write("\n" + "Background Trial: " + str(i+1) + ", reward: " + str(curr_reward))

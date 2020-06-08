@@ -185,10 +185,10 @@ class Webcam_capture():
         # char = "O"
         # comp_img = cv2.imread("results/tips/laser/" + char + "_draw.png")
         # comp_img = cv2.cvtColor(comp_img, cv2.COLOR_BGR2GRAY)
-        # null_img1 = np.zeros(ref_img.shape)
-        # null_img2 = np.zeros(ref_img.shape)
         ref_img = cv2.imread("results/tips/laser/" + char + "_ref.png")
         ref_img = cv2.cvtColor(ref_img, cv2.COLOR_BGR2GRAY)
+        # null_img1 = np.zeros(ref_img.shape)
+        # null_img2 = np.zeros(ref_img.shape)
 
         # Segment current image
         RED_FILTER_low = np.array([0, 0, 0])
@@ -221,8 +221,12 @@ class Webcam_capture():
         # cv2.waitKey(1)
 
         # Compare haussdorf distance
-        hd = cv2.createHausdorffDistanceExtractor(cv2.NORM_L2, 1) # 1 for full proportion of points
-        dist = hd.computeDistance(ref_contours[0],comp_contours[0])
+        # hd = cv2.createHausdorffDistanceExtractor(cv2.NORM_L2, 1) # 1 for full proportion of points
+        # dist = hd.computeDistance(ref_contours[0],comp_contours[0])
+        # import pdb; pdb.set_trace()
+        from scipy.spatial.distance import directed_hausdorff
+        dist = directed_hausdorff( np.squeeze(ref_contours[0]),np.squeeze(comp_contours[0]) )[0]
+
         reward = -dist
 
         return reward

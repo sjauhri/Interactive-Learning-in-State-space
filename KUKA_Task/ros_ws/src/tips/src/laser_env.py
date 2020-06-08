@@ -12,7 +12,7 @@ from iiwa_msgs.msg import JointPosition, JointPositionVelocity, CartesianPose
 import numpy as np
 import time
 
-EPISODE_DURATION = 8 # seconds
+EPISODE_DURATION = 10 # seconds
 ACTION_DURATION = 0#0.8 # seconds
 ACTION_RESET_DURATION = 1 # seconds
 
@@ -30,7 +30,7 @@ A5_LIMIT_HIGH = -6.0 * (np.pi/180)
 A5_LIMIT_LOW  = -34.0 * (np.pi/180)
 
 ACTION_LIMIT = 0.1
-CHAR_DRAW = "C" # C,O,R,L
+CHAR_DRAW = "O" # C,O,R,L
 
 class Laser_Env():
     
@@ -100,12 +100,12 @@ class Laser_Env():
         ### Take action to reset to fixed top left position
         if (CHAR_DRAW == "C"):
             # "C"
-            self.goal.position.a3 =  3 * (np.pi/180)
+            self.goal.position.a3 =  1 * (np.pi/180)
             self.goal.position.a5 =  -30 * (np.pi/180)
         elif (CHAR_DRAW == "O"):
             # "O"
-            self.goal.position.a3 =  0
-            self.goal.position.a5 =  -30 * (np.pi/180)
+            self.goal.position.a3 =  -4 * (np.pi/180)
+            self.goal.position.a5 =  -29.6 * (np.pi/180)
         elif (CHAR_DRAW == "R"):
             # "R"
             self.goal.position.a3 =  -5 * (np.pi/180)
