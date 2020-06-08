@@ -264,8 +264,8 @@ class TIPS_laser(TIPS):
         # Use current policy
 
         # Map action from state
-        # a = np.reshape(self.eval_policy(state), [-1]) TODO
-        a = [0.0,0.0]
+        a = np.reshape(self.eval_policy(state), [-1])
+        # a = [0.0,0.0]
         # Continuous actions
         A = np.copy(a)
 

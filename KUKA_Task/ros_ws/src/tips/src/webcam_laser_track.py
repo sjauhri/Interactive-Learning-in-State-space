@@ -12,7 +12,7 @@ C920_CAM = 2
 # Color Filter: BGR Values
 # THESE VALUES ARE ALLOWED
 COLOR_FILTER_low = np.array([0, 0, 0])
-COLOR_FILTER_high = np.array([255, 255, 210])
+COLOR_FILTER_high = np.array([255, 255, 180])
 
 # Ball position tracking
 ORIGIN = np.array([270.0,90.0])
