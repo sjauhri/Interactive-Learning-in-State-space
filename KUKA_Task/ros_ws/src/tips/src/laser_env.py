@@ -30,7 +30,7 @@ A5_LIMIT_HIGH = -6.0 * (np.pi/180)
 A5_LIMIT_LOW  = -34.0 * (np.pi/180)
 
 ACTION_LIMIT = 0.1
-CHAR_DRAW = "O" # C,O,R,L
+CHAR_DRAW = "R" # C,O,R,L
 
 class Laser_Env():
     
@@ -108,8 +108,8 @@ class Laser_Env():
             self.goal.position.a5 =  -28 * (np.pi/180)#-29.6 * (np.pi/180)
         elif (CHAR_DRAW == "R"):
             # "R"
-            self.goal.position.a3 =  -5 * (np.pi/180)
-            self.goal.position.a5 =  -22 * (np.pi/180)
+            self.goal.position.a3 =  -11 * (np.pi/180)
+            self.goal.position.a5 =  -17.5 * (np.pi/180)
         elif (CHAR_DRAW == "L"):
             # "L"
             self.goal.position.a3 =  -13 * (np.pi/180)

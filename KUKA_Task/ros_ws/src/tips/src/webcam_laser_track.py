@@ -35,7 +35,7 @@ class Webcam_capture():
         self.recordVid = False
         if(self.recordVid):
             self.im_with_keypoints = cv2.imread("results/tips/laser/" + "CO" + "_draw.png")
-            self.vid = cv2.VideoWriter('Laser_Video_O.mp4', 0x7634706d, 10, (640, 480)) # mp4
+            self.vid = cv2.VideoWriter('Laser_Video_COR.mp4', 0x7634706d, 10, (640, 480)) # mp4
 
         ## Blob detection:
         # Setup SimpleBlobDetector parameters
