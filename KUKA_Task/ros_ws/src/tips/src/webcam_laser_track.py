@@ -69,7 +69,7 @@ class Webcam_capture():
         # Flag to show position of keypoints
         self.show_pos = False
         
-        self.laser_pos = np.array([117.8,65.7]) # O
+        self.laser_pos = np.array([222.78,150.37]) # O
         #np.array([92.5,47.1]) # C
         #np.array([117.8,65.7]) # O
         self.laser_vel = np.array([0.0,0.0])
@@ -81,6 +81,7 @@ class Webcam_capture():
         while (elapsed < 1):
             pos = self.get_laser_state()
             print("laser_position (X,Z): ", pos)
+            print("laser_position (X,Z): ", str(self.laser_pos))
             elapsed = time.time() - start
 
 
@@ -147,7 +148,7 @@ class Webcam_capture():
         if(self.show_img):
             # Show keypoints
             cv2.imshow("Keypoints", self.im_with_keypoints)
-            print("laser_position (X,Z): ", str(self.laser_pos))
+            # print("laser_position (X,Z): ", str(self.laser_pos))
             if(self.recordVid):
                 self.vid.write(self.im_with_keypoints)
         if(self.show_pos):
