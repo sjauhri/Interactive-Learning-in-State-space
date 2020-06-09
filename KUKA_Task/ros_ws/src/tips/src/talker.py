@@ -58,13 +58,13 @@ def talker():
     goal.position.a7 = 0 * (np.pi/180)
 
     # Origin
-    goal.position.a1 = 20.0 * (np.pi/180)
-    goal.position.a2 = 5 * (np.pi/180)
-    goal.position.a3 = -4 * (np.pi/180)
-    goal.position.a4 = -85 * (np.pi/180)
-    goal.position.a5 = -29.6 * (np.pi/180)
-    goal.position.a6 = 0
-    goal.position.a7 = 30.0 * (np.pi/180)
+    # goal.position.a1 = 20.0 * (np.pi/180)
+    # goal.position.a2 = 5 * (np.pi/180)
+    # goal.position.a3 = -4 * (np.pi/180)
+    # goal.position.a4 = -85 * (np.pi/180)
+    # goal.position.a5 = -29.6 * (np.pi/180)
+    # goal.position.a6 = 0
+    # goal.position.a7 = 30.0 * (np.pi/180)
     
     # Limit top left
     # goal.position.a1 = 20.0 * (np.pi/180)

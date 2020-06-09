@@ -12,7 +12,7 @@ from iiwa_msgs.msg import JointPosition, JointPositionVelocity, CartesianPose
 import numpy as np
 import time
 
-EPISODE_DURATION = 10 # seconds
+EPISODE_DURATION = 10#6.5 # seconds
 ACTION_DURATION = 0#0.8 # seconds
 ACTION_RESET_DURATION = 1 # seconds
 
@@ -104,8 +104,8 @@ class Laser_Env():
             self.goal.position.a5 =  -30 * (np.pi/180)
         elif (CHAR_DRAW == "O"):
             # "O"
-            self.goal.position.a3 =  -4 * (np.pi/180)
-            self.goal.position.a5 =  -29.6 * (np.pi/180)
+            self.goal.position.a3 =  -1 * (np.pi/180)#-4 * (np.pi/180)
+            self.goal.position.a5 =  -28 * (np.pi/180)#-29.6 * (np.pi/180)
         elif (CHAR_DRAW == "R"):
             # "R"
             self.goal.position.a3 =  -5 * (np.pi/180)

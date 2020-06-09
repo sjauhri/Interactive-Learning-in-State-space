@@ -31,7 +31,11 @@ class Webcam_capture():
         if(not ret):
             print("Warning: No image stream from webcam")
         self.im_with_keypoints = frame
-        # self.vid = cv2.VideoWriter('Laser_Test_Video.mp4', 0x7634706d, 10, (640, 480)) # mp4
+        
+        self.recordVid = False
+        if(self.recordVid):
+            self.im_with_keypoints = cv2.imread("results/tips/laser/" + "CO" + "_draw.png")
+            self.vid = cv2.VideoWriter('Laser_Video_O.mp4', 0x7634706d, 10, (640, 480)) # mp4
 
         ## Blob detection:
         # Setup SimpleBlobDetector parameters
@@ -65,7 +69,9 @@ class Webcam_capture():
         # Flag to show position of keypoints
         self.show_pos = False
         
-        self.laser_pos = ORIGIN
+        self.laser_pos = np.array([117.8,65.7]) # O
+        #np.array([92.5,47.1]) # C
+        #np.array([117.8,65.7]) # O
         self.laser_vel = np.array([0.0,0.0])
 
         # Init webcam and let it adjust exposure for 2 seconds
@@ -141,13 +147,17 @@ class Webcam_capture():
         if(self.show_img):
             # Show keypoints
             cv2.imshow("Keypoints", self.im_with_keypoints)
-            # self.vid.write(self.im_with_keypoints)
+            print("laser_position (X,Z): ", str(self.laser_pos))
+            if(self.recordVid):
+                self.vid.write(self.im_with_keypoints)
         if(self.show_pos):
             print("laser_position (X,Z): ", str(self.laser_pos))
         if cv2.waitKey(1) & 0xFF == ord('q'):
             self.show_img = False
             self.show_pos = False
-            # self.vid.release()
+            if(self.recordVid):
+                cv2.imwrite("O_draw.png", self.im_with_keypoints)
+                self.vid.release()
             cv2.destroyAllWindows()
 
         # Normalize and return:
@@ -176,6 +186,8 @@ class Webcam_capture():
             print("Warning: No image stream from webcam")
             return
         self.im_with_keypoints = frame
+        if(self.recordVid):
+            self.im_with_keypoints = cv2.imread("results/tips/laser/" + "CO" + "_draw.png")
         
         return
 

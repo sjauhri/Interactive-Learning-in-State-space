@@ -237,8 +237,8 @@ class TIPS_laser(TIPS):
         # Update policy (immediate)
         a = np.reshape(a, [-1, self.action_dim])
         self.update_policy_feedback_immediate(state, a)
-        self.update_policy_feedback_immediate(state, a)
-        self.update_policy_feedback_immediate(state, a)
+        # self.update_policy_feedback_immediate(state, a)
+        # self.update_policy_feedback_immediate(state, a)
         # print("Learning: ", (state, a))
 
         # Add state transition pair to demo buffer
