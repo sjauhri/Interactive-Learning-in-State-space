@@ -57,12 +57,12 @@ def talker():
     goal.position.a6 = 0
     goal.position.a7 = 0 * (np.pi/180)
 
-    # Origin
+    # Set-Point
     # goal.position.a1 = 20.0 * (np.pi/180)
     # goal.position.a2 = 5 * (np.pi/180)
-    # goal.position.a3 = -22.5 * (np.pi/180)
+    # goal.position.a3 = -22 * (np.pi/180)
     # goal.position.a4 = -85 * (np.pi/180)
-    # goal.position.a5 = -28.5 * (np.pi/180)
+    # goal.position.a5 = -27.5 * (np.pi/180)
     # goal.position.a6 = 0
     # goal.position.a7 = 30.0 * (np.pi/180)
     

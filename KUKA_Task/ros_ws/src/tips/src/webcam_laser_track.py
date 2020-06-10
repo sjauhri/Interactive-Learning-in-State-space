@@ -69,7 +69,7 @@ class Webcam_capture():
         # Flag to show position of keypoints
         self.show_pos = False
         
-        self.laser_pos = np.array([320.78,50.688]) # L
+        self.laser_pos = np.array([317.8,58]) # L
         #np.array([219.5,154.5]) # R
         #np.array([92.5,47.1]) # C
         #np.array([117.8,65.7]) # O
@@ -195,7 +195,7 @@ class Webcam_capture():
             return
         self.im_with_keypoints = frame
         if(self.recordVid):
-            self.im_with_keypoints = cv2.imread("results/tips/laser/" + "CO" + "_draw.png")
+            self.im_with_keypoints = cv2.imread("results/tips/laser/" + "COR" + "_draw.png")
         
         return
 
