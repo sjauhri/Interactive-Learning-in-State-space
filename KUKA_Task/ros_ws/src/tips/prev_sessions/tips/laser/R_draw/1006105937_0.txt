@@ -1,0 +1,219 @@
+
+Iteration: 1, reward: -111.018016556, feedback_rate(/sec): 2.46972678299
+
+
+Iteration: 2, reward: -62.0, feedback_rate(/sec): 3.15487857743
+
+
+Iteration: 3, reward: -61.9112267687, feedback_rate(/sec): 3.05559968666
+
+
+Iteration: 4, reward: -57.9741321625, feedback_rate(/sec): 3.17225739029
+
+
+Iteration: 5, reward: -26.9072480941, feedback_rate(/sec): 1.77995573067
+
+
+Iteration: 6, reward: -49.040799341, feedback_rate(/sec): 1.48669760834
+
+
+Iteration: 7, reward: -47.3814309619, feedback_rate(/sec): 1.47896906097
+
+
+Iteration: 8, reward: -22.0, feedback_rate(/sec): 1.77228726447
+
+
+Iteration: 9, reward: -34.8281495345, feedback_rate(/sec): 2.37736250634
+
+
+Iteration: 10, reward: -36.6196668472, feedback_rate(/sec): 1.38832100849
+
+
+Iteration: 11, reward: -20.591260282, feedback_rate(/sec): 2.16990792787
+
+
+Iteration: 12, reward: -52.2015325446, feedback_rate(/sec): 2.95985690404
+
+
+Iteration: 13, reward: -48.3735464898, feedback_rate(/sec): 0.890404642902
+
+
+Iteration: 14, reward: -77.4144689318, feedback_rate(/sec): 1.08735170311
+
+
+Iteration: 15, reward: -70.3278038901, feedback_rate(/sec): 2.08246521574
+
+
+Iteration: 16, reward: -38.275318418, feedback_rate(/sec): 0.197125962326
+
+
+Iteration: 17, reward: -17.4642491966, feedback_rate(/sec): 0.0986978104322
+
+
+Iteration: 18, reward: -13.6014705087, feedback_rate(/sec): 0.0
+
+
+Iteration: 19, reward: -15.8113883008, feedback_rate(/sec): 0.0
+
+
+Iteration: 20, reward: -26.2488094968, feedback_rate(/sec): 0.395308125015
+
+
+Iteration: 21, reward: -23.0217288664, feedback_rate(/sec): 0.0991440990726
+
+
+Iteration: 22, reward: -22.0227155455, feedback_rate(/sec): 0.198366057932
+
+
+Iteration: 23, reward: -23.0867927612, feedback_rate(/sec): 0.0
+
+
+Iteration: 24, reward: -14.4222051019, feedback_rate(/sec): 0.196640573204
+
+
+Iteration: 25, reward: -12.6491106407, feedback_rate(/sec): 0.0
+
+
+Iteration: 26, reward: -13.0, feedback_rate(/sec): 0.0
+
+
+Iteration: 27, reward: -16.7630546142, feedback_rate(/sec): 0.0
+
+
+Iteration: 28, reward: -18.973665961, feedback_rate(/sec): 0.197013415129
+
+
+Iteration: 29, reward: -19.3132079158, feedback_rate(/sec): 0.0
+
+
+Iteration: 30, reward: -12.5299640861, feedback_rate(/sec): 0.198018943761
+
+
+Iteration: 31, reward: -62.0322496771, feedback_rate(/sec): 0.0
+
+
+Iteration: 32, reward: -18.3575597507, feedback_rate(/sec): 0.891624102689
+
+
+Iteration: 33, reward: -13.6014705087, feedback_rate(/sec): 0.985899972583
+
+
+Iteration: 34, reward: -17.8044938148, feedback_rate(/sec): 0.0
+
+
+Iteration: 35, reward: -71.0633520178, feedback_rate(/sec): 0.297216009215
+
+
+Iteration: 36, reward: -10.6301458127, feedback_rate(/sec): 0.197828827972
+
+
+Iteration: 37, reward: -7.28010988928, feedback_rate(/sec): 0.0
+
+
+Iteration: 38, reward: -62.0, feedback_rate(/sec): 0.197781191674
+
+
+Iteration: 39, reward: -10.7703296143, feedback_rate(/sec): 0.591111574934
+
+
+Iteration: 40, reward: -10.6301458127, feedback_rate(/sec): 0.197026320743
+
+
+Iteration: 41, reward: -8.24621125124, feedback_rate(/sec): 0.0
+
+
+Iteration: 42, reward: -22.2036033112, feedback_rate(/sec): 0.197231032801
+
+
+Iteration: 43, reward: -13.0, feedback_rate(/sec): 0.0
+
+
+Iteration: 44, reward: -61.400325732, feedback_rate(/sec): 0.0
+
+
+Iteration: 45, reward: -12.3693168769, feedback_rate(/sec): 0.0
+
+
+Iteration: 46, reward: -14.3178210633, feedback_rate(/sec): 0.0984928238243
+
+
+Iteration: 47, reward: -17.7200451467, feedback_rate(/sec): 0.0991374532163
+
+
+Iteration: 48, reward: -60.5392434707, feedback_rate(/sec): 0.198216506821
+
+
+Iteration: 49, reward: -59.5399025864, feedback_rate(/sec): 0.297335249765
+
+
+Iteration: 50, reward: -61.0327780787, feedback_rate(/sec): 0.98799135728
+
+
+Iteration: 51, reward: -9.21954445729, feedback_rate(/sec): 2.97556235814
+
+
+Iteration: 52, reward: -7.0, feedback_rate(/sec): 0.0991736834726
+
+
+Iteration: 53, reward: -61.0737259384, feedback_rate(/sec): 0.297561745499
+
+
+Iteration: 54, reward: -10.4403065089, feedback_rate(/sec): 1.6857408477
+
+
+Iteration: 55, reward: -8.94427191, feedback_rate(/sec): 0.991916067942
+
+
+Iteration: 56, reward: -11.1803398875, feedback_rate(/sec): 0.991655612423
+
+
+Iteration: 57, reward: -6.0827625303, feedback_rate(/sec): 0.984513693936
+
+
+Iteration: 58, reward: -8.0622577483, feedback_rate(/sec): 0.985447008209
+
+
+Iteration: 59, reward: -9.43398113206, feedback_rate(/sec): 0.986940806433
+
+
+Iteration: 60, reward: -11.401754251, feedback_rate(/sec): 1.08874993221
+
+
+Iteration: 61, reward: -9.05538513814, feedback_rate(/sec): 0.0992134650306
+
+
+Iteration: 62, reward: -10.8166538264, feedback_rate(/sec): 1.17873399309
+
+
+Iteration: 63, reward: -8.0622577483, feedback_rate(/sec): 0.0990667614338
+
+
+Iteration: 64, reward: -10.6301458127, feedback_rate(/sec): 0.0
+
+
+Iteration: 65, reward: -9.21954445729, feedback_rate(/sec): 0.793245270389
+
+
+Iteration: 66, reward: -11.6619037897, feedback_rate(/sec): 0.0986928707287
+
+
+Iteration: 67, reward: -6.7082039325, feedback_rate(/sec): 0.0984510504886
+
+
+Iteration: 68, reward: -12.5299640861, feedback_rate(/sec): 0.196904425768
+
+
+Iteration: 69, reward: -8.48528137424, feedback_rate(/sec): 0.0
+
+
+Iteration: 70, reward: -8.0, feedback_rate(/sec): 0.19705423856
+
+
+Iteration: 71, reward: -8.24621125124, feedback_rate(/sec): 0.0
+
+
+Iteration: 72, reward: -8.0622577483, feedback_rate(/sec): 0.0989211442889
+
+
+Iteration: 73, reward: -8.94427191, feedback_rate(/sec): 0.0
+

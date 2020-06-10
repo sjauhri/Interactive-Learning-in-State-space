@@ -34,8 +34,8 @@ class Webcam_capture():
         
         self.recordVid = False
         if(self.recordVid):
-            self.im_with_keypoints = cv2.imread("results/tips/laser/" + "CO" + "_draw.png")
-            self.vid = cv2.VideoWriter('Laser_Video_COR.mp4', 0x7634706d, 10, (640, 480)) # mp4
+            self.im_with_keypoints = cv2.imread("results/tips/laser/" + "COR" + "_draw.png")
+            self.vid = cv2.VideoWriter('Laser_Video_CORL.mp4', 0x7634706d, 10, (640, 480)) # mp4
 
         ## Blob detection:
         # Setup SimpleBlobDetector parameters
@@ -69,7 +69,8 @@ class Webcam_capture():
         # Flag to show position of keypoints
         self.show_pos = False
         
-        self.laser_pos = np.array([222.78,150.37]) # O
+        self.laser_pos = np.array([320.78,50.688]) # L
+        #np.array([219.5,154.5]) # R
         #np.array([92.5,47.1]) # C
         #np.array([117.8,65.7]) # O
         self.laser_vel = np.array([0.0,0.0])
@@ -157,7 +158,7 @@ class Webcam_capture():
             self.show_img = False
             self.show_pos = False
             if(self.recordVid):
-                cv2.imwrite("O_draw.png", self.im_with_keypoints)
+                cv2.imwrite("CORL_draw.png", self.im_with_keypoints)
                 self.vid.release()
             cv2.destroyAllWindows()
 
@@ -172,6 +173,12 @@ class Webcam_capture():
         return laser_p
 
     def reset_laser_img(self):
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            if(self.recordVid):
+                cv2.imwrite("CORL_draw.png", self.im_with_keypoints)
+                self.vid.release()
+            cv2.destroyAllWindows()
+
         self.get_laser_state()
 
         # Capture new frames
