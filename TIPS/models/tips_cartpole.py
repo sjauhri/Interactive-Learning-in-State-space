@@ -106,44 +106,6 @@ class TIPS_cartpole(TIPS):
 
     return States, Nstates, Actions
 
-  def exploration_dynamics_sampling(self):
-    """using epsilon-greedy version of current policy to generate (s_t, s_t+1, a_t) triplets"""
-    terminal = True
-    States = []
-    Nstates = []
-    Actions = []
-
-    for i in range(int(round(self.dynamicsSamples/2))): # Using half the initial dynamics samples
-      if terminal:
-        state = self.env.reset()
-
-      prev_s = state
-      state = np.reshape(state, [-1,self.state_dim])
-
-      # Using an epsilon-greedy policy for exploration of new actions
-      if (np.random.uniform(0,1) < 0.15):
-        # Discrete action space
-        A = np.random.randint(self.action_dim)
-        a = np.zeros([self.action_dim])
-        a[A] = 1
-      else:
-        # Discrete action space
-        a = np.reshape(self.eval_policy(state), [-1])
-        A = np.argmax(a)
-
-      state, _, terminal, _ = self.env.step(A)
-      self.env.render()
-
-      States.append(prev_s)
-      Nstates.append(state)
-      Actions.append(a)
-
-      if i and (i+1) % 1000 == 0:
-        print("Collecting dynamics training data from exploration policy ", i+1)
-        self.log_writer.write("Collecting dynamics training data from exploration policy " + str(i+1) + "\n")
-
-    return States, Nstates, Actions
-
   def get_state_corrected(self, h_fb, state):
     """get corrected state label for this environment using feedback"""
     # state_corrected = np.copy(state)
@@ -161,8 +123,6 @@ class TIPS_cartpole(TIPS):
     elif (h_fb == H_RIGHT):
       # state_corrected[2] += self.errorConst # Correcting Velocity
       state_corrected[0] += self.errorConst # Correcting Pole tip position
-    # else: # (h_fb == H_HOLD)
-    #   state_corrected[3] = 0  # HOLD pole angular velocity zero
     
     return state_corrected
 
@@ -222,57 +182,6 @@ class TIPS_cartpole(TIPS):
         # else: # LEFT or RIGHT
         # cost = abs(state_corrected[2] - nstate[2]) # Corrected Velocity
         cost = abs(state_corrected[0] - nstate_xpos) + abs(state_corrected[1] - nstate_ypos) # Corrected pole tip position
-        
-        # Check for min_cost
-        if(cost < min_cost):
-          min_cost = cost
-          min_action = curr_action
-
-      # Discrete actions: return a = A in one hot
-      min_a = np.zeros(self.action_dim)
-      min_a[min_action] = 1
-
-    return min_a
-
-  def get_action(self, state, nstate_required):
-    """get action to achieve next state close to nstate_required"""
-
-    if (args.learnFDM):
-      # Learnt FDM:
-      
-      # Make a vector of same states
-      States = np.tile(state, (self.ifdm_queries,1))
-      # Choose random actions
-      # Discrete Actions
-      a = np.eye(self.action_dim)
-      Actions = a[np.random.choice(a.shape[0], size=self.ifdm_queries)]
-      # Query ifdm to get next state
-      Nstates = self.eval_fdm(States, Actions)
-
-      # Calculate cost
-      cost = np.sum(abs(nstate_required - Nstates[:]), axis=1) # Automatic broadcasting
-
-      # Check for min_cost
-      min_cost_index = cost.argmin(axis=0)
-      min_a = Actions[min_cost_index]
-
-    else:
-      # True FDM:
-
-      # Discrete Actions
-      min_action = np.random.randint(self.action_dim)
-      min_cost = np.Inf
-
-      for _ in range(1, self.ifdm_queries+1):
-        # Choose random action
-        # Discrete Actions
-        curr_action = np.random.randint(self.action_dim)
-
-        # Query ifdm to get next state
-        nstate = fdm(state, curr_action)
-
-        # Check cost
-        cost = sum(abs(nstate_required - nstate))
         
         # Check for min_cost
         if(cost < min_cost):

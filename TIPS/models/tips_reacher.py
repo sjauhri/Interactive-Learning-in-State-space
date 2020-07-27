@@ -114,45 +114,6 @@ class TIPS_reacher(TIPS):
 
     return States, Nstates, Actions
 
-  def exploration_dynamics_sampling(self):
-    """using epsilon-greedy version of current policy to generate (s_t, s_t+1, a_t) triplets"""
-    terminal = True
-    States = []
-    Nstates = []
-    Actions = []
-
-    for i in range(int(round(self.dynamicsSamples/10))): # Using 10% of the initial dynamics samples
-      if terminal:
-        state = self.env.reset()
-
-      prev_s = state
-      state = np.reshape(state, [-1,self.state_dim])
-
-      # Using an epsilon-greedy policy for exploration of new actions
-      if (np.random.uniform(0,1) < 0.1):
-        # Continuos action space
-        # Actions between -1 and 1
-        A = np.random.uniform(-1, 1, self.action_dim)
-      else:
-        # Continuos action space
-        A = np.reshape(self.eval_policy(state), [-1])
-
-      state, _, terminal, _ = self.env.step(A)
-      # self.env.render()
-      # Zero redundant states
-      z_index = [4,5,8,9,10]
-      prev_s[z_index] = 0
-      state[z_index] = 0
-
-      States.append(prev_s)
-      Nstates.append(state)
-      Actions.append(A)
-
-      if i and (i+1) % 1000 == 0:
-        print("Collecting dynamics training data from exploration policy ", i+1)
-        self.log_writer.write("Collecting dynamics training data from exploration policy " + str(i+1) + "\n")
-
-    return States, Nstates, Actions
 
   def get_xy_pos(self, state):
     """get x-y cartesian position of the end effector or the reacher"""
@@ -222,7 +183,6 @@ class TIPS_reacher(TIPS):
       States = np.tile(state, (self.ifdm_queries,1))
       # Choose random actions
       # Continuous Actions
-      # Actions = np.random.uniform(-1.0, 1.0, (self.ifdm_queries,self.action_dim) )
       Actions = np.random.uniform(-0.4, 0.4, (self.ifdm_queries,self.action_dim) )
       # Query ifdm to get next state
       Nstates = self.eval_fdm(States, Actions)
@@ -243,11 +203,7 @@ class TIPS_reacher(TIPS):
       # state_diffs = np.sum(abs(state-Nstates[:]), axis=1)
       # min_cost_index = (state_diffs[least_cost_inds]).argmin(axis=0)
       # min_action = Actions[least_cost_inds[min_cost_index]]
-
-      # Debug: equal timing
-      # print(time.time() - prev_time)
     else:
-      # prev_time = time.time()
       # True FDM:
 
       # Continous Actions
@@ -292,64 +248,8 @@ class TIPS_reacher(TIPS):
         #     min_action = curr_action
         #     min_state_diff = np.linalg.norm(state-nstate)
 
-      # Debug: equal timing
-      # print(time.time() - prev_time)
     return min_action
 
-  def get_action(self, state, nstate_required):
-    """get action to achieve next state close to nstate_required"""
-
-    if (args.learnFDM):
-      # Learnt FDM:
-
-      # Zero redundant states
-      z_index = [4,5,8,9,10]
-      state[z_index] = 0
-      nstate_required[z_index] = 0
-      
-      # Make a vector of same states
-      States = np.tile(state, (self.ifdm_queries,1))
-      # Choose random actions
-      # Continuous Actions
-      Actions = np.random.uniform(-1, 1, (self.ifdm_queries,self.action_dim) )
-      # Query ifdm to get next state
-      Nstates = self.eval_fdm(States, Actions)
-
-      # Calculate cost
-      # Automatic broadcasting
-      cost = np.sum(abs(nstate_required - Nstates[:]), axis=1)
-
-      # Check for min_cost
-      min_cost_index = cost.argmin(axis=0)
-      min_action = Actions[min_cost_index]
-
-    else:
-      # True FDM:
-
-      # Continous Actions
-      min_action = np.random.uniform(-1, 1, self.action_dim)
-      min_cost = np.Inf
-
-      for _ in range(1, self.ifdm_queries+1):
-        # Choose random action
-        # Continous Actions
-        curr_action = np.random.uniform(-1, 1, self.action_dim)
-        # Discretization
-        # val_set = [0.2*x for x in range(-5,6)]
-        # curr_action = np.random.choice(val_set, self.action_dim)
-
-        # Query ifdm to get next state
-        nstate = fdm_cont(state, curr_action)
-
-        # Check cost
-        cost = sum(abs(nstate_required - nstate))
-        
-        # Check for min_cost
-        if(cost < min_cost):
-          min_cost = cost
-          min_action = curr_action
-
-    return min_action    
 
   def feedback_run(self):
     """run and train agent using D-COACH framework incorporating human feedback"""
@@ -414,7 +314,6 @@ class TIPS_reacher(TIPS):
 
         # Map action from state
         a = np.reshape(self.eval_policy(state), [-1])
-        # a = [0,0]
         # Continuous actions
         A = np.copy(a)
 

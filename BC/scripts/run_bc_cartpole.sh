@@ -1,2 +1,0 @@
-#!/bin/bash
-python3 models/bc_cartpole.py --mode=train --input_file=demonstration/expert_obs/CartPole-v0.pkl --result_dir=results/bc/cartpole/ --session_dir=session/bc/cartpole/ --maxEpochs=50 #--usePrevSession --prev_session_dir=prev_sessions/bc/cartpole/

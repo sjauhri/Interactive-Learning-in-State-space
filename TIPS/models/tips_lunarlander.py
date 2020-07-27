@@ -181,57 +181,6 @@ class TIPS_lunarlander(TIPS):
 
     return min_a
 
-  def get_action(self, state, nstate_required):
-    """get action to achieve next state close to nstate_required"""
-
-    if (args.learnFDM):
-      # Learnt FDM:
-      
-      # Make a vector of same states
-      States = np.tile(state, (self.ifdm_queries,1))
-      # Choose random actions
-      # Discrete Actions
-      a = np.eye(self.action_dim)
-      Actions = a[np.random.choice(a.shape[0], size=self.ifdm_queries)]
-      # Query ifdm to get next state
-      Nstates = self.eval_fdm(States, Actions)
-
-      # Calculate cost
-      cost = np.sum(abs(nstate_required - Nstates[:]), axis=1) # Automatic broadcasting
-
-      # Check for min_cost
-      min_cost_index = cost.argmin(axis=0)
-      min_a = Actions[min_cost_index]
-
-    else:
-      # True FDM:
-
-      # Discrete Actions
-      min_action = np.random.randint(self.action_dim)
-      min_cost = np.Inf
-
-      for _ in range(1, self.ifdm_queries+1):
-        # Choose random action
-        # Discrete Actions
-        curr_action = np.random.randint(self.action_dim)
-
-        # Query ifdm to get next state      
-        nstate = fdm(state, curr_action)
-
-        # Check cost
-        cost = sum(abs(nstate_required - nstate))
-        
-        # Check for min_cost
-        if(cost < min_cost):
-          min_cost = cost
-          min_action = curr_action
-
-      # Discrete actions: return a = A in one hot
-      min_a = np.zeros(self.action_dim)
-      min_a[min_action] = 1
-
-    return min_a
-
   def feedback_run(self):
     """run and train agent using D-COACH framework incorporating human feedback"""
     terminal = False

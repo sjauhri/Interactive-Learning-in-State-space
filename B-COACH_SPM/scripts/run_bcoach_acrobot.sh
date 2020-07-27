@@ -1,2 +1,0 @@
-#!/bin/bash
-python3 models/bcoach_acrobot.py --mode=train --input_file=demonstration/expert_obs/Acrobot-v1.pkl --result_dir=results/bcoach/acrobot/ --model_dir=model/bcoach/acrobot/ --print_freq=1 --save_freq=1 --maxEpochs=50 --numExperiments=1

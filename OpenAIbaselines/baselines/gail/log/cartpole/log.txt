@@ -1,2 +1,0 @@
-Logging to ./baselines/gail/log/cartpole/
-Total transitions: 904

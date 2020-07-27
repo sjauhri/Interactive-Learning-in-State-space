@@ -1,2 +1,0 @@
-#!/bin/bash
-python3 models/bc_lunarlandercont.py --mode=train --input_file=demonstration/expert_obs/LunarLanderContinuous-v2.pkl --result_dir=results/bc/lunarlandercont/ --session_dir=session/bc/lunarlandercont/ --maxEpochs=150 #--usePrevSession --prev_session_dir=prev_sessions/bc/lunarlandercont/

@@ -88,10 +88,6 @@ class TIPS():
     """uniform sampling of actions to generate (s_t, s_t+1) and action pairs"""
     raise NotImplementedError
 
-  # def exploration_dynamics_sampling(self):
-  #   """using epsilon-greedy version of current policy to generate (s_t, s_t+1, a_t) triplets"""
-  #   raise NotImplementedError
-
   def feedback_run(self):
     """run and train using D-COACH framework incorporating human feedback"""
     raise NotImplementedError
@@ -99,19 +95,11 @@ class TIPS():
   def eval_rwd_policy(self):
     """getting the reward by current policy model"""
     raise NotImplementedError
-
-  # def get_action(self, state, nstate_required):
-  #   """get action to achieve next state close to nstate_required"""
-  #   raise NotImplementedError
     
   def update_policy(self, epochIts):
     """update policy model"""
     for it in range(1, epochIts+1):
       batch_s, batch_a =  self.sample_demo(self.batch_size)
-      # batch_a = []
-      # for i in range(self.batch_size):
-      #   batch_a.append(self.get_action(batch_s[i],batch_ns[i]))
-      # batch_a = np.reshape(batch_a, [-1, self.action_dim])
       
       self.sess.run(self.policy_train_step, feed_dict={
       self.state : batch_s,
@@ -121,10 +109,7 @@ class TIPS():
       if it % 500 == 0:
         # Check policy loss on another data set.................
         S, A = self.sample_demo(int(round(self.demo_examples/10))) # 10% of the demo data
-        # A = []
-        # for i in range(len(S)):
-        #   A.append(self.get_action(S[i],nS[i]))
-        # A = np.reshape(A, [-1, self.action_dim])
+
         policy_loss = self.get_policy_loss(S, A)
         print('Policy train: iteration: %5d, policy_loss: %8.6f' % (it, policy_loss))
         self.log_writer.write("Policy train: iteration: " + str(it) + ", policy_loss: " + format(policy_loss, '8.6f') + "\n")
@@ -280,26 +265,6 @@ class TIPS():
             self.reward_writer.write(format(curr_reward, '8.6f') + "\n" )
           avg_reward = policy_reward/numTrials
 
-          # Check policy loss on another data set.................
-          policy_loss = 0
-          # S, A = self.sample_demo(int(round(self.demo_examples/10))) # 10% of the demo data
-          # A = []
-          # for i in range(len(S)):
-          #   A.append(self.get_action(S[i],nS[i]))
-          # A = np.reshape(A, [-1, self.action_dim])
-          # policy_loss = self.get_policy_loss(S, A)
-          # ......................................................
-
-          # Check fdm loss on another data set....................
-          fdm_loss = 0
-          # if (len(self.ExpBuff) > 0):
-            # minibatch_ids = np.random.choice(len(self.ExpBuff), int(round( self.dynamicsSamples/10 )) ) # 10% of the dynamics data
-            # batch_s = [self.ExpBuff[id][0] for id in minibatch_ids]
-            # batch_ns = [self.ExpBuff[id][1] for id in minibatch_ids]
-            # batch_a = [self.ExpBuff[id][2] for id in minibatch_ids]
-
-            # fdm_loss = self.get_fdm_loss(batch_s, batch_ns, batch_a)
-          # ......................................................          
           print('Iteration: %5d, average_reward: %5.1f, feedback_rate: %1.3f' % ((it+1), avg_reward, feedback_rate))
           self.result_writer.write( str(it+1) + " , " + format(avg_reward, '8.6f') + " , " + format(feedback_rate, '8.6f') + "\n" )
           self.log_writer.write("\n" + "Iteration: " + str(it+1) + ", average_reward: " + str(avg_reward) + ", feedback_rate: " + str(feedback_rate) + "\n" + "\n")

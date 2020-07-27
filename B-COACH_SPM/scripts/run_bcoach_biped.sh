@@ -1,2 +1,0 @@
-#!/bin/bash
-python3 models/bcoach_biped.py --mode=train --input_file=demonstration/expert_obs/BipedalWalker-v2_reduced.pkl --result_dir=results/bcoach/biped/ --cont_actions --model_dir=model/bcoach/biped/ --maxEpochs=50 --numExperiments=1 --prev_session_dir=model/bco/biped_suboptimal/ --usePrevSession

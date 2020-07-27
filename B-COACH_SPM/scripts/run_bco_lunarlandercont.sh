@@ -1,2 +1,0 @@
-#!/bin/bash
-python3 models/bco_lunarlandercont.py --mode=train --input_file=demonstration/expert_obs/LunarLanderContinuous-v2.pkl --result_dir=results/bco/lunarlandercont/ --model_dir=model/bco/lunarlandercont/ --print_freq=1 --save_freq=1 --render
