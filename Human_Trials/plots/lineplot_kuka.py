@@ -48,26 +48,32 @@ tips_laser = tips_laser.rename(columns={'iteration': 'Episodes', 'reward': 'Retu
 
 
 
-# # Plot fishing using subplots
-# f, axes = plt.subplots(2, 1, sharex=True, figsize=(8, 6.5))
-# # f.suptitle("Fishing task", fontweight='bold', fontsize=16)
-# sns.lineplot(x="Episodes", y="Return", data=tips_kuka, ax=axes[0])
-# axes[0].set_title("Fishing task", fontweight='bold', fontsize=17)
-# axes[0].set_xticks(range(0,100,20))
-# sns.lineplot(x="Episodes", y="Feedback Rate (/sec)", color="maroon", data=tips_kuka, ax=axes[1])
-# #axes[1].set_title("Reacher", fontweight='bold')
-# #axes[1].set(ylim=(-110, 0))
+# Plot fishing using subplots
+f, axes = plt.subplots(2, 1, sharex=True, figsize=(8, 6.5))
+# f.suptitle("Fishing task", fontweight='bold', fontsize=16)
+l3 = sns.lineplot(x="Episodes", y="Return", data=tips_kuka, ax=axes[0])
+l3.set_ylabel("Return", fontsize=14)
+axes[0].set_title("Fishing task", fontweight='bold', fontsize=17)
+axes[0].set_xticks(range(0,100,20))
+l4 = sns.lineplot(x="Episodes", y="Feedback Rate (/sec)", color="maroon", data=tips_kuka, ax=axes[1])
+l4.set_ylabel("Feedback Rate (/sec)", fontsize=14)
+l4.set_xlabel("Episodes", fontsize=14)
+#axes[1].set_title("Reacher", fontweight='bold')
+#axes[1].set(ylim=(-110, 0))
 
-# # Save figure
-# plt.savefig('TIPSKUKA.pdf', dpi=300)
+# Save figure
+plt.savefig('TIPSKUKA.pdf', dpi=300)
 
 # Plot laser using subplots
 f, axes = plt.subplots(2, 1, sharex=True, figsize=(8, 6.5))
 # f.suptitle("Laser Drawing task", fontweight='bold', fontsize=16)
-sns.lineplot(x="Episodes", y="Return", data=tips_laser, ax=axes[0], ci=None)
+l1 = sns.lineplot(x="Episodes", y="Return", data=tips_laser, ax=axes[0], ci=None)
+l1.set_ylabel("Return", fontsize=14)
 axes[0].set_title("Laser Drawing task", fontweight='bold', fontsize=17)
 axes[0].set_xticks(range(0,100,20))
-sns.lineplot(x="Episodes", y="Feedback Rate (/sec)", color="maroon", data=tips_laser, ax=axes[1], ci=None)
+l2 = sns.lineplot(x="Episodes", y="Feedback Rate (/sec)", color="maroon", data=tips_laser, ax=axes[1], ci=None)
+l2.set_ylabel("Feedback Rate (/sec)", fontsize=14)
+l2.set_xlabel("Episodes", fontsize=14)
 #axes[1].set_title("Reacher", fontweight='bold')
 #axes[1].set(ylim=(-110, 0))
 
