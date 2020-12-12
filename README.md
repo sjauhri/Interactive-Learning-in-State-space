@@ -18,6 +18,7 @@ Then, the files in the `gym_modifications` directory of this repository should b
 - box2d-py
 - gym==0.10.5
 - mujoco-py==1.50.1.56
+- mujuco==mjpro150
 - tensorflow==1.14.0
 - numpy
 - pyglet==1.3.2
