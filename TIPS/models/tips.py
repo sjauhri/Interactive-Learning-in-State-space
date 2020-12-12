@@ -297,8 +297,8 @@ class TIPS():
       if not os.path.exists(args.result_dir):
         os.makedirs(args.result_dir)
 
-      # read demonstration data
-      self.demo_examples, self.inputs, self.targets = self.load_demonstration()
+      # Optional: read demonstration data
+      # self.demo_examples, self.inputs, self.targets = self.load_demonstration()
 
       # store datetime for saving logs
       self.logTime = dt.datetime.now().strftime('%d%m%H%M%S')

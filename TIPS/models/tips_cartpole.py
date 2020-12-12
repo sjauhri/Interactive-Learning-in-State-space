@@ -94,7 +94,7 @@ class TIPS_cartpole(TIPS):
       a[A] = 1
 
       state, _, terminal, _ = self.env.step(A)
-      # self.env.render()
+      self.env.render()
 
       States.append(prev_s)
       Nstates.append(state)
@@ -296,5 +296,6 @@ class TIPS_cartpole(TIPS):
     return total_reward
     
 if __name__ == "__main__":
+  # NOTE: Might need to add other params from args here if you wish to set from command line
   tips = TIPS_cartpole(4, 2, lr=args.lr, maxEpisodes=args.maxEpisodes)
   tips.run()
