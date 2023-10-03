@@ -1,5 +1,5 @@
 # Interactive Imitation Learning in State-Space
-This repository contains the implementation of a novel interactive learning method: TIPS (Teaching Imitative Policies in State-space).
+This repository contains the implementation of a novel interactive learning method: TIPS (Teaching Imitative Policies in State-space). Link: https://proceedings.mlr.press/v155/jauhri21a/jauhri21a.pdf
 
 The code runs simulations in OpenAI Gym environments where an agent performs control tasks. A demonstrator can provide feedback (using arrow keys on a keyboard) to teach the task to the agent. The training is online and thus the agents' learnt behavior can be directly observed during the training process.
 
